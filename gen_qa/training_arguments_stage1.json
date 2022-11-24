@@ -13,7 +13,7 @@
     "max_seq_length": 250,
     "max_answer_length": 250,
     "doc_stride": 128,
-    "output_dir": "tmp/debug_seq2seq_phee",
+    "output_dir": "model/stage1/SciFive-base-PMC",
     "overwrite_output_dir": true,
     "eval_accumulation_steps": 100,
     "predict_with_generate": true,
