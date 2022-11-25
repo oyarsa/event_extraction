@@ -7,7 +7,7 @@ Example input:
 ```json
 {
   "tid": 2771,
-  "info": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",
+  "info": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",  # noqa
   "extraInfo": null,
   "labelData": [
     {
@@ -115,6 +115,8 @@ def convert_file(infile: Path, outfile: Path) -> None:
 
     instances = [convert_instance(instance) for instance in dataset]
     converted = "\n\n".join(format_instance(i) for i in instances)
+
+    outfile.parent.mkdir(exist_ok=True)
     with open(outfile, "w") as f:
         print(converted, file=f)
 
