@@ -25,7 +25,8 @@ Example input:
         ]
       ]
     }
-  ]
+  ],
+  "id": <same as 'tid'>
 }
 ```
 
@@ -82,13 +83,14 @@ def convert_instance(instance: dict[str, Any]) -> dict[str, Any]:
     tokens = list(tokeniser.tokenize(text))
     spans = list(tokeniser.span_tokenize(text))
 
-    label_map = {"reason": "I-Cause", "result": "I-Effect"}
+    label_map = {"reason": "Cause", "result": "Effect"}
 
     out = {
         "sentence": tokens,
         "s_start": 0,
         "ner": [],
         "relation": [],
+        "id": instance["tid"],
     }
 
     events = []
