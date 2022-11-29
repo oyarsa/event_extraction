@@ -14,53 +14,56 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Fine-tuning the library's seq2seq models for question answering using the 🤗 Seq2SeqTrainer.
+Fine-tuning the library's seq2seq models for question answering using the
+🤗 Seq2SeqTrainer.
 """
-# You can also adapt this script on your own question answering task. Pointers for this are left as comments.
+# You can also adapt this script on your own question answering task.
+# Pointers for this are left as comments.
 
-from gc import callbacks
+import json
+import logging
 import os
 import sys
-sys.path.append(os.path.abspath('..'))
-sys.path.append(os.path.abspath('.'))
-
-# os.environ['TRANSFORMERS_CACHE'] = '~/.cache/huggingface/'
-# os.environ['HF_HOME'] = '~/.cache/huggingface/'
-
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
-import logging
-import sys
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple
-import json
-import random
-import datasets
-from datasets import load_dataset, load_metric
+from typing import Any, List, Optional, Tuple
 
+import datasets
 import transformers
-from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
+from datasets import load_dataset
 from transformers import (
     AutoConfig,
     AutoModelForSeq2SeqLM,
     AutoTokenizer,
     DataCollatorForSeq2Seq,
+    EarlyStoppingCallback,
     HfArgumentParser,
     Seq2SeqTrainingArguments,
     set_seed,
-    EarlyStoppingCallback
 )
-
-from transformers.trainer_utils import EvalLoopOutput, EvalPrediction, get_last_checkpoint
-from transformers.utils import check_min_version
+from transformers.trainer_utils import (
+    EvalLoopOutput,
+    EvalPrediction,
+    get_last_checkpoint,
+)
 from transformers.utils.versions import require_version
+
 from metric.phee.phee import PHEE
+from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 
+sys.path.append(os.path.abspath(".."))
+sys.path.append(os.path.abspath("."))
 
+# os.environ['TRANSFORMERS_CACHE'] = '~/.cache/huggingface/'
+# os.environ['HF_HOME'] = '~/.cache/huggingface/'
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
 # check_min_version("4.17.0.dev0")
 
-require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/question-answering/requirements.txt")
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
+require_version(
+    "datasets>=1.8.0",
+    "To fix: pip install -r examples/pytorch/question-answering/requirements.txt",
+)
 
 logger = logging.getLogger(__name__)
 
@@ -72,25 +75,39 @@ class ModelArguments:
     """
 
     model_name_or_path: str = field(
-        metadata={"help": "Path to pretrained model or model identifier from huggingface.co/models"}
+        metadata={
+            "help": "Path to pretrained model or model identifier from huggingface.co/models"
+        }
     )
     config_name: Optional[str] = field(
-        default=None, metadata={"help": "Pretrained config name or path if not the same as model_name"}
+        default=None,
+        metadata={
+            "help": "Pretrained config name or path if not the same as model_name"
+        },
     )
     tokenizer_name: Optional[str] = field(
-        default=None, metadata={"help": "Pretrained tokenizer name or path if not the same as model_name"}
+        default=None,
+        metadata={
+            "help": "Pretrained tokenizer name or path if not the same as model_name"
+        },
     )
     cache_dir: Optional[str] = field(
         default=None,
-        metadata={"help": "Path to directory to store the pretrained models downloaded from huggingface.co"},
+        metadata={
+            "help": "Path to directory to store the pretrained models downloaded from huggingface.co"
+        },
     )
     use_fast_tokenizer: bool = field(
         default=True,
-        metadata={"help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."},
+        metadata={
+            "help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."
+        },
     )
     model_revision: str = field(
         default="main",
-        metadata={"help": "The specific model version to use (can be a branch name, tag name or commit id)."},
+        metadata={
+            "help": "The specific model version to use (can be a branch name, tag name or commit id)."
+        },
     )
     use_auth_token: bool = field(
         default=False,
@@ -108,34 +125,51 @@ class DataTrainingArguments:
     """
 
     dataset_name: Optional[str] = field(
-        default=None, metadata={"help": "The name of the dataset to use (via the datasets library)."}
+        default=None,
+        metadata={"help": "The name of the dataset to use (via the datasets library)."},
     )
     dataset_config_name: Optional[str] = field(
-        default=None, metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
+        default=None,
+        metadata={
+            "help": "The configuration name of the dataset to use (via the datasets library)."
+        },
     )
     context_column: Optional[str] = field(
         default="context",
-        metadata={"help": "The name of the column in the datasets containing the contexts (for question answering)."},
+        metadata={
+            "help": "The name of the column in the datasets containing the contexts (for question answering)."
+        },
     )
     question_column: Optional[str] = field(
         default="question",
-        metadata={"help": "The name of the column in the datasets containing the questions (for question answering)."},
+        metadata={
+            "help": "The name of the column in the datasets containing the questions (for question answering)."
+        },
     )
     answer_column: Optional[str] = field(
         default="answers",
-        metadata={"help": "The name of the column in the datasets containing the answers (for question answering)."},
+        metadata={
+            "help": "The name of the column in the datasets containing the answers (for question answering)."
+        },
     )
-    train_file: Optional[str] = field(default=None, metadata={"help": "The input training data file (a text file)."})
+    train_file: Optional[str] = field(
+        default=None, metadata={"help": "The input training data file (a text file)."}
+    )
     validation_file: Optional[str] = field(
         default=None,
-        metadata={"help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."},
+        metadata={
+            "help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."
+        },
     )
     test_file: Optional[str] = field(
         default=None,
-        metadata={"help": "An optional input test data file to evaluate the perplexity on (a text file)."},
+        metadata={
+            "help": "An optional input test data file to evaluate the perplexity on (a text file)."
+        },
     )
     overwrite_cache: bool = field(
-        default=False, metadata={"help": "Overwrite the cached training and evaluation sets"}
+        default=False,
+        metadata={"help": "Overwrite the cached training and evaluation sets"},
     )
     preprocessing_num_workers: Optional[int] = field(
         default=None,
@@ -194,7 +228,8 @@ class DataTrainingArguments:
         },
     )
     version_2_with_negative: bool = field(
-        default=False, metadata={"help": "If true, some of the examples do not have an answer."}
+        default=False,
+        metadata={"help": "If true, some of the examples do not have an answer."},
     )
     null_score_diff_threshold: float = field(
         default=0.0,
@@ -206,11 +241,15 @@ class DataTrainingArguments:
     )
     doc_stride: int = field(
         default=128,
-        metadata={"help": "When splitting up a long document into chunks, how much stride to take between chunks."},
+        metadata={
+            "help": "When splitting up a long document into chunks, how much stride to take between chunks."
+        },
     )
     n_best_size: int = field(
         default=20,
-        metadata={"help": "The total number of n-best predictions to generate when looking for an answer."},
+        metadata={
+            "help": "The total number of n-best predictions to generate when looking for an answer."
+        },
     )
     num_beams: Optional[int] = field(
         default=None,
@@ -226,10 +265,10 @@ class DataTrainingArguments:
         },
     )
     store_prediction: bool = field(
-        default = False,
+        default=False,
         metadata={
             "help": "Whether to store prediction outputs of the test set or not."
-        }
+        },
     )
 
     def __post_init__(self):
@@ -239,17 +278,28 @@ class DataTrainingArguments:
             and self.validation_file is None
             and self.test_file is None
         ):
-            raise ValueError("Need either a dataset name or a training/validation file/test_file.")
+            raise ValueError(
+                "Need either a dataset name or a training/validation file/test_file."
+            )
         else:
             if self.train_file is not None:
                 extension = self.train_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`train_file` should be a csv or a json file."
+                assert extension in [
+                    "csv",
+                    "json",
+                ], "`train_file` should be a csv or a json file."
             if self.validation_file is not None:
                 extension = self.validation_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`validation_file` should be a csv or a json file."
+                assert extension in [
+                    "csv",
+                    "json",
+                ], "`validation_file` should be a csv or a json file."
             if self.test_file is not None:
                 extension = self.test_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`test_file` should be a csv or a json file."
+                assert extension in [
+                    "csv",
+                    "json",
+                ], "`test_file` should be a csv or a json file."
         if self.val_max_answer_length is None:
             self.val_max_answer_length = self.max_answer_length
 
@@ -264,11 +314,15 @@ def main():
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
 
-    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
+    parser = HfArgumentParser(
+        (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
+    )
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+        model_args, data_args, training_args = parser.parse_json_file(
+            json_file=os.path.abspath(sys.argv[1])
+        )
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
@@ -295,14 +349,20 @@ def main():
 
     # Detecting last checkpoint.
     last_checkpoint = None
-    if os.path.isdir(training_args.output_dir) and training_args.do_train and not training_args.overwrite_output_dir:
+    if (
+        os.path.isdir(training_args.output_dir)
+        and training_args.do_train
+        and not training_args.overwrite_output_dir
+    ):
         last_checkpoint = get_last_checkpoint(training_args.output_dir)
         if last_checkpoint is None and len(os.listdir(training_args.output_dir)) > 0:
             raise ValueError(
                 f"Output directory ({training_args.output_dir}) already exists and is not empty. "
                 "Use --overwrite_output_dir to overcome."
             )
-        elif last_checkpoint is not None and training_args.resume_from_checkpoint is None:
+        elif (
+            last_checkpoint is not None and training_args.resume_from_checkpoint is None
+        ):
             logger.info(
                 f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
                 "the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
@@ -323,21 +383,30 @@ def main():
     if data_args.dataset_name is not None:
         # Downloading and loading a dataset from the hub.
         raw_datasets = load_dataset(
-            data_args.dataset_name, data_args.dataset_config_name, cache_dir=model_args.cache_dir
+            data_args.dataset_name,
+            data_args.dataset_config_name,
+            cache_dir=model_args.cache_dir,
         )
     else:
         data_files = {}
+        extension = ""
         if data_args.train_file is not None:
             data_files["train"] = data_args.train_file
             extension = data_args.train_file.split(".")[-1]
-
         if data_args.validation_file is not None:
             data_files["validation"] = data_args.validation_file
             extension = data_args.validation_file.split(".")[-1]
         if data_args.test_file is not None:
             data_files["test"] = data_args.test_file
             extension = data_args.test_file.split(".")[-1]
-        raw_datasets = load_dataset(extension, data_files=data_files, field="data", cache_dir=model_args.cache_dir)
+
+        raw_datasets = load_dataset(
+            extension,
+            data_files=data_files,
+            field="data",
+            cache_dir=model_args.cache_dir,
+        )
+    assert isinstance(raw_datasets, datasets.DatasetDict)
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 
@@ -347,13 +416,17 @@ def main():
     # The .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
     config = AutoConfig.from_pretrained(
-        model_args.config_name if model_args.config_name else model_args.model_name_or_path,
+        model_args.config_name
+        if model_args.config_name
+        else model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        model_args.tokenizer_name if model_args.tokenizer_name else model_args.model_name_or_path,
+        model_args.tokenizer_name
+        if model_args.tokenizer_name
+        else model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
         use_fast=True,
         revision=model_args.model_revision,
@@ -371,7 +444,9 @@ def main():
     model.resize_token_embeddings(len(tokenizer))
 
     if model.config.decoder_start_token_id is None:
-        raise ValueError("Make sure that `config.decoder_start_token_id` is correctly defined")
+        raise ValueError(
+            "Make sure that `config.decoder_start_token_id` is correctly defined"
+        )
 
     # Preprocessing the datasets.
     # We need to generate and tokenize inputs and targets.
@@ -382,13 +457,19 @@ def main():
     elif training_args.do_predict:
         column_names = raw_datasets["test"].column_names
     else:
-        logger.info("There is nothing to do. Please pass `do_train`, `do_eval` and/or `do_predict`.")
+        logger.info(
+            "There is nothing to do. Please pass `do_train`, `do_eval` and/or `do_predict`."
+        )
         return
 
     # Get the column names for input/target.
-    dataset_columns = question_answering_column_name_mapping.get(data_args.dataset_name, None)
+    dataset_columns = question_answering_column_name_mapping.get(
+        data_args.dataset_name, None
+    )
     if data_args.question_column is None:
-        question_column = dataset_columns[0] if dataset_columns is not None else column_names[0]
+        question_column = (
+            dataset_columns[0] if dataset_columns is not None else column_names[0]
+        )
     else:
         question_column = data_args.question_column
         if question_column not in column_names:
@@ -396,7 +477,9 @@ def main():
                 f"--question_column' value '{data_args.question_column}' needs to be one of: {', '.join(column_names)}"
             )
     if data_args.context_column is None:
-        context_column = dataset_columns[1] if dataset_columns is not None else column_names[1]
+        context_column = (
+            dataset_columns[1] if dataset_columns is not None else column_names[1]
+        )
     else:
         context_column = data_args.context_column
         if context_column not in column_names:
@@ -404,7 +487,9 @@ def main():
                 f"--context_column' value '{data_args.context_column}' needs to be one of: {', '.join(column_names)}"
             )
     if data_args.answer_column is None:
-        answer_column = dataset_columns[2] if dataset_columns is not None else column_names[2]
+        answer_column = (
+            dataset_columns[2] if dataset_columns is not None else column_names[2]
+        )
     else:
         answer_column = data_args.answer_column
         if answer_column not in column_names:
@@ -416,7 +501,9 @@ def main():
     max_answer_length = data_args.max_answer_length
     padding = "max_length" if data_args.pad_to_max_length else False
 
-    if training_args.label_smoothing_factor > 0 and not hasattr(model, "prepare_decoder_input_ids_from_labels"):
+    if training_args.label_smoothing_factor > 0 and not hasattr(
+        model, "prepare_decoder_input_ids_from_labels"
+    ):
         logger.warning(
             "label_smoothing is enabled but the `prepare_decoder_input_ids_from_labels` method is not defined for"
             f"`{model.__class__.__name__}`. This will lead to loss being calculated twice and will take up more memory"
@@ -440,35 +527,49 @@ def main():
         answers = examples[answer_column]
 
         def generate_input(_question, _context):
-            return " ".join(["question:", _question.lstrip(), "context:", _context.lstrip()])
+            return " ".join(
+                ["question:", _question.lstrip(), "context:", _context.lstrip()]
+            )
 
         # def generate_output(_answer):
         #     return _answer['text']
 
-        inputs = [generate_input(question, context) for question, context in zip(questions, contexts)]
+        inputs = [
+            generate_input(question, context)
+            for question, context in zip(questions, contexts)
+        ]
         # targets = [generate_output(answer) for answer in answers]
         targets = [answer for answer in answers]
         return inputs, targets
 
     def preprocess_function(examples):
-        inputs, targets = preprocess_squad_batch(examples, question_column, context_column, answer_column)
+        inputs, targets = preprocess_squad_batch(
+            examples, question_column, context_column, answer_column
+        )
 
-        model_inputs = tokenizer(inputs, max_length=max_seq_length, padding=padding, truncation=True)
+        model_inputs = tokenizer(
+            inputs, max_length=max_seq_length, padding=padding, truncation=True
+        )
         # Setup the tokenizer for targets
         with tokenizer.as_target_tokenizer():
-            labels = tokenizer(targets, max_length=max_answer_length, padding=padding, truncation=True)
+            labels = tokenizer(
+                targets, max_length=max_answer_length, padding=padding, truncation=True
+            )
 
-        # If we are padding here, replace all tokenizer.pad_token_id in the labels by -100 when we want to ignore
-        # padding in the loss.
+        # If we are padding here, replace all tokenizer.pad_token_id in the
+        # labels by -100 when we want to ignore padding in the loss.
         if padding == "max_length" and data_args.ignore_pad_token_for_loss:
+            input_ids: Any = labels["input_ids"]
             labels["input_ids"] = [
-                [(l if l != tokenizer.pad_token_id else -100) for l in label] for label in labels["input_ids"]
+                [(x if x != tokenizer.pad_token_id else -100) for x in label]
+                for label in input_ids
             ]
 
         model_inputs["labels"] = labels["input_ids"]
         model_inputs["example_id"] = examples["id"]
         return model_inputs
 
+    train_dataset = None
     if training_args.do_train:
         if "train" not in raw_datasets:
             raise ValueError("--do_train requires a train dataset")
@@ -490,6 +591,8 @@ def main():
             # Number of samples might increase during Feature Creation, We select only specified max samples
             train_dataset = train_dataset.select(range(data_args.max_train_samples))
 
+    eval_dataset = None
+    eval_examples = None
     if training_args.do_eval:
         if "validation" not in raw_datasets:
             raise ValueError("--do_eval requires a validation dataset")
@@ -498,9 +601,11 @@ def main():
             # We will select sample from whole data
             eval_examples = eval_examples.select(range(data_args.max_eval_samples))
         # Validation Feature Creation
-        with training_args.main_process_first(desc="validation dataset map pre-processing"):
+        with training_args.main_process_first(
+            desc="validation dataset map pre-processing"
+        ):
             eval_dataset = eval_examples.map(
-                preprocess_function, 
+                preprocess_function,
                 batched=True,
                 num_proc=data_args.preprocessing_num_workers,
                 remove_columns=column_names,
@@ -511,15 +616,21 @@ def main():
             # During Feature creation dataset samples might increase, we will select required samples again
             eval_dataset = eval_dataset.select(range(data_args.max_eval_samples))
 
+    predict_dataset = None
+    predict_examples = None
     if training_args.do_predict:
         if "test" not in raw_datasets:
             raise ValueError("--do_predict requires a test dataset")
         predict_examples = raw_datasets["test"]
         if data_args.max_predict_samples is not None:
             # We will select sample from whole data
-            predict_examples = predict_examples.select(range(data_args.max_predict_samples))
+            predict_examples = predict_examples.select(
+                range(data_args.max_predict_samples)
+            )
         # Predict Feature Creation
-        with training_args.main_process_first(desc="prediction dataset map pre-processing"):
+        with training_args.main_process_first(
+            desc="prediction dataset map pre-processing"
+        ):
             predict_dataset = predict_examples.map(
                 preprocess_function,
                 batched=True,
@@ -530,14 +641,18 @@ def main():
             )
         if data_args.max_predict_samples is not None:
             # During Feature creation dataset samples might increase, we will select required samples again
-            predict_dataset = predict_dataset.select(range(data_args.max_predict_samples))
+            predict_dataset = predict_dataset.select(
+                range(data_args.max_predict_samples)
+            )
 
     # Data collator
-    label_pad_token_id = -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
+    label_pad_token_id = (
+        -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
+    )
     data_collator = DataCollatorForSeq2Seq(
         tokenizer,
         model=model,
-        label_pad_token_id=label_pad_token_id,
+        label_pad_token_id=label_pad_token_id or -100,
         pad_to_multiple_of=8 if training_args.fp16 else None,
     )
 
@@ -549,7 +664,10 @@ def main():
 
     # Post-processing:
     def post_processing_function(
-        examples: datasets.Dataset, features: datasets.Dataset, outputs: EvalLoopOutput, stage="eval"
+        examples: datasets.DatasetDict,
+        features: datasets.DatasetDict,
+        outputs: EvalLoopOutput,
+        stage="eval",
     ):
         # Decode the predicted tokens.
         preds = outputs.predictions
@@ -559,7 +677,10 @@ def main():
 
         # Build a map example to its corresponding features.
         example_id_to_index = {k: i for i, k in enumerate(examples["id"])}
-        feature_per_example = {example_id_to_index[feature["example_id"]]: i for i, feature in enumerate(features)}
+        feature_per_example = {
+            example_id_to_index[feature["example_id"]]: i
+            for i, feature in enumerate(features)
+        }
         predictions = {}
         # Let's loop over all the examples!
         for example_index, example in enumerate(examples):
@@ -570,13 +691,25 @@ def main():
         # Format the result to the format the metric expects.
         if data_args.version_2_with_negative:
             formatted_predictions = [
-                {"id": k, "prediction_text": v, "no_answer_probability": 0.0} for k, v in predictions.items()
+                {"id": k, "prediction_text": v, "no_answer_probability": 0.0}
+                for k, v in predictions.items()
             ]
         else:
-            formatted_predictions = [{"id": k, "prediction_text": v} for k, v in predictions.items()]
+            formatted_predictions = [
+                {"id": k, "prediction_text": v} for k, v in predictions.items()
+            ]
 
-        references = [{"id": ex["id"], "answers": ex[answer_column], "question_type": ex["question_type"]} for ex in examples]
-        return EvalPrediction(predictions=formatted_predictions, label_ids=references)
+        references = [
+            {
+                "id": ex["id"],
+                "answers": ex[answer_column],
+                "question_type": ex["question_type"],
+            }
+            for ex in examples
+        ]
+        return EvalPrediction(
+            predictions=formatted_predictions, label_ids=references  # type: ignore
+        )
 
     # Initialize our Trainer
     trainer = QuestionAnsweringSeq2SeqTrainer(
@@ -589,7 +722,7 @@ def main():
         data_collator=data_collator,
         compute_metrics=compute_metrics,
         post_process_function=post_processing_function,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience=2)]
+        callbacks=[EarlyStoppingCallback(early_stopping_patience=2)],
     )
 
     # Training
@@ -602,9 +735,12 @@ def main():
         train_result = trainer.train(resume_from_checkpoint=checkpoint)
         trainer.save_model()  # Saves the tokenizer too for easy upload
 
+        assert train_dataset is not None
         metrics = train_result.metrics
         max_train_samples = (
-            data_args.max_train_samples if data_args.max_train_samples is not None else len(train_dataset)
+            data_args.max_train_samples
+            if data_args.max_train_samples is not None
+            else len(train_dataset)
         )
         metrics["train_samples"] = min(max_train_samples, len(train_dataset))
 
@@ -619,12 +755,23 @@ def main():
         if training_args.generation_max_length is not None
         else data_args.val_max_answer_length
     )
-    num_beams = data_args.num_beams if data_args.num_beams is not None else training_args.generation_num_beams
+    num_beams = (
+        data_args.num_beams
+        if data_args.num_beams is not None
+        else training_args.generation_num_beams
+    )
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
-        metrics = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval")
+        metrics = trainer.evaluate(
+            max_length=max_length, num_beams=num_beams, metric_key_prefix="eval"
+        )
 
-        max_eval_samples = data_args.max_eval_samples if data_args.max_eval_samples is not None else len(eval_dataset)
+        assert eval_dataset is not None
+        max_eval_samples = (
+            data_args.max_eval_samples
+            if data_args.max_eval_samples is not None
+            else len(eval_dataset)
+        )
         metrics["eval_samples"] = min(max_eval_samples, len(eval_dataset))
 
         trainer.log_metrics("eval", metrics)
@@ -632,12 +779,18 @@ def main():
 
     # Prediction
     if training_args.do_predict:
+        assert predict_dataset is not None
+        assert predict_examples is not None
         logger.info("*** Predict ***")
+
         results = trainer.predict(predict_dataset, predict_examples)
         metrics = results.metrics
+        assert metrics is not None
 
         max_predict_samples = (
-            data_args.max_predict_samples if data_args.max_predict_samples is not None else len(predict_dataset)
+            data_args.max_predict_samples
+            if data_args.max_predict_samples is not None
+            else len(predict_dataset)
         )
         metrics["predict_samples"] = min(max_predict_samples, len(predict_dataset))
 
@@ -645,19 +798,29 @@ def main():
         trainer.save_metrics("predict", metrics)
 
         if data_args.store_prediction:
-            with open(os.path.join(training_args.output_dir, "predict_outputs.json"), "w") as fpred:
-                json.dump({
-                    "label_ids": results.label_ids,
-                    "predictions": results.predictions
-                }, fpred)
+            with open(
+                os.path.join(training_args.output_dir, "predict_outputs.json"), "w"
+            ) as fpred:
+                json.dump(
+                    {
+                        "label_ids": results.label_ids,
+                        "predictions": results.predictions,
+                    },
+                    fpred,
+                )
 
     if training_args.push_to_hub:
-        kwargs = {"finetuned_from": model_args.model_name_or_path, "tasks": "question-answering"}
+        kwargs = {
+            "finetuned_from": model_args.model_name_or_path,
+            "tasks": "question-answering",
+        }
         if data_args.dataset_name is not None:
             kwargs["dataset_tags"] = data_args.dataset_name
             if data_args.dataset_config_name is not None:
                 kwargs["dataset_args"] = data_args.dataset_config_name
-                kwargs["dataset"] = f"{data_args.dataset_name} {data_args.dataset_config_name}"
+                kwargs[
+                    "dataset"
+                ] = f"{data_args.dataset_name} {data_args.dataset_config_name}"
             else:
                 kwargs["dataset"] = data_args.dataset_name
 

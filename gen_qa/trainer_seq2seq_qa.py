@@ -19,13 +19,16 @@ from typing import Dict, List, Optional
 
 from torch.utils.data import Dataset
 
-from transformers import Seq2SeqTrainer, is_torch_tpu_available
+from transformers import Seq2SeqTrainer, is_torch_tpu_available, Seq2SeqTrainingArguments
 from transformers.trainer_utils import PredictionOutput
 
 
 if is_torch_tpu_available():
-    import torch_xla.core.xla_model as xm
-    import torch_xla.debug.metrics as met
+    try:
+        import torch_xla.core.xla_model as xm  # type: ignore
+        import torch_xla.debug.metrics as met  # type: ignore
+    except ImportError:
+        raise ValueError("torch_xla must be available to use TPU")
 
 
 class QuestionAnsweringSeq2SeqTrainer(Seq2SeqTrainer):
@@ -44,6 +47,7 @@ class QuestionAnsweringSeq2SeqTrainer(Seq2SeqTrainer):
         max_length: Optional[int] = None,
         num_beams: Optional[int] = None,
     ) -> Dict[str, float]:
+        assert isinstance(self.args, Seq2SeqTrainingArguments)
         self._max_length = max_length if max_length is not None else self.args.generation_max_length
         self._num_beams = num_beams if num_beams is not None else self.args.generation_num_beams
 
