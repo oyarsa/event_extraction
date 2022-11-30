@@ -1,41 +1,50 @@
-import torch
 import argparse
 import os
 import pickle
+
+import torch
+import transformers
+
 from load import load_data_from_file
-from transformers import *
+from utils import dump_args
 
 
-def main():
+def main(args: argparse.Namespace) -> None:
     device = torch.device(args.device)
 
-    if not os.path.exists(args.output_path):
-        os.makedirs(args.output_path)
+    os.makedirs(args.output_path, exist_ok=True)
 
     with open(os.path.join(args.model_path, "label_encoder.pk"), "rb") as file:
         label_encoder = pickle.load(file)
 
-    test_loader, _ = load_data_from_file(args.test_path,
-                                         1,
-                                         args.token_column, args.predict_column,
-                                         args.lang_model_name,
-                                         512,
-                                         args.separator,
-                                         args.pad_label, args.null_label,
-                                         device,
-                                         label_encoder,
-                                         False)
+    test_loader, _ = load_data_from_file(
+        args.test_path,
+        1,
+        args.token_column,
+        args.predict_column,
+        args.lang_model_name,
+        512,
+        args.separator,
+        args.pad_label,
+        args.null_label,
+        device,
+        label_encoder,
+        False,
+    )
 
-    tokenizer = AutoTokenizer.from_pretrained(args.lang_model_name)
+    tokenizer = transformers.AutoTokenizer.from_pretrained(args.lang_model_name)
 
-    model = torch.load(os.path.join(args.model_path, "model.pt"), map_location=args.device)
+    model = torch.load(
+        os.path.join(args.model_path, "model.pt"), map_location=args.device
+    )
     model.fine_tune = False
     model.eval()
 
     list_labels = []
 
     for i, (test_x, _, mask, _) in enumerate(test_loader):
-        print("Predicting tags for sequence: {}/{}...".format(i, len(test_loader.dataset)))
+        dataset_len = len(test_loader.dataset)  # type: ignore
+        print("Predicting tags for sequence: {}/{}...".format(i, dataset_len))
         logits = model.forward(test_x, mask)
         preds = torch.argmax(logits, 2)
 
@@ -44,8 +53,11 @@ def main():
         labels = label_encoder.inverse_transform(preds[0][1:end].tolist())
         list_labels.append(labels)
 
-    with(open(os.path.join(args.test_path), "r", encoding='utf-8')) as in_file, \
-         open(os.path.join(args.output_path, "predict.conllu"), "w", encoding='utf-8') as out_file:
+    in_path = args.test_path
+    out_path = os.path.join(args.output_path, "predict.conllu")
+    with open(in_path, "r", encoding="utf-8") as in_file, open(
+        out_path, "w", encoding="utf-8"
+    ) as out_file:
         sentence_idx = 0
         label_idx = 0
 
@@ -64,9 +76,12 @@ def main():
                     for token in tokens[:-1]:
                         out_file.write("{}{}".format(token, args.separator))
 
-                    out_file.write("{}".format(tokens[-1] + "\n" if "\n" not in tokens[-1] else tokens[-1]))
+                    out_file.write(
+                        "{}".format(
+                            tokens[-1] + "\n" if "\n" not in tokens[-1] else tokens[-1]
+                        )
+                    )
                 else:
-                    # print(label_idx, len(curr_labels))
                     assert label_idx == len(list_labels[sentence_idx])
 
                     out_file.write("\n")
@@ -91,5 +106,5 @@ if __name__ == "__main__":
     parser.add_argument("--device", default="cpu")
 
     args = parser.parse_args()
-
-    main()
+    dump_args(args)
+    main(args)

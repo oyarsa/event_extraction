@@ -26,7 +26,8 @@ class LangModelWithDense(nn.Module):
         Forward function of the model.
 
         :param x: The inputs. Shape: [batch_size, seq_len].
-        :param mask: The attention mask. Ones are unmasked, zeros are masked. Shape: [batch_size, seq_len].
+        :param mask: The attention mask. Ones are unmasked, zeros are masked.
+            Shape: [batch_size, seq_len].
         :return: The logits. Shape: [batch_size, seq_len, num_classes].
 
         Example:
@@ -49,7 +50,8 @@ class LangModelWithDense(nn.Module):
         else:
             embeddings = self.lang_model(x, attention_mask=mask)[0]
 
-        # create a vector to retain the output for each token. Shape: [batch_size, seq_len, num_classes]
+        # create a vector to retain the output for each token. Shape:
+        # [batch_size, seq_len, num_classes]
         logits = torch.zeros((batch_size, seq_len, self.num_classes))
 
         # feed-forward for each token in the sequence and save it in outputs
