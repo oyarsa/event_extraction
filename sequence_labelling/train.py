@@ -146,7 +146,7 @@ def train_model(
 
             best_f1 = macro_f1
             torch.save(model, os.path.join(save_path, "model.pt"))
-            with open(os.path.join(args.save_path, "label_encoder.pk"), "wb") as file:
+            with open(os.path.join(save_path, "label_encoder.pk"), "wb") as file:
                 pickle.dump(label_encoder, file)
 
     tb_writer.close()
