@@ -6,3 +6,4 @@ runs/
 runs_archive/
 *.log
 output/
+.mypy_cache/
