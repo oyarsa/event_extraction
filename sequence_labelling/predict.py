@@ -42,14 +42,13 @@ def main(args: argparse.Namespace) -> None:
 
     list_labels = []
 
+    dataset_len = len(test_loader.dataset)  # type: ignore
     for i, (test_x, _, mask, _) in enumerate(test_loader):
-        dataset_len = len(test_loader.dataset)  # type: ignore
-        print("Predicting tags for sequence: {}/{}...".format(i, dataset_len))
+        print("Predicting tags for sequence: {}/{}...".format(i + 1, dataset_len))
         logits = model.forward(test_x, mask)
         preds = torch.argmax(logits, 2)
 
-        end = torch.argmax(mask, dim=1)
-
+        end = mask.argmin(1) - 1
         labels = label_encoder.inverse_transform(preds[0][1:end].tolist())
         list_labels.append(labels)
 
