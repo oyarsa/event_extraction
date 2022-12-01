@@ -135,8 +135,8 @@ def train_model(
 
         # if the current macro F1 score is the best one -> save the model
         if macro_f1 > best_f1:
-            if not os.path.exists(args.save_path):
-                os.makedirs(args.save_path)
+            save_path = os.path.join(args.save_path, args.run_name)
+            os.makedirs(save_path, exist_ok=True)
 
             logger.info(
                 "Macro F1 score improved from {:.4f} -> {:.4f}. Saving model...".format(
@@ -145,7 +145,7 @@ def train_model(
             )
 
             best_f1 = macro_f1
-            torch.save(model, os.path.join(args.save_path, "model.pt"))
+            torch.save(model, os.path.join(save_path, "model.pt"))
             with open(os.path.join(args.save_path, "label_encoder.pk"), "wb") as file:
                 pickle.dump(label_encoder, file)
 

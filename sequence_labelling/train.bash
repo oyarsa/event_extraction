@@ -6,6 +6,7 @@ LOGFILE="${LOGFILE:-train.log}"
 
 RUN_NAME="${RUN_NAME:-}"
 LR="${LR:-5e-5}"
+LM_NAME="${LM_NAME:-bert-base-cased}"
 
 usage() {
     echo "Usage: TRAIN_DATA=? DEV_DATA=? [TB_RUN=?] [LOG_FILE=?] $0 [-h|--help] [ARGS]"
@@ -32,7 +33,7 @@ python train.py \
     "$TRAIN_DATA" \
     "$DEV_DATA" \
     0 1 \
-    bert-base-cased \
+    "$LM_NAME" \
     --separator " " \
     --device "cuda:0" \
     --fine_tune \

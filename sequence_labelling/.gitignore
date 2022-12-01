@@ -3,5 +3,6 @@ __pycache__/
 *.pyc
 models/
 runs/
+runs_archive/
 *.log
 output/
