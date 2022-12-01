@@ -90,15 +90,15 @@ def load_data_from_file(
                 )
                 list_tokens = []
                 list_labels = []
-            else:
-                logger.warn("Maximum sentence length exceeded.")
+            # else:
+            #     logger.warn("Maximum sentence length exceeded.")
 
             assert len(list_tokens) == len(list_labels)
 
-    assert not list_tokens, (
-        "There are leftover tokens not added to the dataset. There must be a blank line"
-        " at the end of the data file, or the last sentence will be ignored."
-    )
+    # assert not list_tokens, (
+    #     "There are leftover tokens not added to the dataset. There must be a blank line"
+    #     " at the end of the data file, or the last sentence will be ignored."
+    # )
 
     logger.info("File loading done")
     assert len(list_all_tokens) == len(list_all_labels) == len(list_all_masks)

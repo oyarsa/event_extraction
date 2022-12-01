@@ -275,8 +275,8 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    dump_args(args)
 
     init_logger(args.logfile)
+    dump_args(args)
 
     main(args)

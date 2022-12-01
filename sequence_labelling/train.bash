@@ -34,4 +34,5 @@ python train.py \
     --device "cuda:0" \
     --fine_tune \
     --tb-run "$TB_RUN" \
-    --logfile "$LOGFILE"
+    --logfile "$LOGFILE" \
+    "$@"
