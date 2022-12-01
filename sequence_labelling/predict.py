@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 import pickle
 
@@ -6,7 +7,9 @@ import torch
 import transformers
 
 from load import load_data_from_file
-from utils import dump_args
+from utils import dump_args, init_logger
+
+logger = logging.getLogger("bert.predict")
 
 
 def main(args: argparse.Namespace) -> None:
@@ -46,7 +49,7 @@ def main(args: argparse.Namespace) -> None:
 
     dataset_len = len(test_loader.dataset)  # type: ignore
     for i, (test_x, _, mask, _) in enumerate(test_loader):
-        print("Predicting tags for sequence: {}/{}...".format(i + 1, dataset_len))
+        logger.info("Predicting tags for sequence: {}/{}...".format(i + 1, dataset_len))
         logits = model.forward(test_x, mask)
         preds = torch.argmax(logits, 2)
 
@@ -55,7 +58,7 @@ def main(args: argparse.Namespace) -> None:
         list_labels.append(labels)
 
     in_path = args.test_path
-    out_path = os.path.join(args.output_path, "predict.conllu")
+    out_path = os.path.join(args.output_path, args.output_name)
     with open(in_path, "r", encoding="utf-8") as in_file, open(
         out_path, "w", encoding="utf-8"
     ) as out_file:
@@ -65,23 +68,16 @@ def main(args: argparse.Namespace) -> None:
         for line in in_file:
             if not line.startswith("#"):
                 if line not in [" ", "\n"]:
-                    tokens = line.split(args.separator)
+                    tokens = line.strip().split(args.separator)
 
                     token = tokens[args.token_column]
+                    gold = tokens[args.predict_column]
+                    pred = list_labels[sentence_idx][label_idx]
+
+                    out_file.write(args.separator.join([token, gold, pred]) + "\n")
+
                     subtokens = tokenizer.encode(token, add_special_tokens=False)
-
-                    tokens[args.predict_column] = list_labels[sentence_idx][label_idx]
-
                     label_idx += len(subtokens)
-
-                    for token in tokens[:-1]:
-                        out_file.write("{}{}".format(token, args.separator))
-
-                    out_file.write(
-                        "{}".format(
-                            tokens[-1] + "\n" if "\n" not in tokens[-1] else tokens[-1]
-                        )
-                    )
                 else:
                     assert label_idx == len(list_labels[sentence_idx])
 
@@ -101,11 +97,21 @@ if __name__ == "__main__":
     parser.add_argument("lang_model_name", type=str)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--output_path", type=str, default="output")
+    parser.add_argument("--output_name", type=str, default="predict.conllu")
     parser.add_argument("--separator", type=str, default=" ")
     parser.add_argument("--pad_label", type=str, default="<pad>")
     parser.add_argument("--null_label", type=str, default="<X>")
     parser.add_argument("--device", default="cpu")
+    parser.add_argument(
+        "--log-all",
+        action="store_true",
+        help="Enable logging of everything, including libraries like transformers",
+    )
 
     args = parser.parse_args()
+
+    log_name = None if args.log_all else "bert"
+    init_logger(log_name=log_name)
     dump_args(args)
+
     main(args)
