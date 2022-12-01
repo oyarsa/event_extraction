@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("bert.load")
 
 
 def load_data_from_file(

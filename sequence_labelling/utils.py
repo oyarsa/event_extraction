@@ -7,7 +7,7 @@ import torch
 from sklearn.metrics import f1_score, precision_score, recall_score
 from sklearn.preprocessing import LabelEncoder
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("bert.utils")
 
 
 class Meter:
@@ -180,7 +180,7 @@ def init_logger(
         https://github.com/OpenNMT/OpenNMT-py/blob/master/onmt/utils/logging.py
     """
     log_format = logging.Formatter(
-        "[%(asctime)s %(levelname)s %(filename)s:%(lineno)d] %(message)s"
+        "[%(asctime)s %(levelname)s %(name)s:%(lineno)d] %(message)s"
     )
     logger = logging.getLogger(log_name)
     logger.setLevel(logging.INFO)

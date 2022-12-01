@@ -13,7 +13,7 @@ from load import load_data
 from model import LangModelWithDense
 from utils import Meter, dump_args, print_info, init_logger
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("bert.train")
 
 
 def train_model(
@@ -276,10 +276,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "--lr", type=float, help="Optimiser learning rate", default=2e-4
     )
+    parser.add_argument(
+        "--log-all",
+        action="store_true",
+        help="Enable logging of everything, including libraries like transformers",
+    )
 
     args = parser.parse_args()
 
-    init_logger(args.logfile)
+    log_name = None if args.log_all else "bert"
+    init_logger(args.logfile, log_name)
     dump_args(args)
 
     main(args)
