@@ -26,7 +26,7 @@ def load_data_from_file(
 ):
     # create the tokenizer for subtokens
     logger.info("Loading Tokenizer")
-    tokenizer = transformers.AutoTokenizer.from_pretrained(lang_model)
+    tokenizer = transformers.AutoTokenizer.from_pretrained(lang_model, use_fast=True)
     logger.info("Tokenizer loaded")
 
     cls_token_id = tokenizer.cls_token_id
@@ -88,8 +88,6 @@ def load_data_from_file(
                         dtype=torch.bool,
                     )
                 )
-
-            assert len(list_tokens) == len(list_labels)
 
             list_tokens = []
             list_labels = []

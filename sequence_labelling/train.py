@@ -236,7 +236,7 @@ if __name__ == "__main__":
         help="Language model name of HuggingFace's implementation.",
     )
     parser.add_argument("--batch_size", type=int, default=32, help="The batch size.")
-    parser.add_argument("--epochs", type=int, default=100, help="Number of epochs.")
+    parser.add_argument("--epochs", type=int, default=10, help="Number of epochs.")
     parser.add_argument(
         "--save_path", type=str, default="models", help="Where to save the model/"
     )
@@ -246,12 +246,12 @@ if __name__ == "__main__":
         help="Use this to fine-tune the language model's weights.",
     )
     parser.add_argument(
-        "--max_len", type=int, default=128, help="Maximum length of the files."
+        "--max_len", type=int, default=192, help="Maximum length of the files."
     )
     parser.add_argument(
         "--separator",
         type=str,
-        default="\t",
+        default=" ",
         help="Separator of the tokens in the train/dev files.",
     )
     parser.add_argument("--pad_label", type=str, default="<pad>", help="The pad token.")

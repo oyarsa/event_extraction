@@ -32,7 +32,9 @@ def main(args: argparse.Namespace) -> None:
         False,
     )
 
-    tokenizer = transformers.AutoTokenizer.from_pretrained(args.lang_model_name)
+    tokenizer = transformers.AutoTokenizer.from_pretrained(
+        args.lang_model_name, use_fast=True
+    )
 
     model = torch.load(
         os.path.join(args.model_path, "model.pt"), map_location=args.device
@@ -99,7 +101,7 @@ if __name__ == "__main__":
     parser.add_argument("lang_model_name", type=str)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--output_path", type=str, default="output")
-    parser.add_argument("--separator", type=str, default="\t")
+    parser.add_argument("--separator", type=str, default=" ")
     parser.add_argument("--pad_label", type=str, default="<pad>")
     parser.add_argument("--null_label", type=str, default="<X>")
     parser.add_argument("--device", default="cpu")
