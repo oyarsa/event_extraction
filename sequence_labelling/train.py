@@ -34,8 +34,8 @@ def train_model(
     train_meter = Meter(target_classes)
     dev_meter = Meter(target_classes)
 
-    tb_run = f"-{args.tb_run}" if args.tb_run else ""
-    tb_writer = SummaryWriter(comment=tb_run)
+    run_name = f"-{args.run_name}" if args.run_name else ""
+    tb_writer = SummaryWriter(comment=run_name)
 
     best_f1 = -1
 
@@ -182,7 +182,7 @@ def main(args: argparse.Namespace) -> None:
     model = LangModelWithDense(
         lang_model, input_size, len(label_encoder.classes_), args.fine_tune
     ).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=2e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
     if args.no_crf:
         weights = torch.tensor(
@@ -265,13 +265,16 @@ if __name__ == "__main__":
         "--device", type=str, default="cpu", help="The device to train on."
     )
     parser.add_argument(
-        "--tb-run", type=str, help="Suffix for the Tensorboard run name"
+        "--run-name", type=str, help="Suffix for the Tensorboard run name"
     )
     parser.add_argument(
         "--logfile",
         type=str,
         help="Path to the destination log file",
         default="train.log",
+    )
+    parser.add_argument(
+        "--lr", type=float, help="Optimiser learning rate", default=2e-4
     )
 
     args = parser.parse_args()

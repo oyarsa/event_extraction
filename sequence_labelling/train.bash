@@ -3,10 +3,13 @@
 set -e
 
 LOGFILE="${LOGFILE:-train.log}"
-TB_RUN="${TB_RUN:-}"
+
+RUN_NAME="${RUN_NAME:-}"
+LR="${LR:-5e-5}"
 
 usage() {
-    echo "Usage: TRAIN_DATA=? DEV_DATA=? [TB_RUN=?] [LOG_FILE=?] $0 [-h|--help]"
+    echo "Usage: TRAIN_DATA=? DEV_DATA=? [TB_RUN=?] [LOG_FILE=?] $0 [-h|--help] [ARGS]"
+    printf "\t[ARGS] are passed to train.py\n"
     exit 1
 }
 
@@ -33,6 +36,7 @@ python train.py \
     --separator " " \
     --device "cuda:0" \
     --fine_tune \
-    --tb-run "$TB_RUN" \
+    --run-name "$RUN_NAME" \
     --logfile "$LOGFILE" \
+    --lr "$LR" \
     "$@"
