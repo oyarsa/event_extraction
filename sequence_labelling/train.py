@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from load import load_data
 from model import LangModelWithDense
-from utils import Meter, dump_args, print_info
+from utils import Meter, dump_args, print_info, init_logger
 
 logger = logging.getLogger(__name__)
 
@@ -81,8 +81,14 @@ def train_model(
 
         tb_writer.add_scalar("Train/loss", train_meter.loss, epoch)
         tb_writer.add_scalar("Train/macro_f1", train_meter.macro_f1, epoch)
-
         tb_writer.flush()
+
+        logger.info(
+            "[{}/{}] Train Loss: {:.4f}, Train Macro F1: {:.4f}".format(
+                epoch + 1, args.epochs, train_meter.loss, train_meter.macro_f1
+            )
+        )
+
         train_meter.reset()
 
         model.eval()
@@ -117,8 +123,14 @@ def train_model(
 
         tb_writer.add_scalar("Dev/loss", dev_meter.loss, epoch)
         tb_writer.add_scalar("Dev/macro_f1", dev_meter.macro_f1, epoch)
-
         tb_writer.flush()
+
+        logger.info(
+            "[{}/{}] Dev Loss: {:.4f}, Dev Macro F1: {:.4f}".format(
+                epoch + 1, args.epochs, dev_meter.loss, dev_meter.macro_f1
+            )
+        )
+
         dev_meter.reset()
 
         # if the current macro F1 score is the best one -> save the model
@@ -126,7 +138,7 @@ def train_model(
             if not os.path.exists(args.save_path):
                 os.makedirs(args.save_path)
 
-            print(
+            logger.info(
                 "Macro F1 score improved from {:.4f} -> {:.4f}. Saving model...".format(
                     best_f1, macro_f1
                 )
@@ -211,8 +223,6 @@ def main(args: argparse.Namespace) -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-
     parser = argparse.ArgumentParser()
     parser.add_argument("train_path", type=str, help="Path to the training file")
     parser.add_argument("dev_path", type=str, help="Path to the dev file")
@@ -257,7 +267,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "--tb-run", type=str, help="Suffix for the Tensorboard run name"
     )
+    parser.add_argument(
+        "--logfile",
+        type=str,
+        help="Path to the destination log file",
+        default="train.log",
+    )
 
     args = parser.parse_args()
     dump_args(args)
+
+    init_logger(args.logfile)
+
     main(args)

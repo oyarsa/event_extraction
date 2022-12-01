@@ -2,7 +2,7 @@
 
 set -e
 
-LOGFILE="${LOGFILE:-log.txt}"
+LOGFILE="${LOGFILE:-train.log}"
 TB_RUN="${TB_RUN:-}"
 
 usage() {
@@ -22,7 +22,8 @@ if [ -z "$TRAIN_DATA" ] || [ -z "$DEV_DATA" ]; then
     usage
 fi
 
-echo date >> "$LOGFILE"
+
+printf "\n>>>>>>>>>> %s\n\n" "$(date)" >> "$LOGFILE"
 
 python train.py \
     "$TRAIN_DATA" \
@@ -33,4 +34,4 @@ python train.py \
     --device "cuda:0" \
     --fine_tune \
     --tb-run "$TB_RUN" \
-    2>&1 | tee -a "$LOGFILE"
+    --logfile "$LOGFILE"

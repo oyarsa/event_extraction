@@ -149,23 +149,49 @@ def print_info(
     fine_tune: bool,
     device: torch.device,
 ) -> None:
-    print("Training session info:")
-    print("\tLanguage model: {}, Finetune: {}".format(lang_model_name, fine_tune))
-    print(
-        "\tTarget classes: {}".format(
-            [
-                label_encoder.inverse_transform([target_class])[0]
-                for target_class in target_classes
-            ]
-        )
-    )
-    print("\tAll classes: {}".format(label_encoder.classes_.tolist()))  # type: ignore
-    print("\tDevice: {}".format(device))
+    original_target_classes = [
+        label_encoder.inverse_transform([target_class])[0]
+        for target_class in target_classes
+    ]
+    all_classes = label_encoder.classes_.tolist()  # type: ignore
+
+    logger.info("Training session info:")
+    logger.info("\tLanguage model: {}, Finetune: {}".format(lang_model_name, fine_tune))
+    logger.info("\tTarget classes: {}".format(original_target_classes))
+    logger.info("\tAll classes: {}".format(all_classes))
+    logger.info("\tDevice: {}".format(device))
 
 
 def dump_args(args: argparse.Namespace) -> None:
-    print("Arguments")
-    print("---------")
+    logger.info("Arguments")
+    logger.info("---------")
     for key, value in vars(args).items():
-        print(f"{key}: {value}")
-    print()
+        logger.info(f"{key}: {value}")
+    logger.info("---------")
+
+
+def init_logger(
+    log_file: str | None = None, log_name: str | None = None
+) -> logging.Logger:
+    """
+    Adopted from ACE:
+        https://github.com/Alibaba-NLP/ACE/blob/main/flair/utils/logging.py
+    Who adopted from OpenNMT-py:
+        https://github.com/OpenNMT/OpenNMT-py/blob/master/onmt/utils/logging.py
+    """
+    log_format = logging.Formatter(
+        "[%(asctime)s %(levelname)s %(filename)s:%(lineno)d] %(message)s"
+    )
+    logger = logging.getLogger(log_name)
+    logger.setLevel(logging.INFO)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(log_format)
+    logger.handlers = [console_handler]
+
+    if log_file:
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setFormatter(log_format)
+        logger.addHandler(file_handler)
+
+    return logger
