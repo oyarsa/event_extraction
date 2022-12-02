@@ -9,6 +9,38 @@ from tqdm import tqdm
 logger = logging.getLogger("bert.load")
 
 
+def flush_tokens(
+    list_all_tokens,
+    list_all_labels,
+    list_all_masks,
+    list_all_crf_masks,
+    list_labels,
+    list_tokens,
+    cls_token_id,
+    sep_token_id,
+    pad_label,
+    null_label,
+):
+    # add the tokens to a collective list, append [CLS]
+    # token to beginning an the [SEP] token to the end
+    list_all_tokens.append(torch.tensor([cls_token_id] + list_tokens + [sep_token_id]))
+    # add the labels to a collective list, append <pad> to
+    # the beginning and the end
+    list_all_labels.append([pad_label] + list_labels + [pad_label])
+    # create the mask - ignore all tokens from [SEP] token onwards
+    list_all_masks.append(torch.tensor([1] * (len(list_tokens) + 2)))
+
+    list_all_crf_masks.append(
+        torch.tensor(
+            [1 if label != null_label else 0 for label in list_all_labels[-1]],
+            dtype=torch.bool,
+        )
+    )
+
+    list_tokens.clear()
+    list_labels.clear()
+
+
 def load_data_from_file(
     path,
     batch_size,
@@ -67,29 +99,32 @@ def load_data_from_file(
                 continue
 
             if len(list_tokens) + 2 <= max_len:
-                # add the tokens to a collective list, append [CLS]
-                # token to beginning an the [SEP] token to the end
-                list_all_tokens.append(
-                    torch.tensor([cls_token_id] + list_tokens + [sep_token_id])
-                )
-                # add the labels to a collective list, append <pad> to
-                # the beginning and the end
-                list_all_labels.append([pad_label] + list_labels + [pad_label])
-                # create the mask - ignore all tokens from [SEP] token onwards
-                list_all_masks.append(torch.tensor([1] * (len(list_tokens) + 2)))
-
-                list_all_crf_masks.append(
-                    torch.tensor(
-                        [
-                            1 if label != null_label else 0
-                            for label in list_all_labels[-1]
-                        ],
-                        dtype=torch.bool,
-                    )
+                flush_tokens(
+                    list_all_tokens,
+                    list_all_labels,
+                    list_all_masks,
+                    list_all_crf_masks,
+                    list_labels,
+                    list_tokens,
+                    cls_token_id,
+                    sep_token_id,
+                    pad_label,
+                    null_label,
                 )
 
-            list_tokens = []
-            list_labels = []
+    if list_tokens:
+        flush_tokens(
+            list_all_tokens,
+            list_all_labels,
+            list_all_masks,
+            list_all_crf_masks,
+            list_labels,
+            list_tokens,
+            cls_token_id,
+            sep_token_id,
+            pad_label,
+            null_label,
+        )
 
     logger.info("File loading done")
     assert len(list_all_tokens) == len(list_all_labels) == len(list_all_masks)
@@ -110,13 +145,13 @@ def load_data_from_file(
     X = torch.nn.utils.rnn.pad_sequence(
         list_all_tokens,
         batch_first=True,
-        padding_value=tokenizer.pad_token_id,
+        padding_value=int(tokenizer.pad_token_id or 0),
     ).to(device)
 
     y = torch.nn.utils.rnn.pad_sequence(
         list_all_encoded_labels,
         batch_first=True,
-        padding_value=label_encoder.transform([pad_label])[0],
+        padding_value=label_encoder.transform([pad_label])[0],  # type: ignore
     ).to(device)
 
     masks = torch.nn.utils.rnn.pad_sequence(
