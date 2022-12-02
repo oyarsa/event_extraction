@@ -9,13 +9,15 @@ for model in $models; do
 
     for bs in $batch_sizes; do
         for lr in $learning_rates; do
-            echo ">>>> MODEL: $model BATCH SIZE: $bs LEARNING RATE: $lr"
+            model_type=$(awk -F- '{print $1}' <<< "$model")
+            run_name="$model_type-bio-crf-4epoch-bs-${bs}_lr-${lr}"
+            echo ">>>> MODEL: $model BATCH SIZE: $bs LEARNING RATE: $lr NAME $run_name"
 
             bash train.bash \
                 --epochs 4 \
                 --batch_size "$bs" \
                 --lr "$lr" \
-                --run-name "bert-bio-crf-4epoch-bs-${bs}_lr-${lr}"
+                --run-name "$run_name"
 
             printf "\n\n"
         done

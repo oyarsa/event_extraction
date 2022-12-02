@@ -6,7 +6,6 @@ import transformers
 from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
 
-
 logger = logging.getLogger("bert.load")
 
 

@@ -5,6 +5,7 @@ import pickle
 
 import torch
 import transformers
+from tqdm import tqdm
 
 from load import load_data_from_file
 from utils import dump_args, init_logger
@@ -47,9 +48,8 @@ def main(args: argparse.Namespace) -> None:
 
     list_labels = []
 
-    dataset_len = len(test_loader.dataset)  # type: ignore
-    for i, (test_x, _, mask, _) in enumerate(test_loader):
-        logger.info("Predicting tags for sequence: {}/{}...".format(i + 1, dataset_len))
+    logger.info("Predicting tags")
+    for test_x, _, mask, _ in tqdm(test_loader):
         logits = model.forward(test_x, mask)
         preds = torch.argmax(logits, 2)
 

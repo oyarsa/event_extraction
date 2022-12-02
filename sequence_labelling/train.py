@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from load import load_data
 from model import LangModelWithDense
-from utils import Meter, dump_args, print_info, init_logger
+from utils import Meter, dump_args, init_logger, print_info
 
 logger = logging.getLogger("bert.train")
 
