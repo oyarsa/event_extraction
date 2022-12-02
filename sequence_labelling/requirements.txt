@@ -3,3 +3,8 @@ transformers
 scikit-learn
 tqdm
 pytorch-crf
+tensorboard
+black
+mypy
+isort
+flake8

@@ -1,21 +1,23 @@
 # BERT-Sequence-Labeling
 
-This repostiory integrates [HuggingFaces](https://github.com/huggingface)'s models in an end-to-end pipeline for sequence labeling. [Here](https://huggingface.co/transformers/pretrained_models.html) 
-is a complete list of the available models. 
+This repostiory integrates [HuggingFaces](https://github.com/huggingface)'s models in an end-to-end pipeline for sequence labeling. [Here](https://huggingface.co/transformers/pretrained_models.html)
+is a complete list of the available models.
 
 If you found this repository helpful, please give it a star.:blush:
 
 ## Install
 
-```
-git clone https://github.com/avramandrei/BERT-Sequence-Labeling.git
-cd BERT-Sequence-Labeling
-pip3 install -r requirements.txt
+```sh
+$ git clone https://github.com/avramandrei/BERT-Sequence-Labeling.git
+$ cd BERT-Sequence-Labeling
+$ conda create -n bert-sl python=3.10
+$ conda activate bert-sl
+$ pip install -r requirements.txt
 ```
 
 ## Input Format
 
-The files used for training, validation and testing must be in a format similar to the [CoNLL](https://universaldependencies.org/format.html): 
+The files used for training, validation and testing must be in a format similar to the [CoNLL](https://universaldependencies.org/format.html):
 
 ```
 # sent_id = email-enronsent20_01-0048
@@ -52,13 +54,13 @@ python3 predict.py [path_test_file] [model_path] [tokens_column] [predict_column
 
 #### English EWT
 
-| model | upos | xpos | 
+| model | upos | xpos |
 | --- | --- | --- |
 | bert-base-cased | 95.92 | 95.27 |
 | roberta-base | 95.77 | 95.18 |
 
 ## Cite
-Please consider citing the following [paper](https://arxiv.org/abs/2009.05603) as a thank you to the authors: 
+Please consider citing the following [paper](https://arxiv.org/abs/2009.05603) as a thank you to the authors:
 ```
 @article{avram2020upb,
   title={UPB at SemEval-2020 Task 6: Pretrained Language Models for Definition Extraction},

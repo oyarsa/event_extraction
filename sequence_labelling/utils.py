@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 import logging
 
@@ -150,7 +148,7 @@ def print_info(
     device: torch.device,
 ) -> None:
     original_target_classes = [
-        label_encoder.inverse_transform([target_class])[0]
+        label_encoder.inverse_transform([target_class])[0]  # type: ignore
         for target_class in target_classes
     ]
     all_classes = label_encoder.classes_.tolist()  # type: ignore
