@@ -3,8 +3,6 @@
 This repostiory integrates [HuggingFaces](https://github.com/huggingface)'s models in an end-to-end pipeline for sequence labeling. [Here](https://huggingface.co/transformers/pretrained_models.html)
 is a complete list of the available models.
 
-If you found this repository helpful, please give it a star.:blush:
-
 ## Install
 
 ```sh
@@ -17,22 +15,29 @@ $ pip install -r requirements.txt
 
 ## Input Format
 
-The files used for training, validation and testing must be in a format similar to the [CoNLL](https://universaldependencies.org/format.html):
+The files used for training, validation and testing must be in the following format:
+- Each line contains the token and the label separated by space
+- Each document or sentence is separated by a blank line
+
+The labels can be whatever you want.
 
 ```
-# sent_id = email-enronsent20_01-0048
-# text = Please let us know if you have additional questions.
-1	Please	please	INTJ	UH	_	2	discourse	2:discourse	_
-2	let	let	VERB	VB	Mood=Imp|VerbForm=Fin	0	root	0:root	_
-3	us	we	PRON	PRP	Case=Acc|Number=Plur|Person=1|PronType=Prs	2	obj	2:obj|4:nsubj:xsubj	_
-4	know	know	VERB	VB	VerbForm=Inf	2	xcomp	2:xcomp	_
-5	if	if	SCONJ	IN	_	7	mark	7:mark	_
-6	you	you	PRON	PRP	Case=Nom|Person=2|PronType=Prs	7	nsubj	7:nsubj	_
-7	have	have	VERB	VBP	Mood=Ind|Tense=Pres|VerbForm=Fin	4	advcl	4:advcl:if	_
-8	additional	additional	ADJ	JJ	Degree=Pos	9	amod	9:amod	_
-9	questions	question	NOUN	NNS	Number=Plur	7	obj	7:obj	SpaceAfter=No
-10	.	.	PUNCT	.	_	2	punct	2:punct	_
+This O
+is O
+the O
+first O
+sentence B-Label1
+. I-Label1
+
+This B-Label2
+is I-Label2
+the O
+second O
 ```
+
+There can be other columns in the file, and the token-label order can be switched. All
+that matters is that you use the correct column indices (starting from 0) when calling
+the scripts, and that you keep the sentences or documents separated by a blank line.
 
 ## Training
 
@@ -52,22 +57,11 @@ python3 predict.py [path_test_file] [model_path] [tokens_column] [predict_column
 
 ## Results
 
-#### English EWT
+#### FGCR
 
-| model | upos | xpos |
-| --- | --- | --- |
-| bert-base-cased | 95.92 | 95.27 |
-| roberta-base | 95.77 | 95.18 |
+See `data/fgcr` for the data and attribution.
 
-## Cite
-Please consider citing the following [paper](https://arxiv.org/abs/2009.05603) as a thank you to the authors:
-```
-@article{avram2020upb,
-  title={UPB at SemEval-2020 Task 6: Pretrained Language Models for Definition Extraction},
-  author={Avram, Andrei-Marius and Cercel, Dumitru-Clementin and Chiru, Costin-Gabriel},
-  journal={arXiv e-prints},
-  pages={arXiv--2009},
-  year={2020}
-}
-
-
+| model | macro_f1 |
+| --- | --- |
+| bert-base-cased | 73.23 |
+| roberta-base | 74.1 |
