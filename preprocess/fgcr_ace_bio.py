@@ -32,7 +32,7 @@ Example input:
 Example output:
 ```
 If O
-one I-Cause
+one B-Cause
 or I-Cause
 more I-Cause
 of I-Cause
@@ -46,7 +46,7 @@ a I-Cause
 disastrous I-Cause
 outcome I-Cause
 , O
-the I-Effect
+the B-Effect
 firm I-Effect
 's I-Effect
 reputation I-Effect
@@ -78,24 +78,26 @@ def convert_instance(instance: dict[str, Any]) -> list[tuple[str, str]]:
     """Convert a FGCR-format instance into an ACE-format instance.
 
     This ignores the relationship and only annotates the causes and effects using
-    I-Cause, I-Effect and O.
+    B-Cause, I-Cause, B-Effect, I-Effect and O.
 
-    This happens at the token level, so we tokenise the text using the NLTKWordTokenizer.
-    The output is a list of (token, label) pairs.
+    This happens at the token level, so we tokenise the text using the
+    NLTKWordTokenizer. The output is a list of (token, label) pairs.
     """
     text = instance["info"]
     spans = list(NLTKWordTokenizer().span_tokenize(text))
 
-    label_map = {"reason": "I-Cause", "result": "I-Effect"}
+    label_map = {"reason": "Cause", "result": "Effect"}
 
     labels = {}
     for label_data in instance["labelData"]:
         for ev_type in ["reason", "result"]:
             for ev_start, ev_end in label_data[ev_type]:
+                is_first = True
                 for t_start, t_end in spans:
                     if ev_start <= t_start and t_end <= ev_end:
-                        labels[(t_start, t_end)] = label_map[ev_type]
-
+                        tag = "B" if is_first else "I"
+                        is_first = False
+                        labels[(t_start, t_end)] = f"{tag}-{label_map[ev_type]}"
     out = []
     for start, end in spans:
         token = text[start:end]
@@ -123,7 +125,7 @@ def convert_file(infile: Path, outfile: Path) -> None:
 
 def main() -> None:
     raw_folder = Path("../data_fgcr/raw")
-    new_folder = Path("./ace")
+    new_folder = Path("./ace_bio")
 
     splits = ["dev", "test", "train"]
     for split in splits:
