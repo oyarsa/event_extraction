@@ -8,7 +8,7 @@ for model in $models; do
     for bs in $batch_sizes; do
         for lr in $learning_rates; do
             model_type=$(awk -F- '{print $1}' <<< "$model")
-            run_name="$model_type-bio-crf-4epoch-bs-${bs}_lr-${lr}"
+            run_name="$model_type-crf-4epoch-bs-${bs}_lr-${lr}"
             echo ">>>> MODEL: $model BATCH SIZE: $bs LEARNING RATE: $lr NAME: $run_name"
 
             python predict.py \

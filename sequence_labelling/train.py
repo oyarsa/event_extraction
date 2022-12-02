@@ -28,7 +28,6 @@ def train_model(
     label_encoder,
     device,
 ):
-
     # create to Meter's classes to track the performance of the model during
     # training and evaluating
     train_meter = Meter(target_classes)
@@ -54,14 +53,14 @@ def train_model(
 
             logits = model.forward(train_x, mask)
 
-            if args.no_crf:
+            if args.crf:
+                loss = -criterion(
+                    logits.to(device), train_y, reduction="token_mean", mask=crf_mask
+                )
+            else:
                 loss = criterion(
                     logits.reshape(-1, num_classes).to(device),
                     train_y.reshape(-1).to(device),
-                )
-            else:
-                loss = -criterion(
-                    logits.to(device), train_y, reduction="token_mean", mask=crf_mask
                 )
 
             loss.backward()
@@ -100,14 +99,14 @@ def train_model(
         for dev_x, dev_y, mask, crf_mask in dev_tqdm:
             logits = model.forward(dev_x, mask)
 
-            if args.no_crf:
+            if args.crf:
+                loss = -criterion(
+                    logits.to(device), dev_y, reduction="token_mean", mask=crf_mask
+                )
+            else:
                 loss = criterion(
                     logits.reshape(-1, num_classes).to(device),
                     dev_y.reshape(-1).to(device),
-                )
-            else:
-                loss = -criterion(
-                    logits.to(device), dev_y, reduction="token_mean", mask=crf_mask
                 )
 
             loss, _, _, micro_f1, _, _, macro_f1 = dev_meter.update_params(
@@ -184,7 +183,9 @@ def main(args: argparse.Namespace) -> None:
     ).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
-    if args.no_crf:
+    if args.crf:
+        criterion = CRF(len(label_encoder.classes_), batch_first=True).to(device)
+    else:
         weights = torch.tensor(
             [
                 1 if label != args.pad_label and label != args.null_label else 0
@@ -193,15 +194,15 @@ def main(args: argparse.Namespace) -> None:
             dtype=torch.float32,
         ).to(device)
         criterion = torch.nn.CrossEntropyLoss(weight=weights)
-    else:
-        criterion = CRF(len(label_encoder.classes_), batch_first=True).to(device)
 
     # remove the null_label (<X>) and the pad label (<pad>) from the evaluated
     # targets during training
     classes = label_encoder.classes_.tolist()  # type: ignore
     classes.remove(args.null_label)
     classes.remove(args.pad_label)
-    target_classes = [label_encoder.transform([clss])[0] for clss in classes]
+    target_classes = [
+        label_encoder.transform([clss])[0] for clss in classes  # type: ignore
+    ]
 
     print_info(
         target_classes, label_encoder, args.lang_model_name, args.fine_tune, device
@@ -257,8 +258,9 @@ if __name__ == "__main__":
     parser.add_argument("--pad_label", type=str, default="<pad>", help="The pad token.")
     parser.add_argument("--null_label", type=str, default="<X>", help="The null token.")
     parser.add_argument(
-        "--no_crf",
-        action="store_true",
+        "--crf",
+        default=False,
+        action=argparse.BooleanOptionalAction,
         help="Use this to remove the CRF on top of the language model.",
     )
     parser.add_argument(
@@ -287,5 +289,4 @@ if __name__ == "__main__":
     log_name = None if args.log_all else "bert"
     init_logger(args.logfile, log_name)
     dump_args(args)
-
     main(args)

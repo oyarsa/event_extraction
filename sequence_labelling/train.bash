@@ -7,6 +7,8 @@ LOGFILE="${LOGFILE:-train.log}"
 RUN_NAME="${RUN_NAME:-}"
 LR="${LR:-5e-5}"
 LM_NAME="${LM_NAME:-bert-base-cased}"
+BATCH_SIZE="${BATCH_SIZE:-32}"
+EPOCHS="${EPOCHS:-4}"
 
 usage() {
     echo "Usage: TRAIN_DATA=? DEV_DATA=? [RUN_NAME=?] [LM_NAME] [LOG_FILE=?] $0 [-h|--help] [...ARGS]"
@@ -40,4 +42,7 @@ python train.py \
     --run-name "$RUN_NAME" \
     --logfile "$LOGFILE" \
     --lr "$LR" \
+    --batch_size "$BATCH_SIZE" \
+    --epochs "$EPOCHS" \
+    "$([ "$CRF" -eq 1 ] && echo "--crf" || echo "--no-crf")" \
     "$@"
