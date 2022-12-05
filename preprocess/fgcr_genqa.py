@@ -51,16 +51,42 @@ import json
 from pathlib import Path
 from typing import Any
 
+COMBINED_SEP = " | "
 
-def convert_instance(instance: dict[str, Any]) -> dict[str, str]:
+
+def generate_answer_combined_tags(
+    events: dict[str, list[str]], label_map: dict[str, str]
+) -> str:
+    out = []
+    for ev_type, evs in events.items():
+        event = f"[{label_map[ev_type]}] " + COMBINED_SEP.join(evs)
+        out.append(event)
+    return " ".join(sorted(out))
+
+
+def generate_answer_separate_tags(
+    events: dict[str, list[str]], label_map: dict[str, str]
+) -> str:
+    out = []
+    for ev_type, evs in events.items():
+        for e in evs:
+            out.append(f"[{label_map[ev_type]}] {e}")
+    return " ".join(sorted(out))
+
+
+def convert_instance(instance: dict[str, Any], mode: str) -> dict[str, str]:
     """Convert a FGCR-format instance into an EEQA-format instance.
 
     This ignores the relationship and only annotates the causes and effects by
     building a list of (start, end, label) triplets.
 
+    `mode` decides how we should handle multi-span cases (e.g. multiple reason spans).
+    It can be 'separate', where every event is annotated separately (e.g. '[Cause] C1
+    [Cause] C2') or 'combined', where all events of the same type are annotated together
+    and separated by `COMBINED_SEP` (e.g. '[Cause] C1 | C2').
+
     The spans are at the token level, so we tokenise the text using the
     NLTKWordTokenizer.
-
 
     The output is a dictionary with the following keys:
     - sentence: the tokenised text
@@ -75,15 +101,24 @@ def convert_instance(instance: dict[str, Any]) -> dict[str, str]:
     text = instance["info"]
     label_map = {"reason": "Cause", "result": "Effect"}
 
-    out = []
+    events = {"reason": [], "result": []}
+    counts = {"reason": 0, "result": 0}
     for label_data in instance["labelData"]:
         for ev_type in ["reason", "result"]:
+            counts[ev_type] += 1
             for ev_start, ev_end in label_data[ev_type]:
-                label = label_map[ev_type]
                 event = text[ev_start:ev_end]
-                out.append(f"[{label}] {event}")
+                events[ev_type].append(event)
 
-    answer = " ".join(out)
+    multispan_handler = {
+        "separate": generate_answer_separate_tags,
+        "combined": generate_answer_combined_tags,
+    }
+    assert (
+        mode in multispan_handler
+    ), f"Invalid mode of handling multi-spans. Choose one of {list(multispan_handler)}"
+
+    answer = multispan_handler[mode](events, label_map)
     return {
         "id": str(instance["tid"]),
         "context": text,
@@ -93,11 +128,11 @@ def convert_instance(instance: dict[str, Any]) -> dict[str, str]:
     }
 
 
-def convert_file(infile: Path, outfile: Path) -> None:
+def convert_file(infile: Path, outfile: Path, mode: str) -> None:
     with open(infile) as f:
         dataset = json.load(f)
 
-    instances = [convert_instance(instance) for instance in dataset]
+    instances = [convert_instance(instance, mode) for instance in dataset]
     transformed = {"version": "v1.0", "data": instances}
 
     outfile.parent.mkdir(exist_ok=True)
@@ -113,7 +148,7 @@ def main() -> None:
     for split in splits:
         raw_path = raw_folder / f"event_dataset_{split}.json"
         new_path = new_folder / f"{split}.json"
-        convert_file(raw_path, new_path)
+        convert_file(raw_path, new_path, "combined")
 
 
 if __name__ == "__main__":
