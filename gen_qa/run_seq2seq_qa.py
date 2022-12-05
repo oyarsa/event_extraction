@@ -47,11 +47,11 @@ from transformers.trainer_utils import (
 )
 from transformers.utils.versions import require_version
 
-from metric.phee.phee import PHEE
-from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
-
 sys.path.append(os.path.abspath(".."))
 sys.path.append(os.path.abspath("."))
+
+from metric.phee.phee import PHEE
+from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 
 # os.environ['TRANSFORMERS_CACHE'] = '~/.cache/huggingface/'
 # os.environ['HF_HOME'] = '~/.cache/huggingface/'
@@ -329,7 +329,7 @@ def main():
     # Setup logging
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        datefmt="%m/%d/%Y %H:%M:%S",
+        datefmt="%d/%m/%Y %H:%M:%S",
         handlers=[logging.StreamHandler(sys.stdout)],
     )
 
@@ -526,21 +526,11 @@ def main():
         contexts = examples[context_column]
         answers = examples[answer_column]
 
-        def generate_input(_question, _context):
-            return " ".join(
-                ["question:", _question.lstrip(), "context:", _context.lstrip()]
-            )
-
-        # def generate_output(_answer):
-        #     return _answer['text']
-
         inputs = [
-            generate_input(question, context)
+            f"question: {question.lstrip()} context: {context.lstrip()}"
             for question, context in zip(questions, contexts)
         ]
-        # targets = [generate_output(answer) for answer in answers]
-        targets = [answer for answer in answers]
-        return inputs, targets
+        return inputs, answers
 
     def preprocess_function(examples):
         inputs, targets = preprocess_squad_batch(
@@ -808,28 +798,6 @@ def main():
                     },
                     fpred,
                 )
-
-    if training_args.push_to_hub:
-        kwargs = {
-            "finetuned_from": model_args.model_name_or_path,
-            "tasks": "question-answering",
-        }
-        if data_args.dataset_name is not None:
-            kwargs["dataset_tags"] = data_args.dataset_name
-            if data_args.dataset_config_name is not None:
-                kwargs["dataset_args"] = data_args.dataset_config_name
-                kwargs[
-                    "dataset"
-                ] = f"{data_args.dataset_name} {data_args.dataset_config_name}"
-            else:
-                kwargs["dataset"] = data_args.dataset_name
-
-        trainer.push_to_hub(**kwargs)
-
-
-def _mp_fn(index):
-    # For xla_spawn (TPUs)
-    main()
 
 
 if __name__ == "__main__":
