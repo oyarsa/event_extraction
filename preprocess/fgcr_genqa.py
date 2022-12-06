@@ -47,19 +47,18 @@ Example output:
 """
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 from typing import Any
 
-COMBINED_SEP = " | "
-
 
 def generate_answer_combined_tags(
-    events: dict[str, list[str]], label_map: dict[str, str]
+    events: dict[str, list[str]], label_map: dict[str, str], sep: str
 ) -> str:
     out = []
     for ev_type, evs in events.items():
-        event = f"[{label_map[ev_type]}] " + COMBINED_SEP.join(evs)
+        event = f"[{label_map[ev_type]}] " + sep.join(evs)
         out.append(event)
     return " ".join(sorted(out))
 
@@ -74,7 +73,9 @@ def generate_answer_separate_tags(
     return " ".join(sorted(out))
 
 
-def convert_instance(instance: dict[str, Any], mode: str) -> dict[str, str]:
+def convert_instance(
+    instance: dict[str, Any], mode: str, combined_sep: str = " | "
+) -> dict[str, str]:
     """Convert a FGCR-format instance into an EEQA-format instance.
 
     This ignores the relationship and only annotates the causes and effects by
@@ -84,6 +85,9 @@ def convert_instance(instance: dict[str, Any], mode: str) -> dict[str, str]:
     It can be 'separate', where every event is annotated separately (e.g. '[Cause] C1
     [Cause] C2') or 'combined', where all events of the same type are annotated together
     and separated by `COMBINED_SEP` (e.g. '[Cause] C1 | C2').
+
+    `combined_sep` is the separator used when `mode` is 'combined'. It's discarded
+    when `mode` is 'separate'.
 
     The spans are at the token level, so we tokenise the text using the
     NLTKWordTokenizer.
@@ -101,7 +105,7 @@ def convert_instance(instance: dict[str, Any], mode: str) -> dict[str, str]:
     text = instance["info"]
     label_map = {"reason": "Cause", "result": "Effect"}
 
-    events = {"reason": [], "result": []}
+    events: dict[str, list[str]] = {"reason": [], "result": []}
     counts = {"reason": 0, "result": 0}
     for label_data in instance["labelData"]:
         for ev_type in ["reason", "result"]:
@@ -110,15 +114,15 @@ def convert_instance(instance: dict[str, Any], mode: str) -> dict[str, str]:
                 event = text[ev_start:ev_end]
                 events[ev_type].append(event)
 
-    multispan_handler = {
-        "separate": generate_answer_separate_tags,
-        "combined": generate_answer_combined_tags,
-    }
-    assert (
-        mode in multispan_handler
-    ), f"Invalid mode of handling multi-spans. Choose one of {list(multispan_handler)}"
+    if mode == "separate":
+        answer = generate_answer_separate_tags(events, label_map)
+    elif mode == "combined":
+        answer = generate_answer_combined_tags(events, label_map, combined_sep)
+    else:
+        raise ValueError(
+            "Invalid mode of handling multi-spans. Use 'separate' or 'combined'"
+        )
 
-    answer = multispan_handler[mode](events, label_map)
     return {
         "id": str(instance["tid"]),
         "context": text,
@@ -128,11 +132,13 @@ def convert_instance(instance: dict[str, Any], mode: str) -> dict[str, str]:
     }
 
 
-def convert_file(infile: Path, outfile: Path, mode: str) -> None:
+def convert_file(
+    infile: Path, outfile: Path, mode: str, combined_sep: str = " | "
+) -> None:
     with open(infile) as f:
         dataset = json.load(f)
 
-    instances = [convert_instance(instance, mode) for instance in dataset]
+    instances = [convert_instance(instance, mode, combined_sep) for instance in dataset]
     transformed = {"version": "v1.0", "data": instances}
 
     outfile.parent.mkdir(exist_ok=True)
@@ -141,14 +147,34 @@ def convert_file(infile: Path, outfile: Path, mode: str) -> None:
 
 
 def main() -> None:
-    raw_folder = Path("data_fgcr/raw")
-    new_folder = Path("data_fgcr/genqa")
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument(
+        "--src",
+        default="data_fgcr/raw",
+        help="Path to the folder containing the raw data",
+    )
+    argparser.add_argument(
+        "--dst", default="data_fgcr/genqa", help="Path to the output folder"
+    )
+    argparser.add_argument(
+        "--combined-sep", default=" | ", help="Separator for combined mode"
+    )
+    argparser.add_argument(
+        "--mode",
+        default="combined",
+        choices=["separate", "combined"],
+        help="How to handle multi-span cases",
+    )
+    args = argparser.parse_args()
+
+    raw_folder = Path(args.src)
+    new_folder = Path(args.dst)
 
     splits = ["dev", "test", "train"]
     for split in splits:
         raw_path = raw_folder / f"event_dataset_{split}.json"
         new_path = new_folder / f"{split}.json"
-        convert_file(raw_path, new_path, "combined")
+        convert_file(raw_path, new_path, args.mode, args.combined_sep)
 
 
 if __name__ == "__main__":

@@ -45,25 +45,12 @@ from transformers.trainer_utils import (
     EvalPrediction,
     get_last_checkpoint,
 )
-from transformers.utils.versions import require_version
 
-sys.path.append(os.path.abspath(".."))
-sys.path.append(os.path.abspath("."))
-
-from metric.phee.phee import PHEE
+from metric.fgcr_metric import FGCR
 from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
-
-# os.environ['TRANSFORMERS_CACHE'] = '~/.cache/huggingface/'
-# os.environ['HF_HOME'] = '~/.cache/huggingface/'
-# Will error if the minimal version of Transformers is not installed. Remove at your own risks.
-# check_min_version("4.17.0.dev0")
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-require_version(
-    "datasets>=1.8.0",
-    "To fix: pip install -r examples/pytorch/question-answering/requirements.txt",
-)
 
 logger = logging.getLogger(__name__)
 
@@ -439,7 +426,7 @@ def main():
         cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
-    )
+    )  # type: ignore
 
     model.resize_token_embeddings(len(tokenizer))
 
@@ -646,8 +633,7 @@ def main():
         pad_to_multiple_of=8 if training_args.fp16 else None,
     )
 
-    # metric = load_metric("./metric/phee", cache_dir=training_args.output_dir)
-    metric = PHEE()
+    metric = FGCR()
 
     def compute_metrics(p: EvalPrediction):
         return metric.compute(predictions=p.predictions, references=p.label_ids)
@@ -722,8 +708,8 @@ def main():
             checkpoint = training_args.resume_from_checkpoint
         elif last_checkpoint is not None:
             checkpoint = last_checkpoint
-        train_result = trainer.train(resume_from_checkpoint=checkpoint)
-        trainer.save_model()  # Saves the tokenizer too for easy upload
+        train_result = trainer.train(resume_from_checkpoint=checkpoint)  # type: ignore
+        trainer.save_model()  # type: ignore
 
         assert train_dataset is not None
         metrics = train_result.metrics
@@ -734,9 +720,9 @@ def main():
         )
         metrics["train_samples"] = min(max_train_samples, len(train_dataset))
 
-        trainer.log_metrics("train", metrics)
-        trainer.save_metrics("train", metrics)
-        trainer.save_state()
+        trainer.log_metrics("train", metrics)  # type: ignore
+        trainer.save_metrics("train", metrics)  # type: ignore
+        trainer.save_state()  # type: ignore
 
     # Evaluation
     results = {}
@@ -764,8 +750,8 @@ def main():
         )
         metrics["eval_samples"] = min(max_eval_samples, len(eval_dataset))
 
-        trainer.log_metrics("eval", metrics)
-        trainer.save_metrics("eval", metrics)
+        trainer.log_metrics("eval", metrics)  # type: ignore
+        trainer.save_metrics("eval", metrics)  # type: ignore
 
     # Prediction
     if training_args.do_predict:
@@ -784,8 +770,8 @@ def main():
         )
         metrics["predict_samples"] = min(max_predict_samples, len(predict_dataset))
 
-        trainer.log_metrics("predict", metrics)
-        trainer.save_metrics("predict", metrics)
+        trainer.log_metrics("predict", metrics)  # type: ignore
+        trainer.save_metrics("predict", metrics)  # type: ignore
 
         if data_args.store_prediction:
             with open(

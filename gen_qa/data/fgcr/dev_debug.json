@@ -1,10 +1,75 @@
 {
   "version": "v1.0",
-  "data": {
-    "id": "292",
-    "context": "Of all Eaton's businesses, we're most bullish on its electrical sector and its aerospace business given data center growth, necessary upgrades to aging infrastructure, and the eventual commercial aerospace recovery.",
-    "question": "What are the events?",
-    "question_type": "Events",
-    "answers": "[Cause]  data center growth, necessary upgrades to aging infrastructure, and the eventual commercial aerospace recovery [Effect]  we're most bullish on its electrical sector and its aerospace business "
-  }
+  "data": [
+    {
+      "id": "2771",
+      "context": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] one or more of Ecolab's customers were to experience a disastrous outcome [Effect] the firm's reputation could suffer and it could lose multiple customers"
+    },
+    {
+      "id": "3940",
+      "context": "As grocery customers regularly visit the store, they are continually exposed to the firm's higher margin offerings, spurring lucrative general merchandise sales.",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] hey are continually exposed to the firm's higher margin offerings [Effect] spurring lucrative general merchandise sales"
+    },
+    {
+      "id": "710",
+      "context": "Nevertheless, with voices amplified through structural shifts like the rise of digital media, consumers have more agency than ever: if they want LaCroix (or any other National Beverage brand), retailers eventually have to oblige.",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause]  voices amplified through structural shifts [Effect]  consumers have more agency"
+    },
+    {
+      "id": "2175",
+      "context": "Despite these low margins, the company has historically generated returns on invested capital of 20% largely due to scale and growth driven by strong drug price inflation and increases in therapies.",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] scale and growth driven by strong drug price inflation and increases in therapies [Effect]  the company has historically generated returns on invested capital of 20% largely"
+    },
+    {
+      "id": "8374",
+      "context": "Steadily rising Internet access pricing is a key element of our belief that Altice USA can maintain revenue per customer and cash flow as fewer customers take television and telephone services.",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] Steadily rising Internet access pricing | fewer customers take television and telephone services [Effect] Altice USA can maintain revenue per customer and cash flow | Steadily rising Internet access pricing"
+    },
+    {
+      "id": "8642",
+      "context": "In our view, Akamai's biggest environmental, social, and governance, or ESG, risk is that of a data or security breach, given the firm is entrusted with and handles such high volumes of sensitive data.",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] the firm is entrusted with and handles such high volumes of sensitive data [Effect] In our view, Akamai's biggest environmental, social, and governance, or ESG, risk is that of a data or security breach"
+    },
+    {
+      "id": "1891",
+      "context": "With summer 2021 deployment expected abroad, we now think the firm could generate around $2 in EPS in 2022, up from $1.69 prior (still well below the $9.54 in EPS Royal generated in 2019).",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] summer 2021 deployment expected abroad [Effect] we now think the firm could generate around $2 in EPS in 2022, up from $1.69 prior (still well below the $9.54 in EPS Royal generated in 2019)"
+    },
+    {
+      "id": "4816",
+      "context": "In the other European countries, we expect the firm to drive fixed and mobile convergence, with a positive effect on growth and churn rates, and achieve slow margin improvement thanks to efficiency gains via digitalization and scale.",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] efficiency gains via digitalization and scale |  the firm to drive fixed and mobile convergence [Effect] achieve slow margin improvement | a positive effect on growth and churn rates"
+    },
+    {
+      "id": "8838",
+      "context": "Kroger's efforts to monetize its consumer data introduces risk as it grows in segments outside its core competency (such as media and market analysis for outside clients).",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] it grows in segments outside its core competency (such as media and market analysis for outside clients) [Effect] Kroger's efforts to monetize its consumer data introduces risk"
+    },
+    {
+      "id": "1149",
+      "context": "History suggests this could Drug Manufacturers - Specialty & Genericbe possible, as Illinois's early plans for recreational legalization would hand an advantage to companies with medical cultivation and dispensary licenses.",
+      "question": "What are the events?",
+      "question_type": "Events",
+      "answers": "[Cause] Illinois's early plans for recreational legalization would hand an advantage to companies with medical cultivation and dispensary licenses [Effect] this could Drug Manufacturers - Specialty & Genericbe possible"
+    }
+  ]
 }
