@@ -1,0 +1,10 @@
+{
+  "version": "v1.0",
+  "data": {
+    "id": "292",
+    "context": "Of all Eaton's businesses, we're most bullish on its electrical sector and its aerospace business given data center growth, necessary upgrades to aging infrastructure, and the eventual commercial aerospace recovery.",
+    "question": "What are the events?",
+    "question_type": "Events",
+    "answers": "[Cause]  data center growth, necessary upgrades to aging infrastructure, and the eventual commercial aerospace recovery [Effect]  we're most bullish on its electrical sector and its aerospace business "
+  }
+}

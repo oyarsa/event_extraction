@@ -1,0 +1,10 @@
+{
+  "version": "v1.0",
+  "data": {
+    "id": "4769",
+    "context": "We have incorporated more optimistic assumptions for profitability improvements driven by the lower cost of distributing through pharmacies, potential for higher volume through pharmacies, and the lower cost of manufacturing G7.",
+    "question": "What are the events?",
+    "question_type": "Events",
+    "answers": "[Cause] the lower cost of distributing through pharmacies, potential for higher volume through pharmacies, and the lower cost of manufacturing G7 [Effect] We have incorporated more optimistic assumptions for profitability improvements"
+  }
+}

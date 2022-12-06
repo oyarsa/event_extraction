@@ -1,0 +1,10 @@
+{
+  "version": "v1.0",
+  "data": {
+    "id": "4354",
+    "context": "As its larger rivals (such as Royal Dutch Shell, BP, and Exxon) are vertically integrated, Valvoline does not enjoy the same degree of control over base oil supply (though low crude oil prices have mitigated the near-term disadvantage).",
+    "question": "What are the events?",
+    "question_type": "Events",
+    "answers": "[Cause] its larger rivals (such as Royal Dutch Shell, BP, and Exxon) are vertically integrated [Effect] Valvoline does not enjoy the same degree of control over base oil supply"
+  }
+}
