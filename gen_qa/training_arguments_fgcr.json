@@ -13,7 +13,7 @@
     "max_seq_length": 250,
     "max_answer_length": 250,
     "doc_stride": 128,
-    "output_dir": "model/stage1/t5-small",
+    "output_dir": "model/fgcr/t5-small",
     "overwrite_output_dir": true,
     "eval_accumulation_steps": 100,
     "predict_with_generate": true,
@@ -28,5 +28,6 @@
     "validation_file": "data/fgcr/dev.json",
     "test_file": "data/fgcr/test.json",
     "overwrite_cache": true,
-    "store_prediction": true
+    "store_prediction": true,
+    "save_total_limit": 1
 }
