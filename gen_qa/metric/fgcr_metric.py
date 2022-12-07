@@ -106,6 +106,7 @@ def compute_metric(instances: List[Instance]) -> Dict[str, float]:
     pred_lens = {"Cause": 0, "Effect": 0}
     commons = {"Cause": 0, "Effect": 0}
     equal = {"Cause": 0, "Effect": 0}
+    num_instances = {"Cause": 0, "Effect": 0}
 
     for instance in instances:
         kind = instance["kind"]
@@ -119,6 +120,7 @@ def compute_metric(instances: List[Instance]) -> Dict[str, float]:
         commons[kind] += sum(common.values())
 
         equal[kind] += int(gold_toks == pred_toks)
+        num_instances[kind] += 1
 
     result = defaultdict(dict)
     for kind in gold_lens:
@@ -137,13 +139,12 @@ def compute_metric(instances: List[Instance]) -> Dict[str, float]:
         result[kind]["precision"] = precision
         result[kind]["recall"] = recall
         result[kind]["f1"] = f1
+        result[kind]["em"] = equal[kind] / num_instances[kind]
 
-    f1 = sum(result[kind]["f1"] for kind in result) / len(result)
-    em = sum(equal[kind] for kind in equal) / len(equal)
-    return {
-        "f1": f1,
-        "em": em,
-    }
+    def macro_avg(metric: str) -> float:
+        return sum(result[kind][metric] for kind in result) / len(result)
+
+    return {metric: macro_avg(metric) for metric in ["precision", "recall", "f1", "em"]}
 
 
 def parse_instance(answer: str) -> Dict[str, List[str]]:
