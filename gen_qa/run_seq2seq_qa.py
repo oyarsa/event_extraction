@@ -25,7 +25,7 @@ import logging
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import Any, List, Optional, Tuple
+from typing import Any, List, Optional, Tuple, cast
 
 import datasets
 import transformers
@@ -643,8 +643,8 @@ def main():
         examples: datasets.DatasetDict,
         features: datasets.DatasetDict,
         outputs: EvalLoopOutput,
-        stage="eval",
-    ):
+        stage: str = "eval",
+    ) -> EvalPrediction:
         # Decode the predicted tokens.
         preds = outputs.predictions
         if isinstance(preds, tuple):
@@ -652,7 +652,7 @@ def main():
         decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
 
         # Build a map example to its corresponding features.
-        example_id_to_index = {k: i for i, k in enumerate(examples["id"])}
+        example_id_to_index = {cast(str, k): i for i, k in enumerate(examples["id"])}
         feature_per_example = {
             example_id_to_index[feature["example_id"]]: i
             for i, feature in enumerate(features)
