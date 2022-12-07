@@ -48,6 +48,7 @@ Example output:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -123,8 +124,13 @@ def convert_instance(
             "Invalid mode of handling multi-spans. Use 'separate' or 'combined'"
         )
 
+    # There are duplicate IDs in the dataset, so we hash instead.
+    # I'm hashing the entire instance instead of just the text in an abundance
+    # of caution.
+    instance_id = hashlib.sha1(str(instance).encode("utf-8")).hexdigest()[:8]
+
     return {
-        "id": str(instance["tid"]),
+        "id": instance_id,
         "context": text,
         "question": "What are the events?",
         "question_type": "Events",
