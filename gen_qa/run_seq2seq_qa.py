@@ -30,6 +30,9 @@ from typing import Any, List, Optional, Tuple, cast
 import datasets
 import transformers
 from datasets import load_dataset
+from metric.fgcr_metric import FGCR
+from torch.utils.tensorboard import SummaryWriter
+from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 from transformers import (
     AutoConfig,
     AutoModelForSeq2SeqLM,
@@ -40,14 +43,12 @@ from transformers import (
     Seq2SeqTrainingArguments,
     set_seed,
 )
+from transformers.integrations import TensorBoardCallback
 from transformers.trainer_utils import (
     EvalLoopOutput,
     EvalPrediction,
     get_last_checkpoint,
 )
-
-from metric.fgcr_metric import FGCR
-from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -687,6 +688,7 @@ def main():
             predictions=formatted_predictions, label_ids=references  # type: ignore
         )
 
+    tb_run_name = f"-{os.environ['RUN_NAME']}" if "RUN_NAME" in os.environ else ""
     # Initialize our Trainer
     trainer = QuestionAnsweringSeq2SeqTrainer(
         model=model,
@@ -698,7 +700,10 @@ def main():
         data_collator=data_collator,
         compute_metrics=compute_metrics,
         post_process_function=post_processing_function,
-        callbacks=[EarlyStoppingCallback(early_stopping_patience=2)],
+        callbacks=[
+            EarlyStoppingCallback(early_stopping_patience=2),
+            TensorBoardCallback(SummaryWriter(comment=tb_run_name)),
+        ],
     )
 
     # Training
