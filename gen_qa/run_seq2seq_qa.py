@@ -31,6 +31,7 @@ import datasets
 import transformers
 from datasets import load_dataset
 from metric.fgcr_metric import FGCR
+from metric.fgcr_metric_cls import FGCRCls
 from torch.utils.tensorboard import SummaryWriter
 from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 from transformers import (
@@ -257,6 +258,9 @@ class DataTrainingArguments:
         metadata={
             "help": "Whether to store prediction outputs of the test set or not."
         },
+    )
+    joint_prediction: bool = field(
+        default=False, metadata={"help": "Whether to use joint prediction"}
     )
 
     def __post_init__(self):
@@ -634,7 +638,10 @@ def main():
         pad_to_multiple_of=8 if training_args.fp16 else None,
     )
 
-    metric = FGCR()
+    if data_args.joint_prediction:
+        metric = FGCRCls()
+    else:
+        metric = FGCR()
 
     def compute_metrics(p: EvalPrediction):
         return metric.compute(predictions=p.predictions, references=p.label_ids)
