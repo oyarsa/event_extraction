@@ -192,7 +192,7 @@ def parse_instance(answer: str) -> Tuple[Dict[str, List[str]], Optional[str]]:
         return {
             "Cause": [],
             "Effect": [],
-        }, "None"
+        }, "cause"
     causes, effects, relation = matches[0]
     causes = sorted(c.strip() for c in causes.split("|") if c.strip())
     effects = sorted(e.strip() for e in effects.split("|") if e.strip())
