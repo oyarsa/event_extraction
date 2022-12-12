@@ -5,71 +5,71 @@
       "context": "As such, while we forecast an average of 13% ROICs including goodwill annually over the next five years, the actual results reported will probably be more volatile.",
       "question": "What are the events?",
       "question_type": "prevent",
-      "answers": "[Cause] the actual results reported will probably be more volatile [Effect] an average of 13% ROICs including goodwill annually over the next five years [Relation] prevent",
-      "id": "f92a6995"
+      "answers": "[Cause] the actual results reported will probably be more volatile [Relation] prevent [Effect] an average of 13% ROICs including goodwill annually over the next five years",
+      "id": "e875432a"
     },
     {
       "context": "Well expenditure, which is variable with respect to operating days, is quite high; each operating day adds $1 million or more to the costs associated with rig day rates and other services. Thus, even if Frank's charges an extra 20% on its casing services (exact pricing is not provided), this $500,000 or so in incremental costs is easily outweighed by the millions of dollars in direct incremental costs associated with nonperforming time created by an inferior casing operation.",
       "question": "What are the events?",
       "question_type": "cause",
-      "answers": "[Cause] Well expenditure, which is variable with respect to operating days, is quite high; each operating day adds $1 million or more to the costs associated with rig day rates and other services [Effect] even if Frank's charges an extra 20% on its casing services (exact pricing is not provided), this $500,000 or so in incremental costs is easily outweighed by the millions of dollars in direct incremental costs associated with nonperforming time created by an inferior casing operation [Relation] cause",
-      "id": "629c0e45"
+      "answers": "[Cause] Well expenditure, which is variable with respect to operating days, is quite high; each operating day adds $1 million or more to the costs associated with rig day rates and other services [Relation] cause [Effect] even if Frank's charges an extra 20% on its casing services (exact pricing is not provided), this $500,000 or so in incremental costs is easily outweighed by the millions of dollars in direct incremental costs associated with nonperforming time created by an inferior casing operation",
+      "id": "cf9162b8"
     },
     {
       "context": "Customers tend to be loyal, and chips have long product lives because switching to a competing MCU could involve redesigning the entire end product.",
       "question": "What are the events?",
       "question_type": "cause",
-      "answers": "[Cause] switching to a competing MCU could involve redesigning the entire end product [Effect] chips have long product lives [Relation] cause",
-      "id": "6e9afde7"
+      "answers": "[Cause] switching to a competing MCU could involve redesigning the entire end product [Relation] cause [Effect] chips have long product lives",
+      "id": "bfe2d660"
     },
     {
       "context": "While we expect Astra will decelerate these asset sales as newly Drug Manufacturers - Generallaunched drugs offset patent pressures, a prolonged period of low returns could ensue if these avenues of divestments dry up quicker than anticipated.",
       "question": "0 What are the events?",
       "question_type": "enable",
-      "answers": "[Cause] newly Drug Manufacturers - Generallaunched drugs offset patent pressures [Effect]  we expect Astra will decelerate these asset sales [Relation] enable",
-      "id": "1a587fda"
+      "answers": "[Cause] newly Drug Manufacturers - Generallaunched drugs offset patent pressures [Relation] enable [Effect]  we expect Astra will decelerate these asset sales",
+      "id": "d424be8a"
     },
     {
       "context": "While we expect Astra will decelerate these asset sales as newly Drug Manufacturers - Generallaunched drugs offset patent pressures, a prolonged period of low returns could ensue if these avenues of divestments dry up quicker than anticipated.",
       "question": "1 What are the events?",
       "question_type": "cause",
-      "answers": "[Cause] these avenues of divestments dry up quicker than anticipated [Effect] a prolonged period of low returns could ensue [Relation] cause",
-      "id": "28f59c2b"
+      "answers": "[Cause] these avenues of divestments dry up quicker than anticipated [Relation] cause [Effect] a prolonged period of low returns could ensue",
+      "id": "eb09f6d5"
     },
     {
       "context": "We estimate fines and penalties from the San Bruno disaster and allegations of poor recordkeeping resulted in $3 billion of lost shareholder value.",
       "question": "What are the events?",
       "question_type": "cause",
-      "answers": "[Cause] fines and penalties from the San Bruno disaster and allegations of poor recordkeeping  [Effect] $3 billion of lost shareholder value [Relation] cause",
-      "id": "548e30d8"
+      "answers": "[Cause] fines and penalties from the San Bruno disaster and allegations of poor recordkeeping [Relation] cause [Effect] $3 billion of lost shareholder value",
+      "id": "298ebb20"
     },
     {
       "context": "Over the years, these differentiators have allowed the firm to build a large installed base, which can have long useful lives (up to 40 years for applied HVAC systems).",
       "question": "What are the events?",
       "question_type": "enable",
-      "answers": "[Cause] these differentiators [Effect] the firm to build a large installed base [Relation] enable",
-      "id": "bfa71f53"
+      "answers": "[Cause] these differentiators [Relation] enable [Effect] the firm to build a large installed base",
+      "id": "3d8409b3"
     },
     {
       "context": "Our fair value uncertainty rating for Qorvo is high, given the company's customer concentration, the intense competition in the RF and smartphone industries, and the cyclicality of the semiconductor industry.",
       "question": "What are the events?",
       "question_type": "cause",
-      "answers": "[Cause] the company's customer concentration, the intense competition in the RF and smartphone industries, and the cyclicality of the semiconductor industry [Effect] Our fair value uncertainty rating for Qorvo is high [Relation] cause",
-      "id": "2a0fd7dd"
+      "answers": "[Cause] the company's customer concentration, the intense competition in the RF and smartphone industries, and the cyclicality of the semiconductor industry [Relation] cause [Effect] Our fair value uncertainty rating for Qorvo is high",
+      "id": "d20a0abd"
     },
     {
       "context": "We think that while this has historically tracked the mid-single digit growth rate of semiconductor R&D spend, expansion of in-house chip design by systems companies will allow this to outpace historical rates.",
       "question": "What are the events?",
       "question_type": "enable",
-      "answers": "[Cause] expansion of in-house chip design by systems companies [Effect] this to outpace historical rates [Relation] enable",
-      "id": "24b15964"
+      "answers": "[Cause] expansion of in-house chip design by systems companies [Relation] enable [Effect] this to outpace historical rates",
+      "id": "8b919e79"
     },
     {
       "context": "This operational concentration creates relatively higher cash flow uncertainty than its less concentrated managed-care peers, which explains Centene's higher uncertainty rating.",
       "question": "What are the events?",
       "question_type": "cause",
-      "answers": "[Cause] This operational concentration creates relatively higher cash flow uncertainty than its less concentrated managed-care peers [Effect] Centene's higher uncertainty rating [Relation] cause",
-      "id": "99107b16"
+      "answers": "[Cause] This operational concentration creates relatively higher cash flow uncertainty than its less concentrated managed-care peers [Relation] cause [Effect] Centene's higher uncertainty rating",
+      "id": "31b36818"
     }
   ]
 }

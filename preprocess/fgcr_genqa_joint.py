@@ -54,6 +54,22 @@ from pathlib import Path
 from typing import Any
 
 
+def tag_sort_key(tag: str) -> tuple[int, str]:
+    """Sort tags by the following order: Cause, Relation, Effect.
+    Tags with the same type are sorted alphabetically.
+
+    Args:
+        tag (str): The tag to sort.
+
+    Returns:
+        tuple[int, str]: A pair of tag-based index and the tag itself.
+    """
+    for i, c in enumerate("CRE"):
+        if tag.startswith('[' + c):
+            return i, tag
+    assert False, f"Unknown tag: {tag}"
+
+
 def generate_answer_combined_tags(
     events: dict[str, list[str]],
     label_map: dict[str, str],
@@ -63,10 +79,10 @@ def generate_answer_combined_tags(
     out = []
     for ev_type, evs in events.items():
         event = f"[{label_map[ev_type]}] " + sep.join(evs)
-        out.append(event)
+        out.append(event.strip())
     if relation:
         out.append(f"[Relation] {relation}")
-    return " ".join(sorted(out))
+    return " ".join(sorted(out, key=tag_sort_key))
 
 
 def generate_answer_separate_tags(
@@ -78,7 +94,7 @@ def generate_answer_separate_tags(
             out.append(f"[{label_map[ev_type]}] {e}")
     if relation:
         out.append(f"[Relation] {relation}")
-    return " ".join(sorted(out))
+    return " ".join(sorted(out, key=tag_sort_key))
 
 
 def convert_instance(
@@ -189,7 +205,7 @@ def main() -> None:
         help="Path to the folder containing the raw data",
     )
     argparser.add_argument(
-        "--dst", default="data_fgcr/genqa", help="Path to the output folder"
+        "--dst", default="data_fgcr/genqa_joint", help="Path to the output folder"
     )
     argparser.add_argument(
         "--combined-sep", default=" | ", help="Separator for combined mode"
@@ -203,7 +219,14 @@ def main() -> None:
     argparser.add_argument(
         "--add-relation",
         action="store_true",
-        help="Whether to add the relation to the answer",
+        default=True,
+        help="Add the relation to the answer",
+    )
+    argparser.add_argument(
+        "--no-add-relation",
+        action="store_false",
+        dest='add_relation',
+        help="Disable adding the relation to the answer",
     )
     args = argparser.parse_args()
 
