@@ -179,21 +179,20 @@ def compute_extraction_metrics(instances: List[Instance]) -> Dict[str, float]:
 
 
 def parse_instance(answer: str) -> Tuple[Dict[str, List[str]], Optional[str]]:
-    """Parse string answer to separate into class and spans
-    Simple case:
-    [Cause] This is a cause [Effect] This is an effect
+    """Parse string answer to separate into tagged spans and relation.
+    Simple case
+    [Cause] This is a cause [Relation] cause [Effect] This is an effect
 
     Complex case:
-    [Cause] This cause 1 | This cause 2 [Effect] This effect 1 | This effect 2
+    [Cause] This cause 1 | This cause 2 [Relation] cause [Effect] This effect 1 | This effect 2
     """
-    # TODO (italo): Document the relation
-    matches = re.findall(r"\[Cause\](.*?)\[Effect\](.*?)\[Relation\](.*?)$", answer)
+    matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
     if not matches:
         return {
             "Cause": [],
             "Effect": [],
         }, "cause"
-    causes, effects, relation = matches[0]
+    causes, relation, effects = matches[0]
     causes = sorted(c.strip() for c in causes.split("|") if c.strip())
     effects = sorted(e.strip() for e in effects.split("|") if e.strip())
     relation = relation.strip()
