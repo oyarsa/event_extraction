@@ -25,12 +25,10 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 import datasets
-import evaluate
 import transformers
 from datasets import load_dataset
 from transformers import (
     AutoConfig,
-    AutoModelForQuestionAnswering,
     AutoTokenizer,
     DataCollatorWithPadding,
     EvalPrediction,
@@ -41,9 +39,11 @@ from transformers import (
     set_seed,
 )
 from transformers.trainer_utils import get_last_checkpoint
-from transformers.utils import check_min_version, send_example_telemetry
+from transformers.utils import check_min_version
 from transformers.utils.versions import require_version
 
+from fgcr_metric import FGCR
+from models.bert import BertForCauseEffect
 from trainer_qa import QuestionAnsweringTrainer
 from utils_qa import postprocess_qa_predictions
 
@@ -215,7 +215,7 @@ class DataTrainingArguments:
         },
     )
     max_answer_length: int = field(
-        default=30,
+        default=200,
         metadata={
             "help": (
                 "The maximum length of an answer that can be generated. This is needed because the start "
@@ -235,24 +235,16 @@ class DataTrainingArguments:
                 "Need either a dataset name or a training/validation file/test_file."
             )
         else:
-            if self.train_file is not None:
-                extension = self.train_file.split(".")[-1]
+            names = ["train_file", "validation_file", "test_file"]
+            for name in names:
+                file = getattr(self, name)
+                if file is None:
+                    continue
+                extension = file.split(".")[-1]
                 assert extension in [
                     "csv",
                     "json",
-                ], "`train_file` should be a csv or a json file."
-            if self.validation_file is not None:
-                extension = self.validation_file.split(".")[-1]
-                assert extension in [
-                    "csv",
-                    "json",
-                ], "`validation_file` should be a csv or a json file."
-            if self.test_file is not None:
-                extension = self.test_file.split(".")[-1]
-                assert extension in [
-                    "csv",
-                    "json",
-                ], "`test_file` should be a csv or a json file."
+                ], f"`{name}` should be a csv or a json file."
 
 
 def main():
@@ -272,14 +264,10 @@ def main():
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    # Sending telemetry. Tracking the example usage helps us better allocate resources to maintain them. The
-    # information sent is the one passed as arguments along with your Python/PyTorch versions.
-    send_example_telemetry("run_qa", model_args, data_args)
-
     # Setup logging
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        datefmt="%m/%d/%Y %H:%M:%S",
+        datefmt="%d/%m/%Y %H:%M:%S",
         handlers=[logging.StreamHandler(sys.stdout)],
     )
 
@@ -321,42 +309,26 @@ def main():
     # Set seed before initializing model.
     set_seed(training_args.seed)
 
-    # Get the datasets: you can either provide your own CSV/JSON/TXT training and evaluation files (see below)
-    # or just provide the name of one of the public datasets available on the hub at https://huggingface.co/datasets/
-    # (the dataset will be downloaded automatically from the datasets Hub).
-    #
     # For CSV/JSON files, this script will use the column called 'text' or the first column if no column called
     # 'text' is found. You can easily tweak this behavior (see below).
-    #
-    # In distributed training, the load_dataset function guarantee that only one local process can concurrently
-    # download the dataset.
-    if data_args.dataset_name is not None:
-        # Downloading and loading a dataset from the hub.
-        raw_datasets = load_dataset(
-            data_args.dataset_name,
-            data_args.dataset_config_name,
-            cache_dir=model_args.cache_dir,
-            use_auth_token=True if model_args.use_auth_token else None,
-        )
-    else:
-        data_files = {}
-        if data_args.train_file is not None:
-            data_files["train"] = data_args.train_file
-            extension = data_args.train_file.split(".")[-1]
+    data_files = {}
+    if data_args.train_file is not None:
+        data_files["train"] = data_args.train_file
+        extension = data_args.train_file.split(".")[-1]
+    if data_args.validation_file is not None:
+        data_files["validation"] = data_args.validation_file
+        extension = data_args.validation_file.split(".")[-1]
+    if data_args.test_file is not None:
+        data_files["test"] = data_args.test_file
+        extension = data_args.test_file.split(".")[-1]
 
-        if data_args.validation_file is not None:
-            data_files["validation"] = data_args.validation_file
-            extension = data_args.validation_file.split(".")[-1]
-        if data_args.test_file is not None:
-            data_files["test"] = data_args.test_file
-            extension = data_args.test_file.split(".")[-1]
-        raw_datasets = load_dataset(
-            extension,
-            data_files=data_files,
-            field="data",
-            cache_dir=model_args.cache_dir,
-            use_auth_token=True if model_args.use_auth_token else None,
-        )
+    raw_datasets = load_dataset(
+        extension,
+        data_files=data_files,
+        field="data",
+        cache_dir=model_args.cache_dir,
+        use_auth_token=True if model_args.use_auth_token else None,
+    )
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 
@@ -382,7 +354,7 @@ def main():
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
-    model = AutoModelForQuestionAnswering.from_pretrained(
+    model = BertForCauseEffect.from_pretrained(
         model_args.model_name_or_path,
         from_tf=bool(".ckpt" in model_args.model_name_or_path),
         config=config,
@@ -407,12 +379,9 @@ def main():
         column_names = raw_datasets["validation"].column_names
     else:
         column_names = raw_datasets["test"].column_names
-    question_column_name = "question" if "question" in column_names else column_names[0]
     context_column_name = "context" if "context" in column_names else column_names[1]
-    answer_column_name = "answers" if "answers" in column_names else column_names[2]
-
-    # Padding side determines if we do (question|context) or (context|question).
-    pad_on_right = tokenizer.padding_side == "right"
+    cause_column_name = "cause" if "cause" in column_names else column_names[2]
+    effect_column_name = "effect" if "effect" in column_names else column_names[3]
 
     if data_args.max_seq_length > tokenizer.model_max_length:
         logger.warning(
@@ -423,20 +392,12 @@ def main():
 
     # Training preprocessing
     def prepare_train_features(examples):
-        # Some of the questions have lots of whitespace on the left, which is not useful and will make the
-        # truncation of the context fail (the tokenized question will take a lots of space). So we remove that
-        # left whitespace
-        examples[question_column_name] = [
-            q.lstrip() for q in examples[question_column_name]
-        ]
-
         # Tokenize our examples with truncation and maybe padding, but keep the overflows using a stride. This results
         # in one example possible giving several features when a context is long, each of those features having a
         # context that overlaps a bit the context of the previous feature.
         tokenized_examples = tokenizer(
-            examples[question_column_name if pad_on_right else context_column_name],
-            examples[context_column_name if pad_on_right else question_column_name],
-            truncation="only_second" if pad_on_right else "only_first",
+            examples[context_column_name],
+            truncation="longest_first",
             max_length=max_seq_length,
             stride=data_args.doc_stride,
             return_overflowing_tokens=True,
@@ -452,8 +413,10 @@ def main():
         offset_mapping = tokenized_examples.pop("offset_mapping")
 
         # Let's label those examples!
-        tokenized_examples["start_positions"] = []
-        tokenized_examples["end_positions"] = []
+        tokenized_examples["cause_start_positions"] = []
+        tokenized_examples["cause_end_positions"] = []
+        tokenized_examples["effect_start_positions"] = []
+        tokenized_examples["effect_end_positions"] = []
 
         for i, offsets in enumerate(offset_mapping):
             # We will label impossible answers with the index of the CLS token.
@@ -465,24 +428,31 @@ def main():
 
             # One example can give several spans, this is the index of the example containing this span of text.
             sample_index = sample_mapping[i]
-            answers = examples[answer_column_name][sample_index]
-            # If no answers are given, set the cls_index as answer.
-            if len(answers["answer_start"]) == 0:
-                tokenized_examples["start_positions"].append(cls_index)
-                tokenized_examples["end_positions"].append(cls_index)
-            else:
+            for part in ["cause", "effect"]:
+                start_pos_name = f"{part}_start_positions"
+                end_pos_name = f"{part}_end_positions"
+
+                column = cause_column_name if part == "cause" else effect_column_name
+                answers = examples[column][sample_index]
+
+                # If no answers are given, set the cls_index as answer.
+                if len(answers["answer_start"]) == 0:
+                    tokenized_examples[start_pos_name].append(cls_index)
+                    tokenized_examples[end_pos_name].append(cls_index)
+                    continue
+
                 # Start/end character index of the answer in the text.
                 start_char = answers["answer_start"][0]
                 end_char = start_char + len(answers["text"][0])
 
                 # Start token index of the current span in the text.
                 token_start_index = 0
-                while sequence_ids[token_start_index] != (1 if pad_on_right else 0):
+                while sequence_ids[token_start_index] != 0:
                     token_start_index += 1
 
                 # End token index of the current span in the text.
                 token_end_index = len(input_ids) - 1
-                while sequence_ids[token_end_index] != (1 if pad_on_right else 0):
+                while sequence_ids[token_end_index] != 0:
                     token_end_index -= 1
 
                 # Detect if the answer is out of the span (in which case this feature is labeled with the CLS index).
@@ -490,8 +460,8 @@ def main():
                     offsets[token_start_index][0] <= start_char
                     and offsets[token_end_index][1] >= end_char
                 ):
-                    tokenized_examples["start_positions"].append(cls_index)
-                    tokenized_examples["end_positions"].append(cls_index)
+                    tokenized_examples[start_pos_name].append(cls_index)
+                    tokenized_examples[end_pos_name].append(cls_index)
                 else:
                     # Otherwise move the token_start_index and token_end_index to the two ends of the answer.
                     # Note: we could go after the last offset if the answer is the last word (edge case).
@@ -500,10 +470,11 @@ def main():
                         and offsets[token_start_index][0] <= start_char
                     ):
                         token_start_index += 1
-                    tokenized_examples["start_positions"].append(token_start_index - 1)
+                    tokenized_examples[start_pos_name].append(token_start_index - 1)
+
                     while offsets[token_end_index][1] >= end_char:
                         token_end_index -= 1
-                    tokenized_examples["end_positions"].append(token_end_index + 1)
+                    tokenized_examples[end_pos_name].append(token_end_index + 1)
 
         return tokenized_examples
 
@@ -532,20 +503,12 @@ def main():
 
     # Validation preprocessing
     def prepare_validation_features(examples):
-        # Some of the questions have lots of whitespace on the left, which is not useful and will make the
-        # truncation of the context fail (the tokenized question will take a lots of space). So we remove that
-        # left whitespace
-        examples[question_column_name] = [
-            q.lstrip() for q in examples[question_column_name]
-        ]
-
         # Tokenize our examples with truncation and maybe padding, but keep the overflows using a stride. This results
         # in one example possible giving several features when a context is long, each of those features having a
         # context that overlaps a bit the context of the previous feature.
         tokenized_examples = tokenizer(
-            examples[question_column_name if pad_on_right else context_column_name],
-            examples[context_column_name if pad_on_right else question_column_name],
-            truncation="only_second" if pad_on_right else "only_first",
+            examples[context_column_name],
+            truncation="longest_first",
             max_length=max_seq_length,
             stride=data_args.doc_stride,
             return_overflowing_tokens=True,
@@ -561,10 +524,9 @@ def main():
         # corresponding example_id and we will store the offset mappings.
         tokenized_examples["example_id"] = []
 
-        for i in range(len(tokenized_examples["input_ids"])):
+        for i, _ in enumerate(tokenized_examples["input_ids"]):
             # Grab the sequence corresponding to that example (to know what is the context and what is the question).
             sequence_ids = tokenized_examples.sequence_ids(i)
-            context_index = 1 if pad_on_right else 0
 
             # One example can give several spans, this is the index of the example containing this span of text.
             sample_index = sample_mapping[i]
@@ -573,7 +535,7 @@ def main():
             # Set to None the offset_mapping that are not part of the context so it's easy to determine if a token
             # position is part of the context or not.
             tokenized_examples["offset_mapping"][i] = [
-                (o if sequence_ids[k] == context_index else None)
+                (o if sequence_ids[k] == 0 else None)
                 for k, o in enumerate(tokenized_examples["offset_mapping"][i])
             ]
 
@@ -658,23 +620,25 @@ def main():
             log_level=log_level,
             prefix=stage,
         )
+
+        def format_answer(ex):
+            cause = ex[cause_column_name]
+            effect = ex[effect_column_name]
+            return f"[Cause] {cause} [Effect] {effect}"
+
         # Format the result to the format the metric expects.
-        if data_args.version_2_with_negative:
-            formatted_predictions = [
-                {"id": k, "prediction_text": v, "no_answer_probability": 0.0}
-                for k, v in predictions.items()
-            ]
-        else:
-            formatted_predictions = [
-                {"id": k, "prediction_text": v} for k, v in predictions.items()
-            ]
+        formatted_predictions = [
+            {"id": k, "prediction_text": format_answer(v)}
+            for k, v in predictions.items()
+        ]
 
         references = [
-            {"id": ex["id"], "answers": ex[answer_column_name]} for ex in examples
+            {"id": ex["id"], "answers": format_answer(ex), "question_type": "cause"}
+            for ex in examples
         ]
         return EvalPrediction(predictions=formatted_predictions, label_ids=references)
 
-    metric = evaluate.load("squad_v2" if data_args.version_2_with_negative else "squad")
+    metric = FGCR()
 
     def compute_metrics(p: EvalPrediction):
         return metric.compute(predictions=p.predictions, references=p.label_ids)

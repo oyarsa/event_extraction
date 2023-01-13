@@ -191,7 +191,6 @@ tags
 
 ### VisualStudioCode ###
 .vscode/*
-!.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -209,3 +208,9 @@ tags
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,vim,visualstudiocode
+
+data/
+error_analysis.json
+
+output/
+models/
