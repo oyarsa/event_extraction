@@ -19,6 +19,7 @@ from collections import Counter, defaultdict
 from typing import Dict, List
 
 import datasets
+import evaluate
 from typing_extensions import TypedDict  # Python 3.7 doesn't have this in typing
 
 
@@ -40,7 +41,7 @@ class MetricReference(TypedDict):
     question_type: str
 
 
-class FGCR(datasets.Metric):
+class FGCR(evaluate.Metric):
     def _info(self):
         features = datasets.Features(
             {
