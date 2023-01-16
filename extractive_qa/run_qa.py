@@ -428,7 +428,7 @@ def main():
 
             # One example can give several spans, this is the index of the example containing this span of text.
             sample_index = sample_mapping[i]
-            for part in ["cause", "effect"]:
+            for part in [cause_column_name, effect_column_name]:
                 start_pos_name = f"{part}_start_positions"
                 end_pos_name = f"{part}_end_positions"
 
@@ -621,21 +621,31 @@ def main():
             prefix=stage,
         )
 
-        def format_answer(ex):
-            cause = ex[cause_column_name]
-            effect = ex[effect_column_name]
+        def format_answer(cause, effect):
             return f"[Cause] {cause} [Effect] {effect}"
 
         # Format the result to the format the metric expects.
         formatted_predictions = [
-            {"id": k, "prediction_text": format_answer(v)}
+            {
+                "id": k,
+                "prediction_text": format_answer(
+                    v[cause_column_name], v[effect_column_name]
+                ),
+            }
             for k, v in predictions.items()
         ]
 
         references = [
-            {"id": ex["id"], "answers": format_answer(ex), "question_type": "cause"}
+            {
+                "id": ex["id"],
+                "answers": format_answer(
+                    ex[cause_column_name]["text"][0], ex[effect_column_name]["text"][0]
+                ),
+                "question_type": ex["question_type"],
+            }
             for ex in examples
         ]
+
         return EvalPrediction(predictions=formatted_predictions, label_ids=references)
 
     metric = FGCR()
