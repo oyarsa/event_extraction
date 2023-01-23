@@ -1,9 +1,15 @@
+from __future__ import annotations
+
+import sys
 import collections
 import json
 from dataclasses import dataclass
 from typing import TextIO
 
 import click
+
+sys.path.append("..")
+from preprocess.fgcr_genqa_joint import convert_instance  # type: ignore # noqa
 
 
 @dataclass
@@ -17,6 +23,7 @@ class Relation:
 class Example:
     id: int
     text: str
+    answer: str
     relations: list[Relation]
 
 
@@ -26,6 +33,7 @@ def process_data(data_json: list[dict]) -> list[Example]:
     for example in data_json:
         id = example["tid"]
         text = example["info"]
+        answer = convert_instance(example, natural_like=True)["answers"]
         relations = []
 
         for relation in example["labelData"]:
@@ -40,13 +48,7 @@ def process_data(data_json: list[dict]) -> list[Example]:
                 )
             )
 
-        processed.append(
-            Example(
-                id=id,
-                text=text,
-                relations=relations,
-            )
-        )
+        processed.append(Example(id=id, text=text, answer=answer, relations=relations))
 
     return processed
 
@@ -71,6 +73,13 @@ def _render_example(ex: Example) -> str:
                 "",
             ]
         )
+    out.extend(
+        [
+            "# Answer",
+            "",
+            f"```\n{ex.answer}\n```",
+        ]
+    )
     return "\n".join(out)
 
 
@@ -94,6 +103,12 @@ def render_example(ex: Example | list[Example]) -> str:
 @click.option("--min-effects", type=int, default=1, help="Minimum number of effects")
 @click.option("--max-causes", type=int, default=3, help="Maximum number of causes")
 @click.option("--max-effects", type=int, default=3, help="Maximum number of effects")
+@click.option(
+    "--min-relations", type=int, default=0, help="Minimum number of relations"
+)
+@click.option(
+    "--max-relations", type=int, default=10, help="Maximum number of relations"
+)
 @click.option("--stats", is_flag=True, help="Print statistics")
 def main(
     data_file: TextIO,
@@ -102,6 +117,8 @@ def main(
     min_effects: int,
     max_causes: int,
     max_effects: int,
+    min_relations: int,
+    max_relations: int,
     stats: bool,
 ) -> None:
     data_json = json.load(data_file)
@@ -120,6 +137,7 @@ def main(
             and min_effects <= len(r.effects) <= max_effects
             for r in p.relations
         )
+        and min_relations <= len(p.relations) <= max_relations
     ]
     processed = processed[:limit]
 

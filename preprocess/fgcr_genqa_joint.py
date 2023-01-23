@@ -54,55 +54,23 @@ from pathlib import Path
 from typing import Any
 
 
-def tag_sort_key(tag: str) -> tuple[int, str]:
-    """Sort tags by the following order: Cause, Relation, Effect.
-    Tags with the same type are sorted alphabetically.
-
-    Args:
-        tag (str): The tag to sort.
-
-    Returns:
-        tuple[int, str]: A pair of tag-based index and the tag itself.
-    """
-    for i, c in enumerate("CRE"):
-        if tag.startswith('[' + c):
-            return i, tag
-    assert False, f"Unknown tag: {tag}"
-
-
-def generate_answer_combined_tags(
-    events: dict[str, list[str]],
-    label_map: dict[str, str],
-    sep: str,
-    relation: str | None = None,
+def generate_answer(
+    instances: list[tuple[list[str], str, list[str]]],
+    combined_sep: str = " | ",
 ) -> str:
-    out = []
-    for ev_type, evs in events.items():
-        event = f"[{label_map[ev_type]}] " + sep.join(evs)
-        out.append(event.strip())
-    if relation:
-        out.append(f"[Relation] {relation}")
-    return " ".join(sorted(out, key=tag_sort_key))
+    answers: list[str] = []
 
+    for causes, relation, effects in instances:
+        causes = combined_sep.join(sorted(causes))
+        effects = combined_sep.join(sorted(effects))
+        answers.append(f"{causes} {relation} {effects}")
 
-def generate_answer_separate_tags(
-    events: dict[str, list[str]], label_map: dict[str, str], relation: str | None = None
-) -> str:
-    out = []
-    for ev_type, evs in events.items():
-        for e in evs:
-            out.append(f"[{label_map[ev_type]}] {e}")
-    if relation:
-        out.append(f"[Relation] {relation}")
-    return " ".join(sorted(out, key=tag_sort_key))
+    return "\n".join(sorted(answers))
 
 
 def convert_instance(
-    instance: dict[str, Any],
-    mode: str,
-    combined_sep: str = " | ",
-    add_relation: bool = False,
-) -> list[dict[str, str]]:
+    instance: dict[str, Any], combined_sep: str = " | ", natural_like: bool = False
+) -> dict[str, str]:
     """Convert a FGCR-format instance into an EEQA-format instance.
 
     This ignores the relationship and only annotates the causes and effects by
@@ -129,67 +97,50 @@ def convert_instance(
       [start, end, label]. I'm not sure why this is a 3-level list instead of
       just 2 levels (i.e. list of events).
     """
+    if natural_like:
+        combined_sep = " AND "
+
     text = instance["info"]
-    label_map = {"reason": "Cause", "result": "Effect"}
+    relation_map = {"enable": "enables", "cause": "causes", "prevent": "prevents"}
 
-    instances: list[dict[str, str]] = []
+    # Instance: list of causes, relation, list of effects
+    instances: list[tuple[list[str], str, list[str]]] = []
 
-    for i, label_data in enumerate(instance["labelData"]):
-        # TODO (italo): document relation
-        if add_relation:
-            relation = label_data["type"]
+    for label_data in instance["labelData"]:
+        relation = relation_map[label_data["type"]]
+        if natural_like:
+            relation = relation.upper()
         else:
-            relation = None
+            relation = f"[{relation}]"
 
         events: dict[str, list[str]] = {"reason": [], "result": []}
         for ev_type in ["reason", "result"]:
             for ev_start, ev_end in label_data[ev_type]:
-                event = text[ev_start:ev_end]
+                event = text[ev_start:ev_end].strip()
                 events[ev_type].append(event)
 
-        if mode == "separate":
-            answer = generate_answer_separate_tags(events, label_map, relation)
-        elif mode == "combined":
-            answer = generate_answer_combined_tags(
-                events, label_map, combined_sep, relation
-            )
-        else:
-            raise ValueError(
-                "Invalid mode of handling multi-spans. Use 'separate' or 'combined'"
-            )
+        instances.append((events["reason"], relation, events["result"]))
 
-        question = "What are the events?"
-        if len(instance["labelData"]) > 1:
-            question = f"{i} {question}"
+    inst = {
+        "context": text,
+        "question": "What are the events and relations?",
+        "question_type": "Events",
+        "answers": generate_answer(instances, combined_sep),
+    }
+    inst["id"] = hashlib.sha1(str(inst).encode("utf-8")).hexdigest()[:8]
 
-        inst = {
-            "context": text,
-            "question": question,
-            "question_type": relation,
-            "answers": answer,
-        }
-        # There are duplicate IDs in the dataset, so we hash instead.
-        inst["id"] = hashlib.sha1(str(inst).encode("utf-8")).hexdigest()[:8]
-        instances.append(inst)
-
-    return instances
+    return inst
 
 
 def convert_file(
-    infile: Path,
-    outfile: Path,
-    mode: str,
-    combined_sep: str = " | ",
-    add_relation: bool = False,
+    infile: Path, outfile: Path, combined_sep: str = " | ", natural_like: bool = False
 ) -> None:
     with open(infile) as f:
         dataset = json.load(f)
 
-    nested_instances = [
-        convert_instance(instance, mode, combined_sep, add_relation)
-        for instance in dataset
+    instances = [
+        convert_instance(instance, combined_sep, natural_like) for instance in dataset
     ]
-    instances = [item for sublist in nested_instances for item in sublist]
     transformed = {"version": "v1.0", "data": instances}
 
     outfile.parent.mkdir(exist_ok=True)
@@ -201,33 +152,16 @@ def main() -> None:
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "--src",
-        default="data_fgcr/raw",
+        default="data/raw",
         help="Path to the folder containing the raw data",
     )
     argparser.add_argument(
-        "--dst", default="data_fgcr/genqa_joint", help="Path to the output folder"
+        "--dst", default="data/genqa_joint", help="Path to the output folder"
     )
     argparser.add_argument(
         "--combined-sep", default=" | ", help="Separator for combined mode"
     )
-    argparser.add_argument(
-        "--mode",
-        default="combined",
-        choices=["separate", "combined"],
-        help="How to handle multi-span cases",
-    )
-    argparser.add_argument(
-        "--add-relation",
-        action="store_true",
-        default=True,
-        help="Add the relation to the answer",
-    )
-    argparser.add_argument(
-        "--no-add-relation",
-        action="store_false",
-        dest='add_relation',
-        help="Disable adding the relation to the answer",
-    )
+    argparser.add_argument("--natural-like", action="store_true")
     args = argparser.parse_args()
 
     raw_folder = Path(args.src)
@@ -237,9 +171,7 @@ def main() -> None:
     for split in splits:
         raw_path = raw_folder / f"event_dataset_{split}.json"
         new_path = new_folder / f"{split}.json"
-        convert_file(
-            raw_path, new_path, args.mode, args.combined_sep, args.add_relation
-        )
+        convert_file(raw_path, new_path, args.combined_sep, args.natural_like)
 
 
 if __name__ == "__main__":
