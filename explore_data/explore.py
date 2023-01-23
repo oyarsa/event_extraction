@@ -1,6 +1,7 @@
 import collections
 import json
 from dataclasses import dataclass
+from typing import TextIO
 
 import click
 
@@ -82,7 +83,7 @@ def render_example(ex: Example | list[Example]) -> str:
 
 
 @click.command
-@click.argument("data_path", type=click.Path(exists=True))
+@click.argument("data_file", type=click.File("r"))
 @click.option(
     "--limit",
     type=int,
@@ -95,7 +96,7 @@ def render_example(ex: Example | list[Example]) -> str:
 @click.option("--max-effects", type=int, default=3, help="Maximum number of effects")
 @click.option("--stats", is_flag=True, help="Print statistics")
 def main(
-    data_path: str,
+    data_file: TextIO,
     limit: int,
     min_causes: int,
     min_effects: int,
@@ -103,8 +104,7 @@ def main(
     max_effects: int,
     stats: bool,
 ) -> None:
-    with open(data_path) as f:
-        data_json = json.load(f)
+    data_json = json.load(data_file)
 
     processed = process_data(data_json)
 
