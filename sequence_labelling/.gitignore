@@ -1,0 +1,12 @@
+*.swp
+__pycache__/
+*.pyc
+models/
+runs/
+runs_archive/
+*.log
+output/
+.mypy_cache/
+# Files that I want in the same folder as the repo, but I don't want committed
+# to version control
+tmpf/
