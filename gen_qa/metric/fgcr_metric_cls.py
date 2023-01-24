@@ -19,6 +19,7 @@ from collections import Counter, defaultdict
 from typing import Dict, List, Optional, Tuple
 
 import datasets
+import evaluate
 from sklearn.metrics import precision_recall_fscore_support
 from typing_extensions import TypedDict  # Python 3.7 doesn't have this in typing
 
@@ -43,7 +44,7 @@ class MetricReference(TypedDict):
     question_type: str
 
 
-class FGCRCls(datasets.Metric):
+class FGCRCls(evaluate.Metric):
     def _info(self):
         features = datasets.Features(
             {
@@ -58,7 +59,7 @@ class FGCRCls(datasets.Metric):
                 },
             }
         )
-        return datasets.MetricInfo(description="", citation="", features=features)
+        return evaluate.MetricInfo(description="", citation="", features=features)
 
     def _compute(
         self, predictions: List[MetricPrediction], references: List[MetricReference]

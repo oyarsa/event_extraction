@@ -37,6 +37,7 @@ easydict==1.9
 ecco==0.1.2
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.0.0/en_core_web_sm-2.0.0.tar.gz
 entrypoints==0.4
+evaluate==0.4
 filelock==3.4.2
 flatbuffers==2.0
 fonttools==4.30.0
