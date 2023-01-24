@@ -45,6 +45,10 @@ class MetricReference(TypedDict):
 
 
 class FGCRCls(evaluate.Metric):
+    def __init__(self, natural_like: bool = False) -> None:
+        super().__init__()
+        self.natural_like = natural_like
+
     def _info(self):
         features = datasets.Features(
             {
@@ -68,23 +72,23 @@ class FGCRCls(evaluate.Metric):
         for pred, refer in zip(predictions, references):
             assert pred["id"] == refer["id"]
 
-            pred_entities, pred_relation = parse_instance(pred["prediction_text"])
-            ref_entities, ref_relation = parse_instance(refer["answers"])
+            sub_preds = parse_instances(pred["prediction_text"], self.natural_like)
+            sub_refs = parse_instances(refer["answers"], self.natural_like)
 
-            assert (
-                ref_relation == refer["question_type"]
-            ), "Extracted reference relation does not match the question type."
+            for i, (sub_pred, sub_ref) in enumerate(zip(sub_preds, sub_refs)):
+                pred_entities, pred_relation = sub_pred
+                ref_entities, ref_relation = sub_ref
 
-            for itype in ref_entities.keys():
-                instance: Instance = {
-                    "id": refer["id"],
-                    "kind": itype,
-                    "predictions": pred_entities[itype],
-                    "golds": ref_entities[itype],
-                    "pred_relation": pred_relation,
-                    "gold_relation": ref_relation,
-                }
-                instances.append(instance)
+                for itype in ref_entities.keys():
+                    instance: Instance = {
+                        "id": f"{refer['id']}-{i}",
+                        "kind": itype,
+                        "predictions": pred_entities[itype],
+                        "golds": ref_entities[itype],
+                        "pred_relation": pred_relation,
+                        "gold_relation": ref_relation,
+                    }
+                    instances.append(instance)
 
         return compute_metrics(instances)
 
@@ -179,26 +183,57 @@ def compute_extraction_metrics(instances: List[Instance]) -> Dict[str, float]:
     return {metric: macro_avg(metric) for metric in ["precision", "recall", "f1", "em"]}
 
 
-def parse_instance(answer: str) -> Tuple[Dict[str, List[str]], Optional[str]]:
+def parse_instances(
+    answers: str, natural_like: bool
+) -> List[Tuple[Dict[str, List[str]], Optional[str]]]:
+    return sorted(
+        (
+            parse_instance(answer, natural_like)
+            for answer in answers.splitlines()
+            if answer.strip()
+        ),
+        key=lambda x: (x[0]["Cause"], x[0]["Effect"], x[1]),
+    )
+
+
+def parse_instance(
+    answer: str, natural_like: bool
+) -> Tuple[Dict[str, List[str]], Optional[str]]:
     """Parse string answer to separate into tagged spans and relation.
     Simple case
-    [Cause] This is a cause [Relation] cause [Effect] This is an effect
+    This is a cause [causes] This is an effect
 
     Complex case:
-    [Cause] This cause 1 | This cause 2 [Relation] cause [Effect] This effect 1 | This effect 2
+    This cause 1 | This cause 2 [causes] This effect 1 | This effect 2
     """
-    matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
-    if not matches:
+    if natural_like:
+        clause_sep = " AND "
+        relation_tags = ["CAUSES", "PREVENTS", "ENABLES"]
+    else:
+        clause_sep = " | "
+        relation_tags = ["[causes]", "[prevents]", "[enables]"]
+
+    def clean_relation(rel: str) -> str:
+        return rel.replace("[", "").replace("]", "").lower()
+
+    relation = relation_tags[0]
+    for tag in relation_tags:
+        if tag in answer:
+            relation = tag
+            break
+
+    parts = answer.split(relation, maxsplit=1)
+    if len(parts) != 2:
         return {
             "Cause": [],
             "Effect": [],
-        }, "cause"
-    causes, relation, effects = matches[0]
-    causes = sorted(c.strip() for c in causes.split("|") if c.strip())
-    effects = sorted(e.strip() for e in effects.split("|") if e.strip())
-    relation = relation.strip()
+        }, clean_relation(relation_tags[0])
+
+    causes, effects = parts
+    causes = sorted(c.strip() for c in causes.split(clause_sep) if c.strip())
+    effects = sorted(e.strip() for e in effects.split(clause_sep) if e.strip())
 
     return {
         "Cause": causes,
         "Effect": effects,
-    }, relation
+    }, clean_relation(relation)
