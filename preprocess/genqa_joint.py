@@ -166,6 +166,11 @@ def main() -> None:
 
     raw_folder = Path(args.src)
     new_folder = Path(args.dst)
+    if args.natural_like:
+        new_folder = new_folder / "natural"
+    else:
+        new_folder = new_folder / "original"
+
 
     splits = ["dev", "test", "train"]
     for split in splits:
