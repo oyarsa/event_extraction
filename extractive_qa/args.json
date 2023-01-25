@@ -1,7 +1,7 @@
 {
-    "train_file": "./data/train.json",
-    "validation_file": "./data/dev.json",
-    "test_file": "./data/test.json",
+    "train_file": "../data/eeqa/train.json",
+    "validation_file": "../data/eeqa/dev.json",
+    "test_file": "../data/eeqa/test.json",
     "per_device_train_batch_size": 32,
     "per_device_eval_batch_size": 32,
     "num_train_epochs": 10,
@@ -13,8 +13,8 @@
     "do_predict": true,
     "model_name_or_path": "bert-base-cased",
     "evaluation_strategy": "epoch",
-	"max_train_samples": 2000,
-	"max_eval_samples": 20,
-	"max_predict_samples": 200,
+    "max_train_samples": 2000,
+    "max_eval_samples": 20,
+    "max_predict_samples": 200,
     "overwrite_output_dir": true
 }

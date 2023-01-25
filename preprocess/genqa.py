@@ -156,11 +156,11 @@ def main() -> None:
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "--src",
-        default="data_fgcr/raw",
+        default="data/raw",
         help="Path to the folder containing the raw data",
     )
     argparser.add_argument(
-        "--dst", default="data_fgcr/genqa", help="Path to the output folder"
+        "--dst", default="data/genqa", help="Path to the output folder"
     )
     argparser.add_argument(
         "--combined-sep", default=" | ", help="Separator for combined mode"

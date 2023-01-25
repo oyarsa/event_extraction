@@ -124,8 +124,8 @@ def convert_file(infile: Path, outfile: Path) -> None:
 
 
 def main() -> None:
-    raw_folder = Path("../data_fgcr/raw")
-    new_folder = Path("./ace_bio")
+    raw_folder = Path("../data/raw")
+    new_folder = Path("./sequence_labelling")
 
     splits = ["dev", "test", "train"]
     for split in splits:

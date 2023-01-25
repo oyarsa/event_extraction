@@ -123,8 +123,8 @@ def convert_file(infile: Path, outfile: Path) -> None:
 
 
 def main() -> None:
-    raw_folder = Path("data_fgcr/raw")
-    new_folder = Path("data_fgcr/eeqa")
+    raw_folder = Path("data/raw")
+    new_folder = Path("data/eeqa")
 
     splits = ["dev", "test", "train"]
     for split in splits:

@@ -1,6 +1,6 @@
-export TRAIN_DATA="data/fgcr/train.txt"
-export DEV_DATA="data/fgcr/dev.txt"
-export TEST_DATA="data/fgcr/test.txt"
+export TRAIN_DATA="../data/sequence_labelling/train.txt"
+export DEV_DATA="../data/sequence_labelling/dev.txt"
+export TEST_DATA="../data/sequence_labelling/test.txt"
 
 export BATCH_SIZE=32
 export LR=3e-5
