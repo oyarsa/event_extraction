@@ -25,9 +25,10 @@
     "save_strategy": "epoch",
     "load_best_model_at_end": true,
     "metric_for_best_model": "f1",
-    "train_file": "data/fgcr/train_debug2.json",
-    "validation_file": "data/fgcr/dev.json",
-    "test_file": "data/fgcr/test.json",
+    "train_file": "../data/genqa/train.json",
+    "validation_file": "../genqa/fgcr/dev.json",
+    "test_file": "../data/genqa/test.json",
+    "max_train_samples": 2000,
     "overwrite_cache": true,
     "store_prediction": true,
     "save_total_limit": 1
