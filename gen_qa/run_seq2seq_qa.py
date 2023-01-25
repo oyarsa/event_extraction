@@ -262,6 +262,9 @@ class DataTrainingArguments:
     joint_prediction: bool = field(
         default=False, metadata={"help": "Whether to use joint prediction"}
     )
+    natural_like: bool = field(
+        default=False, metadata={"help": "Whether to natural-sounding tags"}
+    )
 
     def __post_init__(self):
         if (
@@ -639,7 +642,7 @@ def main():
     )
 
     if data_args.joint_prediction:
-        metric = FGCRCls()
+        metric = FGCRCls(natural_like=data_args.natural_like)
     else:
         metric = FGCR()
 
