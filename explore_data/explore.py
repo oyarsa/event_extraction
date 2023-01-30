@@ -9,7 +9,7 @@ from typing import TextIO
 import click
 
 sys.path.append("..")
-from preprocess.fgcr_genqa_joint import convert_instance  # type: ignore # noqa
+from preprocess.genqa_joint import convert_instance  # type: ignore # noqa
 
 
 @dataclass
