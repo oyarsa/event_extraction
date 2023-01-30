@@ -523,7 +523,7 @@ def main():
         answers = examples[answer_column]
 
         inputs = [
-            f"question: {question.lstrip()} context: {context.lstrip()}"
+            f"{question.lstrip()}\n{context.lstrip()}"
             for question, context in zip(questions, contexts)
         ]
         return inputs, answers
