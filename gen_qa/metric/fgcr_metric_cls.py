@@ -126,7 +126,7 @@ def compute_classification_metrics(instances: List[Instance]) -> Dict[str, float
 
     accuracy = sum(int(p == g) for p, g in zip(pred, gold)) / len(instances)
     precision, recall, f1, _ = precision_recall_fscore_support(
-        gold, pred, average="macro"
+        gold, pred, average="macro", zero_division=0
     )
 
     return {
