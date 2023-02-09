@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import sys
 import collections
 import json
+import sys
 from dataclasses import dataclass
 from typing import TextIO
 

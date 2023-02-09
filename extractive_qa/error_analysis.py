@@ -1,5 +1,5 @@
-import sys
 import json
+import sys
 
 input_data_path = sys.argv[1]
 prediction_path = sys.argv[2]

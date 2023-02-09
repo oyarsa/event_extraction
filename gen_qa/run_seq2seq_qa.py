@@ -30,10 +30,7 @@ from typing import Any, List, Optional, Tuple, cast
 import datasets
 import transformers
 from datasets import load_dataset
-from metric.fgcr_metric import FGCR
-from metric.fgcr_metric_cls import FGCRCls
 from torch.utils.tensorboard import SummaryWriter
-from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 from transformers import (
     AutoConfig,
     AutoModelForSeq2SeqLM,
@@ -50,6 +47,10 @@ from transformers.trainer_utils import (
     EvalPrediction,
     get_last_checkpoint,
 )
+
+from metric.fgcr_metric import FGCR
+from metric.fgcr_metric_cls import FGCRCls
+from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 

@@ -18,7 +18,6 @@ A subclass of `Trainer` specific to Question-Answering tasks
 from typing import Dict, List, Optional
 
 from torch.utils.data import Dataset
-
 from transformers import Seq2SeqTrainer, Seq2SeqTrainingArguments
 from transformers.trainer_utils import PredictionOutput
 
@@ -83,9 +82,9 @@ class QuestionAnsweringSeq2SeqTrainer(Seq2SeqTrainer):
         else:
             metrics = {}
 
-        if self.args.tpu_metrics_debug or self.args.debug:
-            # tpu-comment: Logging debug metrics for PyTorch/XLA (compile, execute times, ops, etc.)
-            xm.master_print(met.metrics_report())
+        # if self.args.tpu_metrics_debug or self.args.debug:
+        #     # tpu-comment: Logging debug metrics for PyTorch/XLA (compile, execute times, ops, etc.)
+        #     xm.master_print(met.metrics_report())
 
         self.control = self.callback_handler.on_evaluate(
             self.args, self.state, self.control, metrics

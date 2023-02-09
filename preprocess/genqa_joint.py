@@ -171,7 +171,6 @@ def main() -> None:
     else:
         new_folder = new_folder / "original"
 
-
     splits = ["dev", "test", "train"]
     for split in splits:
         raw_path = raw_folder / f"event_dataset_{split}.json"
