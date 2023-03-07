@@ -30,10 +30,7 @@ from typing import Any, List, Optional, Tuple, cast
 import datasets
 import transformers
 from datasets import load_dataset
-from metric.fgcr_metric import FGCR
-from metric.fgcr_metric_cls import FGCRCls
 from torch.utils.tensorboard import SummaryWriter
-from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 from transformers import (
     AutoConfig,
     AutoModelForSeq2SeqLM,
@@ -50,6 +47,9 @@ from transformers.trainer_utils import (
     EvalPrediction,
     get_last_checkpoint,
 )
+
+from metric import FGCRCls, ReconstructMetric
+from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -259,11 +259,8 @@ class DataTrainingArguments:
             "help": "Whether to store prediction outputs of the test set or not."
         },
     )
-    joint_prediction: bool = field(
-        default=False, metadata={"help": "Whether to use joint prediction"}
-    )
-    natural_like: bool = field(
-        default=False, metadata={"help": "Whether to natural-sounding tags"}
+    reconstruct: bool = field(
+        default=False, metadata={"help": "Whether to use the reconstruction goal"}
     )
 
     def __post_init__(self):
@@ -642,10 +639,10 @@ def main():
         pad_to_multiple_of=8 if training_args.fp16 else None,
     )
 
-    if data_args.joint_prediction:
-        metric = FGCRCls(natural_like=data_args.natural_like)
+    if data_args.reconstruct:
+        metric = ReconstructMetric()
     else:
-        metric = FGCR()
+        metric = FGCRCls(natural_like=data_args.natural_like)
 
     def compute_metrics(p: EvalPrediction):
         return metric.compute(predictions=p.predictions, references=p.label_ids)
