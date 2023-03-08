@@ -48,61 +48,13 @@ Example output:
 from __future__ import annotations
 
 import argparse
-import hashlib
-import json
 from pathlib import Path
 from typing import Any
 
-
-def tag_sort_key(tag: str) -> tuple[int, str]:
-    """Sort tags by the following order: Cause, Relation, Effect.
-    Tags with the same type are sorted alphabetically.
-
-    Args:
-        tag (str): The tag to sort.
-
-    Returns:
-        tuple[int, str]: A pair of tag-based index and the tag itself.
-    """
-    for i, c in enumerate("CRE"):
-        if tag.startswith('[' + c):
-            return i, tag
-    assert False, f"Unknown tag: {tag}"
+from genqa_common import generate_answer_combined_tags, hash_instance, convert_file
 
 
-def generate_answer_combined_tags(
-    events: dict[str, list[str]],
-    label_map: dict[str, str],
-    sep: str,
-    relation: str | None = None,
-) -> str:
-    out = []
-    for ev_type, evs in events.items():
-        event = f"[{label_map[ev_type]}] " + sep.join(evs)
-        out.append(event.strip())
-    if relation:
-        out.append(f"[Relation] {relation}")
-    return " ".join(sorted(out, key=tag_sort_key))
-
-
-def generate_answer_separate_tags(
-    events: dict[str, list[str]], label_map: dict[str, str], relation: str | None = None
-) -> str:
-    out = []
-    for ev_type, evs in events.items():
-        for e in evs:
-            out.append(f"[{label_map[ev_type]}] {e}")
-    if relation:
-        out.append(f"[Relation] {relation}")
-    return " ".join(sorted(out, key=tag_sort_key))
-
-
-def convert_instance(
-    instance: dict[str, Any],
-    mode: str,
-    combined_sep: str = " | ",
-    add_relation: bool = False,
-) -> list[dict[str, str]]:
+def convert_genqa_joint(instance: dict[str, Any]) -> list[dict[str, str]]:
     """Convert a FGCR-format instance into an EEQA-format instance.
 
     This ignores the relationship and only annotates the causes and effects by
@@ -128,6 +80,42 @@ def convert_instance(
     - event: a list of lists of events, where each event is a triplet of
       [start, end, label]. I'm not sure why this is a 3-level list instead of
       just 2 levels (i.e. list of events).
+
+    This (raw input):
+    ```json
+    {
+        "tid": 2771,
+        "info": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",  # noqa
+        "extraInfo": null,
+        "labelData": [
+        {
+            "type": "cause",
+            "reason": [
+            [
+                3,
+                76
+            ]
+            ],
+            "result": [
+            [
+                78,
+                149
+            ]
+            ]
+        }
+        ]
+    },
+    ```
+    Becomes:
+    ```json
+    {
+      "context": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",  # noqa
+      "question": "What are the reconstructe",
+      "question_type": "cause",
+      "answers": "[Cause] one or more of Ecolab's customers were to experience a disastrous outcome [Relation] cause [Effect] the firm's reputation could suffer and it could lose multiple customers",  # noqa
+      "id": "86951ffe"
+    }
+    ```
     """
     text = instance["info"]
     label_map = {"reason": "Cause", "result": "Effect"}
@@ -135,11 +123,7 @@ def convert_instance(
     instances: list[dict[str, str]] = []
 
     for i, label_data in enumerate(instance["labelData"]):
-        # TODO (italo): document relation
-        if add_relation:
-            relation = label_data["type"]
-        else:
-            relation = None
+        relation = label_data["type"]
 
         events: dict[str, list[str]] = {"reason": [], "result": []}
         for ev_type in ["reason", "result"]:
@@ -147,16 +131,7 @@ def convert_instance(
                 event = text[ev_start:ev_end]
                 events[ev_type].append(event)
 
-        if mode == "separate":
-            answer = generate_answer_separate_tags(events, label_map, relation)
-        elif mode == "combined":
-            answer = generate_answer_combined_tags(
-                events, label_map, combined_sep, relation
-            )
-        else:
-            raise ValueError(
-                "Invalid mode of handling multi-spans. Use 'separate' or 'combined'"
-            )
+        answer = generate_answer_combined_tags(events, label_map, relation)
 
         question = "What are the events?"
         if len(instance["labelData"]) > 1:
@@ -169,32 +144,10 @@ def convert_instance(
             "answers": answer,
         }
         # There are duplicate IDs in the dataset, so we hash instead.
-        inst["id"] = hashlib.sha1(str(inst).encode("utf-8")).hexdigest()[:8]
+        inst["id"] = hash_instance(inst)
         instances.append(inst)
 
     return instances
-
-
-def convert_file(
-    infile: Path,
-    outfile: Path,
-    mode: str,
-    combined_sep: str = " | ",
-    add_relation: bool = False,
-) -> None:
-    with open(infile) as f:
-        dataset = json.load(f)
-
-    nested_instances = [
-        convert_instance(instance, mode, combined_sep, add_relation)
-        for instance in dataset
-    ]
-    instances = [item for sublist in nested_instances for item in sublist]
-    transformed = {"version": "v1.0", "data": instances}
-
-    outfile.parent.mkdir(exist_ok=True)
-    with open(outfile, "w") as f:
-        json.dump(transformed, f)
 
 
 def main() -> None:
@@ -207,27 +160,6 @@ def main() -> None:
     argparser.add_argument(
         "--dst", default="data/genqa_joint", help="Path to the output folder"
     )
-    argparser.add_argument(
-        "--combined-sep", default=" | ", help="Separator for combined mode"
-    )
-    argparser.add_argument(
-        "--mode",
-        default="combined",
-        choices=["separate", "combined"],
-        help="How to handle multi-span cases",
-    )
-    argparser.add_argument(
-        "--add-relation",
-        action="store_true",
-        default=True,
-        help="Add the relation to the answer",
-    )
-    argparser.add_argument(
-        "--no-add-relation",
-        action="store_false",
-        dest='add_relation',
-        help="Disable adding the relation to the answer",
-    )
     args = argparser.parse_args()
 
     raw_folder = Path(args.src)
@@ -237,9 +169,7 @@ def main() -> None:
     for split in splits:
         raw_path = raw_folder / f"event_dataset_{split}.json"
         new_path = new_folder / f"{split}.json"
-        convert_file(
-            raw_path, new_path, args.mode, args.combined_sep, args.add_relation
-        )
+        convert_file(raw_path, new_path, convert_instance=convert_genqa_joint)
 
 
 if __name__ == "__main__":

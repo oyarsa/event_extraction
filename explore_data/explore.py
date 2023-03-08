@@ -9,7 +9,7 @@ from typing import TextIO
 import click
 
 sys.path.append("..")
-from preprocess.genqa_joint import convert_instance  # type: ignore # noqa
+from preprocess.genqa_joint import convert_genqa_joint  # type: ignore # noqa
 
 
 @dataclass
@@ -33,7 +33,7 @@ def process_data(data_json: list[dict]) -> list[Example]:
     for example in data_json:
         id = example["tid"]
         text = example["info"]
-        answer = convert_instance(example, natural_like=True)["answers"]
+        answer = convert_genqa_joint(example, natural_like=True)["answers"]
         relations = []
 
         for relation in example["labelData"]:

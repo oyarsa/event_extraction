@@ -1,72 +1,22 @@
+"""Convert the FGCR dataset json to the format that the GenQA model accepts. This is for
+the reconstruction task.
+
+See convert_instance.
+"""
+from __future__ import annotations
+
 import argparse
-import json
-from dataclasses import dataclass, asdict
 from pathlib import Path
+from typing import Any
+
+from genqa_common import generate_answer_combined_tags, hash_instance, convert_file
 
 
-@dataclass
-class Relation:
-    type: str
-    causes: list[str]
-    effects: list[str]
-
-
-@dataclass
-class Example:
-    id: int
-    text: str
-    relations: list[Relation]
-
-
-@dataclass
-class ProcessedRelation:
-    relation: Relation
-    sentence: str
-
-
-@dataclass
-class ProcessedExample:
-    id: int
-    text: int
-    relations: list[ProcessedRelation]
-
-
-def read_data(data_json: list[dict[str, str]]) -> list[Example]:
-    processed = []
-
-    for example in data_json:
-        id = example["tid"]
-        text = example["info"]
-        relations = []
-
-        for relation in example["labelData"]:
-            type = relation["type"]
-            causes = [text[start:end] for start, end in relation["reason"]]
-            effects = [text[start:end] for start, end in relation["result"]]
-            relations.append(
-                Relation(
-                    type=type,
-                    causes=causes,
-                    effects=effects,
-                )
-            )
-
-        processed.append(
-            Example(
-                id=id,
-                text=text,
-                relations=relations,
-            )
-        )
-
-    return processed
-
-
-def process_relation(relation: Relation, text: str) -> str:
+def process_relation(causes: list[str], effects: list[str], text: str) -> str:
     start_index = int(float(1e9))
     end_index = -1
 
-    for clause in relation.causes + relation.effects:
+    for clause in causes + effects:
         start = text.index(clause)
         end = start + len(clause)
 
@@ -77,29 +27,81 @@ def process_relation(relation: Relation, text: str) -> str:
     return text[start_index:end_index].strip()
 
 
-def process_example(example: Example) -> ProcessedExample:
-    return ProcessedExample(
-        id=example.id,
-        text=example.text,
-        relations=[
-            ProcessedRelation(
-                relation=relation,
-                sentence=process_relation(relation, example.text),
-            )
-            for relation in example.relations
-        ],
-    )
+def convert_reconstruct(instance: dict[str, Any]) -> list[dict[str, str]]:
+    """Convert a FGCR-format instance into a reconstruction-format instance.
 
+    This first generates the structured information from the input, then extracts the
+    truncated sentence version from the input and creates a dataset that maps structed
+    -> truncated.
 
-def convert_file(infile: Path, outfile: Path) -> None:
-    with open(infile) as f:
-        data = read_data(json.load(f))
+    This (raw input):
+    ```json
+    {
+        "tid": 2771,
+        "info": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",  # noqa
+        "extraInfo": null,
+        "labelData": [
+        {
+            "type": "cause",
+            "reason": [
+            [
+                3,
+                76
+            ]
+            ],
+            "result": [
+            [
+                78,
+                149
+            ]
+            ]
+        }
+        ]
+    },
+    ```
+    Becomes:
+    ```json
+    {
+      "context": "[Cause] one or more of Ecolab's customers were to experience a disastrous outcome [Relation] cause [Effect] the firm's reputation could suffer and it could lose multiple customers",
+      "question": "What is the reconstructed sentence?",
+      "question_type": "cause",
+      "answers": "one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers",
+      "id": "573a2c31"
+    },
+    ```
+    """
+    text = instance["info"]
+    label_map = {"reason": "Cause", "result": "Effect"}
 
-    processed = [process_example(example) for example in data]
-    processed_json = [asdict(example) for example in processed]
+    instances: list[dict[str, str]] = []
 
-    with open(outfile, "w") as f:
-        json.dump(processed_json, f, indent=2)
+    for i, label_data in enumerate(instance["labelData"]):
+        relation = label_data["type"]
+
+        events: dict[str, list[str]] = {"reason": [], "result": []}
+        for ev_type in ["reason", "result"]:
+            for ev_start, ev_end in label_data[ev_type]:
+                event = text[ev_start:ev_end]
+                events[ev_type].append(event)
+
+        structured = generate_answer_combined_tags(events, label_map, relation)
+        answer = process_relation(events["reason"], events["result"], text)
+
+        question = "What is the reconstructed sentence?"
+        if len(instance["labelData"]) > 1:
+            question = f"{i} {question}"
+
+        inst = {
+            "context": structured,
+            "question": question,
+            "question_type": relation,
+            "answers": answer,
+        }
+        # There are duplicate IDs in the dataset, so we hash instead.
+        inst["id"] = hash_instance(inst)
+        instances.append(inst)
+
+    return instances
 
 
 def main() -> None:
@@ -121,7 +123,7 @@ def main() -> None:
     for split in splits:
         raw_path = raw_folder / f"event_dataset_{split}.json"
         new_path = new_folder / f"{split}.json"
-        convert_file(raw_path, new_path)
+        convert_file(raw_path, new_path, convert_instance=convert_reconstruct)
 
 
 if __name__ == "__main__":
