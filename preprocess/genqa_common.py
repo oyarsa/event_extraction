@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from typing import Callable, Any
+from typing import Any, Callable, Iterator
 
 
 def tag_sort_key(tag: str) -> tuple[int, str]:
@@ -66,9 +66,24 @@ def convert_file(
         dataset = json.load(f)
 
     nested_instances = [convert_instance(instance) for instance in dataset]
-    instances = [item for sublist in nested_instances for item in sublist]
+    instances = deduplicate(item for sublist in nested_instances for item in sublist)
     transformed = {"version": "v1.0", "data": instances}
 
     outfile.parent.mkdir(exist_ok=True)
     with open(outfile, "w") as f:
         json.dump(transformed, f)
+
+
+def deduplicate(list: Iterator[dict[str, str]]) -> list[dict[str, str]]:
+    """Remove duplicate instances from the list based on `id`."""
+    seen: set[str] = set()
+    deduped: list[dict[str, str]] = []
+
+    for instance in list:
+        if instance["id"] in seen:
+            continue
+
+        seen.add(instance["id"])
+        deduped.append(instance)
+
+    return deduped
