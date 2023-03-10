@@ -87,7 +87,9 @@ def convert_reconstruct(instance: dict[str, Any]) -> list[dict[str, str]]:
         structured = generate_answer_combined_tags(events, label_map, relation)
         answer = process_relation(events["reason"], events["result"], text)
 
-        question = "What is the reconstructed sentence?"
+        question = (
+            "What is the reconstructed sentence from the cause, relation and effect?"
+        )
         if len(instance["labelData"]) > 1:
             question = f"{i} {question}"
 

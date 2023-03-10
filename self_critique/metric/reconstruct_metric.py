@@ -40,7 +40,7 @@ class MetricReference(TypedDict):
     question_type: str
 
 
-class FGCRCls(evaluate.Metric):
+class ReconstructMetric(evaluate.Metric):
     def _info(self):
         features = datasets.Features(
             {
