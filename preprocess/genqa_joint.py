@@ -51,7 +51,7 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from genqa_common import generate_answer_combined_tags, hash_instance, convert_file
+from common import generate_answer_combined_tags, hash_instance, convert_file_qa
 
 
 def convert_genqa_joint(instance: dict[str, Any]) -> list[dict[str, str]]:
@@ -169,7 +169,7 @@ def main() -> None:
     for split in splits:
         raw_path = raw_folder / f"event_dataset_{split}.json"
         new_path = new_folder / f"{split}.json"
-        convert_file(raw_path, new_path, convert_instance=convert_genqa_joint)
+        convert_file_qa(raw_path, new_path, convert_instance=convert_genqa_joint)
 
 
 if __name__ == "__main__":

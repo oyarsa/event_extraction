@@ -1,3 +1,7 @@
 [tool.isort]
 known_first_party = ["trainer_seq2seq", "t5_unlikelihood", "metric"]
 profile = "black"
+
+[tool.ruff]
+ignore = ["E501"]
+

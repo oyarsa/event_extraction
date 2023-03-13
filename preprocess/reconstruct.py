@@ -9,22 +9,12 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from genqa_common import generate_answer_combined_tags, hash_instance, convert_file
-
-
-def process_relation(causes: list[str], effects: list[str], text: str) -> str:
-    start_index = int(float(1e9))
-    end_index = -1
-
-    for clause in causes + effects:
-        start = text.index(clause)
-        end = start + len(clause)
-
-        start_index = min(start_index, start)
-        end_index = max(end_index, end)
-
-    assert start_index != int(float(1e9)) and end_index != -1
-    return text[start_index:end_index].strip()
+from common import (
+    generate_answer_combined_tags,
+    hash_instance,
+    convert_file_qa,
+    extract_relation_span,
+)
 
 
 def convert_reconstruct(instance: dict[str, Any]) -> list[dict[str, str]]:
@@ -85,7 +75,7 @@ def convert_reconstruct(instance: dict[str, Any]) -> list[dict[str, str]]:
                 events[ev_type].append(event)
 
         structured = generate_answer_combined_tags(events, label_map, relation)
-        answer = process_relation(events["reason"], events["result"], text)
+        answer = extract_relation_span(events["reason"], events["result"], text)
 
         question = (
             "What is the reconstructed sentence from the cause, relation and effect?"
@@ -125,7 +115,7 @@ def main() -> None:
     for split in splits:
         raw_path = raw_folder / f"event_dataset_{split}.json"
         new_path = new_folder / f"{split}.json"
-        convert_file(raw_path, new_path, convert_instance=convert_reconstruct)
+        convert_file_qa(raw_path, new_path, convert_instance=convert_reconstruct)
 
 
 if __name__ == "__main__":
