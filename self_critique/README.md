@@ -18,41 +18,29 @@ limitations under the License.
 The code is based on Huggingface transformer examples: [`question-answering`](https://github.com/huggingface/transformers/blob/master/examples/pytorch/question-answering)
 
 # Instruction:
-Data preprocess:
+Data preprocess: 
 
-```
-conda activate torch_transformer
-cd preprocess
-python produce_genqa_stage1_data.py
-python produce_genda_stage2_gold.py
-cp -r ../data/gen_qa/* ../gen_qa/data/
-```
-
-Train stage1 model:
-
-```
-conda activate torch_transformer
-cd gen_qa
-python run_seq2seq_qa.py training_arguments_stage1.json
+```sh
+# From the repository root:
+$ python preprocess/reconstruct.py
+$ python preprocess/genqa_joint.py
+$ python preprocess/entailment.py
 ```
 
-Evaluate stage1 model event (type) classification F1 (optional):
+For training, use the `genqa` environment (see the `requirements` folder).
 
-```
-python eval_stage1_event.py
-```
-
-Transfer stage1 output to stage2 input:
-```
-python transfer_s1_pred_to_s2_input.py
+Train joint extraction and classification model:
+```sh
+python run_seq2seq_qa.py config/genqa_joint.json
 ```
 
-Train stage2 model:
+Train reconstruction model:
 ```
-python run_seq2seq_qa.py training_arguments_stage2.json
+python run_seq2seq_qa.py config/reconstruct.json
 ```
 
-Evaluate stage2 on test set:
+Train text entailment model (TODO):
 ```
-python eval_stage2_preds.py
+python run_classification.py config/entailment.json
 ```
+
