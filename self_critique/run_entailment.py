@@ -518,8 +518,6 @@ def main():
     if training_args.do_predict:
         logger.info("*** Predict ***")
 
-        # Removing the `label` columns because it contains -1 and Trainer won't like that.
-        predict_dataset = predict_dataset.remove_columns("label")
         results = trainer.predict(predict_dataset, metric_key_prefix="predict")
         metrics = results.metrics
         assert metrics is not None
