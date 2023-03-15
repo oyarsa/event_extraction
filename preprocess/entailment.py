@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 from pathlib import Path
 from typing import Any
 
@@ -72,7 +73,7 @@ def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
         inst = {
             "sentence1": text,
             "sentence2": span,
-            "label": "entailment",
+            "label": random.choice(["entailment", "neutral", "contradiction"]),
         }
         # There are duplicate IDs in the dataset, so we hash instead.
         inst["id"] = hash_instance(inst)
