@@ -14,6 +14,9 @@ from typing import Any
 from common import hash_instance, extract_relation_span, deduplicate
 
 
+CLASSES = ["ENTAILMENT", "NEUTRAL", "CONTRADICTION"]
+
+
 def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
     """Convert a FGCR-format instance into a reconstruction-format instance.
 
@@ -51,7 +54,7 @@ def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
     {
         "sentence1": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",
         "sentence2": "one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers",
-        "label": "entailment",
+        "label": "ENTAILMENT",
         "id": "354f73c1"
     },
     ```
@@ -73,7 +76,7 @@ def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
         inst = {
             "sentence1": text,
             "sentence2": span,
-            "label": random.choice(["entailment", "neutral", "contradiction"]),
+            "label": random.choice(CLASSES),
         }
         # There are duplicate IDs in the dataset, so we hash instead.
         inst["id"] = hash_instance(inst)
