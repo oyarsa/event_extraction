@@ -26,12 +26,14 @@ import datasets
 import numpy as np
 import transformers
 from datasets import load_dataset
-from sklearn.metrics import precision_recall_fscore_support, accuracy_score
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from torch.utils.tensorboard import SummaryWriter
 from transformers import (
     AutoConfig,
     AutoModelForSequenceClassification,
     AutoTokenizer,
     DataCollatorWithPadding,
+    EarlyStoppingCallback,
     EvalPrediction,
     HfArgumentParser,
     Trainer,
@@ -39,6 +41,7 @@ from transformers import (
     default_data_collator,
     set_seed,
 )
+from transformers.integrations import TensorBoardCallback
 from transformers.trainer_utils import get_last_checkpoint
 
 logger = logging.getLogger(__name__)
@@ -451,9 +454,7 @@ def main():
             )
             predict_dataset = predict_dataset.select(range(max_predict_samples))
 
-    # You can define your custom compute_metrics function. It takes an `EvalPrediction` object (a namedtuple with a
-    # predictions and label_ids field) and has to return a dictionary string to float.
-    def compute_metrics(p: EvalPrediction):
+    def compute_metrics(p: EvalPrediction) -> dict[str, float]:
         preds = p.predictions[0] if isinstance(p.predictions, tuple) else p.predictions
         preds = np.argmax(preds, axis=1)
 
@@ -477,6 +478,11 @@ def main():
     else:
         data_collator = None
 
+    if "RUN_NAME" in os.environ:
+        tb_run_name = f"-{os.environ['RUN_NAME']}"
+    else:
+        tb_run_name = ""
+
     # Initialize our Trainer
     trainer = Trainer(
         model=model,
@@ -486,6 +492,10 @@ def main():
         compute_metrics=compute_metrics,
         tokenizer=tokenizer,
         data_collator=data_collator,
+        callbacks=[
+            EarlyStoppingCallback(early_stopping_patience=2),
+            TensorBoardCallback(SummaryWriter(comment=tb_run_name)),
+        ],
     )
 
     # Training
