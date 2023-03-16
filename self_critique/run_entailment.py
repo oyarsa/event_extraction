@@ -26,6 +26,7 @@ import datasets
 import numpy as np
 import transformers
 from datasets import load_dataset
+from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 from transformers import (
     AutoConfig,
     AutoModelForSequenceClassification,
@@ -455,7 +456,17 @@ def main():
     def compute_metrics(p: EvalPrediction):
         preds = p.predictions[0] if isinstance(p.predictions, tuple) else p.predictions
         preds = np.argmax(preds, axis=1)
-        return {"accuracy": (preds == p.label_ids).astype(np.float32).mean().item()}
+
+        accuracy = accuracy_score(p.label_ids, preds)
+        precision, recall, f1, _ = precision_recall_fscore_support(
+            p.label_ids, preds, average="macro", zero_division=0
+        )
+        return {
+            "accuracy": accuracy,
+            "precision": float(precision),
+            "recall": float(recall),
+            "f1": float(f1),
+        }
 
     # Data collator will default to DataCollatorWithPadding when the tokenizer is passed to Trainer, so we change it if
     # we already did the padding.
