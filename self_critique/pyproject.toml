@@ -1,3 +1,6 @@
-[tool.isort]
-known_first_party = ["trainer_seq2seq", "metric"]
-profile = "black"
+[tool.ruff]
+select = ["E", "F", "I"]
+ignore = ["E501"]
+isort = { known-first-party = ["trainer-seq2seq", "metric"] }
+target-version = "py311"
+

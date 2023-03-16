@@ -18,7 +18,6 @@ A subclass of `Trainer` specific to Question-Answering tasks
 from typing import Dict, List, Optional
 
 from torch.utils.data import Dataset
-
 from transformers import Seq2SeqTrainer, Seq2SeqTrainingArguments
 from transformers.trainer_utils import PredictionOutput
 
