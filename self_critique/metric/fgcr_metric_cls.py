@@ -16,12 +16,11 @@
 import re
 import string
 from collections import Counter, defaultdict
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, TypedDict
 
 import datasets
 import evaluate
 from sklearn.metrics import precision_recall_fscore_support
-from typing_extensions import TypedDict  # Python 3.7 doesn't have this in typing
 
 
 class Instance(TypedDict):

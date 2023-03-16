@@ -16,11 +16,10 @@
 import re
 import string
 from collections import Counter
-from typing import Dict, List
+from typing import Dict, List, TypedDict
 
 import datasets
 import evaluate
-from typing_extensions import TypedDict  # Python 3.7 doesn't have this in typing
 
 
 class Instance(TypedDict):
