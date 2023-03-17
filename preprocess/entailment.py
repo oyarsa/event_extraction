@@ -59,8 +59,10 @@ def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
     },
     ```
     """
-    text = instance["info"]
+    # Placeholder while we don't have a way to generate the contradiction class.
+    placeholder_classes = ["ENTAILMENT", "CONTRADICTION"]
 
+    text = instance["info"]
     instances: list[dict[str, str]] = []
 
     for label_data in instance["labelData"]:
@@ -76,7 +78,7 @@ def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
         inst = {
             "sentence1": text,
             "sentence2": span,
-            "label": random.choice(CLASSES),
+            "label": random.choice(placeholder_classes),
         }
         # There are duplicate IDs in the dataset, so we hash instead.
         inst["id"] = hash_instance(inst)
@@ -85,19 +87,88 @@ def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
     return instances
 
 
+def randint_except(n: int, exception: int) -> int:
+    """Get a random index in [0, n], excluding `exception`.
+
+    The integer is sampled from `random.randint(0, n)`, but if the index is the same as
+    the exception, it is retried.
+
+    This is useful when you want to generate a random index that is not the same as the
+    current index. See `make_neutral_instances`.
+    """
+    while True:
+        idx = random.randint(0, n)
+        if idx != exception:
+            return idx
+
+
+def generate_neutral_instances(instances: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Randomly pair instances to create a dataset of neutral examples."""
+    new_instances: list[dict[str, str]] = []
+
+    for i, inst1 in enumerate(instances):
+        j = randint_except(len(instances) - 1, i)
+        inst2 = instances[j]
+        assert inst1["id"] != inst2["id"]
+
+        new_inst = {
+            "sentence1": inst1["sentence1"],
+            "sentence2": inst2["sentence2"],
+            "label": "NEUTRAL",
+        }
+        new_inst["id"] = hash_instance(new_inst)
+        new_instances.append(new_inst)
+
+    return new_instances
+
+
 def convert_file_classification(infile: Path, outfile: Path) -> None:
+    """Convert a file from the FGCR format to the text classification (MNLI) format.
+
+    The MNLI format is a list of instances, where each instance is a dictionary with
+    keys "sentence1", "sentence2", "label", and "id".
+
+    Example:
+    ```json
+    [
+        {
+            "sentence1": "...",
+            "sentence2": "...",
+            "label": "ENTAILMENT/NEUTRAL/CONTRADICTION",
+            "id": "..."
+        },
+        {
+            "sentence1": "...",
+            "sentence2": "...",
+            "label": "ENTAILMENT/NEUTRAL/CONTRADICTION",
+            "id": "..."
+        },
+        ...
+    ]
+
+    Args:
+        infile (Path): Path to input JSON file.
+        outfile (Path): Path to output JSON file. Folders are created if they don't
+            exist.
+    """
     with open(infile) as f:
         dataset = json.load(f)
 
-    nested_instances = [convert_entailment(instance) for instance in dataset]
-    transformed = deduplicate(item for sublist in nested_instances for item in sublist)
+    entailment_instances = [convert_entailment(instance) for instance in dataset]
+    unique_entailment = deduplicate(
+        item for sublist in entailment_instances for item in sublist
+    )
+    neutral_instances = generate_neutral_instances(unique_entailment)
+    final_instances = unique_entailment + neutral_instances
 
     outfile.parent.mkdir(exist_ok=True)
     with open(outfile, "w") as f:
-        json.dump(transformed, f)
+        json.dump(final_instances, f)
 
 
 def main() -> None:
+    random.seed(1)
+
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "--src",
