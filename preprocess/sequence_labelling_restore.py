@@ -17,7 +17,7 @@ class Entry:
 def parse_ace(path: Path) -> list[list[Entry]]:
     sentences: list[list[Entry]] = []
     sentence: list[Entry] = []
-    with open(path) as f:
+    with path.open() as f:
         for line in f:
             if not line.strip():
                 sentences.append(sentence)

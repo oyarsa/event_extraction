@@ -111,13 +111,13 @@ def convert_instance(instance: dict[str, Any]) -> dict[str, Any]:
 
 
 def convert_file(infile: Path, outfile: Path) -> None:
-    with open(infile) as f:
+    with infile.open() as f:
         dataset = json.load(f)
 
     instances = [convert_instance(instance) for instance in dataset]
 
     outfile.parent.mkdir(exist_ok=True)
-    with open(outfile, "w") as f:
+    with outfile.open("w") as f:
         for i in instances:
             print(json.dumps(i), file=f)
 

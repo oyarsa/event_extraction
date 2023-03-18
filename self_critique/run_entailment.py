@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding=utf-8
 # Copyright 2020 The HuggingFace Inc. team. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +19,7 @@ import logging
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import Optional
+from pathlib import Path
 
 import datasets
 import numpy as np
@@ -57,11 +56,11 @@ class DataTrainingArguments:
     the command line.
     """
 
-    dataset_name: Optional[str] = field(
+    dataset_name: str | None = field(
         default=None,
         metadata={"help": "The name of the dataset to use (via the datasets library)."},
     )
-    dataset_config_name: Optional[str] = field(
+    dataset_config_name: str | None = field(
         default=None,
         metadata={
             "help": "The configuration name of the dataset to use (via the datasets library)."
@@ -89,7 +88,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_train_samples: Optional[int] = field(
+    max_train_samples: int | None = field(
         default=None,
         metadata={
             "help": (
@@ -98,7 +97,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_eval_samples: Optional[int] = field(
+    max_eval_samples: int | None = field(
         default=None,
         metadata={
             "help": (
@@ -107,7 +106,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_predict_samples: Optional[int] = field(
+    max_predict_samples: int | None = field(
         default=None,
         metadata={
             "help": (
@@ -116,15 +115,15 @@ class DataTrainingArguments:
             )
         },
     )
-    train_file: Optional[str] = field(
+    train_file: str | None = field(
         default=None,
         metadata={"help": "A csv or a json file containing the training data."},
     )
-    validation_file: Optional[str] = field(
+    validation_file: str | None = field(
         default=None,
         metadata={"help": "A csv or a json file containing the validation data."},
     )
-    test_file: Optional[str] = field(
+    test_file: str | None = field(
         default=None,
         metadata={"help": "A csv or a json file containing the test data."},
     )
@@ -159,19 +158,19 @@ class ModelArguments:
             "help": "Path to pretrained model or model identifier from huggingface.co/models"
         }
     )
-    config_name: Optional[str] = field(
+    config_name: str | None = field(
         default=None,
         metadata={
             "help": "Pretrained config name or path if not the same as model_name"
         },
     )
-    tokenizer_name: Optional[str] = field(
+    tokenizer_name: str | None = field(
         default=None,
         metadata={
             "help": "Pretrained tokenizer name or path if not the same as model_name"
         },
     )
-    cache_dir: Optional[str] = field(
+    cache_dir: str | None = field(
         default=None,
         metadata={
             "help": "Where do you want to store the pretrained models downloaded from huggingface.co"
@@ -218,7 +217,7 @@ def main():
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
         model_args, data_args, training_args = parser.parse_json_file(
-            json_file=os.path.abspath(sys.argv[1])
+            json_file=Path(sys.argv[1]).resolve()
         )
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
@@ -244,14 +243,14 @@ def main():
     # Log on each process the small summary:
     logger.warning(
         f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        + f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
+        f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
 
     # Detecting last checkpoint.
     last_checkpoint = None
     if (
-        os.path.isdir(training_args.output_dir)
+        Path(training_args.output_dir).is_dir()
         and training_args.do_train
         and not training_args.overwrite_output_dir
     ):
@@ -315,7 +314,7 @@ def main():
                     "Need either a GLUE task or a test file for `do_predict`."
                 )
 
-        for key in data_files.keys():
+        for key in data_files:
             logger.info(f"load a local file for {key}: {data_files[key]}")
 
         if data_args.train_file.endswith(".csv"):
@@ -554,16 +553,14 @@ def main():
         trainer.log_metrics("predict", metrics)  # type: ignore
         trainer.save_metrics("predict", metrics)  # type: ignore
 
-        output_predict_file = os.path.join(
-            training_args.output_dir, "predict_results.txt"
-        )
+        output_predict_file = Path(training_args.output_dir) / "predict_results.txt"
         if trainer.is_world_process_zero():
-            with open(output_predict_file, "w") as writer:
+            with output_predict_file.open("w") as writer:
                 logger.info(f"Logging predictions to {output_predict_file}")
                 writer.write("index\tprediction\n")
                 for index, item in enumerate(predictions):
-                    item = label_list[item]
-                    writer.write(f"{index}\t{item}\n")
+                    label = label_list[item]
+                    writer.write(f"{index}\t{label}\n")
 
 
 if __name__ == "__main__":

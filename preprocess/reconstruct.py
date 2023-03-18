@@ -10,10 +10,10 @@ from pathlib import Path
 from typing import Any
 
 from common import (
-    generate_answer_combined_tags,
-    hash_instance,
     convert_file_qa,
     extract_relation_span,
+    generate_answer_combined_tags,
+    hash_instance,
 )
 
 

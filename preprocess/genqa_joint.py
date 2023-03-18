@@ -51,7 +51,7 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from common import generate_answer_combined_tags, hash_instance, convert_file_qa
+from common import convert_file_qa, generate_answer_combined_tags, hash_instance
 
 
 def convert_genqa_joint(instance: dict[str, Any]) -> list[dict[str, str]]:

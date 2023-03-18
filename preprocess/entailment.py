@@ -11,8 +11,7 @@ import random
 from pathlib import Path
 from typing import Any
 
-from common import hash_instance, extract_relation_span, deduplicate
-
+from common import deduplicate, extract_relation_span, hash_instance
 
 CLASSES = ["ENTAILMENT", "NEUTRAL", "CONTRADICTION"]
 
@@ -151,7 +150,7 @@ def convert_file_classification(infile: Path, outfile: Path) -> None:
         outfile (Path): Path to output JSON file. Folders are created if they don't
             exist.
     """
-    with open(infile) as f:
+    with infile.open() as f:
         dataset = json.load(f)
 
     entailment_instances = [convert_entailment(instance) for instance in dataset]
@@ -162,7 +161,7 @@ def convert_file_classification(infile: Path, outfile: Path) -> None:
     final_instances = unique_entailment + neutral_instances
 
     outfile.parent.mkdir(exist_ok=True)
-    with open(outfile, "w") as f:
+    with outfile.open("w") as f:
         json.dump(final_instances, f)
 
 

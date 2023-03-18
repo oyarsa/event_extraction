@@ -1,6 +1,4 @@
 [tool.ruff]
-select = ["E", "F", "I"]
-ignore = ["E501"]
+extend = "../pyproject.toml"
 isort = { known-first-party = ["trainer-seq2seq", "metric"] }
 target-version = "py311"
-

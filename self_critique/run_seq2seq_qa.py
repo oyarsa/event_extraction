@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding=utf-8
 # Copyright 2021 The HuggingFace Team All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +24,8 @@ import logging
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import Any, List, Optional, Tuple, cast
+from pathlib import Path
+from typing import Any, cast
 
 import datasets
 import transformers
@@ -68,19 +68,19 @@ class ModelArguments:
             "help": "Path to pretrained model or model identifier from huggingface.co/models"
         }
     )
-    config_name: Optional[str] = field(
+    config_name: str | None = field(
         default=None,
         metadata={
             "help": "Pretrained config name or path if not the same as model_name"
         },
     )
-    tokenizer_name: Optional[str] = field(
+    tokenizer_name: str | None = field(
         default=None,
         metadata={
             "help": "Pretrained tokenizer name or path if not the same as model_name"
         },
     )
-    cache_dir: Optional[str] = field(
+    cache_dir: str | None = field(
         default=None,
         metadata={
             "help": "Path to directory to store the pretrained models downloaded from huggingface.co"
@@ -113,44 +113,44 @@ class DataTrainingArguments:
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
 
-    dataset_name: Optional[str] = field(
+    dataset_name: str | None = field(
         default=None,
         metadata={"help": "The name of the dataset to use (via the datasets library)."},
     )
-    dataset_config_name: Optional[str] = field(
+    dataset_config_name: str | None = field(
         default=None,
         metadata={
             "help": "The configuration name of the dataset to use (via the datasets library)."
         },
     )
-    context_column: Optional[str] = field(
+    context_column: str | None = field(
         default="context",
         metadata={
             "help": "The name of the column in the datasets containing the contexts (for question answering)."
         },
     )
-    question_column: Optional[str] = field(
+    question_column: str | None = field(
         default="question",
         metadata={
             "help": "The name of the column in the datasets containing the questions (for question answering)."
         },
     )
-    answer_column: Optional[str] = field(
+    answer_column: str | None = field(
         default="answers",
         metadata={
             "help": "The name of the column in the datasets containing the answers (for question answering)."
         },
     )
-    train_file: Optional[str] = field(
+    train_file: str | None = field(
         default=None, metadata={"help": "The input training data file (a text file)."}
     )
-    validation_file: Optional[str] = field(
+    validation_file: str | None = field(
         default=None,
         metadata={
             "help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."
         },
     )
-    test_file: Optional[str] = field(
+    test_file: str | None = field(
         default=None,
         metadata={
             "help": "An optional input test data file to evaluate the perplexity on (a text file)."
@@ -160,7 +160,7 @@ class DataTrainingArguments:
         default=False,
         metadata={"help": "Overwrite the cached training and evaluation sets"},
     )
-    preprocessing_num_workers: Optional[int] = field(
+    preprocessing_num_workers: int | None = field(
         default=None,
         metadata={"help": "The number of processes to use for the preprocessing."},
     )
@@ -178,7 +178,7 @@ class DataTrainingArguments:
             "and end predictions are not conditioned on one another."
         },
     )
-    val_max_answer_length: Optional[int] = field(
+    val_max_answer_length: int | None = field(
         default=None,
         metadata={
             "help": "The maximum total sequence length for validation target text after tokenization. Sequences longer "
@@ -195,21 +195,21 @@ class DataTrainingArguments:
             "be faster on GPU but will be slower on TPU)."
         },
     )
-    max_train_samples: Optional[int] = field(
+    max_train_samples: int | None = field(
         default=None,
         metadata={
             "help": "For debugging purposes or quicker training, truncate the number of training examples to this "
             "value if set."
         },
     )
-    max_eval_samples: Optional[int] = field(
+    max_eval_samples: int | None = field(
         default=None,
         metadata={
             "help": "For debugging purposes or quicker training, truncate the number of evaluation examples to this "
             "value if set."
         },
     )
-    max_predict_samples: Optional[int] = field(
+    max_predict_samples: int | None = field(
         default=None,
         metadata={
             "help": "For debugging purposes or quicker training, truncate the number of prediction examples to this "
@@ -240,7 +240,7 @@ class DataTrainingArguments:
             "help": "The total number of n-best predictions to generate when looking for an answer."
         },
     )
-    num_beams: Optional[int] = field(
+    num_beams: int | None = field(
         default=None,
         metadata={
             "help": "Number of beams to use for evaluation. This argument will be passed to ``model.generate``, "
@@ -313,7 +313,7 @@ def main():
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
         model_args, data_args, training_args = parser.parse_json_file(
-            json_file=os.path.abspath(sys.argv[1])
+            json_file=Path(sys.argv[1]).resolve()
         )
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
@@ -335,7 +335,7 @@ def main():
     # Log on each process the small summary:
     logger.warning(
         f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        + f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
+        f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
     logger.info(f"Data parameters {data_args}")
@@ -343,7 +343,7 @@ def main():
     # Detecting last checkpoint.
     last_checkpoint = None
     if (
-        os.path.isdir(training_args.output_dir)
+        Path(training_args.output_dir).is_dir()
         and training_args.do_train
         and not training_args.overwrite_output_dir
     ):
@@ -514,7 +514,7 @@ def main():
         question_column: str,
         context_column: str,
         answer_column: str,
-    ) -> Tuple[List[str], List[str]]:
+    ) -> tuple[list[str], list[str]]:
         questions = examples[question_column]
         contexts = examples[context_column]
         answers = examples[answer_column]
@@ -696,7 +696,11 @@ def main():
             predictions=formatted_predictions, label_ids=references  # type: ignore
         )
 
-    tb_run_name = f"-{os.environ['RUN_NAME']}" if "RUN_NAME" in os.environ else ""
+    if "RUN_NAME" in os.environ:
+        tb_run_name = f"-{os.environ['RUN_NAME']}"
+    else:
+        tb_run_name = ""
+
     # Initialize our Trainer
     trainer = QuestionAnsweringSeq2SeqTrainer(
         model=model,
@@ -787,9 +791,8 @@ def main():
         trainer.save_metrics("predict", metrics)  # type: ignore
 
         if data_args.store_prediction:
-            with open(
-                os.path.join(training_args.output_dir, "predict_outputs.json"), "w"
-            ) as fpred:
+            output_path = Path(training_args.output_dir) / "predict_outputs.json"
+            with output_path.open("w") as fpred:
                 json.dump(
                     {
                         "label_ids": results.label_ids,

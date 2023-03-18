@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Callable, Iterator
 from pathlib import Path
-from typing import Any, Callable, Iterator
+from typing import Any
 
 
 def tag_sort_key(tag: str) -> tuple[int, str]:
@@ -62,7 +63,7 @@ def convert_file_qa(
     *,
     convert_instance: Callable[[dict[str, Any]], list[dict[str, str]]],
 ) -> None:
-    with open(infile) as f:
+    with infile.open() as f:
         dataset = json.load(f)
 
     nested_instances = [convert_instance(instance) for instance in dataset]
@@ -70,7 +71,7 @@ def convert_file_qa(
     transformed = {"version": "v1.0", "data": instances}
 
     outfile.parent.mkdir(exist_ok=True)
-    with open(outfile, "w") as f:
+    with outfile.open("w") as f:
         json.dump(transformed, f)
 
 

@@ -112,14 +112,14 @@ def format_instance(instances: list[tuple[str, str]]) -> str:
 
 
 def convert_file(infile: Path, outfile: Path) -> None:
-    with open(infile) as f:
+    with infile.open() as f:
         dataset = json.load(f)
 
     instances = [convert_instance(instance) for instance in dataset]
     converted = "\n\n".join(format_instance(i) for i in instances)
 
     outfile.parent.mkdir(exist_ok=True)
-    with open(outfile, "w") as f:
+    with outfile.open("w") as f:
         print(converted, file=f)
 
 

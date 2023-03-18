@@ -16,7 +16,7 @@
 import re
 import string
 from collections import Counter
-from typing import Dict, List, TypedDict
+from typing import TypedDict
 
 import datasets
 import evaluate
@@ -57,8 +57,8 @@ class ReconstructMetric(evaluate.Metric):
         return evaluate.MetricInfo(description="", citation="", features=features)
 
     def _compute(
-        self, predictions: List[MetricPrediction], references: List[MetricReference]
-    ) -> Dict[str, float]:
+        self, predictions: list[MetricPrediction], references: list[MetricReference]
+    ) -> dict[str, float]:
         instances: list[Instance] = []
         for pred, refer in zip(predictions, references):
             assert pred["id"] == refer["id"]
@@ -92,11 +92,11 @@ def normalize_answer(s: str) -> str:
     return s
 
 
-def get_tokens(s: str) -> List[str]:
+def get_tokens(s: str) -> list[str]:
     return normalize_answer(s).split()
 
 
-def compute_metrics(instances: List[Instance]) -> Dict[str, float]:
+def compute_metrics(instances: list[Instance]) -> dict[str, float]:
     gold_lens = 0
     pred_lens = 0
     commons = 0
