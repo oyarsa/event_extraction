@@ -70,7 +70,7 @@ def convert_file_qa(
     instances = deduplicate(item for sublist in nested_instances for item in sublist)
     transformed = {"version": "v1.0", "data": instances}
 
-    outfile.parent.mkdir(exist_ok=True)
+    outfile.mkdir(exist_ok=True, parents=True)
     with outfile.open("w") as f:
         json.dump(transformed, f)
 

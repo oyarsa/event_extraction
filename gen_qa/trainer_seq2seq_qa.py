@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright 2021 The HuggingFace Team All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +14,6 @@
 """
 A subclass of `Trainer` specific to Question-Answering tasks
 """
-from typing import Dict, List, Optional
 
 from torch.utils.data import Dataset
 from transformers import Seq2SeqTrainer, Seq2SeqTrainingArguments
@@ -30,13 +28,13 @@ class QuestionAnsweringSeq2SeqTrainer(Seq2SeqTrainer):
 
     def evaluate(
         self,
-        eval_dataset: Optional[Dataset] = None,
+        eval_dataset: Dataset | None = None,
         eval_examples=None,
-        ignore_keys: Optional[List[str]] = None,
+        ignore_keys: list[str] | None = None,
         metric_key_prefix: str = "eval",
-        max_length: Optional[int] = None,
-        num_beams: Optional[int] = None,
-    ) -> Dict[str, float]:
+        max_length: int | None = None,
+        num_beams: int | None = None,
+    ) -> dict[str, float]:
         assert isinstance(self.args, Seq2SeqTrainingArguments)
         self._max_length = (
             max_length if max_length is not None else self.args.generation_max_length

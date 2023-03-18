@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding=utf-8
 # Copyright 2020 The HuggingFace Team All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +21,14 @@ import logging
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import Optional
+from pathlib import Path
 
 import datasets
 import transformers
 from datasets import load_dataset
+from fgcr_metric import FGCR
+from models.bert import BertForCauseEffect
+from trainer_qa import QuestionAnsweringTrainer
 from transformers import (
     AutoConfig,
     AutoTokenizer,
@@ -39,12 +41,6 @@ from transformers import (
     set_seed,
 )
 from transformers.trainer_utils import get_last_checkpoint
-from transformers.utils import check_min_version
-from transformers.utils.versions import require_version
-
-from fgcr_metric import FGCR
-from models.bert import BertForCauseEffect
-from trainer_qa import QuestionAnsweringTrainer
 from utils_qa import postprocess_qa_predictions
 
 logger = logging.getLogger(__name__)
@@ -61,19 +57,19 @@ class ModelArguments:
             "help": "Path to pretrained model or model identifier from huggingface.co/models"
         }
     )
-    config_name: Optional[str] = field(
+    config_name: str | None = field(
         default=None,
         metadata={
             "help": "Pretrained config name or path if not the same as model_name"
         },
     )
-    tokenizer_name: Optional[str] = field(
+    tokenizer_name: str | None = field(
         default=None,
         metadata={
             "help": "Pretrained tokenizer name or path if not the same as model_name"
         },
     )
-    cache_dir: Optional[str] = field(
+    cache_dir: str | None = field(
         default=None,
         metadata={
             "help": "Path to directory to store the pretrained models downloaded from huggingface.co"
@@ -102,26 +98,26 @@ class DataTrainingArguments:
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
 
-    dataset_name: Optional[str] = field(
+    dataset_name: str | None = field(
         default=None,
         metadata={"help": "The name of the dataset to use (via the datasets library)."},
     )
-    dataset_config_name: Optional[str] = field(
+    dataset_config_name: str | None = field(
         default=None,
         metadata={
             "help": "The configuration name of the dataset to use (via the datasets library)."
         },
     )
-    train_file: Optional[str] = field(
+    train_file: str | None = field(
         default=None, metadata={"help": "The input training data file (a text file)."}
     )
-    validation_file: Optional[str] = field(
+    validation_file: str | None = field(
         default=None,
         metadata={
             "help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."
         },
     )
-    test_file: Optional[str] = field(
+    test_file: str | None = field(
         default=None,
         metadata={
             "help": "An optional input test data file to evaluate the perplexity on (a text file)."
@@ -131,7 +127,7 @@ class DataTrainingArguments:
         default=False,
         metadata={"help": "Overwrite the cached training and evaluation sets"},
     )
-    preprocessing_num_workers: Optional[int] = field(
+    preprocessing_num_workers: int | None = field(
         default=None,
         metadata={"help": "The number of processes to use for the preprocessing."},
     )
@@ -153,7 +149,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_train_samples: Optional[int] = field(
+    max_train_samples: int | None = field(
         default=None,
         metadata={
             "help": (
@@ -162,7 +158,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_eval_samples: Optional[int] = field(
+    max_eval_samples: int | None = field(
         default=None,
         metadata={
             "help": (
@@ -171,7 +167,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_predict_samples: Optional[int] = field(
+    max_predict_samples: int | None = field(
         default=None,
         metadata={
             "help": (
@@ -251,7 +247,7 @@ def main():
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
         model_args, data_args, training_args = parser.parse_json_file(
-            json_file=os.path.abspath(sys.argv[1])
+            json_file=Path(sys.argv[1]).resolve()
         )
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
@@ -273,14 +269,14 @@ def main():
     # Log on each process the small summary:
     logger.warning(
         f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        + f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
+        f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
 
     # Detecting last checkpoint.
     last_checkpoint = None
     if (
-        os.path.isdir(training_args.output_dir)
+        Path(training_args.output_dir).is_dir()
         and training_args.do_train
         and not training_args.overwrite_output_dir
     ):
@@ -357,7 +353,7 @@ def main():
 
     # Tokenizer check: this script requires a fast tokenizer.
     if not isinstance(tokenizer, PreTrainedTokenizerFast):
-        raise ValueError(
+        raise TypeError(
             "This example script only works for models that have a fast tokenizer. Checkout the big table of models at"
             " https://huggingface.co/transformers/index.html#supported-frameworks to find the model types that meet"
             " this requirement"

@@ -147,7 +147,7 @@ def convert_file(
     instances = [convert_instance(instance, mode, combined_sep) for instance in dataset]
     transformed = {"version": "v1.0", "data": instances}
 
-    outfile.parent.mkdir(exist_ok=True)
+    outfile.mkdir(exist_ok=True, parents=True)
     with outfile.open("w") as f:
         json.dump(transformed, f)
 
@@ -156,11 +156,12 @@ def main() -> None:
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "--src",
+        type=Path,
         default="data/raw",
         help="Path to the folder containing the raw data",
     )
     argparser.add_argument(
-        "--dst", default="data/genqa", help="Path to the output folder"
+        "--dst", type=Path, default="data/genqa", help="Path to the output folder"
     )
     argparser.add_argument(
         "--combined-sep", default=" | ", help="Separator for combined mode"
@@ -173,13 +174,10 @@ def main() -> None:
     )
     args = argparser.parse_args()
 
-    raw_folder = Path(args.src)
-    new_folder = Path(args.dst)
-
     splits = ["dev", "test", "train"]
     for split in splits:
-        raw_path = raw_folder / f"event_dataset_{split}.json"
-        new_path = new_folder / f"{split}.json"
+        raw_path = args.raw_folder / f"event_dataset_{split}.json"
+        new_path = args.new_folder / f"{split}.json"
         convert_file(raw_path, new_path, args.mode, args.combined_sep)
 
 

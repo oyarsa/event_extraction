@@ -100,21 +100,19 @@ def main() -> None:
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "--src",
+        type=Path,
         default="data/raw",
         help="Path to the folder containing the raw data",
     )
     argparser.add_argument(
-        "--dst", default="data/reconstruct", help="Path to the output folder"
+        "--dst", type=Path, default="data/reconstruct", help="Path to the output folder"
     )
     args = argparser.parse_args()
 
-    raw_folder = Path(args.src)
-    new_folder = Path(args.dst)
-
     splits = ["dev", "test", "train"]
     for split in splits:
-        raw_path = raw_folder / f"event_dataset_{split}.json"
-        new_path = new_folder / f"{split}.json"
+        raw_path = args.raw_folder / f"event_dataset_{split}.json"
+        new_path = args.new_folder / f"{split}.json"
         convert_file_qa(raw_path, new_path, convert_instance=convert_reconstruct)
 
 

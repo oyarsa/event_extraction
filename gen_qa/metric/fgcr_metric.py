@@ -16,7 +16,6 @@
 import re
 import string
 from collections import Counter, defaultdict
-from typing import Dict, List
 
 import datasets
 from typing_extensions import TypedDict  # Python 3.7 doesn't have this in typing
@@ -25,8 +24,8 @@ from typing_extensions import TypedDict  # Python 3.7 doesn't have this in typin
 class Instance(TypedDict):
     id: str
     kind: str
-    predictions: List[str]
-    golds: List[str]
+    predictions: list[str]
+    golds: list[str]
 
 
 class MetricPrediction(TypedDict):
@@ -58,8 +57,8 @@ class FGCR(datasets.Metric):
         return datasets.MetricInfo(description="", citation="", features=features)
 
     def _compute(
-        self, predictions: List[MetricPrediction], references: List[MetricReference]
-    ) -> Dict[str, float]:
+        self, predictions: list[MetricPrediction], references: list[MetricReference]
+    ) -> dict[str, float]:
         instances: list[Instance] = []
         for pred, refer in zip(predictions, references):
             assert pred["id"] == refer["id"]
@@ -67,7 +66,7 @@ class FGCR(datasets.Metric):
             pred_entities = parse_instance(pred["prediction_text"])
             ref_entities = parse_instance(refer["answers"])
 
-            for itype in ref_entities.keys():
+            for itype in ref_entities:
                 instance: Instance = {
                     "id": refer["id"],
                     "kind": itype,
@@ -97,11 +96,11 @@ def normalize_answer(s: str) -> str:
     return s
 
 
-def get_tokens(s: str) -> List[str]:
+def get_tokens(s: str) -> list[str]:
     return normalize_answer(s).split()
 
 
-def compute_metric(instances: List[Instance]) -> Dict[str, float]:
+def compute_metric(instances: list[Instance]) -> dict[str, float]:
     gold_lens = {"Cause": 0, "Effect": 0}
     pred_lens = {"Cause": 0, "Effect": 0}
     commons = {"Cause": 0, "Effect": 0}
@@ -147,7 +146,7 @@ def compute_metric(instances: List[Instance]) -> Dict[str, float]:
     return {metric: macro_avg(metric) for metric in ["precision", "recall", "f1", "em"]}
 
 
-def parse_instance(answer: str) -> Dict[str, List[str]]:
+def parse_instance(answer: str) -> dict[str, list[str]]:
     """Parse string answer to separate into class and spans
     Simple case:
     [Cause] This is a cause [Effect] This is an effect

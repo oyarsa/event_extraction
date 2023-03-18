@@ -72,20 +72,21 @@ def main() -> None:
     argparser.add_argument(
         "model", help=f"Model to run error analysis. One of {supported_models}."
     )
-    argparser.add_argument("path", help="Path to predictions file or folder.")
+    argparser.add_argument(
+        "path", type=Path, help="Path to predictions file or folder."
+    )
     argparser.add_argument("--search")
 
     args = argparser.parse_args()
 
-    path = Path(args.path)
-    assert path.exists(), f"Path doesn't exist: {path}"
+    assert args.path.exists(), f"Path doesn't exist: {args.path}"
 
     model = args.model.strip().lower()
     if model not in analysis_funcs:
         raise ValueError(f"Invalid model: {model}. Choose one of {supported_models}.")
 
     analysis_func = analysis_funcs[model]
-    analyses = analysis_func(path)
+    analyses = analysis_func(args.path)
 
     for an in analyses:
         if not args.search or args.search in an:

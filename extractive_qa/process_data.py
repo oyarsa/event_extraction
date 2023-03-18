@@ -117,14 +117,14 @@ def convert_instance(instance: dict[str, Any]) -> dict[str, Any]:
 
 
 def convert_file(infile: Path, outfile: Path) -> None:
-    with open(infile) as f:
+    with infile.open() as f:
         dataset = json.load(f)
 
     instances = [convert_instance(instance) for instance in dataset]
     transformed = {"version": "v1.0", "data": instances}
 
-    outfile.parent.mkdir(exist_ok=True)
-    with open(outfile, "w") as f:
+    outfile.mkdir(exist_ok=True, parents=True)
+    with outfile.open("w") as f:
         json.dump(transformed, f)
 
 
@@ -132,18 +132,18 @@ def main() -> None:
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "--src",
+        type=Path,
         help="Path to the folder containing the raw data",
     )
-    argparser.add_argument("--dst", default="data", help="Path to the output folder")
+    argparser.add_argument(
+        "--dst", type=Path, default="data", help="Path to the output folder"
+    )
     args = argparser.parse_args()
-
-    raw_folder = Path(args.src)
-    new_folder = Path(args.dst)
 
     splits = ["dev", "test", "train"]
     for split in splits:
-        raw_path = raw_folder / f"event_dataset_{split}.json"
-        new_path = new_folder / f"{split}.json"
+        raw_path = args.raw_folder / f"event_dataset_{split}.json"
+        new_path = args.new_folder / f"{split}.json"
         convert_file(raw_path, new_path)
 
 

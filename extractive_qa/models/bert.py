@@ -92,7 +92,7 @@ class BertForCauseEffect(BertPreTrainedModel):
             avg_loss = (
                 start_cause_loss + end_cause_loss + start_effect_loss + end_effect_loss
             ) / 4
-            outputs = (avg_loss,) + outputs
+            outputs = (avg_loss, *outputs)
 
         # (loss), start_cause_logits, end_cause_logits, start_effect_logits,
         # end_effect_logits, (hidden_states), (attentions)

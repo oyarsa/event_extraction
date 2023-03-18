@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 import torch
 import torch.utils.data
@@ -23,10 +24,10 @@ def flush_tokens(
 ):
     # add the tokens to a collective list, append [CLS]
     # token to beginning an the [SEP] token to the end
-    list_all_tokens.append(torch.tensor([cls_token_id] + list_tokens + [sep_token_id]))
+    list_all_tokens.append(torch.tensor([cls_token_id, *list_tokens] + [sep_token_id]))
     # add the labels to a collective list, append <pad> to
     # the beginning and the end
-    list_all_labels.append([pad_label] + list_labels + [pad_label])
+    list_all_labels.append([pad_label, *list_labels] + [pad_label])
     # create the mask - ignore all tokens from [SEP] token onwards
     list_all_masks.append(torch.tensor([1] * (len(list_tokens) + 2)))
 
@@ -42,7 +43,7 @@ def flush_tokens(
 
 
 def load_data_from_file(
-    path,
+    path: Path,
     batch_size,
     tokens_column,
     predict_column,
@@ -69,7 +70,7 @@ def load_data_from_file(
     list_all_crf_masks = []
 
     logger.info("Loading data file: %s", path)
-    with open(path, "r", encoding="utf-8") as file:
+    with path.open() as file:
         list_tokens = []
         list_labels = []
 
@@ -142,7 +143,7 @@ def load_data_from_file(
     ]
 
     # pad the tokens, the labels and the masks
-    X = torch.nn.utils.rnn.pad_sequence(
+    X = torch.nn.utils.rnn.pad_sequence(  # noqa: N806
         list_all_tokens,
         batch_first=True,
         padding_value=int(tokenizer.pad_token_id or 0),
@@ -208,7 +209,7 @@ def load_data(
         scikit) used to encode the labels.
     """
     train_loader, label_encoder = load_data_from_file(
-        train_path,
+        Path(train_path),
         batch_size,
         tokens_column,
         predict_column,
@@ -221,7 +222,7 @@ def load_data(
     )
 
     dev_loader, _ = load_data_from_file(
-        dev_path,
+        Path(dev_path),
         batch_size,
         tokens_column,
         predict_column,

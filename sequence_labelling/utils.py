@@ -154,10 +154,10 @@ def print_info(
     all_classes = label_encoder.classes_.tolist()  # type: ignore
 
     logger.info("Training session info:")
-    logger.info("\tLanguage model: {}, Finetune: {}".format(lang_model_name, fine_tune))
-    logger.info("\tTarget classes: {}".format(original_target_classes))
-    logger.info("\tAll classes: {}".format(all_classes))
-    logger.info("\tDevice: {}".format(device))
+    logger.info(f"\tLanguage model: {lang_model_name}, Finetune: {fine_tune}")
+    logger.info(f"\tTarget classes: {original_target_classes}")
+    logger.info(f"\tAll classes: {all_classes}")
+    logger.info(f"\tDevice: {device}")
 
 
 def dump_args(args: argparse.Namespace) -> None:

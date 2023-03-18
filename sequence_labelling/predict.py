@@ -1,13 +1,12 @@
 import argparse
 import logging
-import os
 import pickle
+from pathlib import Path
 
 import torch
 import transformers
-from tqdm import tqdm
-
 from load import load_data_from_file
+from tqdm import tqdm
 from utils import dump_args, init_logger
 
 logger = logging.getLogger("bert.predict")
@@ -16,9 +15,9 @@ logger = logging.getLogger("bert.predict")
 def main(args: argparse.Namespace) -> None:
     device = torch.device(args.device)
 
-    os.makedirs(args.output_path, exist_ok=True)
+    args.output_path.mkdir(exist_ok=True, parents=True)
 
-    with open(os.path.join(args.model_path, "label_encoder.pk"), "rb") as file:
+    with (args.model_path / "label_encoder.pk").open("rb") as file:
         label_encoder = pickle.load(file)
 
     test_loader, _ = load_data_from_file(
@@ -40,9 +39,7 @@ def main(args: argparse.Namespace) -> None:
         args.lang_model_name, use_fast=True
     )
 
-    model = torch.load(
-        os.path.join(args.model_path, "model.pt"), map_location=args.device
-    )
+    model = torch.load(args.odel_path / "model.pt", map_location=args.device)
     model.fine_tune = False
     model.eval()
 
@@ -58,10 +55,8 @@ def main(args: argparse.Namespace) -> None:
         list_labels.append(labels)
 
     in_path = args.test_path
-    out_path = os.path.join(args.output_path, args.output_name)
-    with open(in_path, "r", encoding="utf-8") as in_file, open(
-        out_path, "w", encoding="utf-8"
-    ) as out_file:
+    out_path = args.output_path / args.output_name
+    with in_path.open() as in_file, out_path.open("w") as out_file:
         sentence_idx = 0
         label_idx = 0
 
@@ -90,13 +85,13 @@ def main(args: argparse.Namespace) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("test_path")
-    parser.add_argument("model_path", type=str)
+    parser.add_argument("test_path", type=Path)
+    parser.add_argument("model_path", type=Path)
     parser.add_argument("token_column", type=int)
     parser.add_argument("predict_column", type=int)
     parser.add_argument("lang_model_name", type=str)
     parser.add_argument("--batch_size", type=int, default=32)
-    parser.add_argument("--output_path", type=str, default="output")
+    parser.add_argument("--output_path", type=Path, default="output")
     parser.add_argument("--output_name", type=str, default="predict.conllu")
     parser.add_argument("--separator", type=str, default=" ")
     parser.add_argument("--pad_label", type=str, default="<pad>")

@@ -16,7 +16,6 @@
 import re
 import string
 from collections import Counter, defaultdict
-from typing import Dict, List, Optional, Tuple
 
 import datasets
 import evaluate
@@ -27,10 +26,10 @@ from typing_extensions import TypedDict  # Python 3.7 doesn't have this in typin
 class Instance(TypedDict):
     id: str
     kind: str
-    predictions: List[str]
-    golds: List[str]
-    pred_relation: Optional[str]
-    gold_relation: Optional[str]
+    predictions: list[str]
+    golds: list[str]
+    pred_relation: str | None
+    gold_relation: str | None
 
 
 class MetricPrediction(TypedDict):
@@ -62,8 +61,8 @@ class FGCRCls(evaluate.Metric):
         return evaluate.MetricInfo(description="", citation="", features=features)
 
     def _compute(
-        self, predictions: List[MetricPrediction], references: List[MetricReference]
-    ) -> Dict[str, float]:
+        self, predictions: list[MetricPrediction], references: list[MetricReference]
+    ) -> dict[str, float]:
         instances: list[Instance] = []
         for pred, refer in zip(predictions, references):
             assert pred["id"] == refer["id"]
@@ -75,7 +74,7 @@ class FGCRCls(evaluate.Metric):
                 ref_relation == refer["question_type"]
             ), "Extracted reference relation does not match the question type."
 
-            for itype in ref_entities.keys():
+            for itype in ref_entities:
                 instance: Instance = {
                     "id": refer["id"],
                     "kind": itype,
@@ -106,17 +105,17 @@ def normalize_answer(s: str) -> str:
     return s
 
 
-def get_tokens(s: str) -> List[str]:
+def get_tokens(s: str) -> list[str]:
     return normalize_answer(s).split()
 
 
-def compute_metrics(instances: List[Instance]) -> Dict[str, float]:
+def compute_metrics(instances: list[Instance]) -> dict[str, float]:
     extraction = compute_extraction_metrics(instances)
     classification = compute_classification_metrics(instances)
     return {**extraction, **classification}
 
 
-def compute_classification_metrics(instances: List[Instance]) -> Dict[str, float]:
+def compute_classification_metrics(instances: list[Instance]) -> dict[str, float]:
     pred = [instance["pred_relation"] for instance in instances]
     gold = [instance["gold_relation"] for instance in instances]
 
@@ -133,7 +132,7 @@ def compute_classification_metrics(instances: List[Instance]) -> Dict[str, float
     }
 
 
-def compute_extraction_metrics(instances: List[Instance]) -> Dict[str, float]:
+def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
     gold_lens = {"Cause": 0, "Effect": 0}
     pred_lens = {"Cause": 0, "Effect": 0}
     commons = {"Cause": 0, "Effect": 0}
@@ -179,7 +178,7 @@ def compute_extraction_metrics(instances: List[Instance]) -> Dict[str, float]:
     return {metric: macro_avg(metric) for metric in ["precision", "recall", "f1", "em"]}
 
 
-def parse_instance(answer: str) -> Tuple[Dict[str, List[str]], Optional[str]]:
+def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
     """Parse string answer to separate into class and spans
     Simple case:
     [Cause] This is a cause [Effect] This is an effect

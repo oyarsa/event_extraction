@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright 2020 The HuggingFace Team All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +17,7 @@ Post-processing utilities for question answering.
 import collections
 import json
 import logging
-import os
-from typing import Optional, Tuple
+from pathlib import Path
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -30,14 +28,14 @@ logger = logging.getLogger(__name__)
 def postprocess_qa_predictions(
     examples,
     features,
-    predictions: Tuple[np.ndarray, np.ndarray],
+    predictions: tuple[np.ndarray, np.ndarray],
     version_2_with_negative: bool = False,
     n_best_size: int = 20,
     max_answer_length: int = 30,
     null_score_diff_threshold: float = 0.0,
-    output_dir: Optional[str] = None,
-    prefix: Optional[str] = None,
-    log_level: Optional[int] = logging.WARNING,
+    output_dir: str | None = None,
+    prefix: str | None = None,
+    log_level: int | None = logging.WARNING,
 ):
     """
     Post-processes the predictions of a question-answering model to convert them to
@@ -229,7 +227,7 @@ def postprocess_qa_predictions(
             # In the very rare edge case we have not a single non-null prediction, we create a fake prediction to avoid
             # failure.
             if len(predictions) == 0 or (
-                len(predictions) == 1 and predictions[0]["text"] == ""
+                len(predictions) == 1 and not predictions[0]["text"]
             ):
                 predictions.insert(
                     0,
@@ -257,7 +255,7 @@ def postprocess_qa_predictions(
             else:
                 # Otherwise we first need to find the best non-empty prediction.
                 i = 0
-                while predictions[i]["text"] == "":
+                while not predictions[i]["text"]:
                     i += 1
                 best_non_null_pred = predictions[i]
 
@@ -279,7 +277,7 @@ def postprocess_qa_predictions(
                 {
                     k: (
                         float(v)
-                        if isinstance(v, (np.float16, np.float32, np.float64))
+                        if isinstance(v, np.float16 | np.float32 | np.float64)
                         else v
                     )
                     for k, v in pred.items()
@@ -289,34 +287,34 @@ def postprocess_qa_predictions(
 
     # If we have an output_dir, let's save all those dicts.
     if output_dir is not None:
-        if not os.path.isdir(output_dir):
-            raise EnvironmentError(f"{output_dir} is not a directory.")
+        output_dir = Path(output_dir)
+        if not output_dir.is_dir():
+            raise OSError(f"{output_dir} is not a directory.")
 
-        prediction_file = os.path.join(
-            output_dir,
-            "predictions.json" if prefix is None else f"{prefix}_predictions.json",
+        prediction_file = output_dir / (
+            "predictions.json" if prefix is None else f"{prefix}_predictions.json"
         )
-        nbest_file = os.path.join(
-            output_dir,
+        nbest_file = output_dir / (
             "nbest_predictions.json"
             if prefix is None
-            else f"{prefix}_nbest_predictions.json",
+            else f"{prefix}_nbest_predictions.json"
         )
         if version_2_with_negative:
-            null_odds_file = os.path.join(
-                output_dir,
-                "null_odds.json" if prefix is None else f"{prefix}_null_odds.json",
+            null_odds_file = output_dir / (
+                "null_odds.json" if prefix is None else f"{prefix}_null_odds.json"
             )
 
         logger.info(f"Saving predictions to {prediction_file}.")
-        with open(prediction_file, "w") as writer:
+        with prediction_file.open("w") as writer:
             writer.write(json.dumps(all_predictions, indent=4) + "\n")
+
         logger.info(f"Saving nbest_preds to {nbest_file}.")
-        with open(nbest_file, "w") as writer:
+        with nbest_file.open("w") as writer:
             writer.write(json.dumps(all_nbest_json, indent=4) + "\n")
+
         if version_2_with_negative:
             logger.info(f"Saving null_odds to {null_odds_file}.")
-            with open(null_odds_file, "w") as writer:
+            with null_odds_file.open("w") as writer:
                 writer.write(json.dumps(scores_diff_json, indent=4) + "\n")
 
     return all_predictions

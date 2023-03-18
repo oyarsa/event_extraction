@@ -1,5 +1,5 @@
 import torch
-import torch.nn as nn
+from torch import nn
 
 
 class LangModelWithDense(nn.Module):
@@ -12,7 +12,7 @@ class LangModelWithDense(nn.Module):
         :param num_classes: The number of classes.
         :param fine_tune: whether to fine-tune or freeze the language model's weights.
         """
-        super(LangModelWithDense, self).__init__()
+        super().__init__()
         self.num_classes = num_classes
         self.fine_tune = fine_tune
 

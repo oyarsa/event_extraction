@@ -160,7 +160,7 @@ def convert_file_classification(infile: Path, outfile: Path) -> None:
     neutral_instances = generate_neutral_instances(unique_entailment)
     final_instances = unique_entailment + neutral_instances
 
-    outfile.parent.mkdir(exist_ok=True)
+    outfile.mkdir(exist_ok=True, parents=True)
     with outfile.open("w") as f:
         json.dump(final_instances, f)
 
@@ -171,21 +171,22 @@ def main() -> None:
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "--src",
+        type=Path,
         default="data/raw",
         help="Path to the folder containing the raw data",
     )
     argparser.add_argument(
-        "--dst", default="data/entailment", help="Path to the output folder"
+        "--dst",
+        type=Path,
+        default="data/entailment",
+        help="Path to the output folder",
     )
     args = argparser.parse_args()
 
-    raw_folder = Path(args.src)
-    new_folder = Path(args.dst)
-
     splits = ["dev", "test", "train"]
     for split in splits:
-        raw_path = raw_folder / f"event_dataset_{split}.json"
-        new_path = new_folder / f"{split}.json"
+        raw_path = args.raw_folder / f"event_dataset_{split}.json"
+        new_path = args.new_folder / f"{split}.json"
         convert_file_classification(raw_path, new_path)
 
 

@@ -116,7 +116,7 @@ def convert_file(infile: Path, outfile: Path) -> None:
 
     instances = [convert_instance(instance) for instance in dataset]
 
-    outfile.parent.mkdir(exist_ok=True)
+    outfile.mkdir(exist_ok=True, parents=True)
     with outfile.open("w") as f:
         for i in instances:
             print(json.dumps(i), file=f)

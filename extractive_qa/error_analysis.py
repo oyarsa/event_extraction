@@ -1,10 +1,11 @@
 import json
 import sys
+from pathlib import Path
 
-input_data_path = sys.argv[1]
-prediction_path = sys.argv[2]
+input_data_path = Path(sys.argv[1])
+prediction_path = Path(sys.argv[2])
 # Load input data
-with open(input_data_path) as f:
+with input_data_path.open() as f:
     input_data_json = json.load(f)
 
 input_data = {
@@ -17,7 +18,7 @@ input_data = {
 }
 
 # Load output data
-with open(prediction_path) as f:
+with prediction_path.open() as f:
     predictions = json.load(f)
 
 # Map input data to output data
@@ -37,5 +38,5 @@ result = [
     for id, pred in predictions.items()
 ]
 
-with open("error_analysis.json", "w") as f:
+with Path("error_analysis.json").open("w") as f:
     json.dump(result, f, indent=2)

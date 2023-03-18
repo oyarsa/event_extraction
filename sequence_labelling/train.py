@@ -1,16 +1,15 @@
 import argparse
 import logging
-import os
 import pickle
+from pathlib import Path
 
 import torch
 import transformers
+from load import load_data
+from model import LangModelWithDense
 from torch.utils.tensorboard import SummaryWriter
 from torchcrf import CRF
 from tqdm import tqdm
-
-from load import load_data
-from model import LangModelWithDense
 from utils import Meter, dump_args, init_logger, print_info
 
 logger = logging.getLogger("bert.train")
@@ -134,8 +133,7 @@ def train_model(
 
         # if the current macro F1 score is the best one -> save the model
         if macro_f1 > best_f1:
-            save_path = os.path.join(args.save_path, args.run_name)
-            os.makedirs(save_path, exist_ok=True)
+            args.save_path.mkdir(parents=True, exist_ok=True)
 
             logger.info(
                 "Macro F1 score improved from {:.4f} -> {:.4f}. Saving model...".format(
@@ -144,10 +142,10 @@ def train_model(
             )
 
             best_f1 = macro_f1
-            torch.save(model, os.path.join(save_path, "model.pt"))
-            with open(os.path.join(save_path, "label_encoder.pk"), "wb") as file:
+            torch.save(model, args.save_path / "model.pt")
+            with (args.save_path / "label_encoder.pk").open("wb") as file:
                 pickle.dump(label_encoder, file)
-            with open(os.path.join(save_path, "best"), "w") as file:
+            with (args.save_path / "best").open("w") as file:
                 file.write(f"epoch: {epoch + 1} macro_f1: {best_f1}")
 
     tb_writer.close()
@@ -241,7 +239,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=32, help="The batch size.")
     parser.add_argument("--epochs", type=int, default=10, help="Number of epochs.")
     parser.add_argument(
-        "--save_path", type=str, default="models", help="Where to save the model/"
+        "--save_path", type=Path, default="models", help="Where to save the model/"
     )
     parser.add_argument(
         "--fine_tune",
