@@ -13,6 +13,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("input", type=Path, default="../data/raw")
     parser.add_argument("--prompt", type=str, default=DEFAULT_PROMPT)
+    parser.add_argument("--model", type=str, default="gpt-3.5-turbo")
     args = parser.parse_args()
 
     splits = ["train", "dev", "test"]
@@ -23,7 +24,7 @@ def main() -> None:
         )
         data.extend(split_data)
 
-    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    encoding = tiktoken.encoding_for_model(args.model)
 
     data_tokens = sum(len(encoding.encode(d["info"])) for d in data)
     prompt_tokens = len(encoding.encode(args.prompt)) * len(data)
