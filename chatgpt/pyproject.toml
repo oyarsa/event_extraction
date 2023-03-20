@@ -1,4 +1,5 @@
 [tool.ruff]
 extend = "../pyproject.toml"
 extend-select = ["ANN"]
+extend-ignore = ["ANN101", "ANN102", "ANN401"]
 
