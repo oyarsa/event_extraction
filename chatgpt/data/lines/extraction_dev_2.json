@@ -1,0 +1,19 @@
+{
+  "version": "v1.0",
+  "data": [
+    {
+      "context": "Additionally, the transition to the cloud is prompting enterprises to change software vendors away from all-in-one ERP systems to application specific that are best of breed.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "Cause: the transition to the cloud\nEffect: prompting enterprises to change software vendors away from all-in-one ERP systems to application specific\nRelation: enable",
+      "id": "ee8e5a82"
+    },
+    {
+      "context": "We expect annual earnings growth at Georgia Power to accelerate to high-single digits after Vogtle is completed and penalty returns on equity fade.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Vogtle is completed and penalty returns on equity fade\nEffect: annual earnings growth at Georgia Power to accelerate to high-single digits\nRelation: cause",
+      "id": "1ddb02bc"
+    }
+  ]
+}

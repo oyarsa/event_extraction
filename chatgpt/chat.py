@@ -1,9 +1,17 @@
 import argparse
 import json
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, NamedTuple, cast
 
 import openai
+from tqdm import tqdm
+
+from metrics import (
+    MetricPrediction,
+    MetricReference,
+    StructureFormat,
+    calculate_metrics,
+)
 
 
 class ExchangeLogger:
@@ -67,79 +75,17 @@ def gen_contradiction(
     return response
 
 
-DEFAULT_EXTRACTION_EXAMPLES = [
-    {
-        "text": (
-            "If one or more of Ecolab's customers were to experience a disastrous"
-            " outcome, the firm's reputation could suffer and it could lose multiple"
-            " customers as a result."
-        ),
-        "result": (
-            "[Cause] one or more of Ecolab's customers were to experience a disastrous"
-            " outcome [Relation] cause [Effect] the firm's reputation could suffer and"
-            " it could lose multiple customers"
-        ),
-    },
-    {
-        "text": (
-            "As grocery customers regularly visit the store, they are continually"
-            " exposed to the firm's higher margin offerings, spurring lucrative general"
-            " merchandise sales."
-        ),
-        "result": (
-            "[Cause] they are continually exposed to the firm's higher margin offerings"
-            " [Relation] cause [Effect] spurring lucrative general merchandise sales"
-        ),
-    },
-    {
-        "text": (
-            "We think that QuickBooks exhibits high switching costs given the regularity"
-            " in bookkeeping and the pain of transferring a business' accounting record"
-            " as well as learning a new software to record entries."
-        ),
-        "result": (
-            "[Cause] learning a new software | the regularity in bookkeeping | the"
-            " pain of transferring a business' accounting record [Relation] cause"
-            " [Effect] QuickBooks exhibits high switching costs"
-        ),
-    },
-    {
-        "text": (
-            "We think Lululemon protects the integrity of its brand by selling only"
-            " high-quality apparel and it has continued to grow and improve margins"
-            " despite the introduction of competing products by others."
-        ),
-        "result": (
-            "[Cause] the introduction of competing products by others [Relation] prevent"
-            " [Effect] it has continued to grow and improve margins"
-        ),
-    },
-    {
-        "text": (
-            "In times of crises a AAA or AA rating is imperative within reinsurance as a"
-            " flight to quality for renewals takes hold."
-        ),
-        "result": (
-            "[Cause] a flight to quality for renewals takes hold [Relation] enable"
-            " [Effect] In times of crises a AAA or AA rating is imperative within"
-            " reinsurance"
-        ),
-    },
-]
 DEFAULT_EXTRACTION_PROMPT = (
     "What are the causes, effects and relations in the following text?"
 )
 
 
-def extract_clauses(
+def make_extraction_request(
     model: str,
     text: str,
-    examples: list[dict[str, str]] | None = None,
+    examples: list[dict[str, str]],
     prompt: str = DEFAULT_EXTRACTION_PROMPT,
 ) -> dict[str, Any]:
-    if examples is None:
-        examples = DEFAULT_EXTRACTION_EXAMPLES
-
     response = make_chat_request(
         model=model, messages=generate_extraction_messages(text, examples, prompt)
     )
@@ -157,8 +103,8 @@ def gen_extraction_example_exchange(
         messages.extend(
             [
                 prompt_msg,
-                make_msg("user", example["text"]),
-                make_msg("assistant", example["result"]),
+                make_msg("user", example["context"]),
+                make_msg("assistant", example["answers"]),
             ]
         )
 
@@ -194,30 +140,85 @@ def calculate_cost(model: str, response: dict[str, Any]) -> float:
     return MODEL_COSTS[model] * num_tokens
 
 
-def calculate_metrics(result: str, expected: str) -> dict[str, float]:
-    return {}
+class ExtractionResult(NamedTuple):
+    responses: list[dict[str, Any]]
+    predictions: list[MetricPrediction]
+    metrics: dict[str, float]
 
 
-def run_extraction(model: str) -> dict[str, Any]:
-    text = (
-        "Nevertheless, with voices amplified through structural shifts like the rise"
-        " of digital media, consumers have more agency than ever: if they want"
-        " LaCroix (or any other National Beverage brand), retailers eventually have"
-        " to oblige."
+def extract_clauses(
+    model: str,
+    demonstration_examples: list[dict[str, str]],
+    inputs: list[MetricReference],
+    extraction_mode: StructureFormat,
+) -> ExtractionResult:
+    responses: list[dict[str, Any]] = []
+    predictions: list[MetricPrediction] = []
+
+    for example in tqdm(inputs):
+        response = make_extraction_request(
+            model, example["context"], demonstration_examples
+        )
+        pred: MetricPrediction = {
+            "id": example["id"],
+            "prediction_text": get_result(response),
+        }
+        responses.append(response)
+        predictions.append(pred)
+
+    metrics = calculate_metrics(predictions, inputs, extraction_mode)
+
+    return ExtractionResult(responses, predictions, metrics)
+
+
+def run_extraction(
+    model: str,
+    demonstration_examples_path: Path,
+    input_path: Path,
+    output_path: Path | None,
+    extraction_mode: StructureFormat,
+) -> None:
+    demonstration_examples = json.loads(demonstration_examples_path.read_text())
+    examples: list[MetricReference] = json.loads(input_path.read_text())["data"]
+
+    responses, predictions, metrics = extract_clauses(
+        model, demonstration_examples, examples, extraction_mode
     )
-    expected = (
-        "[Cause] voices amplified through structural shifts [Relation] cause"
-        " [Effect] consumers have more agency"
-    )
 
-    response = extract_clauses(model, text)
-    metrics = calculate_metrics(get_result(response), expected)
+    output = [
+        {
+            "id": example["id"],
+            "text": example["context"],
+            "pred": pred["prediction_text"],
+            "answer": example["answers"],
+        }
+        for example, pred in zip(examples, predictions)
+    ]
+    if output_path is not None:
+        output_path.write_text(json.dumps(output, indent=2))
+    else:
+        print(json.dumps(output, indent=2))
 
     print("\nMetrics:")
     for metric, value in metrics.items():
-        print(f"\t{metric}: {value}")
+        print(f"  {metric}: {value}")
 
-    return response
+    cost = sum(calculate_cost(model, response) for response in responses)
+    print(f"\nTotal cost: ${cost}")
+
+
+def run_contradiction(model: str) -> None:
+    response = gen_contradiction(model, "I am a cat.")
+    print("Result:")
+    print(get_result(response))
+    print(f"\nCost: ${calculate_cost(model, response)}")
+
+
+def print_args(args: argparse.Namespace) -> None:
+    print("Arguments:")
+    for key, value in vars(args).items():
+        print(f"  {key}: {value}")
+    print()
 
 
 def main() -> None:
@@ -228,24 +229,36 @@ def main() -> None:
     parser.add_argument("--print-logs", action="store_true")
     parser.add_argument("--log-file", type=Path, default="chat_log.jsonl")
     parser.add_argument(
-        "--mode",
+        "--task",
         type=str,
-        default="contradiction",
+        default="extraction",
         choices=["contradiction", "extraction"],
     )
+    parser.add_argument("--extraction-examples", type=Path)
+    parser.add_argument("--input", "-i", type=Path)
+    parser.add_argument("--output", "-o", type=Path)
+    parser.add_argument(
+        "--extraction-mode",
+        default="tags",
+        choices=["tags", "lines"],
+        type=StructureFormat,
+    )
     args = parser.parse_args()
+    print_args(args)
 
     logger.config(args.log_file, args.print_logs)
     openai.api_key = get_key(args.key_file, args.key_name)
 
-    if args.mode == "extraction":
-        response = run_extraction(args.model)
+    if args.task == "extraction":
+        run_extraction(
+            args.model,
+            args.extraction_examples,
+            args.input,
+            args.output,
+            args.extraction_mode,
+        )
     else:
-        response = gen_contradiction(args.model, "I am a cat.")
-
-    print("Result:")
-    print(get_result(response))
-    print(f"\nCost: ${calculate_cost(args.model, response)}")
+        run_contradiction(args.model)
 
 
 if __name__ == "__main__":
