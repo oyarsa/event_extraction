@@ -9,11 +9,11 @@ from common import (
     get_key,
     get_result,
     init_argparser,
+    logger,
     make_chat_request,
     make_msg,
     print_args,
 )
-from exchange_logger import logger
 
 CONTRADICTION_SENTENCE_PROMPTS = [
     "Generate a sentence that contradicts the following:",  # 0
