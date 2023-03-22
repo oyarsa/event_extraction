@@ -11,12 +11,13 @@ class ExchangeLogger:
         self.file: Path | None = None
         self.print_log = False
 
-    def config(self, file: Path, print_log: bool) -> None:
+    def config(self, file: Path, print_log: bool = False) -> None:
         self.file = file
         self.print_log = print_log
 
     def log_exchange(self, params: dict[str, Any], response: dict[str, Any]) -> None:
-        assert self.file is not None, "Must call config() before logging exchanges."
+        if self.file is None:
+            raise ValueError("Must call config() before logging exchanges.")
 
         log = {"params": params, "response": response}
 
