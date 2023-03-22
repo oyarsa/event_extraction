@@ -79,4 +79,5 @@ def init_argparser() -> argparse.ArgumentParser:
     parser.add_argument("--input", "-i", type=Path)
     parser.add_argument("--output", "-o", type=Path)
     parser.add_argument("--prompt", type=int, default=0)
+    parser.add_argument("--metrics-path", type=Path)
     return parser

@@ -110,6 +110,7 @@ def run_extraction(
     demonstration_examples_path: Path,
     input_path: Path,
     output_path: Path | None,
+    metric_path: Path | None,
     extraction_mode: StructureFormat,
     prompt: str,
 ) -> None:
@@ -138,23 +139,23 @@ def run_extraction(
     else:
         print(json.dumps(output, indent=2))
 
-    print("\nMetrics:")
-    for metric, value in metrics.items():
-        print(f"  {metric}: {value}")
-
-    cost = sum(calculate_cost(model, response) for response in responses)
-    print(f"\nTotal cost: ${cost}")
+    metrics["cost"] = sum(calculate_cost(model, response) for response in responses)
+    if metric_path is None:
+        print("\nMetrics:")
+        print(json.dumps(metrics, indent=2))
+    else:
+        metric_path.write_text(json.dumps(metrics, indent=2))
 
 
 def main() -> None:
     parser = init_argparser()
     parser.add_argument(
-        "--extraction-examples",
+        "--examples",
         type=Path,
         default="data/tags/extraction_examples_3.json",
     )
     parser.add_argument(
-        "--extraction-mode",
+        "--mode",
         default="tags",
         choices=["tags", "lines"],
         type=StructureFormat,
@@ -169,10 +170,11 @@ def main() -> None:
         raise ValueError(f"Invalid prompt index: {args.prompt}")
     run_extraction(
         model=args.model,
-        demonstration_examples_path=args.extraction_examples,
+        demonstration_examples_path=args.examples,
         input_path=args.input,
         output_path=args.output,
-        extraction_mode=args.extraction_mode,
+        metric_path=args.metrics_path,
+        extraction_mode=args.mode,
         prompt=EXTRACTION_PROMPTS[args.prompt],
     )
 
