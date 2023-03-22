@@ -222,7 +222,7 @@ def print_args(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument("key_file", type=Path)
     parser.add_argument("key_name", type=str)
     parser.add_argument("--model", type=str, default="gpt-3.5-turbo")
@@ -262,4 +262,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if not hasattr(__builtins__, "__IPYTHON__"):
+        main()
