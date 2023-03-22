@@ -1,11 +1,20 @@
-import argparse
 import json
 from pathlib import Path
-from typing import Any, NamedTuple, cast
+from typing import Any, NamedTuple
 
 import openai
 from tqdm import tqdm
 
+from common import (
+    calculate_cost,
+    get_key,
+    get_result,
+    init_argparser,
+    make_chat_request,
+    make_msg,
+    print_args,
+)
+from exchange_logger import logger
 from metrics import (
     MetricPrediction,
     MetricReference,
@@ -13,78 +22,16 @@ from metrics import (
     calculate_metrics,
 )
 
-
-class ExchangeLogger:
-    def __init__(self) -> None:
-        self.file: Path | None = None
-        self.print_log = False
-
-    def config(self, file: Path, print_log: bool) -> None:
-        self.file = file
-        self.print_log = print_log
-
-    def log_exchange(self, params: dict[str, Any], response: dict[str, Any]) -> None:
-        assert self.file is not None, "Must call config() before logging exchanges."
-
-        log = {"params": params, "response": response}
-
-        with self.file.open("a") as f:
-            json.dump(log, f)
-            f.write("\n")
-
-        if self.print_log:
-            print(json.dumps(log, indent=2))
-            print()
-
-
-logger = ExchangeLogger()
-
-
-def get_key(key_file: Path, key_name: str) -> str:
-    keys = json.loads(key_file.read_text())
-    return keys[key_name]
-
-
-def make_msg(role: str, content: str) -> dict[str, str]:
-    return {"role": role, "content": content}
-
-
-def make_chat_request(**kwargs: Any) -> dict[str, Any]:
-    response = cast(dict[str, Any], openai.ChatCompletion.create(**kwargs))
-    logger.log_exchange(kwargs, response)
-    return response
-
-
-DEFAULT_CONTADICTION_PROMPT = "Generate a sentence that contradicts the following:"
-
-
-def gen_contradiction(
-    model: str, sentence: str, prompt: str = DEFAULT_CONTADICTION_PROMPT
-) -> dict[str, Any]:
-    response = make_chat_request(
-        model=model,
-        messages=[
-            make_msg(
-                "system", "You are a helpful assistant that generates contradictions."
-            ),
-            make_msg("user", prompt),
-            make_msg("user", sentence),
-        ],
-    )
-
-    return response
-
-
-DEFAULT_EXTRACTION_PROMPT = (
-    "What are the causes, effects and relations in the following text?"
-)
+EXTRACTION_PROMPTS = [
+    "What are the causes, effects and relations in the following text?",  # 0
+]
 
 
 def make_extraction_request(
     model: str,
     text: str,
     examples: list[dict[str, str]],
-    prompt: str = DEFAULT_EXTRACTION_PROMPT,
+    prompt: str,
 ) -> dict[str, Any]:
     response = make_chat_request(
         model=model, messages=generate_extraction_messages(text, examples, prompt)
@@ -126,20 +73,6 @@ def generate_extraction_messages(
     ]
 
 
-def get_result(response: dict[str, Any]) -> str:
-    return response["choices"][0]["message"]["content"]
-
-
-MODEL_COSTS = {
-    "gpt-3.5-turbo": 0.000002,  # $0.002 / 1K tokens
-}
-
-
-def calculate_cost(model: str, response: dict[str, Any]) -> float:
-    num_tokens = response["usage"]["total_tokens"]
-    return MODEL_COSTS[model] * num_tokens
-
-
 class ExtractionResult(NamedTuple):
     responses: list[dict[str, Any]]
     predictions: list[MetricPrediction]
@@ -151,13 +84,14 @@ def extract_clauses(
     demonstration_examples: list[dict[str, str]],
     inputs: list[MetricReference],
     extraction_mode: StructureFormat,
+    prompt: str,
 ) -> ExtractionResult:
     responses: list[dict[str, Any]] = []
     predictions: list[MetricPrediction] = []
 
     for example in tqdm(inputs):
         response = make_extraction_request(
-            model, example["context"], demonstration_examples
+            model, example["context"], demonstration_examples, prompt
         )
         pred: MetricPrediction = {
             "id": example["id"],
@@ -177,12 +111,17 @@ def run_extraction(
     input_path: Path,
     output_path: Path | None,
     extraction_mode: StructureFormat,
+    prompt: str,
 ) -> None:
     demonstration_examples = json.loads(demonstration_examples_path.read_text())
     examples: list[MetricReference] = json.loads(input_path.read_text())["data"]
 
     responses, predictions, metrics = extract_clauses(
-        model, demonstration_examples, examples, extraction_mode
+        model=model,
+        demonstration_examples=demonstration_examples,
+        inputs=examples,
+        extraction_mode=extraction_mode,
+        prompt=prompt,
     )
 
     output = [
@@ -207,36 +146,13 @@ def run_extraction(
     print(f"\nTotal cost: ${cost}")
 
 
-def run_contradiction(model: str) -> None:
-    response = gen_contradiction(model, "I am a cat.")
-    print("Result:")
-    print(get_result(response))
-    print(f"\nCost: ${calculate_cost(model, response)}")
-
-
-def print_args(args: argparse.Namespace) -> None:
-    print("Arguments:")
-    for key, value in vars(args).items():
-        print(f"  {key}: {value}")
-    print()
-
-
 def main() -> None:
-    parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument("key_file", type=Path)
-    parser.add_argument("key_name", type=str)
-    parser.add_argument("--model", type=str, default="gpt-3.5-turbo")
-    parser.add_argument("--print-logs", action="store_true")
-    parser.add_argument("--log-file", type=Path, default="chat_log.jsonl")
+    parser = init_argparser()
     parser.add_argument(
-        "--task",
-        type=str,
-        default="extraction",
-        choices=["contradiction", "extraction"],
+        "--extraction-examples",
+        type=Path,
+        default="data/tags/extraction_examples_3.json",
     )
-    parser.add_argument("--extraction-examples", type=Path)
-    parser.add_argument("--input", "-i", type=Path)
-    parser.add_argument("--output", "-o", type=Path)
     parser.add_argument(
         "--extraction-mode",
         default="tags",
@@ -249,16 +165,16 @@ def main() -> None:
     logger.config(args.log_file, args.print_logs)
     openai.api_key = get_key(args.key_file, args.key_name)
 
-    if args.task == "extraction":
-        run_extraction(
-            args.model,
-            args.extraction_examples,
-            args.input,
-            args.output,
-            args.extraction_mode,
-        )
-    else:
-        run_contradiction(args.model)
+    if args.prompt < 0 or args.prompt >= len(EXTRACTION_PROMPTS):
+        raise ValueError(f"Invalid prompt index: {args.prompt}")
+    run_extraction(
+        model=args.model,
+        demonstration_examples_path=args.extraction_examples,
+        input_path=args.input,
+        output_path=args.output,
+        extraction_mode=args.extraction_mode,
+        prompt=EXTRACTION_PROMPTS[args.prompt],
+    )
 
 
 if __name__ == "__main__":

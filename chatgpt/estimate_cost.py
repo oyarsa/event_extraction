@@ -4,8 +4,8 @@ from pathlib import Path
 
 import tiktoken
 
-# $0.002 / 1K tokens
-PRICE_PER_TOKEN = 0.000002
+from common import MODEL_COSTS
+
 DEFAULT_PROMPT = "What are the causes, effects and relations in the following text?"
 
 
@@ -30,7 +30,7 @@ def main() -> None:
     prompt_tokens = len(encoding.encode(args.prompt)) * len(data)
 
     total_tokens = data_tokens + prompt_tokens
-    cost = total_tokens * PRICE_PER_TOKEN
+    cost = total_tokens * MODEL_COSTS[args.model]
 
     print(f"Estimated cost: ${cost:.2f} for {total_tokens} tokens")
 
