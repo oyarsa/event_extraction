@@ -1,4 +1,5 @@
 import json
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any, NamedTuple
 
@@ -42,20 +43,12 @@ def make_extraction_request(
 
 def gen_extraction_example_exchange(
     examples: list[dict[str, str]], prompt: str
-) -> list[dict[str, str]]:
+) -> Iterator[dict[str, str]]:
     prompt_msg = make_msg("user", prompt)
-    messages: list[dict[str, str]] = []
-
     for example in examples:
-        messages.extend(
-            [
-                prompt_msg,
-                make_msg("user", example["context"]),
-                make_msg("assistant", example["answers"]),
-            ]
-        )
-
-    return messages
+        yield prompt_msg
+        yield make_msg("user", example["context"])
+        yield make_msg("assistant", example["answers"])
 
 
 def generate_extraction_messages(
