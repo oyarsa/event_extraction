@@ -1,8 +1,10 @@
 import json
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
 import openai
+from tqdm import tqdm
 
 from common import (
     calculate_cost,
@@ -21,8 +23,18 @@ CONTRADICTION_STRUCTURED_PROMPTS = [
 ]
 
 
+def gen_example_exchange(
+    examples: list[dict[str, str]], prompt: str
+) -> Iterator[dict[str, str]]:
+    prompt_msg = make_msg("user", prompt)
+    for example in examples:
+        yield prompt_msg
+        yield make_msg("user", example["context"])
+        yield make_msg("assistant", example["answers"])
+
+
 def gen_contradiction_structured(
-    model: str, sentence: str, prompt: str
+    model: str, sentence: str, prompt: str, examples: list[dict[str, str]]
 ) -> dict[str, Any]:
     response = make_chat_request(
         model=model,
@@ -32,6 +44,7 @@ def gen_contradiction_structured(
                 "You are a helpful assistant that generates sentences from causes,"
                 " effects and relations.",
             ),
+            *gen_example_exchange(examples, prompt),
             make_msg("user", prompt),
             make_msg("user", sentence),
         ],
@@ -67,9 +80,9 @@ def generate_answer_tags(events: dict[str, list[str]], relation: str) -> str:
     return " ".join(sorted(out, key=tag_sort_key))
 
 
-def swap_clauses(instance: str, format: StructureFormat) -> str:
+def gen_input_by_swapping_clauses(instance: str, format: StructureFormat) -> str:
     entities, relation = parse_instance_tags(instance)
-    assert relation is not None
+    assert all(entities.values()) and relation
 
     entities["Cause"], entities["Effect"] = entities["Effect"], entities["Cause"]
     if format == StructureFormat.TAGS:
@@ -80,14 +93,22 @@ def swap_clauses(instance: str, format: StructureFormat) -> str:
 
 def run_contradiction_structured(
     model: str,
+    examples_path: Path,
     prompt: str,
     input_path: Path,
     output_path: Path | None,
     format: StructureFormat,
 ) -> None:
     data = json.loads(input_path.read_text())["data"]
-    inputs = [swap_clauses(i["answers"], format) for i in data]
-    responses = [gen_contradiction_structured(model, inst, prompt) for inst in inputs]
+    demonstration_examples = json.loads(examples_path.read_text())
+
+    inputs = [gen_input_by_swapping_clauses(i["context"], format) for i in data]
+    responses = [
+        gen_contradiction_structured(
+            model=model, sentence=inst, prompt=prompt, examples=demonstration_examples
+        )
+        for inst in tqdm(inputs)
+    ]
     output = [get_result(response) for response in responses]
 
     if output_path is not None:
@@ -101,14 +122,20 @@ def run_contradiction_structured(
 
 def main() -> None:
     parser = init_argparser()
-    args = parser.parse_args()
-    args.add_argument(
+    parser.add_argument(
         "--structured-format",
         type=StructureFormat,
         default="tags",
         choices=["tags", "lines"],
         help="The format of the structured input.",
     )
+    parser.add_argument(
+        "--demonstration-examples",
+        type=Path,
+        default="./data/contradiction-structured/contradiction_examples_3.json",
+        help="Path to the demonstration examples.",
+    )
+    args = parser.parse_args()
     log_args(args, args.args_path)
 
     logger.config(args.log_file, args.print_logs)
@@ -122,6 +149,7 @@ def main() -> None:
 
     run_contradiction_structured(
         model=args.model,
+        examples_path=args.demonstration_examples,
         # Input should be tag-based, regardless of the structured format.
         input_path=args.input,
         output_path=args.output,

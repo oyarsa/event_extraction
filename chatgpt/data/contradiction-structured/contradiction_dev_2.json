@@ -1,0 +1,19 @@
+{
+  "version": "v1.0",
+  "data": [
+    {
+      "context": "[Cause] the transition to the cloud [Relation] enable [Effect] prompting enterprises to change software vendors away from all-in-one ERP systems to application specific",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "the transition to the cloud is prompting enterprises to change software vendors away from all-in-one ERP systems to application specific",
+      "id": "f561068f"
+    },
+    {
+      "context": "[Cause]  Vogtle is completed and penalty returns on equity fade [Relation] cause [Effect] annual earnings growth at Georgia Power to accelerate to high-single digits",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "annual earnings growth at Georgia Power to accelerate to high-single digits after Vogtle is completed and penalty returns on equity fade",
+      "id": "03460ac1"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "context": "[Cause] one or more of Ecolab's customers were to experience a disastrous outcome [Relation] cause [Effect] the firm's reputation could suffer and it could lose multiple customers",
+    "question": "What is the reconstructed sentence from the cause, relation and effect?",
+    "question_type": "cause",
+    "answers": "one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers",
+    "id": "e42b2e84"
+  },
+  {
+    "context": "[Cause] hey are continually exposed to the firm's higher margin offerings [Relation] cause [Effect] spurring lucrative general merchandise sales",
+    "question": "What is the reconstructed sentence from the cause, relation and effect?",
+    "question_type": "cause",
+    "answers": "hey are continually exposed to the firm's higher margin offerings, spurring lucrative general merchandise sales",
+    "id": "fc1863a4"
+  },
+  {
+    "context": "[Cause] Consistent product and process technological advancement enables more favorable pricing [Relation] enable [Effect] relative to many automotive industry suppliers that lack the capability or the desire to innovate",
+    "question": "What is the reconstructed sentence from the cause, relation and effect?",
+    "question_type": "enable",
+    "answers": "Consistent product and process technological advancement enables more favorable pricing relative to many automotive industry suppliers that lack the capability or the desire to innovate",
+    "id": "4493b987"
+  }
+]

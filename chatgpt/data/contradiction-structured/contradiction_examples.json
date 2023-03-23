@@ -1,0 +1,72 @@
+[
+    {
+        "context": "[Cause] one or more of Ecolab's customers were to experience a disastrous outcome [Relation] cause [Effect] the firm's reputation could suffer and it could lose multiple customers",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "cause",
+        "answers": "one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers",
+        "id": "e42b2e84"
+    },
+    {
+        "context": "[Cause] hey are continually exposed to the firm's higher margin offerings [Relation] cause [Effect] spurring lucrative general merchandise sales",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "cause",
+        "answers": "hey are continually exposed to the firm's higher margin offerings, spurring lucrative general merchandise sales",
+        "id": "fc1863a4"
+    },
+    {
+        "context": "[Cause] Consistent product and process technological advancement enables more favorable pricing [Relation] enable [Effect] relative to many automotive industry suppliers that lack the capability or the desire to innovate",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "enable",
+        "answers": "Consistent product and process technological advancement enables more favorable pricing relative to many automotive industry suppliers that lack the capability or the desire to innovate",
+        "id": "4493b987"
+    },
+    {
+        "context": "[Cause] sustained low oil and gas prices [Relation] prevent [Effect]  electricity demand in Texas",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "prevent",
+        "answers": "sustained low oil and gas prices could be a drag on electricity demand in Texas",
+        "id": "803fb9ae"
+    },
+    {
+        "context": "[Cause]  using an augmented reality app to check off a grocery list at Whole Foods or a cruise line integrating a passenger badge/sensor system [Relation] enable [Effect] a more effortless cruise experience",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "enable",
+        "answers": "using an augmented reality app to check off a grocery list at Whole Foods or a cruise line integrating a passenger badge/sensor system for a more effortless cruise experience",
+        "id": "a452860f"
+    },
+    {
+        "context": "[Cause] Pinterest banned all searches related to antivaccination pins [Relation] prevent [Effect] appearing to promote the lifestyle choice",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "prevent",
+        "answers": "Pinterest banned all searches related to antivaccination pins in order to avoid appearing to promote the lifestyle choice",
+        "id": "56309f0c"
+    },
+    {
+        "context": "[Cause] Vistra's clean postbankruptcy balance sheet [Relation] enable [Effect] it to acquire Dynegy in 2018 for $2.27 billion | more than tripling the size of its generation fleet |  introducing Vistra to power markets outside Texas, notably the Midwest and Northeast",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "enable",
+        "answers": "Vistra's clean postbankruptcy balance sheet allowed it to acquire Dynegy in 2018 for $2.27 billion, more than tripling the size of its generation fleet and introducing Vistra to power markets outside Texas, notably the Midwest and Northeast",
+        "id": "f7e01f5a"
+    },
+    {
+        "context": "[Cause]  marginally lifted our sales estimate | significantly raised our operating margin forecast to 4.8% from 3.9%, [Relation] cause [Effect] adjusted EPS forecast that improves to $2.85 from our prior $2.29 estimate.",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "cause",
+        "answers": "marginally lifted our sales estimate (to $18.4 billion from $18.3 billion) but have significantly raised our operating margin forecast to 4.8% from 3.9%, leading to an adjusted EPS forecast that improves to $2.85 from our prior $2.29 estimate.",
+        "id": "e036daed"
+    },
+    {
+        "context": "[Cause] Idex's investments in innovation [Relation] enable [Effect] capture incremental market share gains through introductions of new and improved products | entry into adjacent markets",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "enable",
+        "answers": "Idex's investments in innovation have allowed it to capture incremental market share gains through introductions of new and improved products, as well as entry into adjacent markets",
+        "id": "1821a05d"
+    },
+    {
+        "context": "[Cause] Swiss neutrality | the Swiss franc. [Relation] cause [Effect]  Swiss banks remain attractive to the world's elite",
+        "question": "What is the reconstructed sentence from the cause, relation and effect?",
+        "question_type": "cause",
+        "answers": "Swiss banks remain attractive to the world's elite for two main reasons: first, Swiss neutrality; and second, the Swiss franc.",
+        "id": "2fbbd19b"
+    }
+]

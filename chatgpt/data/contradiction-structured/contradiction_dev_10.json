@@ -1,0 +1,75 @@
+{
+  "version": "v1.0",
+  "data": [
+    {
+      "context": "[Cause] the transition to the cloud [Relation] enable [Effect] prompting enterprises to change software vendors away from all-in-one ERP systems to application specific",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "the transition to the cloud is prompting enterprises to change software vendors away from all-in-one ERP systems to application specific",
+      "id": "f561068f"
+    },
+    {
+      "context": "[Cause]  Vogtle is completed and penalty returns on equity fade [Relation] cause [Effect] annual earnings growth at Georgia Power to accelerate to high-single digits",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "annual earnings growth at Georgia Power to accelerate to high-single digits after Vogtle is completed and penalty returns on equity fade",
+      "id": "03460ac1"
+    },
+    {
+      "context": "[Cause] 94% of its medical office building assets are affiliated with a health system [Relation] cause [Effect] Healthpeak has established itself as a desirable partner with some of the top hospitals",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Healthpeak has established itself as a desirable partner with some of the top hospitals, as 94% of its medical office building assets are affiliated with a health system",
+      "id": "6894dcca"
+    },
+    {
+      "context": "[Cause] the substantial costs at failure [Relation] cause [Effect] we don't expect the military will switch its provider for missile defense systems any day soon",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the substantial costs at failure, we don't expect the military will switch its provider for missile defense systems any day soon",
+      "id": "0f07045e"
+    },
+    {
+      "context": "[Cause] upwardly revised cost synergy [Relation] cause [Effect] lower share count",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "upwardly revised cost synergy assumptions but also lower share count",
+      "id": "d4bb5564"
+    },
+    {
+      "context": "[Cause] Department of Justice wrapped up its investigation into off-label use of the Infuse product without issuing any charges [Relation] cause [Effect] the controversy around the investigation added uncertainty and contributed to a decline in Infuse sales during that period",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Department of Justice wrapped up its investigation into off-label use of the Infuse product without issuing any charges, the controversy around the investigation added uncertainty and contributed to a decline in Infuse sales during that period",
+      "id": "b3b19979"
+    },
+    {
+      "context": "[Cause] the time lag associated with adjusting fuel surcharges to shippers [Relation] cause [Effect] During periods of rapid fuel price increases, truckload carriers often see modest temporary margin headwinds",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "During periods of rapid fuel price increases, truckload carriers often see modest temporary margin headwinds because of the time lag associated with adjusting fuel surcharges to shippers",
+      "id": "ef7e4688"
+    },
+    {
+      "context": "[Cause] State and federal regulators grant PSE&amp;G exclusive rights to charge customers rates [Relation] cause [Effect] earn a fair return on and return of the capital it invests to build, operate, and maintain its distribution networks",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "State and federal regulators grant PSE&amp;G exclusive rights to charge customers rates that allow it to earn a fair return on and return of the capital it invests to build, operate, and maintain its distribution networks",
+      "id": "09a18d36"
+    },
+    {
+      "context": "[Cause] shippers may choose to accelerate or delay certain projects [Relation] cause [Effect] the cyclical supply and demand nature of commodities and related pricing can have an indirect impact on the business",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the cyclical supply and demand nature of commodities and related pricing can have an indirect impact on the business as shippers may choose to accelerate or delay certain projects",
+      "id": "8e0ceafd"
+    },
+    {
+      "context": "[Cause] State and federal regulators typically grant regulated utilities exclusive rights to charge customers rates [Relation] enable [Effect] the utilities to earn a fair return on and of the capital they invest to build, operate, and maintain their distribution networks.",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "State and federal regulators typically grant regulated utilities exclusive rights to charge customers rates that allow the utilities to earn a fair return on and of the capital they invest to build, operate, and maintain their distribution networks.",
+      "id": "c61c597f"
+    }
+  ]
+}
