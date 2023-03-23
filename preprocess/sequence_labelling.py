@@ -118,7 +118,7 @@ def convert_file(infile: Path, outfile: Path) -> None:
     instances = [convert_instance(instance) for instance in dataset]
     converted = "\n\n".join(format_instance(i) for i in instances)
 
-    outfile.mkdir(exist_ok=True, parents=True)
+    outfile.parent.mkdir(exist_ok=True, parents=True)
     with outfile.open("w") as f:
         print(converted, file=f)
 

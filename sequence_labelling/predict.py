@@ -39,7 +39,7 @@ def main(args: argparse.Namespace) -> None:
         args.lang_model_name, use_fast=True
     )
 
-    model = torch.load(args.odel_path / "model.pt", map_location=args.device)
+    model = torch.load(args.model_path / "model.pt", map_location=args.device)
     model.fine_tune = False
     model.eval()
 

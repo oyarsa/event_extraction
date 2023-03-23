@@ -147,7 +147,7 @@ def convert_file(
     instances = [convert_instance(instance, mode, combined_sep) for instance in dataset]
     transformed = {"version": "v1.0", "data": instances}
 
-    outfile.mkdir(exist_ok=True, parents=True)
+    outfile.parent.mkdir(exist_ok=True, parents=True)
     with outfile.open("w") as f:
         json.dump(transformed, f)
 

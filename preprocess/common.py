@@ -8,7 +8,6 @@ from typing import Any
 
 
 def tag_sort_key(tag: str) -> tuple[int, str]:
-
     """Sort tags by the following order: Cause, Relation, Effect.
     Tags with the same type are sorted alphabetically.
 
@@ -70,7 +69,7 @@ def convert_file_qa(
     instances = deduplicate(item for sublist in nested_instances for item in sublist)
     transformed = {"version": "v1.0", "data": instances}
 
-    outfile.mkdir(exist_ok=True, parents=True)
+    outfile.parent.mkdir(exist_ok=True, parents=True)
     with outfile.open("w") as f:
         json.dump(transformed, f)
 
