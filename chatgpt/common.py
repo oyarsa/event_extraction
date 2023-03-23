@@ -1,9 +1,12 @@
 import argparse
 import json
+import time
+from datetime import datetime
 from pathlib import Path
 from typing import Any, cast
 
 import openai
+from openai.error import APIConnectionError
 
 
 class ExchangeLogger:
@@ -43,9 +46,19 @@ def make_msg(role: str, content: str) -> dict[str, str]:
 
 
 def make_chat_request(**kwargs: Any) -> dict[str, Any]:
-    response = cast(dict[str, Any], openai.ChatCompletion.create(**kwargs))
-    logger.log_exchange(kwargs, response)
-    return response
+    attempts = 0
+    while True:
+        try:
+            response = cast(dict[str, Any], openai.ChatCompletion.create(**kwargs))
+        except APIConnectionError as e:
+            ts = datetime.now().isoformat()
+            print(f"{ts} - Connection error - {e} - Attempt {attempts + 1}")
+            if e.http_status == 429:
+                print("Rate limit exceeded. Waiting 10 seconds.")
+                time.sleep(10)
+        else:
+            logger.log_exchange(kwargs, response)
+            return response
 
 
 def get_result(response: dict[str, Any]) -> str:
