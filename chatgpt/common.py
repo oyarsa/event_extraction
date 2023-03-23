@@ -69,6 +69,7 @@ def log_args(args: argparse.Namespace, path: Path | None) -> None:
             args_dict[key] = str(value)
 
     if path is not None:
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(args_dict))
     else:
         print(json.dumps(args_dict, indent=2))
