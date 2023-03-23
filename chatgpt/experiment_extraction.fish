@@ -23,26 +23,28 @@ else
     set examples_file "extraction_examples_3.json"
 end
 
-mkdir -p output
 for prompt in $prompts
     for mode in $modes
         set input ./data/$mode/$input_file
         set examples ./data/$mode/$examples_file
 
-        set output ./output/{$mode}_{$environment}_prompt{$prompt}_output.{$timestamp}.json
-        set metrics ./output/{$mode}_{$environment}_prompt{$prompt}_metrics.{$timestamp}.json
+        set description {$timestamp}_{$mode}_{$environment}_prompt{$prompt}
+        set output_folder ./output/$description
+        mkdir -p $output_folder
 
-        echo $prompt
-        echo "input $input"
-        echo "examples $examples"
-        echo "output $output"
+        echo $description
+
         echo python extraction.py \
             --prompt $prompt \
             --input $input \
-            --output $output \
-            --metrics-path $metrics \
+            --output $output_folder/output.json \
+            --metrics-path $output_folder/metrics.json \
+            --args-path $output_folder/args.json \
+            --log-file $output_folder/log.jsonl \
             --examples $examples \
             --mode $mode
-        printf "\n\n"
+
+        string repeat -n 80 '*'
+        echo
     end
 end

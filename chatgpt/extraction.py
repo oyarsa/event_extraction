@@ -10,10 +10,10 @@ from common import (
     get_key,
     get_result,
     init_argparser,
+    log_args,
     logger,
     make_chat_request,
     make_msg,
-    print_args,
 )
 from metrics import (
     MetricPrediction,
@@ -161,13 +161,13 @@ def main() -> None:
         type=StructureFormat,
     )
     args = parser.parse_args()
-    print_args(args)
+    log_args(args, path=args.args_path)
 
     logger.config(args.log_file, args.print_logs)
     openai.api_key = get_key(args.key_file, args.key_name)
 
     if args.prompt < 0 or args.prompt >= len(EXTRACTION_PROMPTS):
-        raise ValueError(f"Invalid prompt index: {args.prompt}")
+        raise IndexError(f"Invalid prompt index: {args.prompt}")
     run_extraction(
         model=args.model,
         demonstration_examples_path=args.examples,

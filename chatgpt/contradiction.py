@@ -9,10 +9,10 @@ from common import (
     get_key,
     get_result,
     init_argparser,
+    log_args,
     logger,
     make_chat_request,
     make_msg,
-    print_args,
 )
 
 CONTRADICTION_SENTENCE_PROMPTS = [
@@ -61,13 +61,13 @@ def run_contradiction_sentence(
 def main() -> None:
     parser = init_argparser()
     args = parser.parse_args()
-    print_args(args)
+    log_args(args, args.args_path)
 
     logger.config(args.log_file, args.print_logs)
     openai.api_key = get_key(args.key_file, args.key_name)
 
     if args.prompt < 0 or args.prompt >= len(CONTRADICTION_SENTENCE_PROMPTS):
-        raise ValueError(f"Invalid prompt index: {args.prompt}")
+        raise IndexError(f"Invalid prompt index: {args.prompt}")
     run_contradiction_sentence(
         model=args.model,
         input_path=args.input,

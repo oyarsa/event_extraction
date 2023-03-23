@@ -62,11 +62,12 @@ def calculate_cost(model: str, response: dict[str, Any]) -> float:
     return MODEL_COSTS[model] * num_tokens
 
 
-def print_args(args: argparse.Namespace) -> None:
-    print("Arguments:")
-    for key, value in vars(args).items():
-        print(f"  {key}: {value}")
-    print()
+def log_args(args: argparse.Namespace, path: Path | None) -> None:
+    args_dict = vars(args)
+    if path is not None:
+        path.write_text(json.dumps(args_dict))
+    else:
+        print(json.dumps(args_dict, indent=2))
 
 
 def init_argparser() -> argparse.ArgumentParser:
@@ -80,4 +81,5 @@ def init_argparser() -> argparse.ArgumentParser:
     parser.add_argument("--output", "-o", type=Path)
     parser.add_argument("--prompt", type=int, default=0)
     parser.add_argument("--metrics-path", type=Path)
+    parser.add_argument("--args-path", type=Path)
     return parser
