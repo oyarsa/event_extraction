@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Any
 
 import openai
+from tqdm import tqdm
 
 from common import (
     calculate_cost,
@@ -47,7 +48,8 @@ def run_contradiction_sentence(
     data = json.loads(input_path.read_text())
     inputs = [i["sentence2"] for i in data if i["label"] == "ENTAILMENT"]
     responses = [
-        gen_contradiction_sentence(model, entailment, prompt) for entailment in inputs
+        gen_contradiction_sentence(model, entailment, prompt)
+        for entailment in tqdm(inputs)
     ]
     output = [get_result(response) for response in responses]
 
@@ -73,7 +75,6 @@ def main() -> None:
             f"Invalid prompt index: {args.prompt}. Choose one between 0 and"
             f" {len(CONTRADICTION_SENTENCE_PROMPTS)})"
         )
-
     run_contradiction_sentence(
         model=args.model,
         input_path=args.input,
