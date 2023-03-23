@@ -153,12 +153,14 @@ def main() -> None:
         "--examples",
         type=Path,
         default="data/tags/extraction_examples_3.json",
+        help="The path to file with the demonstration examples.",
     )
     parser.add_argument(
         "--mode",
         default="tags",
         choices=["tags", "lines"],
         type=StructureFormat,
+        help="The format of the structured output.",
     )
     args = parser.parse_args()
     log_args(args, path=args.args_path)

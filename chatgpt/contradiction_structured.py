@@ -103,16 +103,11 @@ def main() -> None:
     parser = init_argparser()
     args = parser.parse_args()
     args.add_argument(
-        "--mode",
-        type=str,
-        default="sentence",
-        choices=["sentence", "structured"],
-    )
-    args.add_argument(
         "--structured-format",
         type=StructureFormat,
         default="tags",
         choices=["tags", "lines"],
+        help="The format of the structured input.",
     )
     log_args(args, args.args_path)
 

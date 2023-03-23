@@ -71,15 +71,28 @@ def log_args(args: argparse.Namespace, path: Path | None) -> None:
 
 
 def init_argparser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument("key_file", type=Path)
-    parser.add_argument("key_name", type=str)
-    parser.add_argument("--model", type=str, default="gpt-3.5-turbo")
-    parser.add_argument("--print-logs", action="store_true")
-    parser.add_argument("--log-file", type=Path, default="chat_log.jsonl")
-    parser.add_argument("--input", "-i", type=Path)
-    parser.add_argument("--output", "-o", type=Path)
-    parser.add_argument("--prompt", type=int, default=0)
-    parser.add_argument("--metrics-path", type=Path)
-    parser.add_argument("--args-path", type=Path)
+    parser = argparse.ArgumentParser(
+        allow_abbrev=False, formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument("key_file", type=Path, help="Path to JSON file with API keys")
+    parser.add_argument("key_name", type=str, help="Name of key to use")
+    parser.add_argument(
+        "--model", type=str, default="gpt-3.5-turbo", help="Model to use"
+    )
+    parser.add_argument(
+        "--print-logs", action="store_true", help="Print logs to stdout"
+    )
+    parser.add_argument(
+        "--log-file", type=Path, default="chat_log.jsonl", help="Log file"
+    )
+    parser.add_argument("--input", "-i", type=Path, help="Input file")
+    parser.add_argument("--output", "-o", type=Path, help="Output file for predictions")
+    parser.add_argument(
+        "--prompt",
+        type=int,
+        default=0,
+        help="Prompt index to use for the chat session",
+    )
+    parser.add_argument("--metrics-path", type=Path, help="Path where to save metrics")
+    parser.add_argument("--args-path", type=Path, help="Path where to save args")
     return parser

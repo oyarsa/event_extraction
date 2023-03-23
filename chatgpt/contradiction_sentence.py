@@ -63,12 +63,6 @@ def run_contradiction_sentence(
 def main() -> None:
     parser = init_argparser()
     args = parser.parse_args()
-    args.add_argument(
-        "--mode",
-        type=str,
-        default="sentence",
-        choices=["sentence", "structured"],
-    )
     log_args(args, args.args_path)
 
     logger.config(args.log_file, args.print_logs)
