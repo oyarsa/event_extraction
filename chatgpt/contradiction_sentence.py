@@ -18,9 +18,6 @@ from common import (
 CONTRADICTION_SENTENCE_PROMPTS = [
     "Generate a sentence that contradicts the following:",  # 0
 ]
-CONTRADICTION_STRUCTURED_PROMPTS = [
-    "Given the following causes and effects, generate a sentence:",  # 0
-]
 
 
 def gen_contradiction_sentence(
@@ -30,7 +27,8 @@ def gen_contradiction_sentence(
         model=model,
         messages=[
             make_msg(
-                "system", "You are a helpful assistant that generates contradictions."
+                "system",
+                "You are a helpful assistant that generates contradictions.",
             ),
             make_msg("user", prompt),
             make_msg("user", sentence),
@@ -46,28 +44,42 @@ def run_contradiction_sentence(
     input_path: Path,
     output_path: Path | None,
 ) -> None:
-    response = gen_contradiction_sentence(model, "I am a cat.", prompt)
-    # _examples = json.loads(input_path.read_text())["data"]
+    data = json.loads(input_path.read_text())
+    inputs = [i["sentence2"] for i in data if i["label"] == "ENTAILMENT"]
+    responses = [
+        gen_contradiction_sentence(model, entailment, prompt) for entailment in inputs
+    ]
+    output = [get_result(response) for response in responses]
 
-    output = [get_result(response)]
     if output_path is not None:
         output_path.write_text(json.dumps(output, indent=2))
     else:
         print(json.dumps(output, indent=2))
 
-    print(f"\nCost: ${calculate_cost(model, response)}")
+    cost = sum(calculate_cost(model, response) for response in responses)
+    print(f"\nCost: ${cost}")
 
 
 def main() -> None:
     parser = init_argparser()
     args = parser.parse_args()
+    args.add_argument(
+        "--mode",
+        type=str,
+        default="sentence",
+        choices=["sentence", "structured"],
+    )
     log_args(args, args.args_path)
 
     logger.config(args.log_file, args.print_logs)
     openai.api_key = get_key(args.key_file, args.key_name)
 
     if args.prompt < 0 or args.prompt >= len(CONTRADICTION_SENTENCE_PROMPTS):
-        raise IndexError(f"Invalid prompt index: {args.prompt}")
+        raise IndexError(
+            f"Invalid prompt index: {args.prompt}. Choose one between 0 and"
+            f" {len(CONTRADICTION_SENTENCE_PROMPTS)})"
+        )
+
     run_contradiction_sentence(
         model=args.model,
         input_path=args.input,
