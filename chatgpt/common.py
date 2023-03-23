@@ -63,7 +63,11 @@ def calculate_cost(model: str, response: dict[str, Any]) -> float:
 
 
 def log_args(args: argparse.Namespace, path: Path | None) -> None:
-    args_dict = vars(args)
+    args_dict = vars(args).copy()
+    for key, value in args_dict.items():
+        if isinstance(value, Path):
+            args_dict[key] = str(value)
+
     if path is not None:
         path.write_text(json.dumps(args_dict))
     else:
