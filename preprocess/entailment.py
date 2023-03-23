@@ -13,8 +13,6 @@ from typing import Any
 
 from common import deduplicate, extract_relation_span, hash_instance
 
-CLASSES = ["ENTAILMENT", "NEUTRAL", "CONTRADICTION"]
-
 
 def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
     """Convert a FGCR-format instance into a reconstruction-format instance.
@@ -58,9 +56,6 @@ def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
     },
     ```
     """
-    # Placeholder while we don't have a way to generate the contradiction class.
-    placeholder_classes = ["ENTAILMENT", "CONTRADICTION"]
-
     text = instance["info"]
     instances: list[dict[str, str]] = []
 
@@ -77,7 +72,7 @@ def convert_entailment(instance: dict[str, Any]) -> list[dict[str, str]]:
         inst = {
             "sentence1": text,
             "sentence2": span,
-            "label": random.choice(placeholder_classes),
+            "label": "ENTAILMENT",
         }
         # There are duplicate IDs in the dataset, so we hash instead.
         inst["id"] = hash_instance(inst)
@@ -160,7 +155,7 @@ def convert_file_classification(infile: Path, outfile: Path) -> None:
     neutral_instances = generate_neutral_instances(unique_entailment)
     final_instances = unique_entailment + neutral_instances
 
-    outfile.mkdir(exist_ok=True, parents=True)
+    outfile.parent.mkdir(exist_ok=True, parents=True)
     with outfile.open("w") as f:
         json.dump(final_instances, f)
 
@@ -168,7 +163,9 @@ def convert_file_classification(infile: Path, outfile: Path) -> None:
 def main() -> None:
     random.seed(1)
 
-    argparser = argparse.ArgumentParser()
+    argparser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     argparser.add_argument(
         "--src",
         type=Path,
@@ -185,8 +182,8 @@ def main() -> None:
 
     splits = ["dev", "test", "train"]
     for split in splits:
-        raw_path = args.raw_folder / f"event_dataset_{split}.json"
-        new_path = args.new_folder / f"{split}.json"
+        raw_path = args.src / f"event_dataset_{split}.json"
+        new_path = args.dst / f"{split}.json"
         convert_file_classification(raw_path, new_path)
 
 
