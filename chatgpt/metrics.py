@@ -45,9 +45,10 @@ def calculate_metrics(
         pred_entities, pred_relation = parse_instance(pred["prediction_text"], mode)
         ref_entities, ref_relation = parse_instance(refer["answers"], mode)
 
-        assert (
-            ref_relation == refer["question_type"]
-        ), "Extracted reference relation does not match the question type."
+        assert ref_relation == refer["question_type"], (
+            "Extracted reference relation does not match the question type."
+            f" {ref_relation} != {refer['question_type']}"
+        )
 
         for itype in ref_entities:
             instance: Instance = {
@@ -202,20 +203,19 @@ def parse_instance_lines(answer: str) -> tuple[dict[str, list[str]], str | None]
     Effect: This effect 1 | This effect 2
     Relation: enable
     """
-    splits = answer.split("\n", maxsplit=2)
-    if len(splits) != 3:
+    matches = re.findall(r"Cause:(.*)Effect:(.*)Relation:(.*)", answer, re.DOTALL)
+    if not matches:
         return {
             "Cause": [],
             "Effect": [],
         }, "cause"
-    # Remove the "Cause:" etc. prefix
-    causes, effects, relation = (s.split(":", maxsplit=1)[1].strip() for s in splits)
+    causes, effects, relation = matches[0]
 
-    cause_list = sorted(c.strip() for c in causes.split("|") if c.strip())
-    effect_list = sorted(e.strip() for e in effects.split("|") if e.strip())
+    causes = sorted(c.strip() for c in causes.split("|") if c.strip())
+    effects = sorted(e.strip() for e in effects.split("|") if e.strip())
     relation = relation.strip()
 
     return {
-        "Cause": cause_list,
-        "Effect": effect_list,
+        "Cause": causes,
+        "Effect": effects,
     }, relation
