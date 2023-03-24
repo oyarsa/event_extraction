@@ -131,7 +131,7 @@ def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
         equal[kind] += int(gold_toks == pred_toks)
         num_instances[kind] += 1
 
-    result = defaultdict(dict)
+    result: dict[str, dict[str, float]] = defaultdict(dict)
     for kind in gold_lens:
         if pred_lens[kind] != 0:
             precision = commons[kind] / pred_lens[kind]
@@ -211,11 +211,11 @@ def parse_instance_lines(answer: str) -> tuple[dict[str, list[str]], str | None]
     # Remove the "Cause:" etc. prefix
     causes, effects, relation = (s.split(":", maxsplit=1)[1].strip() for s in splits)
 
-    causes = sorted(c.strip() for c in causes.split("|") if c.strip())
-    effects = sorted(e.strip() for e in effects.split("|") if e.strip())
+    cause_list = sorted(c.strip() for c in causes.split("|") if c.strip())
+    effect_list = sorted(e.strip() for e in effects.split("|") if e.strip())
     relation = relation.strip()
 
     return {
-        "Cause": causes,
-        "Effect": effects,
+        "Cause": cause_list,
+        "Effect": effect_list,
     }, relation

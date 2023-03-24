@@ -6,7 +6,8 @@ from pathlib import Path
 from typing import Any, cast
 
 import openai
-from openai.error import APIConnectionError
+from openai.error import OpenAIError
+from ratelimit import limits, sleep_and_retry
 
 
 class ExchangeLogger:
@@ -38,31 +39,41 @@ logger = ExchangeLogger()
 
 def get_key(key_file: Path, key_name: str) -> str:
     keys = json.loads(key_file.read_text())
-    return keys[key_name]
+    return cast(str, keys[key_name])
 
 
 def make_msg(role: str, content: str) -> dict[str, str]:
     return {"role": role, "content": content}
 
 
+CALLS_PER_MINUTE = 20  # free trial limit
+
+
 def make_chat_request(**kwargs: Any) -> dict[str, Any]:
-    attempts = 0
-    while True:
-        try:
-            response = cast(dict[str, Any], openai.ChatCompletion.create(**kwargs))
-        except APIConnectionError as e:
-            ts = datetime.now().isoformat()
-            print(f"{ts} - Connection error - {e} - Attempt {attempts + 1}")
-            if e.http_status == 429:
-                print("Rate limit exceeded. Waiting 10 seconds.")
-                time.sleep(10)
-        else:
-            logger.log_exchange(kwargs, response)
-            return response
+    # Ignores (mypy): untyped decorator makes function untyped
+    @sleep_and_retry  # type: ignore[misc]
+    @limits(calls=CALLS_PER_MINUTE, period=60)  # type: ignore[misc]
+    def _make_chat_request(**kwargs: Any) -> dict[str, Any]:
+        attempts = 0
+        while True:
+            try:
+                response = cast(dict[str, Any], openai.ChatCompletion.create(**kwargs))
+            except Exception as e:
+                ts = datetime.now().isoformat()
+                print(f"{ts} - Connection error - {e} - Attempt {attempts + 1}")
+
+                if isinstance(e, OpenAIError) and e.http_status == 429:
+                    print("Rate limit exceeded. Waiting 10 seconds.")
+                    time.sleep(10)
+            else:
+                logger.log_exchange(kwargs, response)
+                return response
+
+    return cast(dict[str, Any], _make_chat_request(**kwargs))
 
 
 def get_result(response: dict[str, Any]) -> str:
-    return response["choices"][0]["message"]["content"]
+    return cast(str, response["choices"][0]["message"]["content"])
 
 
 MODEL_COSTS = {
@@ -71,7 +82,7 @@ MODEL_COSTS = {
 
 
 def calculate_cost(model: str, response: dict[str, Any]) -> float:
-    num_tokens = response["usage"]["total_tokens"]
+    num_tokens: int = response["usage"]["total_tokens"]
     return MODEL_COSTS[model] * num_tokens
 
 

@@ -3,3 +3,15 @@ extend = "../pyproject.toml"
 extend-select = ["ANN"]
 extend-ignore = ["ANN101", "ANN102", "ANN401"]
 
+[tool.mypy]
+strict = true
+disallow_untyped_calls = false
+warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = [
+	"ratelimit",
+	"sklearn.metrics"
+]
+ignore_missing_imports = true
+

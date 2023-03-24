@@ -46,6 +46,7 @@ def convert_item(item: dict[str, str]) -> dict[str, str]:
 
 def main() -> None:
     data = json.load(sys.stdin)
+    new_data: dict[str, list[dict[str, str]]] | list[dict[str, str]]
     if len(sys.argv) >= 2:
         key = sys.argv[1]
         new_data = {
