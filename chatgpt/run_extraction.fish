@@ -6,7 +6,7 @@ or return
 set -q _flag_env; or set _flag_env dev
 set -q _flag_mode; or set _flag_mode lines
 set -q _flag_prompt; or set _flag_prompt 0
-set -q _flag_key; or set _flag_key personal
+set -q _flag_key; or set _flag_key kcl
 
 if [ $_flag_env = exp ]
     set input_file "extraction_dev_full.json"
