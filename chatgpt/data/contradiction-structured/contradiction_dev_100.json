@@ -1,0 +1,705 @@
+{
+  "version": "v1.0",
+  "data": [
+    {
+      "context": "[Cause] the transition to the cloud [Relation] enable [Effect] prompting enterprises to change software vendors away from all-in-one ERP systems to application specific",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "the transition to the cloud is prompting enterprises to change software vendors away from all-in-one ERP systems to application specific",
+      "id": "f561068f"
+    },
+    {
+      "context": "[Cause]  Vogtle is completed and penalty returns on equity fade [Relation] cause [Effect] annual earnings growth at Georgia Power to accelerate to high-single digits",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "annual earnings growth at Georgia Power to accelerate to high-single digits after Vogtle is completed and penalty returns on equity fade",
+      "id": "03460ac1"
+    },
+    {
+      "context": "[Cause] 94% of its medical office building assets are affiliated with a health system [Relation] cause [Effect] Healthpeak has established itself as a desirable partner with some of the top hospitals",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Healthpeak has established itself as a desirable partner with some of the top hospitals, as 94% of its medical office building assets are affiliated with a health system",
+      "id": "6894dcca"
+    },
+    {
+      "context": "[Cause] the substantial costs at failure [Relation] cause [Effect] we don't expect the military will switch its provider for missile defense systems any day soon",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the substantial costs at failure, we don't expect the military will switch its provider for missile defense systems any day soon",
+      "id": "0f07045e"
+    },
+    {
+      "context": "[Cause] upwardly revised cost synergy [Relation] cause [Effect] lower share count",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "upwardly revised cost synergy assumptions but also lower share count",
+      "id": "d4bb5564"
+    },
+    {
+      "context": "[Cause] Department of Justice wrapped up its investigation into off-label use of the Infuse product without issuing any charges [Relation] cause [Effect] the controversy around the investigation added uncertainty and contributed to a decline in Infuse sales during that period",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Department of Justice wrapped up its investigation into off-label use of the Infuse product without issuing any charges, the controversy around the investigation added uncertainty and contributed to a decline in Infuse sales during that period",
+      "id": "b3b19979"
+    },
+    {
+      "context": "[Cause] the time lag associated with adjusting fuel surcharges to shippers [Relation] cause [Effect] During periods of rapid fuel price increases, truckload carriers often see modest temporary margin headwinds",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "During periods of rapid fuel price increases, truckload carriers often see modest temporary margin headwinds because of the time lag associated with adjusting fuel surcharges to shippers",
+      "id": "ef7e4688"
+    },
+    {
+      "context": "[Cause] State and federal regulators grant PSE&amp;G exclusive rights to charge customers rates [Relation] cause [Effect] earn a fair return on and return of the capital it invests to build, operate, and maintain its distribution networks",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "State and federal regulators grant PSE&amp;G exclusive rights to charge customers rates that allow it to earn a fair return on and return of the capital it invests to build, operate, and maintain its distribution networks",
+      "id": "09a18d36"
+    },
+    {
+      "context": "[Cause] shippers may choose to accelerate or delay certain projects [Relation] cause [Effect] the cyclical supply and demand nature of commodities and related pricing can have an indirect impact on the business",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the cyclical supply and demand nature of commodities and related pricing can have an indirect impact on the business as shippers may choose to accelerate or delay certain projects",
+      "id": "8e0ceafd"
+    },
+    {
+      "context": "[Cause] State and federal regulators typically grant regulated utilities exclusive rights to charge customers rates [Relation] enable [Effect] the utilities to earn a fair return on and of the capital they invest to build, operate, and maintain their distribution networks.",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "State and federal regulators typically grant regulated utilities exclusive rights to charge customers rates that allow the utilities to earn a fair return on and of the capital they invest to build, operate, and maintain their distribution networks.",
+      "id": "c61c597f"
+    },
+    {
+      "context": "[Cause] payment acceptance products have to immediately analyze a variety of different coins and bills (including different currencies, denominations, and designs) and maintain a high fraud detection rate [Relation] cause [Effect] The business is technology intensive",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "The business is technology intensive as payment acceptance products have to immediately analyze a variety of different coins and bills (including different currencies, denominations, and designs) and maintain a high fraud detection rate",
+      "id": "7f19cba8"
+    },
+    {
+      "context": "[Cause]  this industry as being exposed to shifts in government policy [Relation] cause [Effect] either hurt or help the company",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "this industry as being exposed to shifts in government policy that could either hurt or help the company",
+      "id": "b18aa9e1"
+    },
+    {
+      "context": "[Cause] Firms such as Jones Lang LaSalle increasingly bundle services to provide a consolidated suite of offerings [Relation] enable [Effect]  leverage certain parts of its business such as research and consulting, and it benefits clients that receive a more customized and tailored experience",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Firms such as Jones Lang LaSalle increasingly bundle services to provide a consolidated suite of offerings. This benefits JLL in that it can leverage certain parts of its business such as research and consulting, and it benefits clients that receive a more customized and tailored experience",
+      "id": "7d6d5366"
+    },
+    {
+      "context": "[Cause] Infineon also has hefty manufacturing capacity for its products [Relation] cause [Effect] a higher fixed-cost structure",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Infineon also has hefty manufacturing capacity for its products, which may lead to a higher fixed-cost structure",
+      "id": "7da45274"
+    },
+    {
+      "context": "[Cause] Infineon also has hefty manufacturing capacity for its products [Relation] cause [Effect] significant margin compression when supply far exceeds demand",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Infineon also has hefty manufacturing capacity for its products, which may lead to a higher fixed-cost structure and may cause significant margin compression when supply far exceeds demand",
+      "id": "ee2d61c8"
+    },
+    {
+      "context": "[Cause] Fee rates for the contracts are typically set based on independent analysis of similar assets at other refineries in the region [Relation] cause [Effect] we see returns on invested capital averaging around 10%-11% over the next five years (including the acquisition of Andeavor Logistics), in excess of our weighted average cost of capital",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Fee rates for the contracts are typically set based on independent analysis of similar assets at other refineries in the region. As a result, we see returns on invested capital averaging around 10%-11% over the next five years (including the acquisition of Andeavor Logistics), in excess of our weighted average cost of capital",
+      "id": "959ca5b7"
+    },
+    {
+      "context": "[Cause] the smaller market [Relation] cause [Effect] Pursuit has 50 dealers | sees healthy brand loyalty, with relationships averaging about 12 years",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Pursuit has 50 dealers, a result of the smaller market it serves, and also sees healthy brand loyalty, with relationships averaging about 12 years",
+      "id": "c7bc3819"
+    },
+    {
+      "context": "[Cause] Only Samsung, which holds the leading share of both the NAND and DRAM memory markets [Relation] enable [Effect] squeak out a cost advantage with its unparalleled scale",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Only Samsung, which holds the leading share of both the NAND and DRAM memory markets, has been able to squeak out a cost advantage with its unparalleled scale",
+      "id": "273b911b"
+    },
+    {
+      "context": "[Cause]  effective Criteo Engine [Relation] cause [Effect]  lower the firm's client retention rate and make it harder for Criteo to attract new clients",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "effective Criteo Engine will more than likely lower the firm's client retention rate and make it harder for Criteo to attract new clients",
+      "id": "f570c2b7"
+    },
+    {
+      "context": "[Cause] China Unicom has also made a strong push in mobiles in 2017 and 2018 [Relation] enable [Effect] lift competitive intensity in the market",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "China Unicom has also made a strong push in mobiles in 2017 and 2018 and has helped lift competitive intensity in the market",
+      "id": "cd492f4e"
+    },
+    {
+      "context": "[Cause] the pandemic recedes [Relation] cause [Effect] discretionary services set to bounce back",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "discretionary services set to bounce back as the pandemic recedes",
+      "id": "88bc7a7a"
+    },
+    {
+      "context": "[Cause] discretionary services set to bounce back [Relation] enable [Effect] Willis Towers Watson could see unusually strong growth in the near term",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "discretionary services set to bounce back as the pandemic recedes, Willis Towers Watson could see unusually strong growth in the near term",
+      "id": "6b880f69"
+    },
+    {
+      "context": "[Cause] Omnicom was relatively quiet on the acquisition front in 2016, two years after it ended merger talks with Publicis [Relation] cause [Effect]  made the combined company larger than the U.K.'s WPP",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Omnicom was relatively quiet on the acquisition front in 2016, two years after it ended merger talks with Publicis, which would have made the combined company larger than the U.K.'s WPP",
+      "id": "dc0b0d8b"
+    },
+    {
+      "context": "[Cause] constantly taste the stew and adjust the seasoning and ingredients [Relation] cause [Effect]  create the perfect recipe",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "constantly taste the stew and adjust the seasoning and ingredients to create the perfect recipe",
+      "id": "d57cd571"
+    },
+    {
+      "context": "[Cause] management introduced the Veeva Vault platform [Relation] enable [Effect] broaden the portfolio",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "management introduced the Veeva Vault platform to broaden the portfolio",
+      "id": "619180e8"
+    },
+    {
+      "context": "[Cause] investors require this information and there are no substitutes, Nasdaq enjoys high switching costs [Relation] enable [Effect] makes it easy for it to achieve price increases",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "investors require this information and there are no substitutes, Nasdaq enjoys high switching costs, which makes it easy for it to achieve price increases",
+      "id": "7ef21abf"
+    },
+    {
+      "context": "[Cause] the operator on over 50% of Viper's acreage, and further acquisitions of acreage from private owners [Relation] cause [Effect] a bright outlook via organic drilling growth at Diamondback",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "a bright outlook via organic drilling growth at Diamondback, which will be the operator on over 50% of Viper's acreage, and further acquisitions of acreage from private owners",
+      "id": "3e6e3bb7"
+    },
+    {
+      "context": "[Cause] Tax documents from financial institutions customers have linked their Mint accounts to will automatically feed into TurboTax if cleared by the customer [Relation] enable [Effect]  making TurboTax renewals more likely",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Tax documents from financial institutions customers have linked their Mint accounts to will automatically feed into TurboTax if cleared by the customer, making TurboTax renewals more likely",
+      "id": "e06432d4"
+    },
+    {
+      "context": "[Cause] we see significant barriers to entry around these businesses [Relation] cause [Effect] keeps most of the injectable markets that Baxter participates in quite concentrated from a competitive perspective",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "we see significant barriers to entry around these businesses, which keeps most of the injectable markets that Baxter participates in quite concentrated from a competitive perspective",
+      "id": "086ee93a"
+    },
+    {
+      "context": "[Cause] CIOs continue to consolidate vendors [Relation] cause [Effect]  the combination of Azure, DBMS, Dynamics 365, and Office 365 will drive above-market growth",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the combination of Azure, DBMS, Dynamics 365, and Office 365 will drive above-market growth as CIOs continue to consolidate vendors",
+      "id": "b52e54c7"
+    },
+    {
+      "context": "[Cause] the city is home to China's wealthy and political elite [Relation] cause [Effect] CITIC Prudential Life focuses on selling wealth management products as well as advice on legacy planning and intergenerational insurance solutions",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the city is home to China's wealthy and political elite, CITIC Prudential Life focuses on selling wealth management products as well as advice on legacy planning and intergenerational insurance solutions",
+      "id": "007b33e2"
+    },
+    {
+      "context": "[Cause] After the 2005 merger of TD Waterhouse and Ameritrade, Broadridge lost TD Waterhouse as a client [Relation] cause [Effect]  Ameritrade completed its securities processing in-house.",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "After the 2005 merger of TD Waterhouse and Ameritrade, Broadridge lost TD Waterhouse as a client because Ameritrade completed its securities processing in-house.",
+      "id": "1b8f7250"
+    },
+    {
+      "context": "[Cause] growth in sporting goods retail has generally been minimal due to external competition [Relation] cause [Effect] the impact is temporary",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the impact is temporary, as growth in sporting goods retail has generally been minimal due to external competition",
+      "id": "a4d4a325"
+    },
+    {
+      "context": "[Cause] the quality of the company's offering [Relation] cause [Effect]  they tend to increasingly stay on the platform",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "they tend to increasingly stay on the platform, highlighting the quality of the company's offering",
+      "id": "6b9b72c2"
+    },
+    {
+      "context": "[Cause] store growth and expansions of their accessory businesses [Relation] enable [Effect] Capri has big plans for Versace and Jimmy Choo",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Capri has big plans for Versace and Jimmy Choo, primarily based on store growth and expansions of their accessory businesses",
+      "id": "52041815"
+    },
+    {
+      "context": "[Cause] the significant maintenance requirements that the machines require [Relation] cause [Effect] appear to be sensitive to the availability of aftermarket service",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "appear to be sensitive to the availability of aftermarket service due to the significant maintenance requirements that the machines require",
+      "id": "d05b9cd6"
+    },
+    {
+      "context": "[Cause] biosimilar competition [Relation] cause [Effect] sales of Herceptin, Rituxan, and Avastin to decline from roughly CHF 20 billion in 2019 to CHF 4 billion in 2025",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "sales of Herceptin, Rituxan, and Avastin to decline from roughly CHF 20 billion in 2019 to CHF 4 billion in 2025 due to biosimilar competition",
+      "id": "e35c7526"
+    },
+    {
+      "context": "[Cause] customers look to save on repair costs and as many motorists remaining on the job through lockdowns are lower-income individuals, the core of the DIY segment [Relation] enable [Effect] The sector has held up well during the pandemic (consistent with past economic downturns), with a surge in DIY sales",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "The sector has held up well during the pandemic (consistent with past economic downturns), with a surge in DIY sales as customers look to save on repair costs and as many motorists remaining on the job through lockdowns are lower-income individuals, the core of the DIY segment",
+      "id": "c63063f4"
+    },
+    {
+      "context": "[Cause] acquisition [Relation] enable [Effect] PTC has recently expanded from its core CAD and PLM solutions into Internet of Things and Augmented Reality (AR) offerings",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "PTC has recently expanded from its core CAD and PLM solutions into Internet of Things and Augmented Reality (AR) offerings--largely via acquisition",
+      "id": "a6ab4024"
+    },
+    {
+      "context": "[Cause] The industry's pricing transparency and significantly lower regulatory oversight [Relation] cause [Effect]  the rise of competition from Internet retailers and equipment manufacturers",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "The industry's pricing transparency and significantly lower regulatory oversight have allowed the rise of competition from Internet retailers and equipment manufacturers",
+      "id": "28469828"
+    },
+    {
+      "context": "[Cause] The industry's pricing transparency and significantly lower regulatory oversight [Relation] cause [Effect] eroding most of these firms' switching costs and shifting the competitive landscape",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "The industry's pricing transparency and significantly lower regulatory oversight have allowed the rise of competition from Internet retailers and equipment manufacturers, eroding most of these firms' switching costs and shifting the competitive landscape",
+      "id": "bd7a4982"
+    },
+    {
+      "context": "[Cause] Exact's early entrant status in pan-cancer and Cologuard's existing share [Relation] enable [Effect]  sustain growth over the next 10 years",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Exact's early entrant status in pan-cancer and Cologuard's existing share could help sustain growth over the next 10 years",
+      "id": "4d188c44"
+    },
+    {
+      "context": "[Cause] the gathering and processing business is asset-intensive and receives the bulk of investments and acquisitions [Relation] cause [Effect] firm-level returns on invested capital have averaged about 5% over the past five years, and we don't expect returns to materially improve",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the gathering and processing business is asset-intensive and receives the bulk of investments and acquisitions, firm-level returns on invested capital have averaged about 5% over the past five years, and we don't expect returns to materially improve",
+      "id": "bd9bc3ce"
+    },
+    {
+      "context": "[Cause] Longtime seating firms such as Adient have decades of knowledge of what automakers and consumers want in a seat or interior [Relation] enable [Effect] a helpful intangible asset in keeping new entrants out",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Longtime seating firms such as Adient have decades of knowledge of what automakers and consumers want in a seat or interior, a helpful intangible asset in keeping new entrants out",
+      "id": "ad390f20"
+    },
+    {
+      "context": "[Cause] considerable competition in the space [Relation] cause [Effect] Western Digital will struggle to maximize its opportunities within NAND",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Western Digital will struggle to maximize its opportunities within NAND due to considerable competition in the space",
+      "id": "8812c8ef"
+    },
+    {
+      "context": "[Cause]  the diesel scandal [Relation] cause [Effect] Volkswagen global sales declined 2% in 2015 but have rebounded since, finishing 2019 at nearly 11 million",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the diesel scandal, Volkswagen global sales declined 2% in 2015 but have rebounded since, finishing 2019 at nearly 11 million",
+      "id": "a22499e6"
+    },
+    {
+      "context": "[Cause]  hard to compile an attractively priced provider network without a significant membership share of that caregivers' patient population [Relation] cause [Effect] dynamics create barriers",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "dynamics create barriers to entry for new competitors in local markets because it is hard to compile an attractively priced provider network without a significant membership share of that caregivers' patient population",
+      "id": "5665c0fc"
+    },
+    {
+      "context": "[Cause] solid franchise unit economics, national advertising efforts, and more technological-leveraged and drive-thru-focused restaurant formats [Relation] enable [Effect] Dunkin' can extend its brand reach beyond core markets",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Dunkin' can extend its brand reach beyond core markets, supported by solid franchise unit economics, national advertising efforts, and more technological-leveraged and drive-thru-focused restaurant formats",
+      "id": "bf2775d3"
+    },
+    {
+      "context": "[Cause] The participating companies relinquish the rights to their data to Core [Relation] enable [Effect] in exchange for the knowledge gleaned from the project",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "The participating companies relinquish the rights to their data to Core in exchange for the knowledge gleaned from the project",
+      "id": "73e9798d"
+    },
+    {
+      "context": "[Cause] few towers will be built and acquired in the U.S. [Relation] cause [Effect] a 300-basis-point rise in segment gross margin",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "few towers will be built and acquired in the U.S., contributing to a 300-basis-point rise in segment gross margin",
+      "id": "4916dd2a"
+    },
+    {
+      "context": "[Cause] the COVID-19 pandemic [Relation] cause [Effect] Following significant core sales declines across all three segments in 2020",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Following significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic",
+      "id": "77e1970e"
+    },
+    {
+      "context": "[Cause] Following significant core sales declines across all three segments in 2020 [Relation] cause [Effect] an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Following significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic, we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+      "id": "b5bb759e"
+    },
+    {
+      "context": "[Cause] drugs or methods that are more effective for weight management than traditional nutrition and exercise are created [Relation] cause [Effect] the company would lose significant business",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "drugs or methods that are more effective for weight management than traditional nutrition and exercise are created, we think the company would lose significant business",
+      "id": "726cb86d"
+    },
+    {
+      "context": "[Cause] brand relevance remains at the segment [Relation] cause [Effect] comps that rise 2%-3% on average over the long term",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "comps that rise 2%-3% on average over the long term as brand relevance remains at the segment",
+      "id": "c180e519"
+    },
+    {
+      "context": "[Cause] the growing demand for exports of refined products and NGLs [Relation] cause [Effect] The facility is particularly important",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "The facility is particularly important because of the growing demand for exports of refined products and NGLs",
+      "id": "e85dd9b8"
+    },
+    {
+      "context": "[Cause] geographic constraints [Relation] cause [Effect] access to five docks is an important competitive advantage",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "access to five docks is an important competitive advantage given geographic constraints",
+      "id": "533a9fb4"
+    },
+    {
+      "context": "[Cause] many sites and apps allow fast login through Weixin ID and QQ ID [Relation] cause [Effect] without Weixin/Weixin ID and QQ ID, users may need to spend more time registering on a new Internet service or a new mobile app",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "without Weixin/Weixin ID and QQ ID, users may need to spend more time registering on a new Internet service or a new mobile app, as many sites and apps allow fast login through Weixin ID and QQ ID",
+      "id": "87e05876"
+    },
+    {
+      "context": "[Cause]  net single-digit growth in generic drugs and continued rapid adoption of Austedo and Ajovy [Relation] cause [Effect] Overall revenue is anticipated to grow in fiscal 2020",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Overall revenue is anticipated to grow in fiscal 2020, driven by net single-digit growth in generic drugs and continued rapid adoption of Austedo and Ajovy",
+      "id": "1064b8f8"
+    },
+    {
+      "context": "[Cause] the company shifts more toward areas of unmet medical need [Relation] cause [Effect] After several years of mixed results, Merck's R&D productivity is improving",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "After several years of mixed results, Merck's R&D productivity is improving as the company shifts more toward areas of unmet medical need",
+      "id": "61adaf44"
+    },
+    {
+      "context": "[Cause] Pinterest banned all searches related to antivaccination pins [Relation] prevent [Effect] appearing to promote the lifestyle choice",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "prevent",
+      "answers": "Pinterest banned all searches related to antivaccination pins in order to avoid appearing to promote the lifestyle choice",
+      "id": "56309f0c"
+    },
+    {
+      "context": "[Cause] the purchase price of feed in the tariff program is set to be cut annually, and Kyocera's revenue will decrease as a resul [Relation] cause [Effect] Japanese solar panel market will shrink",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Japanese solar panel market will shrink, as the purchase price of feed in the tariff program is set to be cut annually, and Kyocera's revenue will decrease as a resul",
+      "id": "4557699f"
+    },
+    {
+      "context": "[Cause] sustained low oil and gas prices [Relation] prevent [Effect]  electricity demand in Texas",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "prevent",
+      "answers": "sustained low oil and gas prices could be a drag on electricity demand in Texas",
+      "id": "803fb9ae"
+    },
+    {
+      "context": "[Cause]  using an augmented reality app to check off a grocery list at Whole Foods or a cruise line integrating a passenger badge/sensor system [Relation] enable [Effect] a more effortless cruise experience",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "using an augmented reality app to check off a grocery list at Whole Foods or a cruise line integrating a passenger badge/sensor system for a more effortless cruise experience",
+      "id": "a452860f"
+    },
+    {
+      "context": "[Cause] growing subscription revenue [Relation] cause [Effect] operating margins to expand into the high-20s",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "growing subscription revenue and the product mix shift will lead to operating margins to expand into the high-20s",
+      "id": "b8e53ad1"
+    },
+    {
+      "context": "[Cause] the product mix shift [Relation] cause [Effect] operating margins to expand into the high-20s",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the product mix shift will lead to operating margins to expand into the high-20s",
+      "id": "82965b78"
+    },
+    {
+      "context": "[Cause] anything inconsistent with the prevailing ethos [Relation] cause [Effect] severe commercial disruption",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "anything inconsistent with the prevailing ethos gives rise to the possibility of severe commercial disruption",
+      "id": "d61d140f"
+    },
+    {
+      "context": "[Cause]  a fourth mobile network already established in the market [Relation] cause [Effect]  the French government is very unlikely to facilitate the entrance of a new player or approve any market consolidation by Orange's smaller competitors",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "a fourth mobile network already established in the market, we think the French government is very unlikely to facilitate the entrance of a new player or approve any market consolidation by Orange's smaller competitors",
+      "id": "1915356e"
+    },
+    {
+      "context": "[Cause]  risking upsetting customers with less database flexibility and prompting customers to rethink their cloud ERP needs [Relation] cause [Effect] the company is risking a significant part of its core business",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the company is risking a significant part of its core business by risking upsetting customers with less database flexibility and prompting customers to rethink their cloud ERP needs",
+      "id": "3f1c2cd3"
+    },
+    {
+      "context": "[Cause]  Sinopec's size [Relation] prevent [Effect]  it needs projects of a certain size and quality in order to increase reserves and production cost-effectively",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "prevent",
+      "answers": "Sinopec's size, it needs projects of a certain size and quality in order to increase reserves and production cost-effectively",
+      "id": "d0fafb8d"
+    },
+    {
+      "context": "[Cause] all levels offset market share losses to Android Automotive [Relation] cause [Effect] strong growth for QNX as content gains with AVs",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "strong growth for QNX as content gains with AVs of all levels offset market share losses to Android Automotive",
+      "id": "befa6118"
+    },
+    {
+      "context": "[Cause] Based on the bond financings and the ratings upgrades [Relation] cause [Effect] we lowered the long-term pretax cost of debt assumption in our valuation analysis to low (5.8%) from moderate (6.5%)",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Based on the bond financings and the ratings upgrades we lowered the long-term pretax cost of debt assumption in our valuation analysis to low (5.8%) from moderate (6.5%)",
+      "id": "e8d0ad84"
+    },
+    {
+      "context": "[Cause] competitive pressures will ultimately resurface in its retail categories [Relation] cause [Effect]  it imperative that Kimberly keeps pressing ahead",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "competitive pressures will ultimately resurface in its retail categories, making it imperative that Kimberly keeps pressing ahead",
+      "id": "749c2b90"
+    },
+    {
+      "context": "[Cause]  it imperative that Kimberly keeps pressing ahead [Relation] enable [Effect]  its innovation wins with its customer groups",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "it imperative that Kimberly keeps pressing ahead to ensure its innovation wins with its customer groups",
+      "id": "12f4e5cc"
+    },
+    {
+      "context": "[Cause] 80% of its sales come from footwear [Relation] cause [Effect] The boots category is especially important for the Timberland brand",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "The boots category is especially important for the Timberland brand, as we estimate that 80% of its sales come from footwear",
+      "id": "384d4a39"
+    },
+    {
+      "context": "[Cause] PPP loans roll off the balance sheet [Relation] cause [Effect] growth will be pressured in the near term",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "growth will be pressured in the near term as PPP loans roll off the balance sheet",
+      "id": "ab17ed0c"
+    },
+    {
+      "context": "[Cause]  growth investments bear fruit [Relation] cause [Effect] Scale should come with cost leverage",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Scale should come with cost leverage as growth investments bear fruit",
+      "id": "86bd4af4"
+    },
+    {
+      "context": "[Cause] Emerson, furthermore, has continued its product innovation by eliminating complex installations with an all-welded spool design that doesn't require an orifice plate [Relation] enable [Effect]  supports up to four individual flow transmitters, and further tolerates extreme temperature conditions, whereas previous iterations would have broken down the instrumentation",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Emerson, furthermore, has continued its product innovation by eliminating complex installations with an all-welded spool design that doesn't require an orifice plate. This design supports up to four individual flow transmitters, and further tolerates extreme temperature conditions, whereas previous iterations would have broken down the instrumentation",
+      "id": "e5c9183c"
+    },
+    {
+      "context": "[Cause]  its target customer is constantly aging, necessitating continuous engagement with new shoppers and households [Relation] cause [Effect] Robust advertising initiatives are especially important",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Robust advertising initiatives are especially important as its target customer is constantly aging, necessitating continuous engagement with new shoppers and households",
+      "id": "b8057497"
+    },
+    {
+      "context": "[Cause]  its target customer is constantly aging, necessitating continuous engagement with new shoppers and households [Relation] prevent [Effect]  sheer brand-building expenditures' ability to create durable customer loyalty",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "prevent",
+      "answers": "its target customer is constantly aging, necessitating continuous engagement with new shoppers and households that limits sheer brand-building expenditures' ability to create durable customer loyalty",
+      "id": "a6cb5d6c"
+    },
+    {
+      "context": "[Cause] recently rescinded grounding [Relation] cause [Effect] dented Boeing's reputation and its order book",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "recently rescinded grounding has dented Boeing's reputation and its order book",
+      "id": "97b0d48f"
+    },
+    {
+      "context": "[Cause] a period of HDD oversupply hitting sometime around 2024 [Relation] cause [Effect] shrink the top line",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "a period of HDD oversupply hitting sometime around 2024 to shrink the top line",
+      "id": "98684264"
+    },
+    {
+      "context": "[Cause] the introduction of the Credit Rating Agency Reform Act of 2006 [Relation] enable [Effect] the number of firms with an NRSRO designation has increased (to about 10)",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "the number of firms with an NRSRO designation has increased (to about 10) since the introduction of the Credit Rating Agency Reform Act of 2006",
+      "id": "698e70d5"
+    },
+    {
+      "context": "[Cause] We therefore expect additional divestitures in the coming years [Relation] enable [Effect] help reduce debt, allow for future acquisitions, and reallocate resources to Conagra's brands with high potential, such as its portfolio of healthy frozen foods, unprocessed snacks, alternative protein products, and organic, gluten-free, and vegan offerings",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "We therefore expect additional divestitures in the coming years, which should help reduce debt, allow for future acquisitions, and reallocate resources to Conagra's brands with high potential, such as its portfolio of healthy frozen foods, unprocessed snacks, alternative protein products, and organic, gluten-free, and vegan offerings",
+      "id": "5029c69e"
+    },
+    {
+      "context": "[Cause] the impact of the pandemic subsides [Relation] cause [Effect] firm to generate mid-single-digit top-line growth annually over the course of our projection period",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "the impact of the pandemic subsides, we expect the firm to generate mid-single-digit top-line growth annually over the course of our projection period",
+      "id": "30ae53b1"
+    },
+    {
+      "context": "[Cause]  the tightness of the current construction labor market and land supply [Relation] cause [Effect] we don't think the company is able to negotiate meaningful long-term price concessions",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "we don't think the company is able to negotiate meaningful long-term price concessions, especially given the tightness of the current construction labor market and land supply",
+      "id": "d68d416b"
+    },
+    {
+      "context": "[Cause] Whether its big-box retailers or small-format outlets like convenience stores, the thin margins and technological disruption that have defined this industry will continue to drive an appetite for increased scale and resources [Relation] cause [Effect] the axes of negotiation (regarding price increases, shelf sets, and the like) to tilt more toward National Beverage's retail partners",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Whether its big-box retailers or small-format outlets like convenience stores, the thin margins and technological disruption that have defined this industry will continue to drive an appetite for increased scale and resources. This reality could cause the axes of negotiation (regarding price increases, shelf sets, and the like) to tilt more toward National Beverage's retail partners",
+      "id": "aa8b11bc"
+    },
+    {
+      "context": "[Cause] searchability is an especially valued, critical upgrade from a physical copy [Relation] cause [Effect] digital journal products are often priced at a premium to their print counterparts",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "digital journal products are often priced at a premium to their print counterparts, as searchability is an especially valued, critical upgrade from a physical copy",
+      "id": "5948b133"
+    },
+    {
+      "context": "[Cause] we expect gasoline demand to decline in the years ahead [Relation] cause [Effect] We do not see this as an immediate threat to the business but are mindful of longer-term lower refined product demand",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "We do not see this as an immediate threat to the business but are mindful of longer-term lower refined product demand as we expect gasoline demand to decline in the years ahead",
+      "id": "1dcffa00"
+    },
+    {
+      "context": "[Cause] these programs, so a poorly executed development would financially strain L3Harris [Relation] cause [Effect] The contractor bears the financial risk of cost overruns",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "The contractor bears the financial risk of cost overruns for these programs, so a poorly executed development would financially strain L3Harris",
+      "id": "51200eac"
+    },
+    {
+      "context": "[Cause]  its large and expanding customer base and ability to outgrow its end markets [Relation] enable [Effect] strengthens its standing with its suppliers.",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "its large and expanding customer base and ability to outgrow its end markets strengthens its standing with its suppliers.",
+      "id": "a461dbc0"
+    },
+    {
+      "context": "[Cause] continuing strong growth in areas such as risk and business analytics, in addition to improved growth in the STEM division as the mix effect improves the growth profile from the 2% level we have witnessed for almost a decade now [Relation] enable [Effect] we model organic revenue growth of 4.5% for the remainder of our explicit forecast period, rising from 4.3% in 2021 to 4.7% by 2024",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "we model organic revenue growth of 4.5% for the remainder of our explicit forecast period, rising from 4.3% in 2021 to 4.7% by 2024. This is predicated on continuing strong growth in areas such as risk and business analytics, in addition to improved growth in the STEM division as the mix effect improves the growth profile from the 2% level we have witnessed for almost a decade now",
+      "id": "c999a94f"
+    },
+    {
+      "context": "[Cause] The firm's unique ability to control costs [Relation] enable [Effect] gives it the highest operating margins of its peer group and allows it to quickly bring its numerous acquisitions up to firmwide profitability",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "The firm's unique ability to control costs gives it the highest operating margins of its peer group and allows it to quickly bring its numerous acquisitions up to firmwide profitability",
+      "id": "a459e258"
+    },
+    {
+      "context": "[Cause]  increasingly efficient processes improve an agent's ability to resolve issues for customers in a timely manner [Relation] enable [Effect] Nice benefits from switching costs on this front",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "Nice benefits from switching costs on this front as increasingly efficient processes improve an agent's ability to resolve issues for customers in a timely manner",
+      "id": "77f4fb95"
+    },
+    {
+      "context": "[Cause]  increasingly efficient processes improve an agent's ability to resolve issues for customers in a timely manner [Relation] cause [Effect] makes customers more likely to stay with the company",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "increasingly efficient processes improve an agent's ability to resolve issues for customers in a timely manner, which makes customers more likely to stay with the company",
+      "id": "8ff4c397"
+    },
+    {
+      "context": "[Cause] Low natural gas prices and intensifying EPA regulations [Relation] cause [Effect] put a material portion of the domestic utility coal franchise at risk of disappearing over the long run",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Low natural gas prices and intensifying EPA regulations have put a material portion of the domestic utility coal franchise at risk of disappearing over the long run",
+      "id": "23f0da5d"
+    },
+    {
+      "context": "[Cause] a cursory analysis of West's design service [Relation] cause [Effect] conclude customers could feasibly in-source design and cut out the middleman",
+      "question": "0 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "a cursory analysis of West's design service may lead one to conclude customers could feasibly in-source design and cut out the middleman",
+      "id": "71fad8dc"
+    },
+    {
+      "context": "[Cause]  cost reasons and/or lack of expertise [Relation] cause [Effect] West often provides services that smaller customers are unable to do themselves",
+      "question": "1 What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "West often provides services that smaller customers are unable to do themselves, for cost reasons and/or lack of expertise",
+      "id": "7db86a64"
+    },
+    {
+      "context": "[Cause]  the exclusivity agreement with the da Vinci surgical system [Relation] cause [Effect] Teleflex's Hem-O-Lock system has some trace switching costs",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "Teleflex's Hem-O-Lock system has some trace switching costs because of the exclusivity agreement with the da Vinci surgical system",
+      "id": "91b5fe4b"
+    },
+    {
+      "context": "[Cause] the reliable sales from this sticky customer base [Relation] enable [Effect] further enable ongoing research investment in future areas of significant content growth and add to the firm's intangible assets",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "enable",
+      "answers": "the reliable sales from this sticky customer base, which further enable ongoing research investment in future areas of significant content growth and add to the firm's intangible assets",
+      "id": "1f72a0d0"
+    },
+    {
+      "context": "[Cause]  cost-savings plans [Relation] cause [Effect] the low-hanging fruit has been picked",
+      "question": "What is the reconstructed sentence from the cause, relation and effect?",
+      "question_type": "cause",
+      "answers": "cost-savings plans, we believe the low-hanging fruit has been picked",
+      "id": "9c202c5d"
+    }
+  ]
+}
