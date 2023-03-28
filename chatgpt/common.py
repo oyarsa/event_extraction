@@ -46,7 +46,7 @@ def make_msg(role: str, content: str) -> dict[str, str]:
     return {"role": role, "content": content}
 
 
-CALLS_PER_MINUTE = 40
+CALLS_PER_MINUTE = 3500  # full plan
 
 
 def make_chat_request(**kwargs: Any) -> dict[str, Any]:
