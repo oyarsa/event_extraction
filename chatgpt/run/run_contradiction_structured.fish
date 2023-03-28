@@ -22,6 +22,8 @@ else
     exit 1
 end
 
+cd (dirname (dirname (realpath (status -f))))
+
 set timestamp (date -u +%Y-%m-%dT%H.%M.%SZ)
 set input ./data/contradiction-structured/$input_file
 set examples ./data/contradiction-structured/$examples_file

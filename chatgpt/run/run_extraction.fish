@@ -22,6 +22,8 @@ else
     exit 1
 end
 
+cd (dirname (dirname (realpath (status -f))))
+
 set timestamp (date -u +%Y-%m-%dT%H.%M.%SZ)
 set input ./data/$_flag_mode/$input_file
 set examples ./data/$_flag_mode/$examples_file
