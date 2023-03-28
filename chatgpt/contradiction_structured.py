@@ -123,14 +123,14 @@ def run_contradiction_structured(
 def main() -> None:
     parser = init_argparser()
     parser.add_argument(
-        "--structured-format",
+        "--mode",
         type=StructureFormat,
         default="tags",
         choices=["tags", "lines"],
         help="The format of the structured input.",
     )
     parser.add_argument(
-        "--demonstration-examples",
+        "--examples",
         type=Path,
         default="./data/contradiction-structured/contradiction_examples_3.json",
         help="Path to the demonstration examples.",
@@ -149,12 +149,12 @@ def main() -> None:
 
     run_contradiction_structured(
         model=args.model,
-        examples_path=args.demonstration_examples,
+        examples_path=args.examples,
         # Input should be tag-based, regardless of the structured format.
         input_path=args.input,
         output_path=args.output,
         prompt=CONTRADICTION_STRUCTURED_PROMPTS[args.prompt],
-        format=args.structured_format,
+        format=args.mode,
     )
 
 
