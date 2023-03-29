@@ -80,9 +80,11 @@ def generate_answer_tags(events: dict[str, list[str]], relation: str) -> str:
     return " ".join(sorted(out, key=tag_sort_key))
 
 
-def gen_input_by_swapping_clauses(instance: str, format: StructureFormat) -> str:
+def gen_input_by_swapping_clauses(instance: str, format: StructureFormat) -> str | None:
     entities, relation = parse_instance_tags(instance)
-    assert all(entities.values()) and relation
+    if not (all(entities.values()) and relation):
+        print(f"WARNING: invalid instance: '{instance}'")
+        return None
 
     entities["Cause"], entities["Effect"] = entities["Effect"], entities["Cause"]
     if format == StructureFormat.TAGS:
@@ -108,6 +110,7 @@ def run_contradiction_structured(
             model=model, sentence=inst, prompt=prompt, examples=demonstration_examples
         )
         for inst in tqdm(inputs)
+        if inst is not None
     ]
     output = [get_result(response) for response in responses]
 
