@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-argparse 'env=' 'mode=' 'prompt=' 'key=' -- $argv
+argparse 'env=' 'mode=' 'prompt=' 'key=' 'data=' -- $argv
 or return
 
 set -q _flag_env; or set _flag_env dev
@@ -8,7 +8,10 @@ set -q _flag_mode; or set _flag_mode lines
 set -q _flag_prompt; or set _flag_prompt 0
 set -q _flag_key; or set _flag_key kcl
 
-if [ $_flag_env = exp ]
+if [ $_flag_env = full ]
+    set input_file "contradiction_dev_full.json"
+    set examples_file "contradiction_examples.json"
+else if [ $_flag_env = exp ]
     set input_file "contradiction_dev_100.json"
     set examples_file "contradiction_examples.json"
 else if [ $_flag_env = dev ]
@@ -25,8 +28,15 @@ end
 cd (dirname (dirname (realpath (status -f))))
 
 set timestamp (date -u +%Y-%m-%dT%H.%M.%SZ)
-set input ./data/contradiction-structured/$input_file
+if set -q _flag_data
+    set input $_flag_data
+    set _flag_env full/$_flag_env-(basename $_flag_data)
+else
+    set input (realpath ./data/contradiction-structured/$input_file)
+end
 set examples ./data/contradiction-structured/$examples_file
+
+echo Input: $input
 
 set description {$timestamp}_contradiction-structured_{$_flag_mode}_{$_flag_env}_prompt{$_flag_prompt}
 set output_folder ./output/{$_flag_env}/$description
