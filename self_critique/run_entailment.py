@@ -20,6 +20,7 @@ import os
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Optional
 
 import datasets
 import numpy as np
@@ -56,11 +57,11 @@ class DataTrainingArguments:
     the command line.
     """
 
-    dataset_name: str | None = field(
+    dataset_name: Optional[str] = field(
         default=None,
         metadata={"help": "The name of the dataset to use (via the datasets library)."},
     )
-    dataset_config_name: str | None = field(
+    dataset_config_name: Optional[str] = field(
         default=None,
         metadata={
             "help": "The configuration name of the dataset to use (via the datasets library)."
@@ -88,7 +89,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_train_samples: int | None = field(
+    max_train_samples: Optional[int] = field(
         default=None,
         metadata={
             "help": (
@@ -97,7 +98,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_eval_samples: int | None = field(
+    max_eval_samples: Optional[int] = field(
         default=None,
         metadata={
             "help": (
@@ -106,7 +107,7 @@ class DataTrainingArguments:
             )
         },
     )
-    max_predict_samples: int | None = field(
+    max_predict_samples: Optional[int] = field(
         default=None,
         metadata={
             "help": (
@@ -115,15 +116,15 @@ class DataTrainingArguments:
             )
         },
     )
-    train_file: str | None = field(
+    train_file: Optional[str] = field(
         default=None,
         metadata={"help": "A csv or a json file containing the training data."},
     )
-    validation_file: str | None = field(
+    validation_file: Optional[str] = field(
         default=None,
         metadata={"help": "A csv or a json file containing the validation data."},
     )
-    test_file: str | None = field(
+    test_file: Optional[str] = field(
         default=None,
         metadata={"help": "A csv or a json file containing the test data."},
     )
@@ -158,19 +159,19 @@ class ModelArguments:
             "help": "Path to pretrained model or model identifier from huggingface.co/models"
         }
     )
-    config_name: str | None = field(
+    config_name: Optional[str] = field(
         default=None,
         metadata={
             "help": "Pretrained config name or path if not the same as model_name"
         },
     )
-    tokenizer_name: str | None = field(
+    tokenizer_name: Optional[str] = field(
         default=None,
         metadata={
             "help": "Pretrained tokenizer name or path if not the same as model_name"
         },
     )
-    cache_dir: str | None = field(
+    cache_dir: Optional[str] = field(
         default=None,
         metadata={
             "help": "Where do you want to store the pretrained models downloaded from huggingface.co"

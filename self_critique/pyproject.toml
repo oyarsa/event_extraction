@@ -2,3 +2,4 @@
 extend = "../pyproject.toml"
 isort = { known-first-party = ["trainer-seq2seq", "metric"] }
 target-version = "py311"
+extend-ignore = ["UP007"]  # HF doesn't like T | None
