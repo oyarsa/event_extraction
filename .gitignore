@@ -192,7 +192,7 @@ tags
 [._]*.un~
 
 ### VisualStudioCode ###
-.vscode/*
+.vscode/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
