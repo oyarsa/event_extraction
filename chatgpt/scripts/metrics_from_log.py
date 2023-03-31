@@ -1,5 +1,5 @@
 """
-Stdin input from the output_from_log.fish script.
+Stdin input from the output_from_log.nu script.
 """
 import argparse
 import json

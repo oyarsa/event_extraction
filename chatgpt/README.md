@@ -13,10 +13,10 @@ Scripts:
 
 Run `python <script>.py -h` for options.
 
-For convenience, there's a `run_extraction.fish` script that sets up common
-options. There's also `experiment_extraction.fish` that runs the extraction
+For convenience, there's a `run_extraction.nu` script that sets up common
+options. There's also `experiment_extraction.nu` that runs the extraction
 script through various combinations.
-Requires the [Fish shell](https://fishshell.com/).
+Requires the [Nushell](https://www.nushell.sh/).
 
 Tools used:
 - mypy (strict)
