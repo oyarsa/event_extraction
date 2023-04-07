@@ -1,0 +1,17 @@
+{
+    "model_name_or_path": "microsoft/deberta-base-mnli",
+    "do_train": true,
+    "do_eval": true,
+    "do_predict": true,
+    "max_seq_length": 128,
+    "per_device_train_batch_size": 32,
+    "learning_rate": 2e-5,
+    "num_train_epochs": 3,
+    "output_dir": "./output/mnli_deberta/",
+    "train_file": "../data/entailment/mnli/train.json",
+    "validation_file": "../data/entailment/mnli/dev.json",
+    "test_file": "../data/entailment/mnli/test.json",
+    "overwrite_cache": true,
+    "evaluation_strategy": "epoch",
+    "save_total_limit": 1
+}
