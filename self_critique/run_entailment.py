@@ -19,6 +19,7 @@ import logging
 import os
 import sys
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -127,6 +128,15 @@ class DataTrainingArguments:
     test_file: Optional[str] = field(
         default=None,
         metadata={"help": "A csv or a json file containing the test data."},
+    )
+    create_duplicate_dir: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Create a new output folder when output_dir already exists. The name"
+                " will include the date and time"
+            )
+        },
     )
 
     def __post_init__(self):
@@ -256,7 +266,16 @@ def main():
         and not training_args.overwrite_output_dir
     ):
         last_checkpoint = get_last_checkpoint(training_args.output_dir)
-        if last_checkpoint is None and len(os.listdir(training_args.output_dir)) > 0:
+        if last_checkpoint is None and data_args.create_duplicate_dir:
+            timestamp = datetime.now().strftime("%Y-%m-%dT%H.%M.%S")
+            new_path = Path(training_args.output_dir) / timestamp
+            training_args.output_dir = str(new_path)
+            logger.warning(
+                "Output directory %s already exists. Creating subfolder %s",
+                training_args.output_dir,
+                new_path,
+            )
+        elif last_checkpoint is None and len(os.listdir(training_args.output_dir)) > 0:
             raise ValueError(
                 f"Output directory ({training_args.output_dir}) already exists and is not empty. "
                 "Use --overwrite_output_dir to overcome."
