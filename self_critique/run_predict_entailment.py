@@ -15,6 +15,7 @@
 """ Finetuning the library models for text entailment."""
 # You can also adapt this script on your own text classification task. Pointers for this are left as comments.
 
+import json
 import logging
 import sys
 from dataclasses import dataclass, field
@@ -411,11 +412,13 @@ def main():
     )
 
     logger.info("*** Predict ***")
+    output_dir = Path(training_args.output_dir)
 
     results = trainer.predict(predict_dataset, metric_key_prefix="predict")
     metrics = results.metrics
     assert metrics is not None
     predictions = np.argmax(results.predictions, axis=1)
+    np.save(output_dir / "raw_predictions.npy", results.predictions)
 
     max_predict_samples = (
         data_args.max_predict_samples
@@ -427,7 +430,7 @@ def main():
     trainer.log_metrics("predict", metrics)  # type: ignore
     trainer.save_metrics("predict", metrics)  # type: ignore
 
-    output_predict_file = Path(training_args.output_dir) / "predict_results.txt"
+    output_predict_file = output_dir / "predict_results.txt"
     if trainer.is_world_process_zero():
         with output_predict_file.open("w") as writer:
             logger.info(f"Logging predictions to {output_predict_file}")
@@ -435,6 +438,29 @@ def main():
             for index, item in enumerate(predictions):
                 label = label_list[item]
                 writer.write(f"{index}\t{label}\n")
+
+    print(predict_dataset)
+    output_predict_json = output_dir / "predict_results.json"
+    if trainer.is_world_process_zero():
+        results: list[dict[str, str]] = []
+        logger.info(f"Logging full prediction output to {output_predict_json}")
+        for index, item in enumerate(predictions):
+            tid = predict_dataset["id"][index]
+            sentence1 = predict_dataset["sentence1"][index]
+            sentence2 = predict_dataset["sentence2"][index]
+            gold = label_list[predict_dataset["label"][index]]
+            pred = label_list[item]
+            results.append(
+                {
+                    "id": tid,
+                    "sentence1": sentence1,
+                    "sentence2": sentence2,
+                    "gold": gold,
+                    "pred": pred,
+                }
+            )
+        with output_predict_json.open("w") as writer:
+            json.dump(results, writer)
 
 
 if __name__ == "__main__":
