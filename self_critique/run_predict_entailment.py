@@ -439,7 +439,6 @@ def main():
                 label = label_list[item]
                 writer.write(f"{index}\t{label}\n")
 
-    print(predict_dataset)
     output_predict_json = output_dir / "predict_results.json"
     if trainer.is_world_process_zero():
         results: list[dict[str, str]] = []
