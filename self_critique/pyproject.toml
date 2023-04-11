@@ -6,3 +6,4 @@ extend-ignore = ["UP007"]  # HF doesn't like T | None
 
 [tool.pyright]
 typeCheckingMode = "off"
+useLibraryCodeForTypes = false
