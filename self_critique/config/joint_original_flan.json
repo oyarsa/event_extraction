@@ -1,5 +1,5 @@
 {
-    "model_name_or_path": "t5-base",
+    "model_name_or_path": "google/flan-t5-base",
     "context_column": "context",
     "question_column": "question",
     "answer_column": "answers",
@@ -14,7 +14,7 @@
     "max_seq_length": 250,
     "max_answer_length": 250,
     "doc_stride": 128,
-    "output_dir": "model/fgcr/t5-base-joint",
+    "output_dir": "model/fgcr/flan-t5-base-joint",
     "overwrite_output_dir": true,
     "eval_accumulation_steps": 100,
     "predict_with_generate": true,
