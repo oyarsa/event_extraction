@@ -743,7 +743,6 @@ def main():
         trainer.save_state()  # type: ignore
 
     # Evaluation
-    results = {}
     max_length = (
         training_args.generation_max_length
         if training_args.generation_max_length is not None
@@ -777,7 +776,12 @@ def main():
         assert predict_examples is not None
         logger.info("*** Predict ***")
 
-        results = trainer.predict(predict_dataset, predict_examples)
+        results = trainer.predict(
+            predict_dataset,
+            predict_examples,
+            max_length=max_length,
+            num_beams=num_beams,
+        )
         metrics = results.metrics
         assert metrics is not None
 
