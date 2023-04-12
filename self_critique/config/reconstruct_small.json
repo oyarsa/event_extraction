@@ -14,7 +14,7 @@
     "max_seq_length": 250,
     "max_answer_length": 250,
     "doc_stride": 128,
-    "output_dir": "model/fgcr/t5-small-reconstruct-debug",
+    "output_dir": "model/fgcr/t5-small-reconstruct",
     "overwrite_output_dir": true,
     "eval_accumulation_steps": 100,
     "predict_with_generate": true,
@@ -27,12 +27,8 @@
     "train_file": "../data/reconstruct/train.json",
     "validation_file": "../data/reconstruct/dev.json",
     "test_file": "../data/reconstruct/test.json",
-    "max_train_samples": 20,
-    "max_eval_samples": 20,
-    "max_predict_samples": 20,
     "overwrite_cache": true,
     "store_prediction": true,
-	"log_level": "info",
     "save_total_limit": 1,
 	"reconstruct": true
 }
