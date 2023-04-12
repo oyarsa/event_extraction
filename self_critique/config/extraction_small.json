@@ -29,5 +29,6 @@
     "test_file": "../data/genqa_joint/test.json",
     "overwrite_cache": true,
     "store_prediction": true,
+	"log_level": "info",
     "save_total_limit": 1
 }

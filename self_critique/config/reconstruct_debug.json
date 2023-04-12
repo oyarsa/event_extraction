@@ -33,6 +33,7 @@
     "max_predict_samples": 20,
     "overwrite_cache": true,
     "store_prediction": true,
+	"log_level": "info",
     "save_total_limit": 1,
 	"reconstruct": true
 }

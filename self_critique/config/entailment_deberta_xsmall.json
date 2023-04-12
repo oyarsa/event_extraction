@@ -13,5 +13,6 @@
     "test_file": "../data/entailment/shuffled/test.json",
     "overwrite_cache": true,
     "evaluation_strategy": "epoch",
+	"log_level": "info",
     "save_total_limit": 1
 }

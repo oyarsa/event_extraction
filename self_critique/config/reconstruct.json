@@ -30,6 +30,7 @@
     "test_file": "../data/reconstruct/test.json",
     "overwrite_cache": true,
     "store_prediction": true,
+	"log_level": "info",
     "save_total_limit": 1,
 	"reconstruct": true
 }

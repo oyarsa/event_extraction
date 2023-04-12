@@ -16,5 +16,6 @@
     "max_eval_samples": 20,
     "max_predict_samples": 20,
     "evaluation_strategy": "epoch",
+	"log_level": "info",
     "save_total_limit": 1
 }

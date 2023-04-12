@@ -14,5 +14,6 @@
     "overwrite_cache": true,
     "evaluation_strategy": "epoch",
     "create_duplicate_dir": true,
+	"log_level": "info",
     "save_total_limit": 1
 }

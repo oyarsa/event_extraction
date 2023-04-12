@@ -29,8 +29,8 @@
     "test_file": "../data/genqa_joint/test.json",
     "overwrite_cache": true,
     "store_prediction": true,
+	"log_level": "info",
     "save_total_limit": 1,
-	"log_level": "debug",
     "max_train_samples": 20,
     "max_eval_samples": 20,
     "max_predict_samples": 20
