@@ -45,8 +45,9 @@ from transformers import (
 from transformers.integrations import TensorBoardCallback
 from transformers.trainer_utils import EvalLoopOutput, EvalPrediction
 
-from metric import FGCRCls, ReconstructMetric
-from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer
+sys.path.append(str(Path(__file__).parents[1]))
+from metric import FGCRCls, ReconstructMetric  # noqa: E402
+from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer  # noqa: E402
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
