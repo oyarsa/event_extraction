@@ -25,11 +25,12 @@
     "save_strategy": "epoch",
     "load_best_model_at_end": true,
     "metric_for_best_model": "f1",
-    "train_file": "../data/genqa/train.json",
-    "validation_file": "../genqa/fgcr/dev.json",
-    "test_file": "../data/genqa/test.json",
+    "train_file": "../data/genqa_joint/original/train.json",
+    "validation_file": "../data/genqa_joint/original/dev.json",
+    "test_file": "../data/genqa_joint/original/test.json",
     "max_train_samples": 2000,
     "overwrite_cache": true,
     "store_prediction": true,
-    "save_total_limit": 1
+    "save_total_limit": 1,
+	"joint_prediction": true
 }
