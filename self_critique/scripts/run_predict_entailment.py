@@ -15,6 +15,7 @@
 """ Finetuning the library models for text entailment."""
 # You can also adapt this script on your own text classification task. Pointers for this are left as comments.
 
+import argparse
 import json
 import logging
 import sys
@@ -53,16 +54,6 @@ class DataTrainingArguments:
     the command line.
     """
 
-    dataset_name: Optional[str] = field(
-        default=None,
-        metadata={"help": "The name of the dataset to use (via the datasets library)."},
-    )
-    dataset_config_name: Optional[str] = field(
-        default=None,
-        metadata={
-            "help": "The configuration name of the dataset to use (via the datasets library)."
-        },
-    )
     max_seq_length: int = field(
         default=128,
         metadata={
@@ -85,24 +76,6 @@ class DataTrainingArguments:
             )
         },
     )
-    max_train_samples: Optional[int] = field(
-        default=None,
-        metadata={
-            "help": (
-                "For debugging purposes or quicker training, truncate the number of training examples to this "
-                "value if set."
-            )
-        },
-    )
-    max_eval_samples: Optional[int] = field(
-        default=None,
-        metadata={
-            "help": (
-                "For debugging purposes or quicker training, truncate the number of evaluation examples to this "
-                "value if set."
-            )
-        },
-    )
     max_predict_samples: Optional[int] = field(
         default=None,
         metadata={
@@ -112,45 +85,20 @@ class DataTrainingArguments:
             )
         },
     )
-    train_file: Optional[str] = field(
-        default=None,
-        metadata={"help": "A csv or a json file containing the training data."},
-    )
-    validation_file: Optional[str] = field(
-        default=None,
-        metadata={"help": "A csv or a json file containing the validation data."},
-    )
     test_file: Optional[str] = field(
         default=None,
         metadata={"help": "A csv or a json file containing the test data."},
     )
-    create_duplicate_dir: bool = field(
-        default=False,
-        metadata={
-            "help": (
-                "Create a new output folder when output_dir already exists. The name"
-                " will include the date and time"
-            )
-        },
-    )
 
     def __post_init__(self):
-        if self.dataset_name is not None:
-            pass
-        elif self.train_file is None or self.validation_file is None:
-            raise ValueError(
-                "Need either a GLUE task, a training/validation file or a dataset name."
-            )
+        if self.test_file is None:
+            raise ValueError("Need a test file")
         else:
-            train_extension = self.train_file.split(".")[-1]
-            assert train_extension in [
+            test_extension = self.test_file.split(".")[-1]
+            assert test_extension in [
                 "csv",
                 "json",
-            ], "`train_file` should be a csv or a json file."
-            validation_extension = self.validation_file.split(".")[-1]
-            assert (
-                validation_extension == train_extension
-            ), "`validation_file` should have the same extension (csv or json) as `train_file`."
+            ], "`test_file` should be a csv or a json file."
 
 
 @dataclass
@@ -215,18 +163,24 @@ def main():
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
+    parser = argparse.ArgumentParser()
+    parser.add_argument("config_file", type=Path, help="Configuration file")
+    parser.add_argument("model_path", type=str, help="Path to model", nargs="?")
+    parser.add_argument(
+        "data_file", type=str, help="Data file to predict on", nargs="?"
+    )
+    args = parser.parse_args()
 
-    parser = HfArgumentParser(
+    hf_parser = HfArgumentParser(
         (ModelArguments, DataTrainingArguments, TrainingArguments)
     )
-    if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
-        # If we pass only one argument to the script and it's the path to a json file,
-        # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(
-            json_file=Path(sys.argv[1]).resolve()
-        )
-    else:
-        model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+    model_args, data_args, training_args = hf_parser.parse_json_file(
+        json_file=args.config_file, allow_extra_keys=True
+    )
+    if args.model_path is not None:
+        model_args.model_name_or_path = args.model_path
+    if args.data_file is not None:
+        data_args.test_file = args.data_file
 
     # Setup logging
     logging.basicConfig(
@@ -256,22 +210,7 @@ def main():
     # Set seed before initializing model.
     set_seed(training_args.seed)
 
-    data_files = {
-        "train": data_args.train_file,
-        "validation": data_args.validation_file,
-    }
-
-    if training_args.do_predict:
-        if data_args.test_file is not None:
-            train_extension = data_args.train_file.split(".")[-1]
-            test_extension = data_args.test_file.split(".")[-1]
-            assert (
-                test_extension == train_extension
-            ), "`test_file` should have the same extension (csv or json) as `train_file`."
-            data_files["test"] = data_args.test_file
-        else:
-            raise ValueError("Need either a GLUE task or a test file for `do_predict`.")
-
+    data_files = {"test": data_args.test_file}
     for key in data_files:
         logger.info(f"load a local file for {key}: {data_files[key]}")
 
@@ -283,7 +222,7 @@ def main():
     # Trying to have good defaults here, don't hesitate to tweak to your needs.
     # A useful fast method:
     # https://huggingface.co/docs/datasets/package_reference/main_classes.html#datasets.Dataset.unique
-    label_list = raw_datasets["train"].unique("label")
+    label_list = raw_datasets["test"].unique("label")
     label_list.sort()  # Let's sort it for determinism
     num_labels = len(label_list)
 
