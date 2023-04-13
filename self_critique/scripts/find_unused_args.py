@@ -10,16 +10,15 @@ import typer
 def import_file(full_name: str, path: Path) -> ModuleType:
     "From https://stackoverflow.com/a/46198651"
     spec = util.spec_from_file_location(full_name, path)
-    assert spec is not None
-    assert spec.loader is not None
+    assert spec is not None and spec.loader is not None
     mod = util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
 
 def used_fields(lines: list[str], fields: set[str]) -> tuple[set[str], list[str]]:
-    used_fields = set()
-    used_lines = []
+    used_fields: set[str] = set()
+    used_lines: list[str] = []
     for i, line in enumerate(lines):
         for field in fields:
             if field in used_fields:
@@ -44,14 +43,10 @@ def main(module_file: Path, data_classes: list[str]) -> None:
         print("Used lines:")
         for line in lines:
             print(line)
-
-        print()
-        print("Unused:")
+        print("\nUnused:")
         for field in unused:
             print(f"- {field}")
-        print()
-        print("*" * 80)
-        print()
+        print(f"\n{'*'*80}\n")
 
 
 if __name__ == "__main__":
