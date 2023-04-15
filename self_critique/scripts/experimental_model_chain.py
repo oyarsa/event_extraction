@@ -2,10 +2,11 @@ import inspect
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional, Self
+from typing import Optional, Self
 
+import torch
 import typer
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, GenerationMixin
 
 
 @dataclass
@@ -28,15 +29,17 @@ class Config:
         )
 
 
-def generate(model, input_ids, config: Config):
+def generate(
+    model: GenerationMixin, input_ids: torch.Tensor, config: Config
+) -> torch.Tensor:
     return model.generate(
         input_ids, num_beams=config.num_beams, max_length=config.max_seq_length
     )
 
 
-def read_json(
+def read_json_dataset(
     path: Path, key: str | None = None, max_n: int | None = None
-) -> dict[str, Any]:
+) -> list[dict[str, str]]:
     data = json.loads(path.read_text())
     if key is not None:
         data = data[key]
@@ -63,11 +66,21 @@ def main(
     model_2 = AutoModelForSeq2SeqLM.from_pretrained(model_2_path)
 
     config = Config.from_json(config_path.read_text())
-    model_1_data_path = model_1_data_path or Path(config.model_1_data_path)
-    model_2_data_path = model_2_data_path or Path(config.model_2_data_path)
 
-    model_1_data = read_json(model_1_data_path, "data", config.max_samples)
-    model_2_data = read_json(model_2_data_path, "data", config.max_samples)
+    model_1_data_path = model_1_data_path or (
+        Path(config.model_1_data_path) if config.model_1_data_path else None
+    )
+    if model_1_data_path is None:
+        raise ValueError("You must specify the path for the first model's data")
+
+    model_2_data_path = model_2_data_path or (
+        Path(config.model_2_data_path) if config.model_2_data_path else None
+    )
+    if model_2_data_path is None:
+        raise ValueError("You must specify the path for the second model's data")
+
+    model_1_data = read_json_dataset(model_1_data_path, "data", config.max_samples)
+    model_2_data = read_json_dataset(model_2_data_path, "data", config.max_samples)
 
     input_texts = [entry["context"] for entry in model_1_data]
     expected_outputs = [entry["answers"] for entry in model_2_data]
@@ -86,9 +99,14 @@ def main(
     for input_text, expected_output, output_text in zip(
         input_texts, expected_outputs, output_texts
     ):
-        print("Input text:     ", input_text)
-        print("Expected output:", expected_output)
-        print("Output text:    ", output_text)
+        print("INPUT TEXT:")
+        print(input_text)
+        print("=" * 80)
+        print("EXPECTED OUTPUT:")
+        print(expected_output)
+        print("=" * 80)
+        print("OUTPUT TEXT:")
+        print(output_text)
         print()
 
 
