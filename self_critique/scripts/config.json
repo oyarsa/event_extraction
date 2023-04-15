@@ -1,0 +1,7 @@
+{
+	"num_beams": 1,
+	"max_seq_length": 256,
+	"max_samples": 5,
+	"model_1_data_path": "../../data/genqa_joint/dev.json",
+	"model_2_data_path": "../../data/reconstruct/dev.json"
+}
