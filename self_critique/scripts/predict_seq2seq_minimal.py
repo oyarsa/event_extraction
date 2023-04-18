@@ -23,7 +23,6 @@ import metric  # noqa: E402
 
 
 def filter_kwargs(cls: type) -> type:
-    print(type(cls))
     if not is_dataclass(cls):
         raise TypeError("filter_kwargs should only be used with dataclasses")
 
@@ -44,23 +43,42 @@ def filter_kwargs(cls: type) -> type:
 class Config:
     """Configuration for the model training, evaluation and prediction."""
 
+    # Model name from the HuggingFace model hub, or path to a local model saved
+    # with `model.save_pretrained`.
     model_name_or_path: str
+    # Maximum length of the input sequence
     max_seq_length: int = 256
+    # Number of beams to use for beam search
     generation_num_beams: int | None = None
-    per_device_test_batch_size: int = 32
-    per_device_eval_batch_size: int = 32
+    # Batch size for training
     per_device_train_batch_size: int = 32
+    # Batch size for evaluation
+    per_device_eval_batch_size: int = 32
+    # Batch size for prediction
+    per_device_test_batch_size: int = 32
+    # Device to use
     device: str = "cuda:0"
+    # Number of training epochs
     num_train_epochs: int = 20
+    # Learning rate
     learning_rate: float = 5e-4
+    # Directory to save the model, tokeniser, metrics and predictions
     output_dir: Path | None = None
+    # Path to the training data
     train_file: Path | None = None
+    # Path to the validation data
     validation_file: Path | None = None
+    # Path to the test data
     test_file: Path | None = None
+    # Whether to run prediction at the end
     do_predict: bool = True
+    # Whether to run training
     do_train: bool = True
+    # Maximum number of samples used for training
     max_train_samples: int | None = None
+    # Maximum number of samples used for evaluation
     max_eval_samples: int | None = None
+    # Maximum number of samples used for prediction
     max_predict_samples: int | None = None
 
 
