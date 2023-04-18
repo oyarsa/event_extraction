@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import sys
-from dataclasses import InitVar, asdict, dataclass, fields, is_dataclass
+from dataclasses import asdict, dataclass, fields, is_dataclass
 from pathlib import Path
 from typing import Any
 
@@ -19,7 +19,7 @@ from transformers import (
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from metric import FGCRCls  # noqa: E402
+import metric  # noqa: E402
 
 
 def filter_kwargs(cls: type) -> type:
@@ -27,7 +27,7 @@ def filter_kwargs(cls: type) -> type:
     if not is_dataclass(cls):
         raise TypeError("filter_kwargs should only be used with dataclasses")
 
-    original_init = cls.__init__
+    original_init = cls.__init__  # type: ignore
 
     def new_init(cls: type, **kwargs: dict[str, Any]) -> None:
         filtered_kwargs = {
@@ -35,7 +35,7 @@ def filter_kwargs(cls: type) -> type:
         }
         return original_init(cls, **filtered_kwargs)
 
-    cls.__init__ = new_init
+    cls.__init__ = new_init  # type: ignore
     return cls
 
 
@@ -62,10 +62,10 @@ class Config:
     max_train_samples: int | None = None
     max_eval_samples: int | None = None
     max_predict_samples: int | None = None
-    extra_kwargs: InitVar[dict] = None
 
 
-def log_metrics(metrics: dict[str, float], desc: str) -> None:
+def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
+    desc = desc or "metrics"
     logging.info(f">>>> {desc.upper()}")
 
     padding = max(len(k) for k in metrics)
@@ -136,11 +136,11 @@ def do_eval(
     loader: DataLoader,
     data: list[dict[str, str]],
     desc: str | None = None,
-) -> None:
+) -> EvalResult:
     model.eval()
 
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
-    loss = 0
+    total_loss = 0
     num_batches = 0
     all_predictions: list[str] = []
 
@@ -163,10 +163,10 @@ def do_eval(
             )
 
             all_predictions.extend(predicted_texts)
-            loss += loss.item()
+            total_loss += loss.item()
             num_batches += 1
 
-    avg_loss = loss / num_batches
+    avg_loss = total_loss / num_batches
     return EvalResult(
         loss=avg_loss,
         metrics=metrics,
@@ -246,9 +246,9 @@ def do_train(
 
 
 def calculate_metrics(
-    data: list[dict[str, str]], predictions: list[str]
+    data: list[dict[str, str]], output: list[str]
 ) -> dict[str, float]:
-    references = [
+    references: list[metric.MetricReference] = [
         {
             "id": inp["id"],
             "answers": inp["answers"],
@@ -256,15 +256,15 @@ def calculate_metrics(
         }
         for inp in data
     ]
-    predictions = [
+    predictions: list[metric.MetricPrediction] = [
         {
             "id": inp["id"],
             "prediction_text": out,
         }
-        for inp, out in zip(data, predictions)
+        for inp, out in zip(data, output)
     ]
 
-    return FGCRCls()._compute(predictions=predictions, references=references)
+    return metric.FGCRCls()._compute(predictions=predictions, references=references)
 
 
 def do_predict(
@@ -349,7 +349,7 @@ def main() -> None:
 
     if config.do_train:
         if config.train_file is None:
-            raise ValueError("train_data_path must be specified when training")
+            raise ValueError("train_file must be specified when training")
 
         train_data = json.loads(config.train_file.read_text())["data"]
         eval_data = (
@@ -365,6 +365,8 @@ def main() -> None:
             tokeniser.save_pretrained(config.output_dir)
 
     if config.do_predict:
+        if config.test_file is None:
+            raise ValueError("test_file must be specified when training")
         predict_data = json.loads(config.test_file.read_text())["data"]
         output, metrics = do_predict(model, tokeniser, predict_data, config)
         if config.output_dir is not None:
