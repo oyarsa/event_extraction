@@ -21,22 +21,13 @@ from typing import TypedDict
 import datasets
 import evaluate
 
+from metric.types import MetricPrediction, MetricReference
+
 
 class Instance(TypedDict):
     id: str
     prediction: str
     gold: str
-
-
-class MetricPrediction(TypedDict):
-    id: str
-    prediction_text: str
-
-
-class MetricReference(TypedDict):
-    id: str
-    answers: str
-    question_type: str
 
 
 class ReconstructMetric(evaluate.Metric):

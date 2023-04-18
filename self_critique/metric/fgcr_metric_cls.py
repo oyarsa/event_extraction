@@ -22,6 +22,8 @@ import datasets
 import evaluate
 from sklearn.metrics import precision_recall_fscore_support
 
+from metric.types import MetricPrediction, MetricReference
+
 
 class Instance(TypedDict):
     id: str
@@ -30,17 +32,6 @@ class Instance(TypedDict):
     golds: list[str]
     pred_relation: str | None
     gold_relation: str | None
-
-
-class MetricPrediction(TypedDict):
-    id: str
-    prediction_text: str
-
-
-class MetricReference(TypedDict):
-    id: str
-    answers: str
-    question_type: str
 
 
 class FGCRCls(evaluate.Metric):
@@ -154,7 +145,7 @@ def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
         equal[kind] += int(gold_toks == pred_toks)
         num_instances[kind] += 1
 
-    result = defaultdict(dict)
+    result: dict[str, dict[str, float]] = defaultdict(dict)
     for kind in gold_lens:
         if pred_lens[kind] != 0:
             precision = commons[kind] / pred_lens[kind]
