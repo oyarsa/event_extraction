@@ -41,9 +41,10 @@ PyYAML==6.0
 regex==2022.10.31
 requests==2.28.2
 responses==0.18.0
-ruff==0.0.256
+ruff==0.0.261
 scikit-learn==1.2.2
 scipy==1.10.1
+simple-parsing==0.1.1
 six==1.16.0
 sympy==1.11.1
 tensorboard==2.12.0
