@@ -1,13 +1,12 @@
-import argparse
-import inspect
 import json
 import logging
 import os
 import sys
-from dataclasses import asdict, dataclass
+from dataclasses import InitVar, asdict, dataclass, fields, is_dataclass
 from pathlib import Path
-from typing import Any, Self
+from typing import Any
 
+import simple_parsing
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
@@ -19,11 +18,32 @@ from transformers import (
 )
 
 sys.path.append(str(Path(__file__).parents[1]))
+
 from metric import FGCRCls  # noqa: E402
 
 
+def filter_kwargs(cls: type) -> type:
+    print(type(cls))
+    if not is_dataclass(cls):
+        raise TypeError("filter_kwargs should only be used with dataclasses")
+
+    original_init = cls.__init__
+
+    def new_init(cls: type, **kwargs: dict[str, Any]) -> None:
+        filtered_kwargs = {
+            f.name: kwargs[f.name] for f in fields(cls) if f.name in kwargs
+        }
+        return original_init(cls, **filtered_kwargs)
+
+    cls.__init__ = new_init
+    return cls
+
+
+@filter_kwargs
 @dataclass
 class Config:
+    """Configuration for the model training, evaluation and prediction."""
+
     model_name_or_path: str
     max_seq_length: int = 256
     generation_num_beams: int | None = None
@@ -42,23 +62,7 @@ class Config:
     max_train_samples: int | None = None
     max_eval_samples: int | None = None
     max_predict_samples: int | None = None
-
-    @classmethod
-    def from_dict(cls, params: dict[str, Any]) -> Self:
-        "Create instance from dict, ignoring unknown fields."
-
-        def convert(key: str, value: Any) -> Any:
-            if any(sub in key for sub in ["file", "path", "dir"]):
-                return Path(value)
-            return value
-
-        return cls(
-            **{
-                k: convert(k, v)
-                for k, v in params.items()
-                if k in inspect.signature(cls).parameters
-            }
-        )
+    extra_kwargs: InitVar[dict] = None
 
 
 def log_metrics(metrics: dict[str, float], desc: str) -> None:
@@ -326,9 +330,7 @@ def log_config(config: Config) -> None:
 def main() -> None:
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("config_path", type=Path, help="Path to config file")
-    args = parser.parse_args()
+    config = simple_parsing.parse(Config, add_config_path_arg=True)
 
     logging.basicConfig(
         level=logging.INFO,
@@ -336,7 +338,6 @@ def main() -> None:
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
-    config = Config.from_dict(json.loads(args.config_path.read_text()))
     log_config(config)
 
     model = AutoModelForSeq2SeqLM.from_pretrained(config.model_name_or_path).to(
