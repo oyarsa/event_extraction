@@ -1,5 +1,4 @@
 {
-	"device": "cpu",
     "model_name_or_path": "t5-small",
     "do_train": true,
     "do_eval": true,
@@ -13,7 +12,7 @@
     "train_file": "../data/genqa_joint/train.json",
     "validation_file": "../data/genqa_joint/dev.json",
     "test_file": "../data/genqa_joint/test.json",
-    "max_train_samples": 20,
-    "max_eval_samples": 20,
-    "max_predict_samples": 20
+    "max_train_samples": null,
+    "max_eval_samples": null,
+    "max_predict_samples": null
 }

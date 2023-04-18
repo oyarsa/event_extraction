@@ -127,19 +127,6 @@ def preprocess_data(
     return loader
 
 
-def pad_labels(
-    label_batch: torch.Tensor, tokeniser: PreTrainedTokenizer
-) -> torch.Tensor:
-    return torch.cat(
-        [
-            label_batch[:, :-1],
-            tokeniser.pad_token_id
-            * torch.ones((label_batch.shape[0], 1), dtype=torch.long),
-        ],
-        dim=-1,
-    )
-
-
 @dataclass
 class EvalResult:
     loss: float
@@ -164,8 +151,7 @@ def do_eval(
 
     with torch.no_grad():
         for input_batch, label_batch in tqdm(loader, desc=desc):
-            decoder_input_ids = pad_labels(label_batch, tokeniser)
-            outputs = model(input_batch, decoder_input_ids=decoder_input_ids)
+            outputs = model(input_batch, decoder_input_ids=label_batch)
             logits = outputs.logits
 
             predicted_ids = torch.argmax(logits, dim=-1)
@@ -233,8 +219,7 @@ def do_train(
         for input_batch, label_batch in tqdm(
             train_loader, desc=f"Epoch {epoch+1} training"
         ):
-            decoder_input_ids = pad_labels(label_batch, tokeniser)
-            outputs = model(input_batch, decoder_input_ids=decoder_input_ids)
+            outputs = model(input_batch, decoder_input_ids=label_batch)
             logits = outputs.logits
 
             loss = criterion(logits.view(-1, logits.shape[-1]), label_batch.view(-1))
@@ -285,12 +270,18 @@ def calculate_metrics(
     return metric.FGCRCls()._compute(predictions=predictions, references=references)
 
 
+@dataclass
+class PredictResult:
+    predictions: list[dict[str, str]]
+    metrics: dict[str, float]
+
+
 def do_predict(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     data: list[dict[str, str]],
     config: Config,
-) -> tuple[list[dict[str, str]], dict[str, float]]:
+) -> PredictResult:
     """Perform prediction on data.
 
     `model` must be a Seq2Seq model and compatible with `tokeniser`.
@@ -336,7 +327,7 @@ def do_predict(
         {"input": inp, "output": out, "gold": d["answers"]}
         for inp, out, d in zip(input_texts, predicted_texts, data)
     ]
-    return output, metrics
+    return PredictResult(predictions=output, metrics=metrics)
 
 
 def log_config(config: Config) -> None:
@@ -382,16 +373,35 @@ def main() -> None:
             model.save_pretrained(config.output_dir)
             tokeniser.save_pretrained(config.output_dir)
 
+        if eval_data is not None and config.output_dir is not None:
+            config.output_dir.mkdir(exist_ok=True, parents=True)
+            logging.info(
+                "Saving evaluation results to: %s", config.output_dir.resolve()
+            )
+            result = do_predict(model, tokeniser, eval_data, config)
+            (config.output_dir / "eval_output.json").write_text(
+                json.dumps(result.predictions)
+            )
+            (config.output_dir / "eval_metrics.json").write_text(
+                json.dumps(result.metrics)
+            )
+
     if config.do_predict:
         if config.test_file is None:
             raise ValueError("test_file must be specified when training")
         predict_data = json.loads(config.test_file.read_text())["data"]
-        output, metrics = do_predict(model, tokeniser, predict_data, config)
+        result = do_predict(model, tokeniser, predict_data, config)
         if config.output_dir is not None:
             config.output_dir.mkdir(exist_ok=True, parents=True)
-            logging.info("Saving results to: %s", config.output_dir.resolve())
-            (config.output_dir / "predict_output.json").write_text(json.dumps(output))
-            (config.output_dir / "predict_metrics.json").write_text(json.dumps(metrics))
+            logging.info(
+                "Saving prediction results to: %s", config.output_dir.resolve()
+            )
+            (config.output_dir / "predict_output.json").write_text(
+                json.dumps(result.predictions)
+            )
+            (config.output_dir / "predict_metrics.json").write_text(
+                json.dumps(result.metrics)
+            )
 
 
 if __name__ == "__main__":
