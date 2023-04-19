@@ -182,15 +182,17 @@ def do_eval(
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
             outputs = model(**inputs)
-            logits = outputs.logits
 
+            # CrossEntropy wants [batch * seq_len, num_classes] and [batch * seq_len]
             loss = criterion(
-                logits.view(-1, logits.shape[-1]),
-                inputs["labels"].view(-1),
+                # [batch, seq_len, vocab_size] -> [batch * seq_len, vocab_size]
+                outputs.logits.reshape(-1, outputs.logits.size(-1)),
+                # [batch, seq_len] -> [batch * seq_len]
+                inputs["labels"].reshape(-1),
             )
             total_loss += loss.item()
 
-            predicted_ids = torch.argmax(logits, dim=-1)
+            predicted_ids = torch.argmax(outputs.logits, dim=-1)
             all_predictions.extend(predicted_ids)
 
             num_batches += 1
