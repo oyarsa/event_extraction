@@ -8,7 +8,7 @@ from typing import Any
 
 import simple_parsing
 import torch
-from torch.utils.data import DataLoader, Dataset, TensorDataset
+from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 from transformers import (
     AutoConfig,
@@ -162,6 +162,7 @@ def do_eval(
     epoch: int,
     loader: DataLoader,
     data: list[dict[str, str]],
+    config: Config,
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -176,26 +177,35 @@ def do_eval(
             outputs = model(**inputs)
             logits = outputs.logits
 
-            # metrics = calculate_metrics(data, predicted_texts)
-            # log_metrics(metrics, desc)
-
             loss = criterion(
                 logits.view(-1, logits.shape[-1]),
                 inputs["labels"].view(-1),
             )
             total_loss += loss.item()
 
-            predicted_ids = torch.argmax(logits, dim=-2)
-            predicted_texts = tokeniser.batch_decode(
-                predicted_ids, skip_special_tokens=True
+            # predicted_ids = torch.argmax(logits, dim=-2)
+            # predicted_texts = tokeniser.batch_decode(
+            #     predicted_ids, skip_special_tokens=True
+            # )
+            # all_predictions.extend(predicted_texts)
+            batch_predicted_ids = model.generate(
+                inputs["input_ids"],
+                num_beams=config.generation_num_beams or model.config.num_beams,
+                max_length=config.max_seq_length,
             )
-            all_predictions.extend(predicted_texts)
+            all_predictions.extend(batch_predicted_ids)
 
             num_batches += 1
 
-    avg_loss = total_loss / num_batches
-    metrics = calculate_metrics(data, all_predictions)
+    logging.info("Decoding output")
+    predicted_texts = tokeniser.batch_decode(all_predictions, skip_special_tokens=True)
+
+    logging.info("Calculating metrics")
+    metrics = calculate_metrics(data, predicted_texts)
     log_metrics(metrics, desc)
+    avg_loss = total_loss / num_batches
+    # metrics = calculate_metrics(data, all_predictions)
+    # log_metrics(metrics, desc)
     return EvalResult(
         loss=avg_loss,
         metrics=metrics,
@@ -266,6 +276,7 @@ def do_train(
                 epoch,
                 eval_loader,
                 eval_data,
+                config,
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
@@ -328,15 +339,6 @@ def do_inference(
         shuffle=True,
         batch_size=config.per_device_train_batch_size,
     )
-    # input_ids = tokeniser(
-    #     input_texts,
-    #     return_tensors="pt",
-    #     padding=True,
-    #     max_length=config.max_seq_length,
-    #     truncation=True,
-    # ).input_ids.to(config.device)
-    # dataset = TensorDataset(input_ids)
-    # loader = DataLoader(dataset, batch_size=config.per_device_eval_batch_size)
 
     logging.info("Generating output")
     logging.warning("loader size: %s", len(loader))
@@ -345,7 +347,6 @@ def do_inference(
     for input_batch in tqdm(loader, desc=desc):
         batch_predicted_ids = model.generate(
             input_batch["input_ids"],
-            # input_batch[0].to(config.device),
             num_beams=config.generation_num_beams or model.config.num_beams,
             max_length=config.max_seq_length,
         )
@@ -410,18 +411,20 @@ def main() -> None:
             model.save_pretrained(config.output_dir)
             tokeniser.save_pretrained(config.output_dir)
 
-        if eval_data is not None and config.output_dir is not None:
-            config.output_dir.mkdir(exist_ok=True, parents=True)
-            logging.info(
-                "Saving evaluation results to: %s", config.output_dir.resolve()
-            )
+        if eval_data is not None:
             result = do_inference(model, tokeniser, eval_data, config, "evaluation")
-            (config.output_dir / "eval_output.json").write_text(
-                json.dumps(result.predictions)
-            )
-            (config.output_dir / "eval_metrics.json").write_text(
-                json.dumps(result.metrics)
-            )
+
+            if config.output_dir is not None:
+                config.output_dir.mkdir(exist_ok=True, parents=True)
+                logging.info(
+                    "Saving evaluation results to: %s", config.output_dir.resolve()
+                )
+                (config.output_dir / "eval_output.json").write_text(
+                    json.dumps(result.predictions)
+                )
+                (config.output_dir / "eval_metrics.json").write_text(
+                    json.dumps(result.metrics)
+                )
 
     if config.do_predict:
         if config.test_file is None:
