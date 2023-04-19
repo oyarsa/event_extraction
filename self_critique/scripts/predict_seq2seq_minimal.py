@@ -177,8 +177,8 @@ def do_eval(
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
     total_loss = 0
     num_batches = 0
-    all_predictions: list[str] = []
 
+    all_predictions: list[torch.Tensor] = []
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
             outputs = model(**inputs)
@@ -221,7 +221,7 @@ def do_train(
         tokeniser,
         train_data,
         config,
-        shuffle=True,
+        shuffle=False,
         batch_size=config.per_device_train_batch_size,
     )
 
@@ -259,6 +259,7 @@ def do_train(
             outputs = model(**inputs)
             logits = outputs.logits
 
+            # TODO: Understand why this doesn't work: loss = criterion(logits, inputs["labels"])
             loss = criterion(
                 logits.view(-1, logits.shape[-1]), inputs["labels"].view(-1)
             )
@@ -290,9 +291,6 @@ def do_train(
             early_stopping_counter = 0
 
             logging.info("New best model! Saving to: %s", config.output_dir.resolve())
-            # TODO: Do I need to save the config? Can I do it like this, or do I need
-            # to pass the config as a param just to save it?
-            model.config.save_pretrained(config.output_dir)
             model.save_pretrained(config.output_dir)
             tokeniser.save_pretrained(config.output_dir)
         else:
@@ -330,7 +328,7 @@ def calculate_metrics(
 
 
 @dataclass
-class PredictResult:
+class InferenceResult:
     predictions: list[dict[str, str]]
     metrics: dict[str, float]
 
@@ -341,7 +339,7 @@ def do_inference(
     data: list[dict[str, str]],
     config: Config,
     desc: str,
-) -> PredictResult:
+) -> InferenceResult:
     """Perform prediction on data.
 
     `model` must be a Seq2Seq model and compatible with `tokeniser`.
@@ -353,13 +351,11 @@ def do_inference(
     logging.info("Tokenising input")
 
     data = data[: config.max_predict_samples]
-    input_texts = [format_input(d) for d in data]
-
     loader = preprocess_data(
         tokeniser,
         data,
         config,
-        shuffle=True,
+        shuffle=False,
         batch_size=config.per_device_train_batch_size,
     )
 
@@ -382,10 +378,10 @@ def do_inference(
     metrics = calculate_metrics(data, predicted_texts)
     log_metrics(metrics, desc)
     output = [
-        {"input": inp, "output": out, "gold": d["answers"]}
-        for inp, out, d in zip(input_texts, predicted_texts, data)
+        {"input": d["context"], "output": out, "gold": d["answers"]}
+        for out, d in zip(predicted_texts, data)
     ]
-    return PredictResult(predictions=output, metrics=metrics)
+    return InferenceResult(predictions=output, metrics=metrics)
 
 
 def log_config(config: Config) -> None:
@@ -437,6 +433,7 @@ def main() -> None:
 
         model = do_train(model, tokeniser, train_data, eval_data, config)
         if config.load_best_model_at_end:
+            logging.info("Loading best model from %s", config.output_dir.resolve())
             model, tokeniser = load_model(
                 config.output_dir, config.max_seq_length, config.device
             )
