@@ -80,6 +80,8 @@ class Config:
     max_eval_samples: int | None = None
     # Maximum number of samples used for prediction
     max_predict_samples: int | None = None
+    # Level for logging. Most messages are INFO.
+    log_level: str = "info"
 
 
 def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
@@ -276,17 +278,19 @@ class PredictResult:
     metrics: dict[str, float]
 
 
-def do_predict(
+def do_inference(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     data: list[dict[str, str]],
     config: Config,
+    desc: str,
 ) -> PredictResult:
     """Perform prediction on data.
 
     `model` must be a Seq2Seq model and compatible with `tokeniser`.
     """
-    logging.info("*** Predicting ***")
+    desc = desc.capitalize()
+    logging.info("*** %s ***", desc)
     model.eval()
 
     logging.info("Tokenising input")
@@ -309,7 +313,7 @@ def do_predict(
     predicted_ids: list[torch.Tensor] = []
     dataset = TensorDataset(input_ids)
     loader = DataLoader(dataset, batch_size=batch_size)
-    for input_batch in tqdm(loader, desc="Predicting"):
+    for input_batch in tqdm(loader, desc=desc):
         batch_predicted_ids = model.generate(
             input_batch[0].to(config.device),
             num_beams=num_beams,
@@ -322,7 +326,7 @@ def do_predict(
 
     logging.info("Calculating metrics")
     metrics = calculate_metrics(data, predicted_texts)
-    log_metrics(metrics, "Prediction")
+    log_metrics(metrics, desc)
     output = [
         {"input": inp, "output": out, "gold": d["answers"]}
         for inp, out, d in zip(input_texts, predicted_texts, data)
@@ -342,7 +346,7 @@ def main() -> None:
     config = simple_parsing.parse(Config, add_config_path_arg=True)
 
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.getLevelName(config.log_level.upper()),
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
@@ -378,7 +382,7 @@ def main() -> None:
             logging.info(
                 "Saving evaluation results to: %s", config.output_dir.resolve()
             )
-            result = do_predict(model, tokeniser, eval_data, config)
+            result = do_inference(model, tokeniser, eval_data, config, "evaluation")
             (config.output_dir / "eval_output.json").write_text(
                 json.dumps(result.predictions)
             )
@@ -390,7 +394,7 @@ def main() -> None:
         if config.test_file is None:
             raise ValueError("test_file must be specified when training")
         predict_data = json.loads(config.test_file.read_text())["data"]
-        result = do_predict(model, tokeniser, predict_data, config)
+        result = do_inference(model, tokeniser, predict_data, config, "prediction")
         if config.output_dir is not None:
             config.output_dir.mkdir(exist_ok=True, parents=True)
             logging.info(
