@@ -8,9 +8,10 @@ from typing import Any
 
 import simple_parsing
 import torch
-from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data import DataLoader, Dataset, TensorDataset
 from tqdm import tqdm
 from transformers import (
+    AutoConfig,
     AutoModelForSeq2SeqLM,
     AutoTokenizer,
     PreTrainedModel,
@@ -100,7 +101,7 @@ def format_input(d: dict[str, str]) -> str:
 
 
 def preprocess_data(
-    tokeniser,
+    tokeniser: PreTrainedTokenizer,
     data: list[dict[str, str]],
     config: Config,
     shuffle: bool,
@@ -109,24 +110,43 @@ def preprocess_data(
     source_texts = [format_input(d) for d in data]
     target_texts = [d["answers"] for d in data]
 
-    input_ids = tokeniser(
+    model_inputs = tokeniser(
         source_texts,
-        padding=True,
+        padding="max_length",
         return_tensors="pt",
         truncation=True,
         max_length=config.max_seq_length,
-    ).input_ids.to(config.device)
+    )
     labels = tokeniser(
-        target_texts,
-        padding=True,
+        text_target=target_texts,
+        padding="max_length",
         return_tensors="pt",
-        truncation=True,
         max_length=config.max_seq_length,
-    ).input_ids.to(config.device)
+        truncation=True,
+    )
 
-    dataset = TensorDataset(input_ids, labels)
+    dataset = Seq2SeqDataset(
+        input_tokens=model_inputs, target_tokens=labels, device=config.device
+    )
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     return loader
+
+
+@dataclass
+class Seq2SeqDataset(Dataset):
+    input_tokens: torch.Tensor
+    target_tokens: torch.Tensor
+    device: str
+
+    def __len__(self) -> int:
+        return self.input_tokens["input_ids"].size(0)
+
+    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
+        return {
+            "input_ids": self.input_tokens["input_ids"][idx].to(self.device),
+            "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
+            "labels": self.target_tokens["input_ids"][idx].to(self.device),
+        }
 
 
 @dataclass
@@ -152,27 +172,30 @@ def do_eval(
     all_predictions: list[str] = []
 
     with torch.no_grad():
-        for input_batch, label_batch in tqdm(loader, desc=desc):
-            outputs = model(input_batch, decoder_input_ids=label_batch)
+        for inputs in tqdm(loader, desc=desc):
+            outputs = model(**inputs)
             logits = outputs.logits
 
-            predicted_ids = torch.argmax(logits, dim=-1)
-            predicted_texts = tokeniser.batch_decode(
-                predicted_ids, skip_special_tokens=True
-            )
-            metrics = calculate_metrics(data, predicted_texts)
-            log_metrics(metrics, desc)
+            # metrics = calculate_metrics(data, predicted_texts)
+            # log_metrics(metrics, desc)
 
             loss = criterion(
                 logits.view(-1, logits.shape[-1]),
-                label_batch.view(-1),
+                inputs["labels"].view(-1),
             )
-
-            all_predictions.extend(predicted_texts)
             total_loss += loss.item()
+
+            predicted_ids = torch.argmax(logits, dim=-2)
+            predicted_texts = tokeniser.batch_decode(
+                predicted_ids, skip_special_tokens=True
+            )
+            all_predictions.extend(predicted_texts)
+
             num_batches += 1
 
     avg_loss = total_loss / num_batches
+    metrics = calculate_metrics(data, all_predictions)
+    log_metrics(metrics, desc)
     return EvalResult(
         loss=avg_loss,
         metrics=metrics,
@@ -218,13 +241,13 @@ def do_train(
         total_loss = 0
         num_batches = 0
 
-        for input_batch, label_batch in tqdm(
-            train_loader, desc=f"Epoch {epoch+1} training"
-        ):
-            outputs = model(input_batch, decoder_input_ids=label_batch)
+        for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
+            outputs = model(**inputs)
             logits = outputs.logits
 
-            loss = criterion(logits.view(-1, logits.shape[-1]), label_batch.view(-1))
+            loss = criterion(
+                logits.view(-1, logits.shape[-1]), inputs["labels"].view(-1)
+            )
             loss.backward()
 
             optimizer.step()
@@ -297,26 +320,33 @@ def do_inference(
 
     data = data[: config.max_predict_samples]
     input_texts = [format_input(d) for d in data]
-    input_ids = tokeniser(
-        input_texts,
-        return_tensors="pt",
-        padding=True,
-        max_length=config.max_seq_length,
-        truncation=True,
-    ).input_ids.to(config.device)
+
+    loader = preprocess_data(
+        tokeniser,
+        data,
+        config,
+        shuffle=True,
+        batch_size=config.per_device_train_batch_size,
+    )
+    # input_ids = tokeniser(
+    #     input_texts,
+    #     return_tensors="pt",
+    #     padding=True,
+    #     max_length=config.max_seq_length,
+    #     truncation=True,
+    # ).input_ids.to(config.device)
+    # dataset = TensorDataset(input_ids)
+    # loader = DataLoader(dataset, batch_size=config.per_device_eval_batch_size)
 
     logging.info("Generating output")
-
-    batch_size = config.per_device_test_batch_size
-    num_beams = config.generation_num_beams or model.config.num_beams
+    logging.warning("loader size: %s", len(loader))
 
     predicted_ids: list[torch.Tensor] = []
-    dataset = TensorDataset(input_ids)
-    loader = DataLoader(dataset, batch_size=batch_size)
     for input_batch in tqdm(loader, desc=desc):
         batch_predicted_ids = model.generate(
-            input_batch[0].to(config.device),
-            num_beams=num_beams,
+            input_batch["input_ids"],
+            # input_batch[0].to(config.device),
+            num_beams=config.generation_num_beams or model.config.num_beams,
             max_length=config.max_seq_length,
         )
         predicted_ids.extend(batch_predicted_ids)
@@ -353,12 +383,14 @@ def main() -> None:
 
     log_config(config)
 
-    model = AutoModelForSeq2SeqLM.from_pretrained(config.model_name_or_path).to(
-        config.device
-    )
+    model_config = AutoConfig.from_pretrained(config.model_name_or_path)
+    model = AutoModelForSeq2SeqLM.from_pretrained(
+        config.model_name_or_path, config=model_config
+    ).to(config.device)
     tokeniser = AutoTokenizer.from_pretrained(
         config.model_name_or_path, model_max_length=config.max_seq_length
     )
+    model.resize_token_embeddings(len(tokeniser))
 
     if config.do_train:
         if config.train_file is None:
@@ -374,6 +406,7 @@ def main() -> None:
         model = do_train(model, tokeniser, train_data, eval_data, config)
         if config.output_dir is not None:
             logging.info("Saving model to: %s", config.output_dir.resolve())
+            model_config.save_pretrained(config.output_dir)
             model.save_pretrained(config.output_dir)
             tokeniser.save_pretrained(config.output_dir)
 
