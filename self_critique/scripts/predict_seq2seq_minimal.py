@@ -134,8 +134,8 @@ def preprocess_data(
 
 @dataclass
 class Seq2SeqDataset(Dataset):
-    input_tokens: torch.Tensor
-    target_tokens: torch.Tensor
+    input_tokens: dict[str, torch.Tensor]
+    target_tokens: dict[str, torch.Tensor]
     device: str
 
     def __len__(self) -> int:
@@ -183,17 +183,8 @@ def do_eval(
             )
             total_loss += loss.item()
 
-            # predicted_ids = torch.argmax(logits, dim=-2)
-            # predicted_texts = tokeniser.batch_decode(
-            #     predicted_ids, skip_special_tokens=True
-            # )
-            # all_predictions.extend(predicted_texts)
-            batch_predicted_ids = model.generate(
-                inputs["input_ids"],
-                num_beams=config.generation_num_beams or model.config.num_beams,
-                max_length=config.max_seq_length,
-            )
-            all_predictions.extend(batch_predicted_ids)
+            predicted_ids = torch.argmax(logits, dim=-1)
+            all_predictions.extend(predicted_ids)
 
             num_batches += 1
 
@@ -204,8 +195,6 @@ def do_eval(
     metrics = calculate_metrics(data, predicted_texts)
     log_metrics(metrics, desc)
     avg_loss = total_loss / num_batches
-    # metrics = calculate_metrics(data, all_predictions)
-    # log_metrics(metrics, desc)
     return EvalResult(
         loss=avg_loss,
         metrics=metrics,

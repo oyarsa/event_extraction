@@ -5,6 +5,7 @@ profile = "black"
 [tool.ruff]
 select = [
 	"E",
+	"ERA",
 	"F",
 	"I",
 	"ISC",
