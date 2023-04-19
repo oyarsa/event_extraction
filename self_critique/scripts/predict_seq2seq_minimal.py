@@ -16,6 +16,7 @@ from transformers import (
     AutoTokenizer,
     PreTrainedModel,
     PreTrainedTokenizer,
+    get_linear_schedule_with_warmup,
 )
 
 sys.path.append(str(Path(__file__).parents[1]))
@@ -47,6 +48,8 @@ class Config:
     # Model name from the HuggingFace model hub, or path to a local model saved
     # with `model.save_pretrained`.
     model_name_or_path: str
+    # Directory to save the model, tokeniser, metrics and predictions
+    output_dir: Path
     # Maximum length of the input sequence
     max_seq_length: int = 256
     # Number of beams to use for beam search
@@ -63,8 +66,6 @@ class Config:
     num_train_epochs: int = 20
     # Learning rate
     learning_rate: float = 5e-4
-    # Directory to save the model, tokeniser, metrics and predictions
-    output_dir: Path | None = None
     # Path to the training data
     train_file: Path | None = None
     # Path to the validation data
@@ -73,6 +74,8 @@ class Config:
     test_file: Path | None = None
     # Whether to run prediction at the end
     do_predict: bool = True
+    # Whether to run evaluation
+    do_eval: bool = True
     # Whether to run training
     do_train: bool = True
     # Maximum number of samples used for training
@@ -83,6 +86,10 @@ class Config:
     max_predict_samples: int | None = None
     # Level for logging. Most messages are INFO.
     log_level: str = "info"
+    # Load the best model by token F1 at the end of training
+    load_best_model_at_end: bool = True
+    # Early stopping patience
+    early_stopping_patience: int = 5
 
 
 def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
@@ -220,6 +227,9 @@ def do_train(
 
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
     optimizer = torch.optim.Adam(model.parameters(), lr=5e-4)
+    scheduler = get_linear_schedule_with_warmup(
+        optimizer, 0, config.num_train_epochs * len(train_loader)
+    )
 
     model.train()
 
@@ -234,6 +244,9 @@ def do_train(
             batch_size=config.per_device_eval_batch_size,
         )
 
+    best_f1 = 0
+    early_stopping_counter = 0
+
     for epoch in range(config.num_train_epochs):
         model.train()
 
@@ -241,6 +254,8 @@ def do_train(
         num_batches = 0
 
         for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
+            optimizer.zero_grad()
+
             outputs = model(**inputs)
             logits = outputs.logits
 
@@ -250,7 +265,7 @@ def do_train(
             loss.backward()
 
             optimizer.step()
-            optimizer.zero_grad()
+            scheduler.step()
 
             total_loss += loss.item()
             num_batches += 1
@@ -269,6 +284,25 @@ def do_train(
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
+
+        if eval_result.metrics["f1"] > best_f1:
+            best_f1 = eval_result.metrics["f1"]
+            early_stopping_counter = 0
+
+            logging.info("New best model! Saving to: %s", config.output_dir.resolve())
+            # TODO: Do I need to save the config? Can I do it like this, or do I need
+            # to pass the config as a param just to save it?
+            model.config.save_pretrained(config.output_dir)
+            model.save_pretrained(config.output_dir)
+            tokeniser.save_pretrained(config.output_dir)
+        else:
+            early_stopping_counter += 1
+
+        if early_stopping_counter >= config.early_stopping_patience:
+            logging.info(
+                f"Early stopping: {early_stopping_counter} epochs without improvement"
+            )
+            break
 
     return model
 
@@ -360,6 +394,20 @@ def log_config(config: Config) -> None:
         logging.info(f"{key}: {value}")
 
 
+def load_model(
+    model_name_or_path: str | Path, max_seq_length: int, device: str
+) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
+    model_config = AutoConfig.from_pretrained(model_name_or_path)
+    model = AutoModelForSeq2SeqLM.from_pretrained(
+        model_name_or_path, config=model_config
+    ).to(device)
+    tokeniser = AutoTokenizer.from_pretrained(
+        model_name_or_path, model_max_length=max_seq_length
+    )
+    model.resize_token_embeddings(len(tokeniser))
+    return model, tokeniser
+
+
 def main() -> None:
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -370,18 +418,12 @@ def main() -> None:
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-
+    config.output_dir.mkdir(exist_ok=True, parents=True)
     log_config(config)
 
-    model_config = AutoConfig.from_pretrained(config.model_name_or_path)
-    model = AutoModelForSeq2SeqLM.from_pretrained(
-        config.model_name_or_path, config=model_config
-    ).to(config.device)
-    tokeniser = AutoTokenizer.from_pretrained(
-        config.model_name_or_path, model_max_length=config.max_seq_length
+    model, tokeniser = load_model(
+        config.model_name_or_path, config.max_seq_length, config.device
     )
-    model.resize_token_embeddings(len(tokeniser))
-
     if config.do_train:
         if config.train_file is None:
             raise ValueError("train_file must be specified when training")
@@ -394,43 +436,37 @@ def main() -> None:
         )
 
         model = do_train(model, tokeniser, train_data, eval_data, config)
-        if config.output_dir is not None:
-            logging.info("Saving model to: %s", config.output_dir.resolve())
-            model_config.save_pretrained(config.output_dir)
-            model.save_pretrained(config.output_dir)
-            tokeniser.save_pretrained(config.output_dir)
+        if config.load_best_model_at_end:
+            model, tokeniser = load_model(
+                config.output_dir, config.max_seq_length, config.device
+            )
 
-        if eval_data is not None:
-            result = do_inference(model, tokeniser, eval_data, config, "evaluation")
+    if config.do_eval:
+        if eval_data is None:
+            raise ValueError(
+                "validation_file must be specified when evaluating training"
+            )
+        result = do_inference(model, tokeniser, eval_data, config, "evaluation")
 
-            if config.output_dir is not None:
-                config.output_dir.mkdir(exist_ok=True, parents=True)
-                logging.info(
-                    "Saving evaluation results to: %s", config.output_dir.resolve()
-                )
-                (config.output_dir / "eval_output.json").write_text(
-                    json.dumps(result.predictions)
-                )
-                (config.output_dir / "eval_metrics.json").write_text(
-                    json.dumps(result.metrics)
-                )
+        logging.info("Saving evaluation results to: %s", config.output_dir.resolve())
+        (config.output_dir / "eval_output.json").write_text(
+            json.dumps(result.predictions)
+        )
+        (config.output_dir / "eval_metrics.json").write_text(json.dumps(result.metrics))
 
     if config.do_predict:
         if config.test_file is None:
             raise ValueError("test_file must be specified when training")
         predict_data = json.loads(config.test_file.read_text())["data"]
         result = do_inference(model, tokeniser, predict_data, config, "prediction")
-        if config.output_dir is not None:
-            config.output_dir.mkdir(exist_ok=True, parents=True)
-            logging.info(
-                "Saving prediction results to: %s", config.output_dir.resolve()
-            )
-            (config.output_dir / "predict_output.json").write_text(
-                json.dumps(result.predictions)
-            )
-            (config.output_dir / "predict_metrics.json").write_text(
-                json.dumps(result.metrics)
-            )
+
+        logging.info("Saving prediction results to: %s", config.output_dir.resolve())
+        (config.output_dir / "predict_output.json").write_text(
+            json.dumps(result.predictions)
+        )
+        (config.output_dir / "predict_metrics.json").write_text(
+            json.dumps(result.metrics)
+        )
 
 
 if __name__ == "__main__":
