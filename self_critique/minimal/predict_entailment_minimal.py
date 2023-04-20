@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import sys
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass, fields, is_dataclass
 from pathlib import Path
@@ -20,8 +19,6 @@ from transformers import (
     PreTrainedTokenizer,
     get_linear_schedule_with_warmup,
 )
-
-sys.path.append(str(Path(__file__).parents[1]))
 
 
 def filter_kwargs(cls: type) -> type:
