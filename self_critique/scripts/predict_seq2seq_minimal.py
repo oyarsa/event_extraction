@@ -353,6 +353,7 @@ def do_inference(
     logging.info("Tokenising input")
 
     data = data[: config.max_predict_samples]
+    logging.info("%d samples", len(data))
     loader = preprocess_data(
         tokeniser,
         data,
@@ -362,7 +363,6 @@ def do_inference(
     )
 
     logging.info("Generating output")
-    logging.warning("loader size: %s", len(loader))
 
     predicted_ids: list[torch.Tensor] = []
     for input_batch in tqdm(loader, desc=desc):
