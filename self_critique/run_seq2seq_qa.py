@@ -653,7 +653,7 @@ def main():
         examples: datasets.DatasetDict,
         features: datasets.DatasetDict,
         outputs: EvalLoopOutput,
-        stage: str = "eval",
+        stage: str = "eval",  # pyright: ignore reportUnusedVariable
     ) -> EvalPrediction:
         # Decode the predicted tokens.
         preds = outputs.predictions
