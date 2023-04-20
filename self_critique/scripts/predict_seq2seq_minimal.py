@@ -101,12 +101,6 @@ def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
         logging.info(f"  {k:>{padding}}: {v}")
 
 
-def format_input(d: dict[str, str]) -> str:
-    context = d["context"].lstrip()
-    question = d["question"].lstrip()
-    return f"{context}\n{question}"
-
-
 def preprocess_data(
     tokeniser: PreTrainedTokenizer,
     data: list[dict[str, str]],
@@ -114,7 +108,7 @@ def preprocess_data(
     shuffle: bool,
     batch_size: int,
 ) -> DataLoader:
-    source_texts = [format_input(d) for d in data]
+    source_texts = [f"{d['question'].lstrip()}\n{d['context'].lstrip()}" for d in data]
     target_texts = [d["answers"] for d in data]
 
     model_inputs = tokeniser(
