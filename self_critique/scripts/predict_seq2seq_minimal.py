@@ -255,7 +255,6 @@ def do_train(
             outputs = model(**inputs)
             logits = outputs.logits
 
-            # TODO: Understand why this doesn't work: loss = criterion(logits, inputs["labels"])
             loss = criterion(
                 logits.view(-1, logits.shape[-1]), inputs["labels"].view(-1)
             )

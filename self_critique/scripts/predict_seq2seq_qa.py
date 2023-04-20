@@ -50,6 +50,7 @@ from metric import FGCRCls, ReconstructMetric  # noqa: E402
 from trainer_seq2seq_qa import QuestionAnsweringSeq2SeqTrainer  # noqa: E402
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "true"
 
 
 logger = logging.getLogger(__name__)
