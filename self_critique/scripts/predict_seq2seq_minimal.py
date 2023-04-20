@@ -160,10 +160,8 @@ class EvalResult:
 def do_eval(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
-    epoch: int,
     loader: DataLoader,
     data: list[dict[str, str]],
-    config: Config,
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -240,7 +238,7 @@ def do_train(
             batch_size=config.per_device_eval_batch_size,
         )
 
-    best_f1 = 0
+    best_f1 = -1
     early_stopping_counter = 0
 
     for epoch in range(config.num_train_epochs):
@@ -273,10 +271,8 @@ def do_train(
             eval_result = do_eval(
                 model,
                 tokeniser,
-                epoch,
                 eval_loader,
                 eval_data,
-                config,
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
