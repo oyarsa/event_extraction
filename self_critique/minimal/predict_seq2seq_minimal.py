@@ -227,7 +227,7 @@ def do_train(
             batch_size=config.per_device_eval_batch_size,
         )
 
-    best_f1 = -1
+    best_f1 = -1.0
     early_stopping_counter = 0
 
     for epoch in range(config.num_train_epochs):
