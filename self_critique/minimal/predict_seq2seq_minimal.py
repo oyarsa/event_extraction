@@ -8,7 +8,7 @@ import warnings
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict, cast
 
 import numpy as np
 import simple_parsing
@@ -142,26 +142,60 @@ def preprocess_data(
     )
 
     dataset = Seq2SeqDataset(
-        input_tokens=model_inputs, target_tokens=labels, device=config.device
+        input_tokens=model_inputs,
+        target_tokens=labels,
+        device=config.device,
+        ids=[d.id for d in data],
+        answers=[d.answers for d in data],
+        question_types=[d.question_type for d in data],
+        contexts=[d.context for d in data],
     )
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     return loader
+
+
+class Seq2SeqDatasetEntry(TypedDict):
+    input_ids: torch.Tensor
+    attention_mask: torch.Tensor
+    labels: torch.Tensor
+    id: str
+    answers: str
+    question_type: str
+    context: str
+
+
+class Seq2SeqDatasetSeries(TypedDict):
+    input_ids: torch.Tensor
+    attention_mask: torch.Tensor
+    labels: torch.Tensor
+    id: list[str]
+    answers: list[str]
+    question_type: list[str]
+    context: list[str]
 
 
 @dataclass
 class Seq2SeqDataset(Dataset):
     input_tokens: Mapping[str, torch.Tensor]
     target_tokens: Mapping[str, torch.Tensor]
+    ids: list[str]
+    answers: list[str]
+    question_types: list[str]
+    contexts: list[str]
     device: str
 
     def __len__(self) -> int:
         return self.input_tokens["input_ids"].size(0)
 
-    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
+    def __getitem__(self, idx: int) -> Seq2SeqDatasetEntry:
         return {
             "input_ids": self.input_tokens["input_ids"][idx].to(self.device),
             "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
             "labels": self.target_tokens["input_ids"][idx].to(self.device),
+            "id": self.ids[idx],
+            "answers": self.answers[idx],
+            "question_type": self.question_types[idx],
+            "context": self.contexts[idx],
         }
 
 
@@ -172,11 +206,10 @@ class EvalResult:
     predictions: list[str]
 
 
-def do_eval(
+def eval(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
-    data: list[Seq2SeqEntry],
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -186,9 +219,14 @@ def do_eval(
     num_batches = 0
 
     all_predictions: list[torch.Tensor] = []
+    all_data: list[Seq2SeqDatasetSeries] = []
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
-            outputs = model(**inputs)
+            outputs = model(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                labels=inputs["labels"],
+            )
 
             # CrossEntropy wants [batch * seq_len, num_classes] and [batch * seq_len]
             loss = criterion(
@@ -201,14 +239,16 @@ def do_eval(
 
             predicted_ids = torch.argmax(outputs.logits, dim=-1)
             all_predictions.extend(predicted_ids)
+            all_data.append(inputs)
 
             num_batches += 1
 
     logging.info("Decoding output")
     predicted_texts = tokeniser.batch_decode(all_predictions, skip_special_tokens=True)
 
+    model_data = collect_model_data(all_data)
     logging.info("Calculating metrics")
-    metrics = calculate_metrics(data, predicted_texts)
+    metrics = calculate_metrics(model_data, predicted_texts)
     log_metrics(metrics, desc)
     avg_loss = total_loss / num_batches
     return EvalResult(
@@ -218,7 +258,18 @@ def do_eval(
     )
 
 
-def do_train(
+def collect_model_data(
+    all_data: list[Seq2SeqDatasetSeries],
+) -> list[Seq2SeqDatasetEntry]:
+    model_data: list[Seq2SeqDatasetEntry] = []
+    for d in all_data:
+        for i in range(len(d["id"])):
+            entry = {k: d[k][i] for k in d}
+            model_data.append(cast(Seq2SeqDatasetEntry, entry))
+    return model_data
+
+
+def train(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     train_data: list[Seq2SeqEntry],
@@ -230,13 +281,13 @@ def do_train(
         tokeniser,
         train_data,
         config,
-        shuffle=False,
+        shuffle=True,
         batch_size=config.per_device_train_batch_size,
         desc="training",
     )
 
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
-    optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
     scheduler = get_linear_schedule_with_warmup(
         optimizer, 0, config.num_train_epochs * len(train_loader)
     )
@@ -250,7 +301,7 @@ def do_train(
             tokeniser,
             eval_data,
             config,
-            shuffle=False,
+            shuffle=True,
             batch_size=config.per_device_eval_batch_size,
             desc="evaluation",
         )
@@ -267,7 +318,11 @@ def do_train(
         for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
             optimizer.zero_grad()
 
-            outputs = model(**inputs)
+            outputs = model(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                labels=inputs["labels"],
+            )
             logits = outputs.logits
 
             loss = criterion(
@@ -285,11 +340,10 @@ def do_train(
         logging.info(f"Epoch {epoch+1}, training loss: {avg_loss}")
 
         if eval_data and eval_loader is not None:
-            eval_result = do_eval(
+            eval_result = eval(
                 model,
                 tokeniser,
                 eval_loader,
-                eval_data,
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
@@ -327,18 +381,20 @@ def save_model(
     tokeniser.save_pretrained(output_dir)
 
 
-def calculate_metrics(data: list[Seq2SeqEntry], output: list[str]) -> dict[str, float]:
+def calculate_metrics(
+    data: list[Seq2SeqDatasetEntry], output: list[str]
+) -> dict[str, float]:
     references: list[metric.MetricReference] = [
         {
-            "id": entry.id,
-            "answers": entry.answers,
-            "question_type": entry.question_type,
+            "id": entry["id"],
+            "answers": entry["answers"],
+            "question_type": entry["question_type"],
         }
         for entry in data
     ]
     predictions: list[metric.MetricPrediction] = [
         {
-            "id": entry.id,
+            "id": entry["id"],
             "prediction_text": out,
         }
         for entry, out in zip(data, output)
@@ -353,12 +409,13 @@ class InferenceResult:
     metrics: dict[str, float]
 
 
-def do_inference(
+def infer(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     data: list[Seq2SeqEntry],
     config: Config,
     desc: str,
+    max_samples: int | None = None,
 ) -> InferenceResult:
     """Perform prediction on data.
 
@@ -368,7 +425,7 @@ def do_inference(
     logging.info("*** %s ***", desc)
     model.eval()
 
-    data = data[: config.max_predict_samples]
+    data = data[:max_samples]
     logging.info("%d samples", len(data))
     loader = preprocess_data(
         tokeniser,
@@ -380,21 +437,26 @@ def do_inference(
     )
 
     predicted_ids: list[torch.Tensor] = []
-    for input_batch in tqdm(loader, desc=desc):
+    all_data: list[Seq2SeqDatasetSeries] = []
+
+    for inputs in tqdm(loader, desc=desc):
         batch_predicted_ids = model.generate(
-            input_batch["input_ids"],
+            inputs["input_ids"],
             num_beams=config.generation_num_beams or model.config.num_beams,
             max_length=config.max_seq_length,
         )
         predicted_ids.extend(batch_predicted_ids)
+        all_data.append(inputs)
 
     predicted_texts = tokeniser.batch_decode(predicted_ids, skip_special_tokens=True)
-    metrics = calculate_metrics(data, predicted_texts)
+
+    model_data = collect_model_data(all_data)
+    metrics = calculate_metrics(model_data, predicted_texts)
     log_metrics(metrics, desc)
 
     output = [
-        {"input": d.context, "output": out, "gold": d.answers}
-        for out, d in zip(predicted_texts, data)
+        {"input": d["context"], "output": out, "gold": d["answers"]}
+        for out, d in zip(predicted_texts, model_data)
     ]
     return InferenceResult(predictions=output, metrics=metrics)
 
@@ -429,6 +491,13 @@ def set_seed(seed: int) -> None:
     torch.cuda.manual_seed_all(seed)
 
 
+def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
+    desc = desc.lower()
+    logging.info("Saving %s results to: %s", desc, output_dir.resolve())
+    (output_dir / f"{desc}_output.json").write_text(json.dumps(result.predictions))
+    (output_dir / f"{desc}_metrics.json").write_text(json.dumps(result.metrics))
+
+
 def main() -> None:
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -451,16 +520,18 @@ def main() -> None:
         config.model_name_or_path, config.max_seq_length, config.device
     )
 
-    eval_data: list[Seq2SeqEntry] | None = None
-    if config.do_train:
-        if config.train_file is None:
-            raise ValueError("train_file must be specified when training")
-
+    train_data, eval_data, predict_data = None, None, None
+    if config.train_file is not None:
         train_data = load_data(config.train_file)
-        if config.validation_file is not None:
-            eval_data = load_data(config.validation_file)
+    if config.validation_file is not None:
+        eval_data = load_data(config.validation_file)
+    if config.test_file is not None:
+        predict_data = load_data(config.test_file)
 
-        model = do_train(model, tokeniser, train_data, eval_data, config)
+    if config.do_train:
+        if train_data is None:
+            raise ValueError("train_file must be specified when training")
+        model = train(model, tokeniser, train_data, eval_data, config)
         if config.load_best_model_at_end:
             logging.info("Loading best model from %s", config.output_dir.resolve())
             model, tokeniser = load_model(
@@ -472,27 +543,23 @@ def main() -> None:
             raise ValueError(
                 "validation_file must be specified when evaluating training"
             )
-        result = do_inference(model, tokeniser, eval_data, config, "evaluation")
-
-        logging.info("Saving evaluation results to: %s", config.output_dir.resolve())
-        (config.output_dir / "eval_output.json").write_text(
-            json.dumps(result.predictions)
+        result = infer(
+            model, tokeniser, eval_data, config, "evaluation", config.max_eval_samples
         )
-        (config.output_dir / "eval_metrics.json").write_text(json.dumps(result.metrics))
+        save_results("evaluation", config.output_dir, result)
 
     if config.do_predict:
-        if config.test_file is None:
+        if predict_data is None:
             raise ValueError("test_file must be specified when training")
-        predict_data = load_data(config.test_file)
-        result = do_inference(model, tokeniser, predict_data, config, "prediction")
-
-        logging.info("Saving prediction results to: %s", config.output_dir.resolve())
-        (config.output_dir / "predict_output.json").write_text(
-            json.dumps(result.predictions)
+        result = infer(
+            model,
+            tokeniser,
+            predict_data,
+            config,
+            "prediction",
+            config.max_predict_samples,
         )
-        (config.output_dir / "predict_metrics.json").write_text(
-            json.dumps(result.metrics)
-        )
+        save_results("prediction", config.output_dir, result)
 
 
 if __name__ == "__main__":
