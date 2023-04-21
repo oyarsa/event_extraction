@@ -110,7 +110,7 @@ def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
 
     padding = max(len(k) for k in metrics)
     for k, v in metrics.items():
-        logging.info(f"  {k:>{padding}}: {v}")
+        logging.info(f"    {k:>{padding}}: {v}")
 
 
 def preprocess_data(
@@ -402,7 +402,7 @@ def do_inference(
 def log_config(config: Config) -> None:
     logging.info(">>>> CONFIGURATON")
     for key, value in asdict(config).items():
-        logging.info(f"{key}: {value}")
+        logging.info(f"  {key}: {value}")
 
 
 def load_model(

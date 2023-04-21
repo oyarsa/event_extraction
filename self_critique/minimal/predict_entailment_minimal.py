@@ -12,6 +12,7 @@ from typing import Any
 import numpy as np
 import simple_parsing
 import torch
+import torch.utils.data
 import transformers
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from torch.utils.data import DataLoader, Dataset
@@ -91,7 +92,7 @@ def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
 
     padding = max(len(k) for k in metrics)
     for k, v in metrics.items():
-        logging.info(f"  {k:>{padding}}: {v}")
+        logging.info(f"    {k:>{padding}}: {v}")
 
 
 @dataclass
@@ -115,6 +116,12 @@ class Labeller:
         self.id2label = {i: label for i, label in enumerate(label_list)}
         self.label2id = {label: i for i, label in self.id2label.items()}
 
+    def encode(self, txt_labels: Iterable[str]) -> list[int]:
+        return [self.label2id[label] for label in txt_labels]
+
+    def decode(self, int_labels: Iterable[int]) -> list[str]:
+        return [self.id2label[label] for label in int_labels]
+
 
 def preprocess_data(
     tokeniser: PreTrainedTokenizer,
@@ -135,10 +142,12 @@ def preprocess_data(
         truncation=True,
         max_length=config.max_seq_length,
     )
-    labels = torch.tensor([labeller.label2id[d.label] for d in data])
+    labels = labeller.encode(d.label for d in data)
 
     dataset = EntailmentDataset(
-        input_tokens=model_inputs, labels=labels, device=config.device
+        input_tokens=model_inputs,
+        labels=torch.tensor(labels),
+        device=config.device,
     )
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     return loader
@@ -153,7 +162,7 @@ class EntailmentDataset(Dataset):
     def __len__(self) -> int:
         return self.input_tokens["input_ids"].size(0)
 
-    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
+    def __getitem__(self, idx: int) -> dict[str, Any]:
         return {
             "input_ids": self.input_tokens["input_ids"][idx].to(self.device),
             "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
@@ -168,10 +177,9 @@ class EvalResult:
     predictions: list[str]
 
 
-def do_eval(
+def eval(
     model: PreTrainedModel,
     loader: DataLoader,
-    data: list[EntailmentEntry],
     labeller: Labeller,
     desc: str | None = None,
 ) -> EvalResult:
@@ -182,23 +190,27 @@ def do_eval(
     num_batches = 0
 
     all_predictions: list[int] = []
+    all_labels: list[int] = []
+
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
             outputs = model(**inputs)
-
             loss = criterion(outputs.logits, inputs["labels"])
             total_loss += loss.item()
 
             preds = torch.argmax(outputs.logits, dim=-1)
-            all_predictions.extend(int(p.item()) for p in preds)
+
+            all_predictions.extend(int(x.item()) for x in preds)
+            all_labels.extend(int(x.item()) for x in inputs["labels"])
 
             num_batches += 1
 
-    txt_predictions = [labeller.id2label[p] for p in all_predictions]
-    metrics = calculate_metrics(data, txt_predictions)
+    metrics = calculate_metrics(all_labels, all_predictions)
     log_metrics(metrics, desc)
 
     avg_loss = total_loss / num_batches
+    txt_predictions = labeller.decode(all_predictions)
+
     return EvalResult(
         loss=avg_loss,
         metrics=metrics,
@@ -206,7 +218,7 @@ def do_eval(
     )
 
 
-def do_train(
+def train(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     train_data: list[EntailmentEntry],
@@ -220,7 +232,7 @@ def do_train(
         train_data,
         config,
         labeller,
-        shuffle=False,
+        shuffle=True,
         batch_size=config.per_device_train_batch_size,
         desc="training",
     )
@@ -242,7 +254,7 @@ def do_train(
             eval_data,
             config,
             labeller,
-            shuffle=False,
+            shuffle=True,
             batch_size=config.per_device_eval_batch_size,
             desc="evaluation",
         )
@@ -269,9 +281,7 @@ def do_train(
             optimizer.zero_grad()
 
             outputs = model(**inputs)
-            logits = outputs.logits
-
-            loss = criterion(logits, inputs["labels"])
+            loss = criterion(outputs.logits, inputs["labels"])
             loss.backward()
 
             optimizer.step()
@@ -284,10 +294,9 @@ def do_train(
         logging.info(f"Epoch {epoch+1}, training loss: {avg_loss}")
 
         if eval_data and eval_loader is not None:
-            eval_result = do_eval(
+            eval_result = eval(
                 model,
                 eval_loader,
-                eval_data,
                 labeller,
                 desc=f"Epoch {epoch+1} evaluation",
             )
@@ -326,10 +335,7 @@ def save_model(
     tokeniser.save_pretrained(output_dir)
 
 
-def calculate_metrics(
-    data: list[EntailmentEntry], preds: list[str]
-) -> dict[str, float]:
-    gold = [d.label for d in data]
+def calculate_metrics(gold: list[int], preds: list[int]) -> dict[str, float]:
     accuracy = accuracy_score(gold, preds)
     precision, recall, f1, _ = precision_recall_fscore_support(
         gold, preds, average="macro", zero_division=0
@@ -348,7 +354,7 @@ class InferenceResult:
     metrics: dict[str, float]
 
 
-def do_inference(
+def infer(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     data: list[EntailmentEntry],
@@ -371,21 +377,28 @@ def do_inference(
         data,
         config,
         labeller,
+        # This must be false or the output will be broken. See the TODO below.
         shuffle=False,
         batch_size=config.per_device_train_batch_size,
         desc=desc,
     )
 
     predictions: list[int] = []
-    for input_batch in tqdm(loader, desc=desc):
-        logits = model(**input_batch)
+    labels: list[int] = []
+    for inputs in tqdm(loader, desc=desc):
+        logits = model(**inputs)
         preds = torch.argmax(logits.logits, -1)
-        predictions.extend(int(p.item()) for p in preds)
+        predictions.extend(int(x.item()) for x in preds)
+        labels.extend(int(x.item()) for x in inputs["labels"])
 
-    txt_predictions = [labeller.id2label[p] for p in predictions]
-    metrics = calculate_metrics(data, txt_predictions)
+    metrics = calculate_metrics(labels, predictions)
     log_metrics(metrics, desc)
 
+    txt_predictions = labeller.decode(predictions)
+    # TODO: This is broken because `data` and `txt_predictions` will have different
+    # orders. I need something better to join the data with the predictions. I might
+    # have to add the id to the dataset.
+    # This will be all right as long as I never shuffle the inference dataset
     output = [{**asdict(d), "prediction": out} for out, d in zip(txt_predictions, data)]
     return InferenceResult(predictions=output, metrics=metrics)
 
@@ -393,7 +406,7 @@ def do_inference(
 def log_config(config: Config) -> None:
     logging.info(">>>> CONFIGURATON")
     for key, value in asdict(config).items():
-        logging.info(f"{key}: {value}")
+        logging.info(f"  {key}: {value}")
 
 
 def load_model(
@@ -446,9 +459,12 @@ def main() -> None:
     )
     log_config(config)
 
+    # Remove annoying messages about tokenisers and unititialised weights
     warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
     transformers.logging.set_verbosity_error()
 
+    # TODO: I think this is erasing the contents of the directory, if there are
+    # any. That shouldn't happen. Needs investigation.
     config.output_dir.mkdir(exist_ok=True, parents=True)
 
     train_data, eval_data, predict_data = None, None, None
@@ -471,7 +487,7 @@ def main() -> None:
         if train_data is None:
             raise ValueError("train_file must be specified when training")
 
-        model = do_train(model, tokeniser, train_data, eval_data, config, labeller)
+        model = train(model, tokeniser, train_data, eval_data, config, labeller)
         if config.load_best_model_at_end:
             logging.info("Loading best model from %s", config.output_dir.resolve())
             model, tokeniser = load_model(config.output_dir, config.device, labeller)
@@ -481,17 +497,13 @@ def main() -> None:
             raise ValueError(
                 "validation_file must be specified when evaluating training"
             )
-        result = do_inference(
-            model, tokeniser, eval_data, config, labeller, "evaluation"
-        )
+        result = infer(model, tokeniser, eval_data, config, labeller, "evaluation")
         save_results("eval", config.output_dir, result)
 
     if config.do_predict:
         if predict_data is None:
             raise ValueError("test_file must be specified when training")
-        result = do_inference(
-            model, tokeniser, predict_data, config, labeller, "prediction"
-        )
+        result = infer(model, tokeniser, predict_data, config, labeller, "prediction")
         save_results("predict", config.output_dir, result)
 
 
