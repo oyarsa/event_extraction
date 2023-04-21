@@ -81,6 +81,22 @@ class Config:
                 setattr(self, f.name, kwargs[f.name])
 
 
+@dataclass
+class Seq2SeqEntry:
+    id: str
+    context: str
+    question: str
+    answers: str
+    question_type: str
+
+
+def load_data(file_path: Path) -> list[Seq2SeqEntry]:
+    data = json.loads(file_path.read_text())
+    if "data" in data:
+        data = data["data"]
+    return [Seq2SeqEntry(**d) for d in data]
+
+
 def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
     desc = desc or "metrics"
     logging.info(f">>>> {desc.upper()}")
@@ -92,13 +108,13 @@ def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
 
 def preprocess_data(
     tokeniser: PreTrainedTokenizer,
-    data: list[dict[str, str]],
+    data: list[Seq2SeqEntry],
     config: Config,
     shuffle: bool,
     batch_size: int,
 ) -> DataLoader:
-    source_texts = [f"{d['question'].lstrip()}\n{d['context'].lstrip()}" for d in data]
-    target_texts = [d["answers"] for d in data]
+    source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
+    target_texts = [d.answers for d in data]
 
     model_inputs = tokeniser(
         source_texts,
@@ -150,7 +166,7 @@ def do_eval(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
-    data: list[dict[str, str]],
+    data: list[Seq2SeqEntry],
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -195,8 +211,8 @@ def do_eval(
 def do_train(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
-    train_data: list[dict[str, str]],
-    eval_data: list[dict[str, str]] | None,
+    train_data: list[Seq2SeqEntry],
+    eval_data: list[Seq2SeqEntry] | None,
     config: Config,
 ) -> PreTrainedModel:
     train_data = train_data[: config.max_train_samples]
@@ -299,23 +315,21 @@ def save_model(
     tokeniser.save_pretrained(output_dir)
 
 
-def calculate_metrics(
-    data: list[dict[str, str]], output: list[str]
-) -> dict[str, float]:
+def calculate_metrics(data: list[Seq2SeqEntry], output: list[str]) -> dict[str, float]:
     references: list[metric.MetricReference] = [
         {
-            "id": inp["id"],
-            "answers": inp["answers"],
-            "question_type": inp["question_type"],
+            "id": entry.id,
+            "answers": entry.answers,
+            "question_type": entry.question_type,
         }
-        for inp in data
+        for entry in data
     ]
     predictions: list[metric.MetricPrediction] = [
         {
-            "id": inp["id"],
+            "id": entry.id,
             "prediction_text": out,
         }
-        for inp, out in zip(data, output)
+        for entry, out in zip(data, output)
     ]
 
     return metric.FGCRCls()._compute(predictions=predictions, references=references)
@@ -330,7 +344,7 @@ class InferenceResult:
 def do_inference(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
-    data: list[dict[str, str]],
+    data: list[Seq2SeqEntry],
     config: Config,
     desc: str,
 ) -> InferenceResult:
@@ -372,7 +386,7 @@ def do_inference(
     metrics = calculate_metrics(data, predicted_texts)
     log_metrics(metrics, desc)
     output = [
-        {"input": d["context"], "output": out, "gold": d["answers"]}
+        {"input": d.context, "output": out, "gold": d.answers}
         for out, d in zip(predicted_texts, data)
     ]
     return InferenceResult(predictions=output, metrics=metrics)
@@ -415,14 +429,14 @@ def main() -> None:
         config.model_name_or_path, config.max_seq_length, config.device
     )
 
-    eval_data: list[dict[str, str]] | None = None
+    eval_data: list[Seq2SeqEntry] | None = None
     if config.do_train:
         if config.train_file is None:
             raise ValueError("train_file must be specified when training")
 
-        train_data = json.loads(config.train_file.read_text())["data"]
+        train_data = load_data(config.train_file)
         if config.validation_file is not None:
-            eval_data = json.loads(config.validation_file.read_text())["data"]
+            eval_data = load_data(config.validation_file)
 
         model = do_train(model, tokeniser, train_data, eval_data, config)
         if config.load_best_model_at_end:
@@ -447,7 +461,7 @@ def main() -> None:
     if config.do_predict:
         if config.test_file is None:
             raise ValueError("test_file must be specified when training")
-        predict_data = json.loads(config.test_file.read_text())["data"]
+        predict_data = load_data(config.test_file)
         result = do_inference(model, tokeniser, predict_data, config, "prediction")
 
         logging.info("Saving prediction results to: %s", config.output_dir.resolve())
