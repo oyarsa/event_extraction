@@ -2,11 +2,14 @@
 import json
 import logging
 import os
+import random
 import sys
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import simple_parsing
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -73,6 +76,8 @@ class Config:
     load_best_model_at_end: bool = True
     # Early stopping patience
     early_stopping_patience: int = 5
+    # Random seed for reproducibility
+    seed: int = 0
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -140,8 +145,8 @@ def preprocess_data(
 
 @dataclass
 class Seq2SeqDataset(Dataset):
-    input_tokens: dict[str, torch.Tensor]
-    target_tokens: dict[str, torch.Tensor]
+    input_tokens: Mapping[str, torch.Tensor]
+    target_tokens: Mapping[str, torch.Tensor]
     device: str
 
     def __len__(self) -> int:
@@ -406,10 +411,19 @@ def load_model(
     return model, tokeniser
 
 
+def set_seed(seed: int) -> None:
+    "Set random seed for reproducibility."
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+
 def main() -> None:
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
     config = simple_parsing.parse(Config, add_config_path_arg=True)
+    set_seed(config.seed)
 
     logging.basicConfig(
         level=logging.getLevelName(config.log_level.upper()),

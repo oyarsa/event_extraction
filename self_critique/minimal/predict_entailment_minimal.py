@@ -2,11 +2,13 @@
 import json
 import logging
 import os
+import random
 from collections.abc import Iterable, Mapping
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import simple_parsing
 import torch
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
@@ -71,6 +73,8 @@ class Config:
     load_best_model_at_end: bool = True
     # Early stopping patience
     early_stopping_patience: int = 5
+    # Random seed for reproducibility
+    seed: int = 0
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -216,14 +220,7 @@ def do_train(
     )
 
     criterion = torch.nn.CrossEntropyLoss()
-    # TODO
-    optimizer = torch.optim.AdamW(
-        model.parameters(),
-        lr=config.learning_rate,
-        betas=(0.9, 0.999),
-        eps=1e-8,
-        weight_decay=0.0,
-    )
+    optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
     num_optimisation_steps = config.num_train_epochs * len(train_loader)
     scheduler = get_linear_schedule_with_warmup(
         optimizer=optimizer,
@@ -419,10 +416,19 @@ def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
     (output_dir / f"{desc}_metrics.json").write_text(json.dumps(result.metrics))
 
 
+def set_seed(seed: int) -> None:
+    "Set random seed for reproducibility."
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+
 def main() -> None:
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
     config = simple_parsing.parse(Config, add_config_path_arg=True)
+    set_seed(config.seed)
 
     logging.basicConfig(
         level=logging.getLevelName(config.log_level.upper()),
