@@ -4,6 +4,7 @@ import logging
 import os
 import random
 import sys
+import warnings
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
@@ -12,6 +13,7 @@ from typing import Any
 import numpy as np
 import simple_parsing
 import torch
+import transformers
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 from transformers import (
@@ -117,7 +119,10 @@ def preprocess_data(
     config: Config,
     shuffle: bool,
     batch_size: int,
+    desc: str | None = None,
 ) -> DataLoader:
+    desc = desc or ""
+    logging.info(f"Preprocessing {desc} data")
     source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
     target_texts = [d.answers for d in data]
 
@@ -227,6 +232,7 @@ def do_train(
         config,
         shuffle=False,
         batch_size=config.per_device_train_batch_size,
+        desc="training",
     )
 
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
@@ -246,6 +252,7 @@ def do_train(
             config,
             shuffle=False,
             batch_size=config.per_device_eval_batch_size,
+            desc="evaluation",
         )
 
     best_f1 = -1.0
@@ -369,6 +376,7 @@ def do_inference(
         config,
         shuffle=False,
         batch_size=config.per_device_train_batch_size,
+        desc=desc,
     )
 
     predicted_ids: list[torch.Tensor] = []
@@ -400,6 +408,8 @@ def log_config(config: Config) -> None:
 def load_model(
     model_name_or_path: str | Path, max_seq_length: int, device: str
 ) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
+    logging.info("Loading model from %s", model_name_or_path)
+
     model_config = AutoConfig.from_pretrained(model_name_or_path)
     model = AutoModelForSeq2SeqLM.from_pretrained(
         model_name_or_path, config=model_config
@@ -430,8 +440,12 @@ def main() -> None:
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-    config.output_dir.mkdir(exist_ok=True, parents=True)
     log_config(config)
+
+    warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
+    transformers.logging.set_verbosity_error()
+
+    config.output_dir.mkdir(exist_ok=True, parents=True)
 
     model, tokeniser = load_model(
         config.model_name_or_path, config.max_seq_length, config.device

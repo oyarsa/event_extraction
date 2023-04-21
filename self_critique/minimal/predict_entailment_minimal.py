@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import random
+import warnings
 from collections.abc import Iterable, Mapping
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
@@ -11,6 +12,7 @@ from typing import Any
 import numpy as np
 import simple_parsing
 import torch
+import transformers
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
@@ -121,7 +123,10 @@ def preprocess_data(
     labeller: Labeller,
     shuffle: bool,
     batch_size: int,
+    desc: str | None = None,
 ) -> DataLoader:
+    desc = desc or ""
+    logging.info(f"Preprocessing {desc} data")
     model_inputs = tokeniser(
         [d.sentence1 for d in data],
         [d.sentence2 for d in data],
@@ -217,6 +222,7 @@ def do_train(
         labeller,
         shuffle=False,
         batch_size=config.per_device_train_batch_size,
+        desc="training",
     )
 
     criterion = torch.nn.CrossEntropyLoss()
@@ -238,6 +244,7 @@ def do_train(
             labeller,
             shuffle=False,
             batch_size=config.per_device_eval_batch_size,
+            desc="evaluation",
         )
 
     best_f1 = -1.0
@@ -253,13 +260,12 @@ def do_train(
     for epoch in range(config.num_train_epochs):
         model.train()
 
-        total_loss = 0
-        num_batches = 0
         logging.info(f"Epoch {epoch+1} learning rate: {scheduler.get_last_lr()[0]}")
 
-        for i, inputs in enumerate(
-            tqdm(train_loader, desc=f"Epoch {epoch+1} training")
-        ):
+        total_loss = 0
+        num_batches = 0
+
+        for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
             optimizer.zero_grad()
 
             outputs = model(**inputs)
@@ -367,6 +373,7 @@ def do_inference(
         labeller,
         shuffle=False,
         batch_size=config.per_device_train_batch_size,
+        desc=desc,
     )
 
     predictions: list[int] = []
@@ -392,6 +399,8 @@ def log_config(config: Config) -> None:
 def load_model(
     model_name_or_path: str | Path, device: str, labeller: Labeller
 ) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
+    logging.info("Loading model from %s", model_name_or_path)
+
     config = AutoConfig.from_pretrained(
         model_name_or_path, num_labels=labeller.num_labels, revision="main"
     )
@@ -436,6 +445,10 @@ def main() -> None:
         datefmt="%Y-%m-%d %H:%M:%S",
     )
     log_config(config)
+
+    warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
+    transformers.logging.set_verbosity_error()
+
     config.output_dir.mkdir(exist_ok=True, parents=True)
 
     train_data, eval_data, predict_data = None, None, None
