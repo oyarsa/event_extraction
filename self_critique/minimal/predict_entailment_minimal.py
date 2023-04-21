@@ -1,8 +1,9 @@
+# pyright: basic
 import json
 import logging
 import os
 from collections.abc import Iterable
-from dataclasses import asdict, dataclass, fields, is_dataclass
+from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
 
@@ -21,23 +22,6 @@ from transformers import (
 )
 
 
-def filter_kwargs(cls: type) -> type:
-    if not is_dataclass(cls):
-        raise TypeError("filter_kwargs should only be used with dataclasses")
-
-    original_init = cls.__init__  # type: ignore
-
-    def new_init(cls: type, **kwargs: dict[str, Any]) -> None:
-        filtered_kwargs = {
-            f.name: kwargs[f.name] for f in fields(cls) if f.name in kwargs
-        }
-        return original_init(cls, **filtered_kwargs)
-
-    cls.__init__ = new_init  # type: ignore
-    return cls
-
-
-@filter_kwargs
 @dataclass
 class Config:
     """Configuration for the model training, evaluation and prediction."""
@@ -87,6 +71,12 @@ class Config:
     load_best_model_at_end: bool = True
     # Early stopping patience
     early_stopping_patience: int = 5
+
+    def __init__(self, **kwargs: Any) -> None:
+        "Ignore unknown arguments"
+        for f in fields(self):
+            if f.name in kwargs:
+                setattr(self, f.name, kwargs[f.name])
 
 
 def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
@@ -173,7 +163,7 @@ def do_eval(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
-    data: list[dict[str, str]],
+    data: list[EntailmentEntry],
     labeller: Labeller,
     desc: str | None = None,
 ) -> EvalResult:
@@ -183,7 +173,7 @@ def do_eval(
     total_loss = 0
     num_batches = 0
 
-    all_predictions: list[torch.Tensor] = []
+    all_predictions: list[int] = []
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
             outputs = model(**inputs)
@@ -192,7 +182,7 @@ def do_eval(
             total_loss += loss.item()
 
             preds = torch.argmax(outputs.logits, dim=-1)
-            all_predictions.extend(p.item() for p in preds)
+            all_predictions.extend(int(p.item()) for p in preds)
 
             num_batches += 1
 
@@ -206,15 +196,15 @@ def do_eval(
     return EvalResult(
         loss=avg_loss,
         metrics=metrics,
-        predictions=all_predictions,
+        predictions=txt_predictions,
     )
 
 
 def do_train(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
-    train_data: list[dict[str, str]],
-    eval_data: list[dict[str, str]] | None,
+    train_data: list[EntailmentEntry],
+    eval_data: list[EntailmentEntry] | None,
     config: Config,
     labeller: Labeller,
 ) -> PreTrainedModel:
@@ -289,28 +279,41 @@ def do_train(
             )
             logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
 
-        if eval_result.metrics["accuracy"] > best_acc:
-            best_acc = eval_result.metrics["accuracy"]
-            early_stopping_counter = 0
+            if eval_result.metrics["accuracy"] > best_acc:
+                best_acc = eval_result.metrics["accuracy"]
+                early_stopping_counter = 0
 
-            logging.info("New best model! Saving to: %s", config.output_dir.resolve())
-            model.config.save_pretrained(config.output_dir)
-            model.save_pretrained(config.output_dir)
-            tokeniser.save_pretrained(config.output_dir)
-        else:
-            early_stopping_counter += 1
+                logging.info(
+                    "New best model! Saving to: %s", config.output_dir.resolve()
+                )
+                save_model(model, tokeniser, config.output_dir)
+            else:
+                early_stopping_counter += 1
 
-        if early_stopping_counter >= config.early_stopping_patience:
-            logging.info(
-                f"Early stopping: {early_stopping_counter} epochs without improvement"
-            )
-            break
+            if early_stopping_counter >= config.early_stopping_patience:
+                logging.info(
+                    f"Early stopping: {early_stopping_counter} epochs without improvement"
+                )
+                break
+
+    # Either we're not saving based on eval accuracy, or we're at the end of training
+    # and we haven't saved yet
+    if best_acc == -1:
+        save_model(model, tokeniser, config.output_dir)
 
     return model
 
 
+def save_model(
+    model: PreTrainedModel, tokeniser: PreTrainedTokenizer, output_dir: Path
+) -> None:
+    model.config.save_pretrained(output_dir)
+    model.save_pretrained(output_dir)
+    tokeniser.save_pretrained(output_dir)
+
+
 def calculate_metrics(
-    data: list[EntailmentEntry], preds: list[int]
+    data: list[EntailmentEntry], preds: list[str]
 ) -> dict[str, float]:
     gold = [d.label for d in data]
     accuracy = accuracy_score(gold, preds)
@@ -334,7 +337,7 @@ class InferenceResult:
 def do_inference(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
-    data: list[dict[str, str]],
+    data: list[EntailmentEntry],
     config: Config,
     labeller: Labeller,
     desc: str,
@@ -362,11 +365,11 @@ def do_inference(
 
     logging.info("Generating output")
 
-    predictions: list[torch.Tensor] = []
+    predictions: list[int] = []
     for input_batch in tqdm(loader, desc=desc):
         logits = model(**input_batch)
-        preds = torch.argmax(logits.logits, axis=-1)
-        predictions.extend(p.item() for p in preds)
+        preds = torch.argmax(logits.logits, -1)
+        predictions.extend(int(p.item()) for p in preds)
 
     logging.info("Calculating metrics")
     txt_predictions = [labeller.id2label[p] for p in predictions]
@@ -414,8 +417,8 @@ def main() -> None:
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-    config.output_dir.mkdir(exist_ok=True, parents=True)
     log_config(config)
+    config.output_dir.mkdir(exist_ok=True, parents=True)
 
     train_data, eval_data, predict_data = None, None, None
     if config.train_file is not None:
