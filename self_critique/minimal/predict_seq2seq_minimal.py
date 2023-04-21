@@ -144,11 +144,8 @@ def preprocess_data(
     dataset = Seq2SeqDataset(
         input_tokens=model_inputs,
         target_tokens=labels,
+        data=data,
         device=config.device,
-        ids=[d.id for d in data],
-        answers=[d.answers for d in data],
-        question_types=[d.question_type for d in data],
-        contexts=[d.context for d in data],
     )
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     return loader
@@ -178,10 +175,7 @@ class Seq2SeqDatasetSeries(TypedDict):
 class Seq2SeqDataset(Dataset):
     input_tokens: Mapping[str, torch.Tensor]
     target_tokens: Mapping[str, torch.Tensor]
-    ids: list[str]
-    answers: list[str]
-    question_types: list[str]
-    contexts: list[str]
+    data: list[Seq2SeqEntry]
     device: str
 
     def __len__(self) -> int:
@@ -192,10 +186,10 @@ class Seq2SeqDataset(Dataset):
             "input_ids": self.input_tokens["input_ids"][idx].to(self.device),
             "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
             "labels": self.target_tokens["input_ids"][idx].to(self.device),
-            "id": self.ids[idx],
-            "answers": self.answers[idx],
-            "question_type": self.question_types[idx],
-            "context": self.contexts[idx],
+            "id": self.data[idx].id,
+            "answers": self.data[idx].answers,
+            "question_type": self.data[idx].question_type,
+            "context": self.data[idx].context,
         }
 
 
