@@ -2,7 +2,7 @@
 import json
 import logging
 import os
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
@@ -137,7 +137,7 @@ def preprocess_data(
 
 @dataclass
 class EntailmentDataset(Dataset):
-    input_tokens: dict[str, torch.Tensor]
+    input_tokens: Mapping[str, torch.Tensor]
     labels: torch.Tensor
     device: str
 
@@ -161,7 +161,6 @@ class EvalResult:
 
 def do_eval(
     model: PreTrainedModel,
-    tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
     data: list[EntailmentEntry],
     labeller: Labeller,
@@ -169,7 +168,7 @@ def do_eval(
 ) -> EvalResult:
     model.eval()
 
-    criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
+    criterion = torch.nn.CrossEntropyLoss()
     total_loss = 0
     num_batches = 0
 
@@ -185,8 +184,6 @@ def do_eval(
             all_predictions.extend(int(p.item()) for p in preds)
 
             num_batches += 1
-
-    logging.info("Calculating metrics")
 
     txt_predictions = [labeller.id2label[p] for p in all_predictions]
     metrics = calculate_metrics(data, txt_predictions)
@@ -218,13 +215,21 @@ def do_train(
         batch_size=config.per_device_train_batch_size,
     )
 
-    criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
-    optimizer = torch.optim.Adam(model.parameters(), lr=5e-4)
-    scheduler = get_linear_schedule_with_warmup(
-        optimizer, 0, config.num_train_epochs * len(train_loader)
+    criterion = torch.nn.CrossEntropyLoss()
+    # TODO
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=config.learning_rate,
+        betas=(0.9, 0.999),
+        eps=1e-8,
+        weight_decay=0.0,
     )
-
-    model.train()
+    num_optimisation_steps = config.num_train_epochs * len(train_loader)
+    scheduler = get_linear_schedule_with_warmup(
+        optimizer=optimizer,
+        num_warmup_steps=0,
+        num_training_steps=num_optimisation_steps,
+    )
 
     eval_loader = None
     if eval_data:
@@ -238,25 +243,32 @@ def do_train(
             batch_size=config.per_device_eval_batch_size,
         )
 
-    best_acc = -1.0
+    best_f1 = -1.0
     early_stopping_counter = 0
+    num_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+    logging.info("Starting training...")
+    logging.info(f"Num examples: {len(train_data)}")
+    logging.info(f"Num epochs: {config.num_train_epochs}")
+    logging.info(f"Number of trainable parameters = {num_params}")
+    logging.info(f"Total optimisation steps: {num_optimisation_steps}")
 
     for epoch in range(config.num_train_epochs):
         model.train()
 
         total_loss = 0
         num_batches = 0
+        logging.info(f"Epoch {epoch+1} learning rate: {scheduler.get_last_lr()[0]}")
 
-        for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
+        for i, inputs in enumerate(
+            tqdm(train_loader, desc=f"Epoch {epoch+1} training")
+        ):
             optimizer.zero_grad()
 
             outputs = model(**inputs)
             logits = outputs.logits
 
-            # TODO: This will probably break
-            loss = criterion(
-                logits.view(-1, logits.shape[-1]), inputs["labels"].view(-1)
-            )
+            loss = criterion(logits, inputs["labels"])
             loss.backward()
 
             optimizer.step()
@@ -266,12 +278,11 @@ def do_train(
             num_batches += 1
 
         avg_loss = total_loss / num_batches
-        logging.info(f"Epoch {epoch+1}, loss: {avg_loss}")
+        logging.info(f"Epoch {epoch+1}, training loss: {avg_loss}")
 
         if eval_data and eval_loader is not None:
             eval_result = do_eval(
                 model,
-                tokeniser,
                 eval_loader,
                 eval_data,
                 labeller,
@@ -279,8 +290,8 @@ def do_train(
             )
             logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
 
-            if eval_result.metrics["accuracy"] > best_acc:
-                best_acc = eval_result.metrics["accuracy"]
+            if eval_result.metrics["f1"] > best_f1:
+                best_f1 = eval_result.metrics["f1"]
                 early_stopping_counter = 0
 
                 logging.info(
@@ -296,9 +307,9 @@ def do_train(
                 )
                 break
 
-    # Either we're not saving based on eval accuracy, or we're at the end of training
-    # and we haven't saved yet
-    if best_acc == -1:
+    # Either we're not saving based on eval F1, or we're at the end of training
+    # and haven't saved yet
+    if best_f1 == -1:
         save_model(model, tokeniser, config.output_dir)
 
     return model
@@ -350,8 +361,6 @@ def do_inference(
     logging.info("*** %s ***", desc)
     model.eval()
 
-    logging.info("Tokenising input")
-
     data = data[: config.max_predict_samples]
     logging.info("%d samples", len(data))
     loader = preprocess_data(
@@ -363,18 +372,16 @@ def do_inference(
         batch_size=config.per_device_train_batch_size,
     )
 
-    logging.info("Generating output")
-
     predictions: list[int] = []
     for input_batch in tqdm(loader, desc=desc):
         logits = model(**input_batch)
         preds = torch.argmax(logits.logits, -1)
         predictions.extend(int(p.item()) for p in preds)
 
-    logging.info("Calculating metrics")
     txt_predictions = [labeller.id2label[p] for p in predictions]
     metrics = calculate_metrics(data, txt_predictions)
     log_metrics(metrics, desc)
+
     output = [{**asdict(d), "prediction": out} for out, d in zip(txt_predictions, data)]
     return InferenceResult(predictions=output, metrics=metrics)
 
@@ -388,23 +395,28 @@ def log_config(config: Config) -> None:
 def load_model(
     model_name_or_path: str | Path, device: str, labeller: Labeller
 ) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
-    tokeniser = AutoTokenizer.from_pretrained(model_name_or_path)
     config = AutoConfig.from_pretrained(
-        model_name_or_path, num_labels=labeller.num_labels
+        model_name_or_path, num_labels=labeller.num_labels, revision="main"
     )
+    tokeniser = AutoTokenizer.from_pretrained(model_name_or_path, revision="main")
     model = AutoModelForSequenceClassification.from_pretrained(
-        model_name_or_path, config=config
-    ).to(device)
-
-    model.resize_token_embeddings(len(tokeniser))
+        model_name_or_path, config=config, revision="main"
+    )
     model.config.label2id = labeller.label2id
     model.config.id2label = labeller.id2label
 
-    return model, tokeniser
+    return model.to(device), tokeniser
 
 
 def load_data(file_path: Path) -> list[EntailmentEntry]:
     return [EntailmentEntry(**d) for d in json.loads(file_path.read_text())]
+
+
+def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
+    desc = desc.lower()
+    logging.info("Saving %s results to: %s", desc, output_dir.resolve())
+    (output_dir / f"{desc}_output.json").write_text(json.dumps(result.predictions))
+    (output_dir / f"{desc}_metrics.json").write_text(json.dumps(result.metrics))
 
 
 def main() -> None:
@@ -434,7 +446,6 @@ def main() -> None:
         )
 
     labeller = Labeller(train_data, eval_data, predict_data)
-
     model, tokeniser = load_model(config.model_name_or_path, config.device, labeller)
 
     if config.do_train:
@@ -454,12 +465,7 @@ def main() -> None:
         result = do_inference(
             model, tokeniser, eval_data, config, labeller, "evaluation"
         )
-
-        logging.info("Saving evaluation results to: %s", config.output_dir.resolve())
-        (config.output_dir / "eval_output.json").write_text(
-            json.dumps(result.predictions)
-        )
-        (config.output_dir / "eval_metrics.json").write_text(json.dumps(result.metrics))
+        save_results("eval", config.output_dir, result)
 
     if config.do_predict:
         if predict_data is None:
@@ -467,14 +473,7 @@ def main() -> None:
         result = do_inference(
             model, tokeniser, predict_data, config, labeller, "prediction"
         )
-
-        logging.info("Saving prediction results to: %s", config.output_dir.resolve())
-        (config.output_dir / "predict_output.json").write_text(
-            json.dumps(result.predictions)
-        )
-        (config.output_dir / "predict_metrics.json").write_text(
-            json.dumps(result.metrics)
-        )
+        save_results("predict", config.output_dir, result)
 
 
 if __name__ == "__main__":
