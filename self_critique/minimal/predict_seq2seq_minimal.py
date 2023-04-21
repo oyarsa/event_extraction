@@ -225,7 +225,7 @@ def do_train(
     )
 
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
-    optimizer = torch.optim.Adam(model.parameters(), lr=5e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
     scheduler = get_linear_schedule_with_warmup(
         optimizer, 0, config.num_train_epochs * len(train_loader)
     )
@@ -270,7 +270,7 @@ def do_train(
             num_batches += 1
 
         avg_loss = total_loss / num_batches
-        logging.info(f"Epoch {epoch+1}, loss: {avg_loss}")
+        logging.info(f"Epoch {epoch+1}, training loss: {avg_loss}")
 
         if eval_data and eval_loader is not None:
             eval_result = do_eval(
@@ -356,8 +356,6 @@ def do_inference(
     logging.info("*** %s ***", desc)
     model.eval()
 
-    logging.info("Tokenising input")
-
     data = data[: config.max_predict_samples]
     logging.info("%d samples", len(data))
     loader = preprocess_data(
@@ -368,8 +366,6 @@ def do_inference(
         batch_size=config.per_device_train_batch_size,
     )
 
-    logging.info("Generating output")
-
     predicted_ids: list[torch.Tensor] = []
     for input_batch in tqdm(loader, desc=desc):
         batch_predicted_ids = model.generate(
@@ -379,12 +375,10 @@ def do_inference(
         )
         predicted_ids.extend(batch_predicted_ids)
 
-    logging.info("Decoding output")
     predicted_texts = tokeniser.batch_decode(predicted_ids, skip_special_tokens=True)
-
-    logging.info("Calculating metrics")
     metrics = calculate_metrics(data, predicted_texts)
     log_metrics(metrics, desc)
+
     output = [
         {"input": d.context, "output": out, "gold": d.answers}
         for out, d in zip(predicted_texts, data)
