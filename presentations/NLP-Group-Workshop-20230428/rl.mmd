@@ -1,0 +1,24 @@
+%% TODO:
+%% - Add links from Model 3 back to Model 1 and Model 2 (rewards)
+%% - Make this prettier (i.e. bold model names)
+%% - Add illustrations for each model
+graph TD
+	A[Data]
+	B([Model 1: Extraction<br/>Text to Structured Answer])
+	C[Structured Answer]
+	D([Model 2: Reconstruction<br/>Structured Answer<br/>Sentence])
+	E[Reconstructed Natural Language Sentence]
+	F([Model 3<br/>Entailment])
+	G[\Contradiction\]
+	H[\Entailment\]
+	I[\Neutral\]
+
+	A --> B
+	B --> C
+	C --> D
+	A --> F
+	E --> F
+	D --> E
+	F --> G
+	F --> H
+	F --> I
