@@ -8,7 +8,7 @@ import warnings
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
-from typing import Any, TypedDict, cast
+from typing import Any, TypedDict
 
 import numpy as np
 import simple_parsing
@@ -259,7 +259,7 @@ def collect_model_data(
     for d in all_data:
         for i in range(len(d["id"])):
             entry = {k: d[k][i] for k in d}
-            model_data.append(cast(Seq2SeqDatasetEntry, entry))
+            model_data.append(Seq2SeqDatasetEntry(**entry))
     return model_data
 
 

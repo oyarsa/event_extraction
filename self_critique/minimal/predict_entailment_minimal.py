@@ -7,7 +7,7 @@ import warnings
 from collections.abc import Iterable, Mapping
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import numpy as np
 import simple_parsing
@@ -147,27 +147,64 @@ def preprocess_data(
     dataset = EntailmentDataset(
         input_tokens=model_inputs,
         labels=torch.tensor(labels),
+        data=data,
         device=config.device,
     )
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     return loader
 
 
+class EntailmentDatasetEntry(TypedDict):
+    input_ids: torch.Tensor
+    attention_mask: torch.Tensor
+    labels: torch.Tensor
+    txt_labels: str
+    sentence1: str
+    sentence2: str
+    id: str
+
+
+class EntailmentDatasetSeries(TypedDict):
+    input_tokens: torch.Tensor
+    attention_mask: torch.Tensor
+    labels: torch.Tensor
+    txt_labels: list[str]
+    sentence1: list[str]
+    sentence2: list[str]
+    id: list[str]
+
+
 @dataclass
 class EntailmentDataset(Dataset):
     input_tokens: Mapping[str, torch.Tensor]
     labels: torch.Tensor
+    data: list[EntailmentEntry]
     device: str
 
     def __len__(self) -> int:
         return self.input_tokens["input_ids"].size(0)
 
-    def __getitem__(self, idx: int) -> dict[str, Any]:
+    def __getitem__(self, idx: int) -> EntailmentDatasetEntry:
         return {
             "input_ids": self.input_tokens["input_ids"][idx].to(self.device),
             "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
             "labels": self.labels[idx].to(self.device),
+            "txt_labels": self.data[idx].label,
+            "sentence1": self.data[idx].sentence1,
+            "sentence2": self.data[idx].sentence2,
+            "id": self.data[idx].id,
         }
+
+
+def collect_model_data(
+    all_data: list[EntailmentDatasetSeries],
+) -> list[EntailmentDatasetEntry]:
+    model_data: list[EntailmentDatasetEntry] = []
+    for d in all_data:
+        for i in range(len(d["id"])):
+            entry = {k: d[k][i] for k in d}
+            model_data.append(EntailmentDatasetEntry(**entry))
+    return model_data
 
 
 @dataclass
@@ -194,7 +231,11 @@ def eval(
 
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
-            outputs = model(**inputs)
+            outputs = model(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                labels=inputs["labels"],
+            )
             loss = criterion(outputs.logits, inputs["labels"])
             total_loss += loss.item()
 
@@ -280,7 +321,11 @@ def train(
         for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
             optimizer.zero_grad()
 
-            outputs = model(**inputs)
+            outputs = model(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                labels=inputs["labels"],
+            )
             loss = criterion(outputs.logits, inputs["labels"])
             loss.backward()
 
@@ -377,7 +422,6 @@ def infer(
         data,
         config,
         labeller,
-        # This must be false or the output will be broken. See the TODO below.
         shuffle=False,
         batch_size=config.per_device_train_batch_size,
         desc=desc,
@@ -385,21 +429,33 @@ def infer(
 
     predictions: list[int] = []
     labels: list[int] = []
+    all_data: list[EntailmentDatasetSeries] = []
     for inputs in tqdm(loader, desc=desc):
-        logits = model(**inputs)
+        logits = model(
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
+            labels=inputs["labels"],
+        )
         preds = torch.argmax(logits.logits, -1)
         predictions.extend(int(x.item()) for x in preds)
         labels.extend(int(x.item()) for x in inputs["labels"])
+        all_data.append(inputs)
 
     metrics = calculate_metrics(labels, predictions)
     log_metrics(metrics, desc)
 
     txt_predictions = labeller.decode(predictions)
-    # TODO: This is broken because `data` and `txt_predictions` will have different
-    # orders. I need something better to join the data with the predictions. I might
-    # have to add the id to the dataset.
-    # This will be all right as long as I never shuffle the inference dataset
-    output = [{**asdict(d), "prediction": out} for out, d in zip(txt_predictions, data)]
+    model_data = collect_model_data(all_data)
+    output = [
+        {
+            "id": d["id"],
+            "sentence1": d["sentence1"],
+            "sentence2": d["sentence2"],
+            "gold": d["txt_labels"],
+            "prediction": out,
+        }
+        for out, d in zip(txt_predictions, model_data)
+    ]
     return InferenceResult(predictions=output, metrics=metrics)
 
 
