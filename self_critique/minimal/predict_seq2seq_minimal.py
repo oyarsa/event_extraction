@@ -20,9 +20,8 @@ from transformers import (
     get_linear_schedule_with_warmup,
 )
 
-from common import (
-    Config,
-    log_config,
+from conf import Config
+from util import (
     log_metrics,
     save_model,
     set_seed,
@@ -31,7 +30,7 @@ from common import (
 )
 
 sys.path.append(str(Path(__file__).parents[1]))
-import metric  # noqa: E402
+import metric  # noqa: E402 # pyright: ignore [reportMissingImports]
 
 
 @dataclass
@@ -145,6 +144,7 @@ def eval(
 ) -> EvalResult:
     model.eval()
 
+    assert tokeniser.pad_token_id is not None
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
     total_loss = 0
     num_batches = 0
@@ -217,6 +217,7 @@ def train(
         desc="training",
     )
 
+    assert tokeniser.pad_token_id is not None
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
     scheduler = get_linear_schedule_with_warmup(
@@ -412,7 +413,7 @@ def main() -> None:
     set_seed(config.seed)
 
     setup_logging(config.log_level)
-    log_config(config)
+    logging.info("%s", config)
 
     supress_transformers_warnings()
 

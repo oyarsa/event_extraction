@@ -21,9 +21,8 @@ from transformers import (
     get_linear_schedule_with_warmup,
 )
 
-from common import (
-    Config,
-    log_config,
+from conf import Config
+from util import (
     log_metrics,
     save_model,
     set_seed,
@@ -312,10 +311,10 @@ def train(
 def calculate_metrics(gold: list[int], preds: list[int]) -> dict[str, float]:
     accuracy = accuracy_score(gold, preds)
     precision, recall, f1, _ = precision_recall_fscore_support(
-        gold, preds, average="macro", zero_division=0
+        gold, preds, average="macro", zero_division=0  # type: ignore
     )
     return {
-        "accuracy": accuracy,
+        "accuracy": float(accuracy),
         "precision": float(precision),
         "recall": float(recall),
         "f1": float(f1),
@@ -422,7 +421,7 @@ def main() -> None:
     set_seed(config.seed)
 
     setup_logging(config.log_level)
-    log_config(config)
+    logging.info("%s", config)
 
     supress_transformers_warnings()
 

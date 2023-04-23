@@ -1,16 +1,7 @@
 # pyright: basic
-import logging
-import os
-import random
-import warnings
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
-
-import numpy as np
-import torch
-import transformers
-from transformers import PreTrainedModel, PreTrainedTokenizer
 
 
 @dataclass
@@ -71,48 +62,8 @@ class Config:
             if f.name in kwargs:
                 setattr(self, f.name, kwargs[f.name])
 
-
-def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
-    desc = desc or "metrics"
-    logging.info(f">>>> {desc.upper()}")
-
-    padding = max(len(k) for k in metrics)
-    for k, v in metrics.items():
-        logging.info(f"    {k:>{padding}}: {v}")
-
-
-def setup_logging(log_level: str) -> None:
-    logging.basicConfig(
-        level=logging.getLevelName(log_level.upper()),
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-
-
-def supress_transformers_warnings() -> None:
-    "Remove annoying messages about tokenisers and unititialised weights."
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
-    warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
-    transformers.logging.set_verbosity_error()
-
-
-def log_config(config: Config) -> None:
-    logging.info(">>>> CONFIGURATON")
-    for key, value in asdict(config).items():
-        logging.info(f"  {key}: {value}")
-
-
-def set_seed(seed: int) -> None:
-    "Set random seed for reproducibility."
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-
-
-def save_model(
-    model: PreTrainedModel, tokeniser: PreTrainedTokenizer, output_dir: Path
-) -> None:
-    model.config.save_pretrained(output_dir)
-    model.save_pretrained(output_dir)
-    tokeniser.save_pretrained(output_dir)
+    def __str__(self) -> str:
+        config_lines = [">>>> CONFIGURATION"]
+        for key, value in asdict(self).items():
+            config_lines.append(f"  {key}: {value}")
+        return "\n".join(config_lines)
