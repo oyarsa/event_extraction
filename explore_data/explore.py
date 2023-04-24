@@ -31,27 +31,30 @@ class Example:
 
 
 def process_data(data_json: list[dict]) -> list[Example]:
-    processed = []
+    processed: list[Example] = []
 
     for example in data_json:
         id = example["tid"]
         text = example["info"]
-        answer = convert_genqa_joint(example, natural_like=True)["answers"]
-        relations = []
+        converted = convert_genqa_joint(example)
+        relations: list[Relation] = []
 
-        for relation in example["labelData"]:
-            type = relation["type"]
+        for relation, conv in zip(example["labelData"], converted):
+            assert relation["type"] == conv["question_type"]
+
             causes = [text[start:end] for start, end in relation["reason"]]
             effects = [text[start:end] for start, end in relation["result"]]
             relations.append(
                 Relation(
-                    type=type,
+                    type=relation["type"],
                     causes=causes,
                     effects=effects,
                 )
             )
 
-        processed.append(Example(id=id, text=text, answer=answer, relations=relations))
+            processed.append(
+                Example(id=id, text=text, answer=conv["answers"], relations=relations)
+            )
 
     return processed
 
@@ -112,6 +115,12 @@ def render_example(ex: Example | list[Example]) -> str:
 @click.option(
     "--max-relations", type=int, default=10, help="Maximum number of relations"
 )
+@click.option(
+    "--relation-types",
+    type=str,
+    default="enable,prevent,cause",
+    help="Filter by relation type",
+)
 @click.option("--stats", is_flag=True, help="Print statistics")
 def main(
     data_file: TextIO,
@@ -122,6 +131,7 @@ def main(
     max_effects: int,
     min_relations: int,
     max_relations: int,
+    relation_types: str,
     stats: bool,
 ) -> None:
     data_json = json.load(data_file)
@@ -132,6 +142,8 @@ def main(
         print_stats(processed)
         return
 
+    allowed_relations = relation_types.split(",")
+
     processed = [
         p
         for p in processed
@@ -141,6 +153,7 @@ def main(
             for r in p.relations
         )
         and min_relations <= len(p.relations) <= max_relations
+        and any(r.type in allowed_relations for r in p.relations)
     ]
     processed = processed[:limit]
 
