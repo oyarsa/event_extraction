@@ -4,12 +4,15 @@ import collections
 import json
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import TextIO
 
 import click
 
-sys.path.append("..")
-from preprocess.genqa_joint import convert_genqa_joint  # type: ignore # noqa
+sys.path.append(str(Path(__file__).parents[1] / "preprocess"))
+from genqa_joint import (  # noqa: E402 # pyright: ignore [reportMissingImports]
+    convert_genqa_joint,
+)
 
 
 @dataclass
