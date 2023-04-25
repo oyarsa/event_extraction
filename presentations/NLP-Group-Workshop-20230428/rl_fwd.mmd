@@ -3,11 +3,11 @@
 %% - Make this prettier (i.e. bold model names)
 %% - Add illustrations for each model
 graph TD
-	A[Data]
-	B([Model 1: Extraction<br/>Text to Structured Answer])
-	C[Structured Answer]
-	D([Model 2: Reconstruction<br/>Structured Answer<br/>Sentence])
-	E[Reconstructed Natural Language Sentence]
+	A[Input Sentence]
+	B([Model 1: Extraction<br/><i>Text to Structured Answer</i>])
+	C["Structured Answer<br/><i>&lt;Cause, Relation, Effect&gt;</i>"]
+	D([Model 2: Reconstruction<br/><i>Output Sentence</i>])
+	E[Reconstructed<br/><i>Natural Language Sentence</i>]
 	F([Model 3<br/>Entailment])
 	G[\Contradiction\]
 	H[\Entailment\]
