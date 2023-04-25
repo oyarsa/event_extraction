@@ -18,7 +18,7 @@ limitations under the License.
 The code is based on Huggingface transformer examples: [`question-answering`](https://github.com/huggingface/transformers/blob/master/examples/pytorch/question-answering)
 
 # Instruction:
-Data preprocess: 
+Data preprocess:
 
 ```sh
 # From the repository root:
@@ -39,7 +39,7 @@ Train reconstruction model:
 python run_seq2seq_qa.py config/reconstruct.json
 ```
 
-Train text entailment model (TODO):
+Train text entailment model:
 ```
 python run_classification.py config/entailment.json
 ```
