@@ -29,34 +29,7 @@ colorlinks: true
     [github.com/YangLinyi/Fine-grained-Causal-Reasoning](
     https://github.com/YangLinyi/Fine-grained-Causal-Reasoning/)
 
-# Example 1
-
-> Given the \textcolor{teal}{importance of Teleflex products to health
-outcomes}, product issues (either related to quality control or manufacturing)
-should be prevented to \textcolor{red}{avoid social ESG concerns}.
-
-- \textcolor{teal}{Cause}: importance of Teleflex products to health outcomes
-- \textcolor{red}{Effect}: avoid social ESG concerns
-- **Relation**: prevent
-
-# Example 2
-
-The cause and effect can be split into multiple spans: \newline
-
-> While the automotive part sector has performed relatively well during the
-pandemic thus far, \textcolor{teal}{spiking unemployment} and
-\textcolor{teal}{unprecedented global lockdowns} have \textcolor{red}{slashed
-miles driven} and \textcolor{red}{slowed vehicle wear and tear}.
-
-- \textcolor{teal}{Cause}:
-    - spiking unemployment
-    - unprecedented global lockdowns
-- \textcolor{red}{Effect}:
-    - slashed miles driven
-    - slowed vehicle wear and tear
-- **Relation**: enable
-
-# Example 3 (pt. 1)
+# Example (pt. 1)
 
 There can be more than one pair of cause/effect in the context: \newline
 
@@ -69,7 +42,7 @@ measured approach to entering new markets.
 - \textcolor{teal}{Effect}~1~: The firm's gross margin is set to stabilize
 - **Relation**~1~: cause
 
-# Example 3 (pt. 2)
+# Example (pt. 2)
 
 There can be more than one pair of cause/effect in the context: \newline
 
@@ -219,7 +192,8 @@ the business was not profitable at the time of the October 2019 acquisition),
 \end{huge}
 
 \scriptsize
-[github.com/oyarsa/event_extraction/self_critique](https://github.com/oyarsa/event_extraction/tree/master/self_critique)
+[github.com/oyarsa/event_extraction/self_critique](
+https://github.com/oyarsa/event_extraction/tree/master/self_critique)
 
 Slides: [t.ly/1X2S](https://t.ly/1X2S)
 
