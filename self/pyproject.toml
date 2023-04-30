@@ -1,0 +1,40 @@
+[project]
+name = "self_critique"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Italo Silva", email = "italo@maleldil.com"},
+]
+dependencies = [
+	"datasets==2.12.0",
+	"evaluate==0.4.0",
+	"scikit-learn==1.2.2",
+	"simple-parsing==0.1.2.post1",
+	"torch==2.0.0",
+	"tqdm==4.65.0",
+	"transformers==4.28.1",
+]
+requires-python = ">=3.10"
+license = {text = "GPLv3"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "ruff>=0.0.263",
+    "black>=23.3.0",
+]
+[tool.ruff]
+extend = "../pyproject.toml"
+isort = { known-first-party = ["trainer-seq2seq", "metric"] }
+target-version = "py311"
+extend-ignore = ["UP007"]  # HF doesn't like T | None
+
+[tool.pyright]
+typeCheckingMode = "off"
+useLibraryCodeForTypes = false
+reportMissingImports = false
