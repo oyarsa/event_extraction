@@ -8,6 +8,19 @@ requires_python = ">=3.6"
 summary = "Abseil Python Common Libraries, see https://github.com/abseil/abseil-py."
 
 [[package]]
+name = "accelerate"
+version = "0.18.0"
+requires_python = ">=3.7.0"
+summary = "Accelerate"
+dependencies = [
+    "numpy>=1.17",
+    "packaging>=20.0",
+    "psutil",
+    "pyyaml",
+    "torch>=1.4.0",
+]
+
+[[package]]
 name = "aiohttp"
 version = "3.8.4"
 requires_python = ">=3.6"
@@ -332,6 +345,12 @@ requires_python = ">=3.7"
 summary = ""
 
 [[package]]
+name = "psutil"
+version = "5.9.5"
+requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+summary = "Cross-platform lib for process and system monitoring in Python."
+
+[[package]]
 name = "pyarrow"
 version = "11.0.0"
 requires_python = ">=3.7"
@@ -569,6 +588,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "trl"
+version = "0.4.1"
+requires_python = ">=3.7"
+summary = "A Pytorch implementation of Proximal Policy Optimization for transfomer language models."
+dependencies = [
+    "accelerate",
+    "datasets",
+    "numpy>=1.18.2",
+    "torch>=1.4.0",
+    "transformers>=4.18.0",
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.5.0"
 requires_python = ">=3.7"
@@ -620,12 +652,16 @@ dependencies = [
 [metadata]
 lock_version = "4.2"
 groups = ["default", "dev"]
-content_hash = "sha256:c399c30e29d8d4a5ae48a639d5429cd7197ef07dc7f390bcfdfb1f18cf319589"
+content_hash = "sha256:a62fb814a39c86ea2efa254dc622b59452385eaf20b453e0362b6f8f478728b2"
 
 [metadata.files]
 "absl-py 1.4.0" = [
     {url = "https://files.pythonhosted.org/packages/79/c9/45ecff8055b0ce2ad2bfbf1f438b5b8605873704d50610eda05771b865a0/absl-py-1.4.0.tar.gz", hash = "sha256:d2c244d01048ba476e7c080bd2c6df5e141d211de80223460d5b3b8a2a58433d"},
     {url = "https://files.pythonhosted.org/packages/dd/87/de5c32fa1b1c6c3305d576e299801d8655c175ca9557019906247b994331/absl_py-1.4.0-py3-none-any.whl", hash = "sha256:0d3fe606adfa4f7db64792dd4c7aee4ee0c38ab75dfd353b7a83ed3e957fcb47"},
+]
+"accelerate 0.18.0" = [
+    {url = "https://files.pythonhosted.org/packages/28/16/d361c7716dc7b46c8f1ee77040b09d22e01f9b36f5159a139aed877a4bef/accelerate-0.18.0.tar.gz", hash = "sha256:1dd36fd972de4a6d0cffe5e4d6d30622fd853765f773b5582cf0796deefe1016"},
+    {url = "https://files.pythonhosted.org/packages/e7/87/25dd46811431cfc5e8d6ba8c80758cb3131574b271fbf06cf1b691dba8d4/accelerate-0.18.0-py3-none-any.whl", hash = "sha256:41a84ac94407d7dcf030caf0cdadc70496594aec27ea680207bdb15b95f8a602"},
 ]
 "aiohttp 3.8.4" = [
     {url = "https://files.pythonhosted.org/packages/03/e7/84b65e341b1f45753fea51158d8a9522e57a5ae804acbc6dc34edf07cea0/aiohttp-3.8.4-cp39-cp39-musllinux_1_1_aarch64.whl", hash = "sha256:bca5f24726e2919de94f047739d0a4fc01372801a3672708260546aa2601bf57"},
@@ -1267,6 +1303,22 @@ content_hash = "sha256:c399c30e29d8d4a5ae48a639d5429cd7197ef07dc7f390bcfdfb1f18c
     {url = "https://files.pythonhosted.org/packages/f4/fd/d8d309382c71c5e83a1920ae9840410396e595e3b36229d96e3ba755687e/protobuf-4.22.3-cp37-abi3-manylinux2014_x86_64.whl", hash = "sha256:13233ee2b9d3bd9a5f216c1fa2c321cd564b93d8f2e4f521a85b585447747997"},
     {url = "https://files.pythonhosted.org/packages/f8/70/6291e75633eeaa24fed46c9f66091bec184644e6159f392ac32eb92b1f65/protobuf-4.22.3-cp39-cp39-win_amd64.whl", hash = "sha256:e0e630d8e6a79f48c557cd1835865b593d0547dce221c66ed1b827de59c66c97"},
 ]
+"psutil 5.9.5" = [
+    {url = "https://files.pythonhosted.org/packages/26/f2/dcd8a3cc9c9b1fcd7576a54e3603ce4d1f85672f2687a44050340f7d47b0/psutil-5.9.5-cp27-none-win_amd64.whl", hash = "sha256:8c5f7c5a052d1d567db4ddd231a9d27a74e8e4a9c3f44b1032762bd7b9fdcd42"},
+    {url = "https://files.pythonhosted.org/packages/3b/e4/fee119c206545fd37be1e5fa4eeb0c729a52ec2ade4f728ae1fd1acb2a3a/psutil-5.9.5-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:be8929ce4313f9f8146caad4272f6abb8bf99fc6cf59344a3167ecd74f4f203f"},
+    {url = "https://files.pythonhosted.org/packages/5f/da/de9d2342db0b7a96863ef84ab94ef1022eec78ece05aac253cddc494e1a7/psutil-5.9.5-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:acf2aef9391710afded549ff602b5887d7a2349831ae4c26be7c807c0a39fac4"},
+    {url = "https://files.pythonhosted.org/packages/86/f3/23e4e4e7ec7855d506ed928756b04735c246b14d9f778ed7ffaae18d8043/psutil-5.9.5-cp36-abi3-win_amd64.whl", hash = "sha256:b258c0c1c9d145a1d5ceffab1134441c4c5113b2417fafff7315a917a026c3c9"},
+    {url = "https://files.pythonhosted.org/packages/89/fa/ab117fa86195050802207639f5daee857791daaabe9a996935b5b77dbe10/psutil-5.9.5-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:4aef137f3345082a3d3232187aeb4ac4ef959ba3d7c10c33dd73763fbc063da4"},
+    {url = "https://files.pythonhosted.org/packages/8d/24/ed6b6506f187def39887a91a68e58336eff4cf3e3d5a163ded58bee98624/psutil-5.9.5-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:ab8ed1a1d77c95453db1ae00a3f9c50227ebd955437bcf2a574ba8adbf6a74d5"},
+    {url = "https://files.pythonhosted.org/packages/99/f5/ec768e107445f18baa907509aaa0562a4d148a602bd97e8114d79bd6c84d/psutil-5.9.5-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:ea8518d152174e1249c4f2a1c89e3e6065941df2fa13a1ab45327716a23c2b48"},
+    {url = "https://files.pythonhosted.org/packages/9a/76/c0195c3443a725c24b3a479f57636dec89efe53d19d435d1752c5188f7de/psutil-5.9.5-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:3c6f686f4225553615612f6d9bc21f1c0e305f75d7d8454f9b46e901778e7217"},
+    {url = "https://files.pythonhosted.org/packages/af/4d/389441079ecef400e2551a3933224885a7bde6b8a4810091d628cdd75afe/psutil-5.9.5-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:89518112647f1276b03ca97b65cc7f64ca587b1eb0278383017c2a0dcc26cbe4"},
+    {url = "https://files.pythonhosted.org/packages/cf/e3/6af6ec0cbe72f63e9a16d8b53590489e40ed0ff0c99b6a6f05d6af3bb80e/psutil-5.9.5-cp27-none-win32.whl", hash = "sha256:5b9b8cb93f507e8dbaf22af6a2fd0ccbe8244bf30b1baad6b3954e935157ae3f"},
+    {url = "https://files.pythonhosted.org/packages/d6/0f/96b7309212a926c1448366e9ce69b081ea79d63265bde33f11cc9cfc2c07/psutil-5.9.5.tar.gz", hash = "sha256:5410638e4df39c54d957fc51ce03048acd8e6d60abc0f5107af51e5fb566eb3c"},
+    {url = "https://files.pythonhosted.org/packages/e5/2e/56db2b45508ad484b3f22888b3e1adaaf09b8766eaa058ed0e4486c1abae/psutil-5.9.5-cp36-abi3-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:7a7dd9997128a0d928ed4fb2c2d57e5102bb6089027939f3b722f3a210f9a8da"},
+    {url = "https://files.pythonhosted.org/packages/ed/98/2624954f83489ab13fde2b544baa337d5578c07eee304d320d9ba56e1b1f/psutil-5.9.5-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:c607bb3b57dc779d55e1554846352b4e358c10fff3abf3514a7a6601beebdb30"},
+    {url = "https://files.pythonhosted.org/packages/fa/e0/e91277b1cabf5c3f2995c22314553f1be68b17444260101f365c5a5b6ba1/psutil-5.9.5-cp36-abi3-win32.whl", hash = "sha256:104a5cc0e31baa2bcf67900be36acde157756b9c44017b86b2c049f11957887d"},
+]
 "pyarrow 11.0.0" = [
     {url = "https://files.pythonhosted.org/packages/01/a3/471746d52e4be2ef6d9bb040b68983955f32d04b6c8a7b3b442407cebd7d/pyarrow-11.0.0-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:f12932e5a6feb5c58192209af1d2607d488cb1d404fbc038ac12ada60327fa34"},
     {url = "https://files.pythonhosted.org/packages/1b/dc/e9c7979ff1785b2412757b7c46880f0119ca4ac92c0c7c25c28b0cd063f1/pyarrow-11.0.0-cp311-cp311-win_amd64.whl", hash = "sha256:2f51dc7ca940fdf17893227edb46b6784d37522ce08d21afc56466898cb213b2"},
@@ -1605,6 +1657,10 @@ content_hash = "sha256:c399c30e29d8d4a5ae48a639d5429cd7197ef07dc7f390bcfdfb1f18c
 "transformers 4.28.1" = [
     {url = "https://files.pythonhosted.org/packages/0d/9f/0d27dec00839c14866d03c9992542d31992ef94d496765789234c9593e94/transformers-4.28.1.tar.gz", hash = "sha256:7334f8730cff7ac31d9ba5c12f2113fcb7a7a5b61eeb5dbbdb162117c3aaa2d1"},
     {url = "https://files.pythonhosted.org/packages/d8/a7/a6ff727fd5d96d6625f4658944a2ae230f0c75743a9a117fbda013b03d3d/transformers-4.28.1-py3-none-any.whl", hash = "sha256:f30a006220d0475789ac0e7c874f51bf5143956797616d89975b637883ce0be6"},
+]
+"trl 0.4.1" = [
+    {url = "https://files.pythonhosted.org/packages/34/d3/0186c3408e6ab76dc217b1366f3c929d48717435370838213cf1714510ef/trl-0.4.1.tar.gz", hash = "sha256:dfee9ee6c21f533e6705fa39472cfe81ec3f2b04efeee99022c6c036453df349"},
+    {url = "https://files.pythonhosted.org/packages/84/4d/8b8eaa7dca3345335c79d7cb7a680d76c265dec92e47f6f93f93362d523d/trl-0.4.1-py3-none-any.whl", hash = "sha256:26b0acc920784fc490f6c3b010805064d27390b70910f4f39ff8bdc6ca3b9d45"},
 ]
 "typing-extensions 4.5.0" = [
     {url = "https://files.pythonhosted.org/packages/31/25/5abcd82372d3d4a3932e1fa8c3dbf9efac10cc7c0d16e78467460571b404/typing_extensions-4.5.0-py3-none-any.whl", hash = "sha256:fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4"},
