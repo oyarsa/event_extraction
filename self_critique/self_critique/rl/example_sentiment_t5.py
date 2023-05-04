@@ -18,16 +18,9 @@ from typing import Optional
 import torch
 from datasets import load_dataset
 from tqdm import tqdm
-from transformers import (
-    AutoModelForSeq2SeqLM,
-    AutoTokenizer,
-    HfArgumentParser,
-    pipeline,
-)
-from trl import PPOConfig, PPOTrainer, create_reference_model
+from transformers import AutoTokenizer, HfArgumentParser, pipeline
+from trl import AutoModelForSeq2SeqLMWithValueHead, PPOConfig, PPOTrainer, set_seed
 from trl.core import LengthSampler
-
-from self_critique.minimal.util import set_seed
 
 tqdm.pandas()
 
@@ -118,17 +111,15 @@ def build_imdb_dataset(tokenizer, input_min_text_length=2, input_max_text_length
 
 
 def collater(data):
-    return {key: [d[key] for d in data] for key in data[0]}
+    return dict((key, [d[key] for d in data]) for key in data[0])
 
 
 # set seed before initializing value head for deterministic eval
 set_seed(config.seed)
 
 # Now let's build the model, the reference model, and the tokenizer.
-# model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(config.model_name)
-# ref_model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(config.model_name)
-model = AutoModelForSeq2SeqLM.from_pretrained(config.model_name)
-ref_model = create_reference_model(model)
+model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(config.model_name)
+ref_model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(config.model_name)
 tokenizer = AutoTokenizer.from_pretrained(config.model_name)
 
 # We retrieve the dataloader by calling the `build_dataset` function.
