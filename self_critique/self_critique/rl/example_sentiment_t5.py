@@ -18,8 +18,19 @@ from typing import Optional
 import torch
 from datasets import load_dataset
 from tqdm import tqdm
-from transformers import AutoTokenizer, HfArgumentParser, pipeline
-from trl import AutoModelForSeq2SeqLMWithValueHead, PPOConfig, PPOTrainer, set_seed
+from transformers import (
+    AutoConfig,
+    AutoModelForSeq2SeqLM,
+    AutoTokenizer,
+    HfArgumentParser,
+    pipeline,
+)
+from trl import (
+    AutoModelForSeq2SeqLMWithValueHead,
+    PPOConfig,
+    PPOTrainer,
+    create_reference_model,
+)
 from trl.core import LengthSampler
 
 tqdm.pandas()
@@ -118,9 +129,22 @@ def collater(data):
 set_seed(config.seed)
 
 # Now let's build the model, the reference model, and the tokenizer.
+model_name_or_path = config.model_name
+max_seq_length = 256
+
+# model_config = AutoConfig.from_pretrained(model_name_or_path)
+# # model = AutoModelForSeq2SeqLM.from_pretrained(model_name_or_path, config=model_config)
+# model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(
+#     model_name_or_path, config=model_config
+# )
+# tokenizer = AutoTokenizer.from_pretrained(
+#     model_name_or_path, model_max_length=max_seq_length
+# )
+# ref_model = create_reference_model(model)
+
 model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(config.model_name)
-ref_model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(config.model_name)
 tokenizer = AutoTokenizer.from_pretrained(config.model_name)
+ref_model = create_reference_model(model)
 
 # We retrieve the dataloader by calling the `build_dataset` function.
 dataset = build_imdb_dataset(tokenizer)
@@ -154,13 +178,13 @@ output_length_sampler = LengthSampler(output_min_length, output_max_length)
 
 for epoch, batch in tqdm(enumerate(ppo_trainer.dataloader)):
     query_tensors = batch["input_ids"]
+    print(len(query_tensors))
+    print(type(query_tensors[0]))
+    print(len(query_tensors[0]))
 
     # Get response from t5
     response_tensors = ppo_trainer.generate(
-        query_tensors,
-        return_prompt=False,
-        length_sampler=output_length_sampler,
-        **generation_kwargs
+        query_tensors, length_sampler=output_length_sampler, **generation_kwargs
     )
     batch["response"] = tokenizer.batch_decode([r[1:] for r in response_tensors])
 
