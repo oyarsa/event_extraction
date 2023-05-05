@@ -12,59 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
-from typing import Optional
+from pathlib import Path
+from typing import Any, Optional
 
 import torch
 from datasets import load_dataset
+from torch.utils.data import Dataset
 from tqdm import tqdm
 from transformers import (
-    AutoModelForSeq2SeqLM,
+    AutoConfig,
+    AutoModelForSequenceClassification,
     AutoTokenizer,
     HfArgumentParser,
+    PreTrainedModel,
+    PreTrainedTokenizer,
     pipeline,
 )
-from trl import PPOConfig, PPOTrainer, create_reference_model
-from trl.core import LengthSampler
+from trl import (
+    AutoModelForSeq2SeqLMWithValueHead,
+    PPOConfig,
+    PPOTrainer,
+    create_reference_model,
+)
 
 from self_critique.minimal.util import set_seed
 
-tqdm.pandas()
 
-########################################################################
-# This is a fully working simple example to use trl with accelerate.
-#
-# This example fine-tunes a T5 model on the IMDB dataset using PPO
-# (proximal policy optimization).
-# in any of the following settings (with the same script):
-#   - single CPU or single GPU
-#   - multi GPUS (using PyTorch distributed mode)
-#   - multi GPUS (using DeepSpeed ZeRO-Offload stages 1 & 2)
-#   - fp16 (mixed-precision) or fp32 (normal precision)
-#
-# To run it in each of these various modes, first initialize the accelerate
-# configuration with `accelerate config` then run the script with
-# `accelerate launch ppo-sentiment-t5-small.py`
-#
-########################################################################
-
-
-# We first define the configuration of the experiment, defining the model, the dataset,
-# the training parameters, and the PPO parameters.
-# Check the default arguments in the `PPOConfig` class for more details.
 @dataclass
 class ScriptArguments:
-    """
-    The name of the Casual LM model we wish to fine with PPO
-    """
+    "The name of the Casual LM model we wish to fine with PPO."
 
-    # NOTE: gpt2 models use Conv1D instead of Linear layers which are not yet supported in 8 bit mode
-    # models like gpt-neo* models are more suitable.
-    model_name: Optional[str] = field(
-        default="lvwerra/t5-imdb", metadata={"help": "the model name"}
-    )
-    log_with: Optional[str] = field(
-        default=None, metadata={"help": "use 'wandb' to log with wandb"}
+    model_name: str = field(default="t5-small", metadata={"help": "the model name"})
+    classification_model: str = field(
+        default="t5-small", metadata={"help": "the model name"}
     )
     learning_rate: Optional[float] = field(
         default=5e-5, metadata={"help": "the learning rate"}
@@ -76,108 +59,187 @@ class ScriptArguments:
     gradient_accumulation_steps: Optional[int] = field(
         default=1, metadata={"help": "the number of gradient accumulation steps"}
     )
+    max_seq_length: int = field(
+        default=512, metadata={"help": "the maximum sequence length"}
+    )
+    seed: int = field(default=0, metadata={"help": "Fixed random seed"})
+    max_samples: Optional[int] = field(
+        default=None, metadata={"help": "Max data samples"}
+    )
 
 
-parser = HfArgumentParser(ScriptArguments)
-script_args = parser.parse_args_into_dataclasses()[0]
-
-config = PPOConfig(
-    model_name=script_args.model_name,
-    learning_rate=script_args.learning_rate,
-    log_with=script_args.log_with,
-    mini_batch_size=script_args.mini_batch_size,
-    batch_size=script_args.batch_size,
-    gradient_accumulation_steps=script_args.gradient_accumulation_steps,
-)
-# We then define the arguments to pass to the sentiment analysis pipeline.
-# We set `return_all_scores` to True to get the sentiment score for each token.
-sent_kwargs = {"return_all_scores": True, "function_to_apply": "none", "batch_size": 16}
-
-
-# Below is an example function to build the dataset. In our case, we use the IMDB dataset
-# from the `datasets` library. One should customize this function to train the model on
-# its own dataset.
-def build_imdb_dataset(tokenizer, input_min_text_length=2, input_max_text_length=8):
-    # load imdb with datasets
-    ds = load_dataset("imdb", split="train")
-    ds = ds.rename_columns({"text": "review"})
-    ds = ds.filter(lambda x: len(x["review"]) > 200, batched=False)
-
-    input_size = LengthSampler(input_min_text_length, input_max_text_length)
-
-    def tokenize(sample):
-        sample["input_ids"] = tokenizer.encode(sample["review"])[: input_size()] + [
-            tokenizer.eos_token_id
-        ]
+def build_imdb_dataset(
+    tokenizer: PreTrainedTokenizer,
+    max_seq_length: int,
+    max_samples: int | None,
+) -> Dataset:
+    def tokenize(sample: Mapping[str, Sequence[Any]]) -> Mapping[str, Sequence[Any]]:
+        sample["input_ids"] = tokenizer.encode(
+            sample["review"],
+            padding="max_length",
+            truncation=True,
+            max_length=max_seq_length,
+        )
         sample["query"] = tokenizer.decode(sample["input_ids"])
         return sample
 
-    ds = ds.map(tokenize, batched=False)
-    ds.set_format(type="torch")
-    return ds
+    ds = (
+        load_dataset("imdb", split="train")
+        .rename_columns({"text": "review"})
+        .filter(lambda x: len(x["review"]) > 200, batched=False)
+    )
+    if max_samples is not None:
+        max_samples = min(max_samples, len(ds))
+        ds = ds.select(range(max_samples))
+    return ds.map(tokenize).with_format("torch")
 
 
-def collater(data):
+def data_collator(data: Sequence[Mapping[str, Any]]) -> Mapping[str, list[Any]]:
     return {key: [d[key] for d in data] for key in data[0]}
 
 
-# set seed before initializing value head for deterministic eval
-set_seed(config.seed)
-
-# Now let's build the model, the reference model, and the tokenizer.
-# model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(config.model_name)
-# ref_model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(config.model_name)
-model = AutoModelForSeq2SeqLM.from_pretrained(config.model_name)
-ref_model = create_reference_model(model)
-tokenizer = AutoTokenizer.from_pretrained(config.model_name)
-
-# We retrieve the dataloader by calling the `build_dataset` function.
-dataset = build_imdb_dataset(tokenizer)
-
-query = tokenizer("I really liked this movie because", return_tensors="pt")["input_ids"]
-
-generation_kwargs = {"top_k": 0.0, "top_p": 1.0, "do_sample": True, "eos_token_id": -1}
-
-
-# We then build the PPOTrainer, passing the model, the reference model, the tokenizer
-ppo_trainer = PPOTrainer(
-    config, model, ref_model, tokenizer, dataset=dataset, data_collator=collater
-)
-
-# We then build the sentiment analysis pipeline, passing the model name and the
-# sentiment analysis pipeline arguments. Let's also make sure to set the device
-# to the same device as the PPOTrainer.
-device = ppo_trainer.accelerator.device
-if ppo_trainer.accelerator.num_processes == 1:
-    device = 0 if torch.cuda.is_available() else "cpu"  # to avoid a `pipeline` bug
-sentiment_pipe = pipeline(
-    "sentiment-analysis", "lvwerra/distilbert-imdb", device=device
-)
-
-# We then define the arguments to pass to the `generate` function. These arguments
-# are passed to the `generate` function of the PPOTrainer, which is a wrapper around
-# the `generate` function of the trained model.
-output_min_length = 16
-output_max_length = 32
-output_length_sampler = LengthSampler(output_min_length, output_max_length)
-
-for epoch, batch in tqdm(enumerate(ppo_trainer.dataloader)):
-    query_tensors = batch["input_ids"]
-
-    # Get response from t5
-    response_tensors = ppo_trainer.generate(
-        query_tensors,
-        return_prompt=False,
-        length_sampler=output_length_sampler,
-        **generation_kwargs
+def load_entailment_model(
+    model_name_or_path: str, device: str
+) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
+    config = AutoConfig.from_pretrained(
+        model_name_or_path, num_labels=3, revision="main"
     )
-    batch["response"] = tokenizer.batch_decode([r[1:] for r in response_tensors])
+    tokeniser = AutoTokenizer.from_pretrained(model_name_or_path, revision="main")
+    model = AutoModelForSequenceClassification.from_pretrained(
+        model_name_or_path, config=config, revision="main"
+    )
+    model.config.label2id = {
+        "CONTRADICTION": 0,
+        "ENTAILMENT": 1,
+        "NEUTRAL": 2,
+    }
+    model.config.id2label = {id: label for label, id in model.config.label2id.items()}
 
-    # Compute sentiment score
-    texts = [q + r for q, r in zip(batch["query"], batch["response"])]
-    pipe_outputs = sentiment_pipe(texts, **sent_kwargs)
-    rewards = [torch.tensor(output[1]["score"]).to(device) for output in pipe_outputs]
+    return model.to(device), tokeniser
 
-    # Run PPO step
-    stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
-    ppo_trainer.log_stats(stats, batch, rewards)
+
+def load_seq2seq_model(
+    model_name: str,
+) -> tuple[PreTrainedModel, PreTrainedModel, PreTrainedTokenizer]:
+    model_config = AutoConfig.from_pretrained(model_name)
+    model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(
+        model_name, config=model_config
+    )
+    ref_model = create_reference_model(model)
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    return model, ref_model, tokenizer
+
+
+def parse_arguments() -> ScriptArguments:
+    # Define the command-line arguments using the dataclass
+    parser = HfArgumentParser(ScriptArguments)
+    parser.add_argument(
+        "--config",
+        type=Path,
+        help="Path to a JSON configuration file",
+    )
+    args = parser.parse_args()
+
+    # Load the configuration from a JSON file if provided
+    if args.config is not None:
+        config_dict = json.loads(args.config.read_text())
+        config = ScriptArguments(**config_dict)
+    else:
+        config = ScriptArguments()
+
+    # Update the configuration with the command-line arguments
+    for key, value in vars(args).items():
+        if value is not None and key != "config":
+            setattr(config, key, value)
+
+    print(config)
+    exit()
+    return config
+
+
+def main() -> None:
+    # TODO: Support overrides from the CLI
+    # parser = HfArgumentParser(ScriptArguments)
+    # if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
+    #     args = parser.parse_json_file(sys.argv[1])[0]
+    # else:
+    #     args = parser.parse_args_into_dataclasses()[0]
+    args = parse_arguments()
+
+    set_seed(args.seed)
+
+    model, ref_model, tokenizer = load_seq2seq_model(args.model_name)
+    dataset = build_imdb_dataset(
+        tokenizer=tokenizer,
+        max_seq_length=args.max_seq_length,
+        max_samples=args.max_samples,
+    )
+
+    ppo_config = PPOConfig(
+        model_name=args.model_name,
+        learning_rate=args.learning_rate,
+        mini_batch_size=args.mini_batch_size,
+        batch_size=args.batch_size,
+        gradient_accumulation_steps=args.gradient_accumulation_steps,
+    )
+
+    ppo_trainer = PPOTrainer(
+        ppo_config,
+        model,
+        ref_model,
+        tokenizer,
+        dataset=dataset,
+        data_collator=data_collator,
+    )
+
+    device = ppo_trainer.accelerator.device
+    if ppo_trainer.accelerator.num_processes == 1:
+        device = 0 if torch.cuda.is_available() else "cpu"
+
+    entailment_model, entailment_tokenizer = load_entailment_model(
+        args.classification_model, device
+    )
+    sentiment_pipe = pipeline(
+        "sentiment-analysis",
+        model=entailment_model,
+        tokenizer=entailment_tokenizer,
+        device=device,
+    )
+
+    label_to_reward = {
+        "CONTRADICTION": -1.0,
+        "ENTAILMENT": 1.0,
+        "NEUTRAL": 0.0,
+    }
+
+    for _, batch in tqdm(enumerate(ppo_trainer.dataloader)):
+        query_tensors = batch["input_ids"]
+
+        print("# Get response from t5")
+        response_tensors = ppo_trainer.generate(
+            query_tensors,
+            num_beams=model.config.num_beams,
+            max_length=10,
+        )
+        print("# Decode response")
+        batch["response"] = tokenizer.batch_decode([r[1:] for r in response_tensors])
+
+        print("# Compute entailment labels")
+        texts = [f"{q}\n{r}" for q, r in zip(batch["query"], batch["response"])]
+        pipe_outputs = sentiment_pipe(
+            texts, top_k=1, function_to_apply="none", batch_size=16
+        )
+
+        print("# Calculate rewards")
+        rewards = [
+            torch.tensor(label_to_reward[output[0]["label"]]).to(device)
+            for output in pipe_outputs
+        ]
+
+        print("# Run PPO step")
+        stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
+        ppo_trainer.log_stats(stats, batch, rewards)
+
+
+if __name__ == "__main__":
+    main()

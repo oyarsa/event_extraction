@@ -1,0 +1,5 @@
+{
+	"model_name": "../../output/t5-small-reconstruct",
+	"classification_model": "../../output/shuf-deberta-xsmall",
+	"max_samples": 1000
+}
