@@ -1,3 +1,4 @@
+# pyright: basic
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
-from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Optional
+from collections.abc import Iterable, Mapping, Sequence
+from dataclasses import asdict, dataclass, field, fields
+from typing import Any, TypedDict
 
+import simple_parsing
 import torch
 from datasets import load_dataset
-from torch.utils.data import Dataset
+from torch.utils.data import DataLoader, Dataset, TensorDataset
 from tqdm import tqdm
 from transformers import (
     AutoConfig,
     AutoModelForSequenceClassification,
     AutoTokenizer,
-    HfArgumentParser,
     PreTrainedModel,
     PreTrainedTokenizer,
-    pipeline,
 )
 from trl import (
     AutoModelForSeq2SeqLMWithValueHead,
@@ -38,34 +36,50 @@ from trl import (
     create_reference_model,
 )
 
-from self_critique.minimal.util import set_seed
+from self_critique.minimal.util import set_seed, supress_transformers_warnings
 
 
 @dataclass
-class ScriptArguments:
+class Config:
     "The name of the Casual LM model we wish to fine with PPO."
 
-    model_name: str = field(default="t5-small", metadata={"help": "the model name"})
-    classification_model: str = field(
-        default="t5-small", metadata={"help": "the model name"}
-    )
-    learning_rate: Optional[float] = field(
-        default=5e-5, metadata={"help": "the learning rate"}
-    )
-    mini_batch_size: Optional[int] = field(
-        default=16, metadata={"help": "the PPO minibatch size"}
-    )
-    batch_size: Optional[int] = field(default=256, metadata={"help": "the batch size"})
-    gradient_accumulation_steps: Optional[int] = field(
-        default=1, metadata={"help": "the number of gradient accumulation steps"}
-    )
-    max_seq_length: int = field(
-        default=512, metadata={"help": "the maximum sequence length"}
-    )
-    seed: int = field(default=0, metadata={"help": "Fixed random seed"})
-    max_samples: Optional[int] = field(
-        default=None, metadata={"help": "Max data samples"}
-    )
+    # Seq2Seq model name or path
+    seq2seq_model: str = "t5-small"
+    # Entailment model name or path
+    entailment_model: str = "microsoft/deberta-v3-xsmall"
+    # Learning rate
+    learning_rate: float = 5e-5
+    # PPO minibatch size
+    mini_batch_size: int = 16
+    # Reward model batch size
+    batch_size: int = 256
+    # Gradient accumulation steps
+    gradient_accumulation_steps: int = 1
+    # Maximum sequence length for Seq2Seq model
+    max_seq_length: int = 512
+    # Fixed random seed
+    seed: int = 0
+    # Max data samples
+    max_samples: int | None = None
+    # Max length for generated sequences from the Seq2Seq model
+    max_generation_length: int = 512
+
+    def __init__(self, **kwargs: Any) -> None:
+        "Ignore unknown arguments"
+        for f in fields(self):
+            if f.name in kwargs:
+                setattr(self, f.name, kwargs[f.name])
+
+    def __str__(self) -> str:
+        config_lines = [">>>> CONFIGURATION"]
+        for key, value in asdict(self).items():
+            config_lines.append(f"  {key}: {value}")
+        return "\n".join(config_lines)
+
+
+class ImdbDatasetEntry(TypedDict):
+    input_ids: list[int]
+    query: str
 
 
 def build_imdb_dataset(
@@ -73,20 +87,26 @@ def build_imdb_dataset(
     max_seq_length: int,
     max_samples: int | None,
 ) -> Dataset:
-    def tokenize(sample: Mapping[str, Sequence[Any]]) -> Mapping[str, Sequence[Any]]:
-        sample["input_ids"] = tokenizer.encode(
+    class ImdbSample(TypedDict):
+        review: str
+
+    def tokenize(sample: ImdbSample) -> ImdbDatasetEntry:
+        input_ids: list[int] = tokenizer.encode(
             sample["review"],
             padding="max_length",
             truncation=True,
             max_length=max_seq_length,
         )
-        sample["query"] = tokenizer.decode(sample["input_ids"])
-        return sample
+        query: str = tokenizer.decode(input_ids)
+        return {
+            "input_ids": input_ids,
+            "query": query,
+        }
 
     ds = (
         load_dataset("imdb", split="train")
         .rename_columns({"text": "review"})
-        .filter(lambda x: len(x["review"]) > 200, batched=False)
+        .filter(lambda x: len(x["review"]) > 200)
     )
     if max_samples is not None:
         max_samples = min(max_samples, len(ds))
@@ -94,28 +114,41 @@ def build_imdb_dataset(
     return ds.map(tokenize).with_format("torch")
 
 
-def data_collator(data: Sequence[Mapping[str, Any]]) -> Mapping[str, list[Any]]:
+def data_collator(data: Sequence[Mapping[str, Any]]) -> dict[str, list[Any]]:
     return {key: [d[key] for d in data] for key in data[0]}
 
 
+@dataclass
+class Labeller:
+    label2id: dict[str, int]
+    id2label: dict[int, str] = field(init=False)
+    num_classes: int = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.id2label = {id: label for label, id in self.label2id.items()}
+        self.num_classes = len(self.label2id)
+
+    def decode(self, labels: Iterable[int | float]) -> list[str]:
+        return [self.id2label[int(label)] for label in labels]
+
+
 def load_entailment_model(
-    model_name_or_path: str, device: str
+    model_name_or_path: str,
+    device: torch.device,
+    labeller: Labeller,
 ) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
     config = AutoConfig.from_pretrained(
-        model_name_or_path, num_labels=3, revision="main"
+        model_name_or_path, num_labels=labeller.num_classes, revision="main"
     )
-    tokeniser = AutoTokenizer.from_pretrained(model_name_or_path, revision="main")
+    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, revision="main")
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name_or_path, config=config, revision="main"
     )
-    model.config.label2id = {
-        "CONTRADICTION": 0,
-        "ENTAILMENT": 1,
-        "NEUTRAL": 2,
-    }
-    model.config.id2label = {id: label for label, id in model.config.label2id.items()}
+    model.config.label2id = labeller.label2id
+    model.config.id2label = labeller.id2label
 
-    return model.to(device), tokeniser
+    model = model.to(device)
+    return model, tokenizer
 
 
 def load_seq2seq_model(
@@ -130,59 +163,68 @@ def load_seq2seq_model(
     return model, ref_model, tokenizer
 
 
-def parse_arguments() -> ScriptArguments:
-    # Define the command-line arguments using the dataclass
-    parser = HfArgumentParser(ScriptArguments)
-    parser.add_argument(
-        "--config",
-        type=Path,
-        help="Path to a JSON configuration file",
+def label_to_reward(label: str) -> float:
+    return {
+        "CONTRADICTION": -1.0,
+        "ENTAILMENT": 1.0,
+        "NEUTRAL": 0.0,
+    }[label]
+
+
+def run_entailment(
+    model: PreTrainedModel,
+    tokenizer: PreTrainedTokenizer,
+    labeller: Labeller,
+    max_seq_length: int,
+    batch_size: int,
+    sentence1: list[str],
+    sentence2: list[str],
+) -> list[str]:
+    inputs = tokenizer(
+        sentence1,
+        sentence2,
+        padding="max_length",
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_seq_length,
     )
-    args = parser.parse_args()
+    dataset = TensorDataset(inputs["input_ids"], inputs["attention_mask"])
+    loader = DataLoader(dataset, batch_size=batch_size)
 
-    # Load the configuration from a JSON file if provided
-    if args.config is not None:
-        config_dict = json.loads(args.config.read_text())
-        config = ScriptArguments(**config_dict)
-    else:
-        config = ScriptArguments()
+    model.eval()
+    predictions: list[str] = []
+    with torch.no_grad():
+        for input_ids, attention_mask in tqdm(loader, desc="> Running entailment"):
+            outputs = model(
+                input_ids=input_ids.to(model.device),
+                attention_mask=attention_mask.to(model.device),
+            )
+            preds = torch.argmax(outputs.logits, dim=-1)
+            predictions.extend(labeller.decode(x.item() for x in preds))
 
-    # Update the configuration with the command-line arguments
-    for key, value in vars(args).items():
-        if value is not None and key != "config":
-            setattr(config, key, value)
-
-    print(config)
-    exit()
-    return config
+    return predictions
 
 
 def main() -> None:
-    # TODO: Support overrides from the CLI
-    # parser = HfArgumentParser(ScriptArguments)
-    # if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
-    #     args = parser.parse_json_file(sys.argv[1])[0]
-    # else:
-    #     args = parser.parse_args_into_dataclasses()[0]
-    args = parse_arguments()
+    args = simple_parsing.parse(Config, add_config_path_arg=True)
+    print(f"{args}\n")
 
     set_seed(args.seed)
+    supress_transformers_warnings()
 
-    model, ref_model, tokenizer = load_seq2seq_model(args.model_name)
+    model, ref_model, tokenizer = load_seq2seq_model(args.seq2seq_model)
     dataset = build_imdb_dataset(
         tokenizer=tokenizer,
         max_seq_length=args.max_seq_length,
         max_samples=args.max_samples,
     )
-
     ppo_config = PPOConfig(
-        model_name=args.model_name,
+        model_name=args.seq2seq_model,
         learning_rate=args.learning_rate,
         mini_batch_size=args.mini_batch_size,
         batch_size=args.batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
     )
-
     ppo_trainer = PPOTrainer(
         ppo_config,
         model,
@@ -192,48 +234,46 @@ def main() -> None:
         data_collator=data_collator,
     )
 
-    device = ppo_trainer.accelerator.device
-    if ppo_trainer.accelerator.num_processes == 1:
-        device = 0 if torch.cuda.is_available() else "cpu"
-
+    device: torch.device = ppo_trainer.accelerator.device
+    labeller = Labeller(
+        {
+            "CONTRADICTION": 0,
+            "ENTAILMENT": 1,
+            "NEUTRAL": 2,
+        }
+    )
     entailment_model, entailment_tokenizer = load_entailment_model(
-        args.classification_model, device
-    )
-    sentiment_pipe = pipeline(
-        "sentiment-analysis",
-        model=entailment_model,
-        tokenizer=entailment_tokenizer,
-        device=device,
+        model_name_or_path=args.entailment_model, device=device, labeller=labeller
     )
 
-    label_to_reward = {
-        "CONTRADICTION": -1.0,
-        "ENTAILMENT": 1.0,
-        "NEUTRAL": 0.0,
-    }
-
-    for _, batch in tqdm(enumerate(ppo_trainer.dataloader)):
+    for epoch, batch in tqdm(enumerate(ppo_trainer.dataloader)):
+        print(f"Epoch {epoch}")
         query_tensors = batch["input_ids"]
 
-        print("# Get response from t5")
+        print("\n# Get response from t5")
         response_tensors = ppo_trainer.generate(
             query_tensors,
             num_beams=model.config.num_beams,
-            max_length=10,
+            max_length=args.max_generation_length,
         )
         print("# Decode response")
         batch["response"] = tokenizer.batch_decode([r[1:] for r in response_tensors])
 
         print("# Compute entailment labels")
-        texts = [f"{q}\n{r}" for q, r in zip(batch["query"], batch["response"])]
-        pipe_outputs = sentiment_pipe(
-            texts, top_k=1, function_to_apply="none", batch_size=16
+        entailment_labels = run_entailment(
+            model=entailment_model,
+            tokenizer=entailment_tokenizer,
+            max_seq_length=args.max_seq_length,
+            batch_size=args.batch_size,
+            labeller=labeller,
+            sentence1=batch["query"],
+            sentence2=batch["response"],
         )
 
         print("# Calculate rewards")
         rewards = [
-            torch.tensor(label_to_reward[output[0]["label"]]).to(device)
-            for output in pipe_outputs
+            torch.tensor(label_to_reward(label)).to(device)
+            for label in entailment_labels
         ]
 
         print("# Run PPO step")
