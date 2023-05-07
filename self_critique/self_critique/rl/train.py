@@ -134,7 +134,6 @@ class Labeller:
 
 def load_entailment_model(
     model_name_or_path: str,
-    device: torch.device,
     labeller: Labeller,
 ) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
     config = AutoConfig.from_pretrained(
@@ -147,20 +146,18 @@ def load_entailment_model(
     model.config.label2id = labeller.label2id
     model.config.id2label = labeller.id2label
 
-    model = model.to(device)
     return model, tokenizer
 
 
 def load_seq2seq_model(
     model_name: str,
-) -> tuple[PreTrainedModel, PreTrainedModel, PreTrainedTokenizer]:
+) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
     model_config = AutoConfig.from_pretrained(model_name)
     model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(
         model_name, config=model_config
     )
-    ref_model = create_reference_model(model)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    return model, ref_model, tokenizer
+    return model, tokenizer
 
 
 def label_to_reward(label: str) -> float:
@@ -205,19 +202,15 @@ def run_entailment(
     return predictions
 
 
-def main() -> None:
-    args = simple_parsing.parse(Config, add_config_path_arg=True)
-    print(f"{args}\n")
-
-    set_seed(args.seed)
-    supress_transformers_warnings()
-
-    model, ref_model, tokenizer = load_seq2seq_model(args.seq2seq_model)
-    dataset = build_imdb_dataset(
-        tokenizer=tokenizer,
-        max_seq_length=args.max_seq_length,
-        max_samples=args.max_samples,
-    )
+def train(
+    seq2seq_model: PreTrainedModel,
+    seq2seq_tokenizer: PreTrainedTokenizer,
+    dataset: Dataset,
+    entailment_model: PreTrainedModel,
+    entailment_tokenizer: PreTrainedTokenizer,
+    labeller: Labeller,
+    args: Config,
+) -> PreTrainedModel:
     ppo_config = PPOConfig(
         model_name=args.seq2seq_model,
         learning_rate=args.learning_rate,
@@ -225,26 +218,18 @@ def main() -> None:
         batch_size=args.batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
     )
+    ref_model = create_reference_model(seq2seq_model)
     ppo_trainer = PPOTrainer(
         ppo_config,
-        model,
+        seq2seq_model,
         ref_model,
-        tokenizer,
+        seq2seq_tokenizer,
         dataset=dataset,
         data_collator=data_collator,
     )
 
-    device: torch.device = ppo_trainer.accelerator.device
-    labeller = Labeller(
-        {
-            "CONTRADICTION": 0,
-            "ENTAILMENT": 1,
-            "NEUTRAL": 2,
-        }
-    )
-    entailment_model, entailment_tokenizer = load_entailment_model(
-        model_name_or_path=args.entailment_model, device=device, labeller=labeller
-    )
+    device = ppo_trainer.accelerator.device
+    entailment_model = entailment_model.to(device)
 
     for epoch, batch in tqdm(enumerate(ppo_trainer.dataloader)):
         print(f"Epoch {epoch}")
@@ -253,11 +238,13 @@ def main() -> None:
         print("\n# Get response from t5")
         response_tensors = ppo_trainer.generate(
             query_tensors,
-            num_beams=model.config.num_beams,
+            num_beams=seq2seq_model.config.num_beams,
             max_length=args.max_generation_length,
         )
         print("# Decode response")
-        batch["response"] = tokenizer.batch_decode([r[1:] for r in response_tensors])
+        batch["response"] = seq2seq_tokenizer.batch_decode(
+            [r[1:] for r in response_tensors]
+        )
 
         print("# Compute entailment labels")
         entailment_labels = run_entailment(
@@ -279,6 +266,41 @@ def main() -> None:
         print("# Run PPO step")
         stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
         ppo_trainer.log_stats(stats, batch, rewards)
+    return ppo_trainer.model
+
+
+def main() -> None:
+    args = simple_parsing.parse(Config, add_config_path_arg=True)
+    print(f"{args}\n")
+
+    set_seed(args.seed)
+    supress_transformers_warnings()
+
+    seq2seq_model, seq2seq_tokenizer = load_seq2seq_model(args.seq2seq_model)
+    dataset = build_imdb_dataset(
+        tokenizer=seq2seq_tokenizer,
+        max_seq_length=args.max_seq_length,
+        max_samples=args.max_samples,
+    )
+    labeller = Labeller(
+        {
+            "CONTRADICTION": 0,
+            "ENTAILMENT": 1,
+            "NEUTRAL": 2,
+        }
+    )
+    entailment_model, entailment_tokenizer = load_entailment_model(
+        model_name_or_path=args.entailment_model, labeller=labeller
+    )
+    seq2seq_model = train(
+        seq2seq_model=seq2seq_model,
+        seq2seq_tokenizer=seq2seq_tokenizer,
+        dataset=dataset,
+        entailment_model=entailment_model,
+        entailment_tokenizer=entailment_tokenizer,
+        labeller=labeller,
+        args=args,
+    )
 
 
 if __name__ == "__main__":
