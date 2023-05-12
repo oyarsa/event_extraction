@@ -13,13 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass, field, fields
+from datetime import datetime
+from pathlib import Path
 from typing import Any, TypedDict
 
 import simple_parsing
 import torch
-from datasets import load_dataset
 from torch.utils.data import DataLoader, Dataset, TensorDataset
 from tqdm import tqdm
 from transformers import (
@@ -43,26 +45,38 @@ from self_critique.minimal.util import set_seed, supress_transformers_warnings
 class Config:
     "The name of the Casual LM model we wish to fine with PPO."
 
+    # Path to training data
+    train_file: Path
     # Seq2Seq model name or path
-    seq2seq_model: str = "t5-small"
+    seq2seq_model: str
     # Entailment model name or path
-    entailment_model: str = "microsoft/deberta-v3-xsmall"
+    entailment_model: str
     # Learning rate
     learning_rate: float = 5e-5
     # PPO minibatch size
     mini_batch_size: int = 16
     # Reward model batch size
     batch_size: int = 256
+    # Epochs
+    num_epochs: int = 20
     # Gradient accumulation steps
     gradient_accumulation_steps: int = 1
     # Maximum sequence length for Seq2Seq model
     max_seq_length: int = 512
     # Fixed random seed
     seed: int = 0
-    # Max data samples
-    max_samples: int | None = None
+    # Maximum number of samples used for training
+    max_train_samples: int | None = None
+    # Maximum number of samples used for evaluation
+    max_eval_samples: int | None = None
+    # Maximum number of samples used for prediction
+    max_predict_samples: int | None = None
     # Max length for generated sequences from the Seq2Seq model
     max_generation_length: int = 512
+    # Path to output directory where metrics, checkpoints and predictions will be saved
+    output_dir: Path = Path("output")
+    # Path to evaluation data
+    eval_file: Path | None = None
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -75,43 +89,6 @@ class Config:
         for key, value in asdict(self).items():
             config_lines.append(f"  {key}: {value}")
         return "\n".join(config_lines)
-
-
-class ImdbDatasetEntry(TypedDict):
-    input_ids: list[int]
-    query: str
-
-
-def build_imdb_dataset(
-    tokenizer: PreTrainedTokenizer,
-    max_seq_length: int,
-    max_samples: int | None,
-) -> Dataset:
-    class ImdbSample(TypedDict):
-        review: str
-
-    def tokenize(sample: ImdbSample) -> ImdbDatasetEntry:
-        input_ids: list[int] = tokenizer.encode(
-            sample["review"],
-            padding="max_length",
-            truncation=True,
-            max_length=max_seq_length,
-        )
-        query: str = tokenizer.decode(input_ids)
-        return {
-            "input_ids": input_ids,
-            "query": query,
-        }
-
-    ds = (
-        load_dataset("imdb", split="train")
-        .rename_columns({"text": "review"})
-        .filter(lambda x: len(x["review"]) > 200)
-    )
-    if max_samples is not None:
-        max_samples = min(max_samples, len(ds))
-        ds = ds.select(range(max_samples))
-    return ds.map(tokenize).with_format("torch")
 
 
 def data_collator(data: Sequence[Mapping[str, Any]]) -> dict[str, list[Any]]:
@@ -204,6 +181,7 @@ def run_entailment(
 
 def train(
     seq2seq_model: PreTrainedModel,
+    seq2seq_ref_model: PreTrainedModel,
     seq2seq_tokenizer: PreTrainedTokenizer,
     dataset: Dataset,
     entailment_model: PreTrainedModel,
@@ -218,33 +196,34 @@ def train(
         batch_size=args.batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
     )
-    ref_model = create_reference_model(seq2seq_model)
     ppo_trainer = PPOTrainer(
         ppo_config,
         seq2seq_model,
-        ref_model,
+        seq2seq_ref_model,
         seq2seq_tokenizer,
         dataset=dataset,
         data_collator=data_collator,
     )
 
     device = ppo_trainer.accelerator.device
+    seq2seq_model.device = device
     entailment_model = entailment_model.to(device)
 
     for epoch, batch in tqdm(enumerate(ppo_trainer.dataloader)):
-        print(f"Epoch {epoch}")
+        if epoch >= args.num_epochs:
+            break
+
+        print(f"\nTraining epoch: {epoch}")
         query_tensors = batch["input_ids"]
 
-        print("\n# Get response from t5")
+        print("# Get response from t5")
         response_tensors = ppo_trainer.generate(
             query_tensors,
             num_beams=seq2seq_model.config.num_beams,
             max_length=args.max_generation_length,
         )
         print("# Decode response")
-        batch["response"] = seq2seq_tokenizer.batch_decode(
-            [r[1:] for r in response_tensors]
-        )
+        response = seq2seq_tokenizer.batch_decode([r[1:] for r in response_tensors])
 
         print("# Compute entailment labels")
         entailment_labels = run_entailment(
@@ -253,8 +232,8 @@ def train(
             max_seq_length=args.max_seq_length,
             batch_size=args.batch_size,
             labeller=labeller,
-            sentence1=batch["query"],
-            sentence2=batch["response"],
+            sentence1=batch["original"],
+            sentence2=response,
         )
 
         print("# Calculate rewards")
@@ -269,6 +248,103 @@ def train(
     return ppo_trainer.model
 
 
+@dataclass
+class Seq2SeqEntry:
+    id: str
+    original: str
+    context: str
+    question: str
+    answers: str
+    question_type: str
+
+
+def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEntry]:
+    data = json.loads(file_path.read_text())
+    if "data" in data:
+        data = data["data"]
+    return [Seq2SeqEntry(**d) for d in data][:max_samples]
+
+
+def preprocess_data(
+    tokeniser: PreTrainedTokenizer,
+    data: list[Seq2SeqEntry],
+    max_seq_length: int,
+    device: str | torch.device,
+    desc: str | None = None,
+) -> Dataset:
+    desc = desc or ""
+    source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
+    target_texts = [d.answers for d in data]
+
+    model_inputs = tokeniser(
+        source_texts,
+        padding="max_length",
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_seq_length,
+    )
+    labels = tokeniser(
+        text_target=target_texts,
+        padding="max_length",
+        return_tensors="pt",
+        max_length=max_seq_length,
+        truncation=True,
+    )
+
+    dataset = Seq2SeqDataset(
+        input_tokens=model_inputs,
+        target_tokens=labels,
+        data=data,
+        device=device,
+    )
+    return dataset
+
+
+class Seq2SeqDatasetEntry(TypedDict):
+    input_ids: torch.Tensor
+    attention_mask: torch.Tensor
+    labels: torch.Tensor
+    id: str
+    original: str
+    answers: str
+    question_type: str
+    context: str
+
+
+class Seq2SeqDatasetSeries(TypedDict):
+    input_ids: torch.Tensor
+    attention_mask: torch.Tensor
+    labels: torch.Tensor
+    id: list[str]
+    original: list[str]
+    answers: list[str]
+    question_type: list[str]
+    context: list[str]
+
+
+@dataclass
+class Seq2SeqDataset(Dataset):
+    input_tokens: Mapping[str, torch.Tensor]
+    target_tokens: Mapping[str, torch.Tensor]
+    data: list[Seq2SeqEntry]
+    device: str | torch.device
+
+    def __len__(self) -> int:
+        return self.input_tokens["input_ids"].size(0)
+
+    def __getitem__(self, idx: int) -> Seq2SeqDatasetEntry:
+        return {
+            "input_ids": self.input_tokens["input_ids"][idx].to(self.device),
+            "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
+            "labels": self.target_tokens["input_ids"][idx].to(self.device),
+            "id": self.data[idx].id,
+            "original": self.data[idx].original,
+            "answers": self.data[idx].answers,
+            "question_type": self.data[idx].question_type,
+            "context": self.data[idx].context,
+        }
+
+
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
     print(f"{args}\n")
@@ -276,11 +352,18 @@ def main() -> None:
     set_seed(args.seed)
     supress_transformers_warnings()
 
+    if args.train_file is None:
+        raise ValueError("Must provide a training file")
+
     seq2seq_model, seq2seq_tokenizer = load_seq2seq_model(args.seq2seq_model)
-    dataset = build_imdb_dataset(
-        tokenizer=seq2seq_tokenizer,
+    seq2seq_ref_model = create_reference_model(seq2seq_model)
+    train_data = load_data(args.train_file, args.max_train_samples)
+    train_dataset = preprocess_data(
+        tokeniser=seq2seq_tokenizer,
+        data=train_data,
         max_seq_length=args.max_seq_length,
-        max_samples=args.max_samples,
+        device="cpu",
+        desc="training",
     )
     labeller = Labeller(
         {
@@ -289,18 +372,118 @@ def main() -> None:
             "NEUTRAL": 2,
         }
     )
+
     entailment_model, entailment_tokenizer = load_entailment_model(
         model_name_or_path=args.entailment_model, labeller=labeller
     )
     seq2seq_model = train(
         seq2seq_model=seq2seq_model,
+        seq2seq_ref_model=seq2seq_ref_model,
         seq2seq_tokenizer=seq2seq_tokenizer,
-        dataset=dataset,
+        dataset=train_dataset,
         entailment_model=entailment_model,
         entailment_tokenizer=entailment_tokenizer,
         labeller=labeller,
         args=args,
     )
+
+    if args.eval_file is not None:
+        eval_data = load_data(args.eval_file, args.max_eval_samples)
+        eval_result = evaluate(
+            data=eval_data,
+            seq2seq_ref_model=seq2seq_ref_model,
+            seq2seq_model=seq2seq_model,
+            seq2seq_tokenizer=seq2seq_tokenizer,
+            entailment_model=entailment_model,
+            entailment_tokenizer=entailment_tokenizer,
+            labeller=labeller,
+            args=args,
+        )
+        out_dir = args.output_dir / datetime.now().isoformat()
+        out_dir.mkdir(exist_ok=True, parents=True)
+        output_file = out_dir / "eval_result.json"
+        output_file.write_text(json.dumps(eval_result, indent=2))
+
+
+def evaluate(
+    data: list[Seq2SeqEntry],
+    seq2seq_model: PreTrainedModel,
+    seq2seq_ref_model: PreTrainedModel,
+    seq2seq_tokenizer: PreTrainedTokenizer,
+    entailment_model: PreTrainedModel,
+    entailment_tokenizer: PreTrainedTokenizer,
+    labeller: Labeller,
+    args: Config,
+) -> list[dict[str, Any]]:
+    dataset = preprocess_data(
+        tokeniser=seq2seq_tokenizer,
+        data=data,
+        max_seq_length=args.max_seq_length,
+        device=seq2seq_model.device,
+        desc="training",
+    )
+    loader = DataLoader(dataset, batch_size=args.batch_size)
+
+    output: list[dict[str, Any]] = []
+    for epoch, batch in tqdm(enumerate(loader)):
+        print(f"Eval epoch: {epoch}")
+        query_tensors = batch["input_ids"]
+
+        print("\n# Get response from RL t5")
+        rl_response_tensor = seq2seq_model.generate(
+            query_tensors,
+            num_beams=seq2seq_model.config.num_beams,
+            max_length=args.max_generation_length,
+        )
+        print("# Decode RL response")
+        rl_response = seq2seq_tokenizer.batch_decode(
+            [r[1:] for r in rl_response_tensor]
+        )
+
+        print("\n# Get response from reference t5")
+        ref_response_tensor = seq2seq_ref_model.generate(
+            query_tensors,
+            num_beams=seq2seq_model.config.num_beams,
+            max_length=args.max_generation_length,
+        )
+        print("# Decode reference response")
+        ref_response = seq2seq_tokenizer.batch_decode(
+            [r[1:] for r in ref_response_tensor]
+        )
+
+        print("# Compute entailment labels")
+        entailment_labels = run_entailment(
+            model=entailment_model,
+            tokenizer=entailment_tokenizer,
+            max_seq_length=args.max_seq_length,
+            batch_size=args.batch_size,
+            labeller=labeller,
+            sentence1=batch["original"],
+            sentence2=rl_response,
+        )
+
+        print("# Calculate rewards")
+        rewards = [
+            torch.tensor(label_to_reward(label)).to(seq2seq_model.device)
+            for label in entailment_labels
+        ]
+
+        for i in range(len(batch)):
+            output.append(
+                {
+                    "id": batch["id"][i],
+                    "original": batch["original"][i],
+                    "answers": batch["answers"][i],
+                    "question_type": batch["question_type"][i],
+                    "context": batch["context"][i],
+                    "rl_response": rl_response[i],
+                    "ref_response": ref_response[i],
+                    "entailment_label": entailment_labels[i],
+                    "reward": rewards[i].tolist(),
+                }
+            )
+
+    return output
 
 
 if __name__ == "__main__":
