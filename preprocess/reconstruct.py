@@ -111,8 +111,8 @@ def main() -> None:
 
     splits = ["dev", "test", "train"]
     for split in splits:
-        raw_path = args.raw_folder / f"event_dataset_{split}.json"
-        new_path = args.new_folder / f"{split}.json"
+        raw_path = args.src / f"event_dataset_{split}.json"
+        new_path = args.dst / f"{split}.json"
         convert_file_qa(raw_path, new_path, convert_instance=convert_reconstruct)
 
 
