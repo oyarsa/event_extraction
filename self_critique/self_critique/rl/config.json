@@ -3,9 +3,10 @@
 	"eval_file": "../../../data/reconstruct_rl/dev.json",
 	"seq2seq_model": "../../output/t5-small-reconstruct",
 	"entailment_model": "../../output/shuf-deberta-xsmall",
-	"max_train_samples": 1000,
-	"max_eval_samples": 1000,
-	"max_predict_samples": 1000,
-	"num_epochs": 1,
-	"max_generation_length": 10
+	"max_train_samples": 128,
+	"max_eval_samples": 128,
+	"max_predict_samples": 128,
+	"num_epochs": 2,
+	"max_generation_length": 5,
+	"batch_size": 32
 }
