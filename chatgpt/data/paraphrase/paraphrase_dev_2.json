@@ -1,0 +1,14 @@
+[
+  {
+    "sentence1": "In terms of switching costs, commercial banks have the advantage of being able to sell their clients a comprehensive suite of products, reducing sensitivity to interest paid on deposits as clients prefer the ease of maintaining all accounts in the same place.",
+    "sentence2": "commercial banks have the advantage of being able to sell their clients a comprehensive suite of products, reducing sensitivity to interest paid on deposits as clients prefer the ease of maintaining all accounts in the same place",
+    "label": "ENTAILMENT",
+    "id": "5bb779b8"
+  },
+  {
+    "sentence1": "Thanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.",
+    "sentence2": "Boston has maintained its strong position in drug-coated coronary stents and is developing some transcatheter mitral valve repair technologies, building on its footprint in the cardiac and vascular markets",
+    "label": "NEUTRAL",
+    "id": "e5662b76"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "sentence1": "In terms of switching costs, commercial banks have the advantage of being able to sell their clients a comprehensive suite of products, reducing sensitivity to interest paid on deposits as clients prefer the ease of maintaining all accounts in the same place.",
+    "sentence2": "commercial banks have the advantage of being able to sell their clients a comprehensive suite of products, reducing sensitivity to interest paid on deposits as clients prefer the ease of maintaining all accounts in the same place",
+    "label": "ENTAILMENT",
+    "id": "5bb779b8"
+  },
+  {
+    "sentence1": "Thanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.",
+    "sentence2": "Boston has maintained its strong position in drug-coated coronary stents and is developing some transcatheter mitral valve repair technologies, building on its footprint in the cardiac and vascular markets",
+    "label": "NEUTRAL",
+    "id": "e5662b76"
+  },
+  {
+    "sentence1": "We expect revenue to grow at an organic 5% annualized rate over our five-year forecast period as automaker customers focus on reducing vehicle emissions and launch electrified vehicle models.",
+    "sentence2": "revenue to grow at an organic 5% annualized rate over our five-year forecast period as automaker customers focus on reducing vehicle emissions and launch electrified vehicle models",
+    "label": "ENTAILMENT",
+    "id": "9fc36ede"
+  },
+  {
+    "sentence1": "Other federal, state, and local regulations also make it very difficult for a competitor to receive the necessary land use and environmental permits to construct competing networks.",
+    "sentence2": "Other federal, state, and local regulations also make it very difficult for a competitor to receive the necessary land use and environmental permits to construct competing networks",
+    "label": "ENTAILMENT",
+    "id": "62758bf5"
+  },
+  {
+    "sentence1": "Enterprises can be slow to migrate to the cloud, given the greater degree of complexity involved in modifying large-scale operations. These firms often make the transition gradually, taking several years to go from an on-premises to a full cloud-native model.",
+    "sentence2": "quarterly fluctuations caused by changes in crush margin and capacity utilization",
+    "label": "NEUTRAL",
+    "id": "efa77e1b"
+  },
+  {
+    "sentence1": "As such, during the early 1990s, the company was protected on the basis of its patent portfolio, which shielded the company from direct competition in cellulose-reinforced fibre cement products.",
+    "sentence2": "the company was protected on the basis of its patent portfolio",
+    "label": "ENTAILMENT",
+    "id": "84e39862"
+  },
+  {
+    "sentence1": "Adjusted operating margins rose from 34% in 2013 to 50% in 2019 and we'd attribute the gain to streamlining operations and revenue growth.",
+    "sentence2": "competition rising, we anticipate margins will be pressured long term",
+    "label": "NEUTRAL",
+    "id": "7a802a3a"
+  },
+  {
+    "sentence1": "We also expect a strong recovery in Spanish fee income as transactional activity normalises and asset management fees that will benefit from a recovery in assets under management, or AUM.",
+    "sentence2": "asset management fees that will benefit from a recovery in assets under management, or AUM",
+    "label": "ENTAILMENT",
+    "id": "206ba5bd"
+  },
+  {
+    "sentence1": "Additionally, we also expect industrial markets to recover, which we think will boost freight demand for fleet owners, leading to higher revenue for CNH Industrial.",
+    "sentence2": "entrants then face steep customer acquisition costs and startup losses as they attempt to gain share with a modestly differentiated product in a rapidly maturing market",
+    "label": "NEUTRAL",
+    "id": "215d5d5f"
+  },
+  {
+    "sentence1": "This growth will be supplemented by rising volume out of the consumer brands segment thanks to the recent deal with Lowe's, and the successful execution of roughly 100 new store openings a year in the Americas, adding another 2.5% to overall revenue growth.",
+    "sentence2": "the rise of online grocery, hastened in part by the coronavirus crisis, certainly has some positive implications for the industry",
+    "label": "NEUTRAL",
+    "id": "ec44a544"
+  }
+]

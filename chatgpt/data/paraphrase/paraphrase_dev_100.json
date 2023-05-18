@@ -1,0 +1,602 @@
+[
+  {
+    "sentence1": "In terms of switching costs, commercial banks have the advantage of being able to sell their clients a comprehensive suite of products, reducing sensitivity to interest paid on deposits as clients prefer the ease of maintaining all accounts in the same place.",
+    "sentence2": "commercial banks have the advantage of being able to sell their clients a comprehensive suite of products, reducing sensitivity to interest paid on deposits as clients prefer the ease of maintaining all accounts in the same place",
+    "label": "ENTAILMENT",
+    "id": "5bb779b8"
+  },
+  {
+    "sentence1": "Thanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.",
+    "sentence2": "Boston has maintained its strong position in drug-coated coronary stents and is developing some transcatheter mitral valve repair technologies, building on its footprint in the cardiac and vascular markets",
+    "label": "NEUTRAL",
+    "id": "e5662b76"
+  },
+  {
+    "sentence1": "We expect revenue to grow at an organic 5% annualized rate over our five-year forecast period as automaker customers focus on reducing vehicle emissions and launch electrified vehicle models.",
+    "sentence2": "revenue to grow at an organic 5% annualized rate over our five-year forecast period as automaker customers focus on reducing vehicle emissions and launch electrified vehicle models",
+    "label": "ENTAILMENT",
+    "id": "9fc36ede"
+  },
+  {
+    "sentence1": "Other federal, state, and local regulations also make it very difficult for a competitor to receive the necessary land use and environmental permits to construct competing networks.",
+    "sentence2": "Other federal, state, and local regulations also make it very difficult for a competitor to receive the necessary land use and environmental permits to construct competing networks",
+    "label": "ENTAILMENT",
+    "id": "62758bf5"
+  },
+  {
+    "sentence1": "Enterprises can be slow to migrate to the cloud, given the greater degree of complexity involved in modifying large-scale operations. These firms often make the transition gradually, taking several years to go from an on-premises to a full cloud-native model.",
+    "sentence2": "quarterly fluctuations caused by changes in crush margin and capacity utilization",
+    "label": "NEUTRAL",
+    "id": "efa77e1b"
+  },
+  {
+    "sentence1": "As such, during the early 1990s, the company was protected on the basis of its patent portfolio, which shielded the company from direct competition in cellulose-reinforced fibre cement products.",
+    "sentence2": "the company was protected on the basis of its patent portfolio",
+    "label": "ENTAILMENT",
+    "id": "84e39862"
+  },
+  {
+    "sentence1": "Adjusted operating margins rose from 34% in 2013 to 50% in 2019 and we'd attribute the gain to streamlining operations and revenue growth.",
+    "sentence2": "competition rising, we anticipate margins will be pressured long term",
+    "label": "NEUTRAL",
+    "id": "7a802a3a"
+  },
+  {
+    "sentence1": "We also expect a strong recovery in Spanish fee income as transactional activity normalises and asset management fees that will benefit from a recovery in assets under management, or AUM.",
+    "sentence2": "asset management fees that will benefit from a recovery in assets under management, or AUM",
+    "label": "ENTAILMENT",
+    "id": "206ba5bd"
+  },
+  {
+    "sentence1": "Additionally, we also expect industrial markets to recover, which we think will boost freight demand for fleet owners, leading to higher revenue for CNH Industrial.",
+    "sentence2": "entrants then face steep customer acquisition costs and startup losses as they attempt to gain share with a modestly differentiated product in a rapidly maturing market",
+    "label": "NEUTRAL",
+    "id": "215d5d5f"
+  },
+  {
+    "sentence1": "This growth will be supplemented by rising volume out of the consumer brands segment thanks to the recent deal with Lowe's, and the successful execution of roughly 100 new store openings a year in the Americas, adding another 2.5% to overall revenue growth.",
+    "sentence2": "the rise of online grocery, hastened in part by the coronavirus crisis, certainly has some positive implications for the industry",
+    "label": "NEUTRAL",
+    "id": "ec44a544"
+  },
+  {
+    "sentence1": "Brand Intangible Assets:The creation of brand-driven intangible assets could help cannabis companies establish pricing power and generate economic profits.",
+    "sentence2": "The creation of brand-driven intangible assets could help cannabis companies establish pricing power and generate economic profits",
+    "label": "ENTAILMENT",
+    "id": "5f84e054"
+  },
+  {
+    "sentence1": "While progress of smartphone cameras and the diffusion of high-end mirrorless interchangeable lens cameras is a threat to the business, we believe the combination of a DSLR camera and lenses produces the best-quality pictures, and thus solid demand for DSLRs will remain.",
+    "sentence2": "the first mover in this space, Veeva has a built-in structural advantage",
+    "label": "NEUTRAL",
+    "id": "62365113"
+  },
+  {
+    "sentence1": "With the company already in turnaround mode, the coronavirus pandemic will prolong the process, detouring any improvement in execution through the rough roads of margin contraction on negative operating leverage from lower volume.",
+    "sentence2": "the company already in turnaround mode, the coronavirus pandemic",
+    "label": "ENTAILMENT",
+    "id": "2cc1ce27"
+  },
+  {
+    "sentence1": "We expect Macerich to continue improving its portfolio through redevelopment, opportunistic acquisitions, and asset sales, which should deliver strong earnings growth for Macerich over time.",
+    "sentence2": "This trend of Amphenol's products underpinning advancements in technology that keep its prices elevated can be seen across its many industry verticals",
+    "label": "NEUTRAL",
+    "id": "48e6ea9d"
+  },
+  {
+    "sentence1": "Looking beyond our five-year explicit forecast period, we think genomics could allow Neogen to finally exceed its long-stated 20% operating margin target.",
+    "sentence2": "More complex trials provide room for differentiation",
+    "label": "NEUTRAL",
+    "id": "275ce5ff"
+  },
+  {
+    "sentence1": "We forecast lower lower midcycle steel prices yet, driven by our bearish outlook for Chinese fixed-asset investment and the persistence of structural overcapacity as well as faltering cost support from steelmaking raw materials.",
+    "sentence2": "lower lower midcycle steel prices yet, driven by our bearish outlook for Chinese fixed-asset investment and the persistence of structural overcapacity as well as faltering cost support from steelmaking raw materials",
+    "label": "ENTAILMENT",
+    "id": "5f2c69f8"
+  },
+  {
+    "sentence1": "Along those lines, low visibility surrounding the magnitude of industrial end market recovery brings elevated uncertainty to our volume assumptions for 2021 and 2022.",
+    "sentence2": "low visibility surrounding the magnitude of industrial end market recovery brings elevated uncertainty to our volume assumptions for 2021 and 2022",
+    "label": "ENTAILMENT",
+    "id": "3a668c8d"
+  },
+  {
+    "sentence1": "Fifth Third was hit quite hard during the last recession, with its outsize exposure to Rust belt economies such as Detroit, and provisioning that ate up all the bank's net interest income in 2008 and 2009. This has meant that the bank has not historically had a credit cost advantage, and its operating efficiency ratios have been pressured as well.",
+    "sentence2": "Fifth Third was hit quite hard during the last recession, with its outsize exposure to Rust belt economies such as Detroit, and provisioning that ate up all the bank's net interest income in 2008 and 2009. This has meant that the bank has not historically had a credit cost advantage, and its operating efficiency ratios have been pressured as well",
+    "label": "ENTAILMENT",
+    "id": "ee2ea251"
+  },
+  {
+    "sentence1": "With Lazard deriving half of its revenue from financial advisory and half from asset management, the company's revenue and earnings can be cyclical.",
+    "sentence2": "declining net interest margins over the past few years, Bradesco has pivoted toward higher margin small and medium enterprise and personal lending, in tandem with an increased focus on fee income",
+    "label": "NEUTRAL",
+    "id": "3767251c"
+  },
+  {
+    "sentence1": "All three of PVH's segments suffered sales declines in North America in 2019 on weak international traffic (from China and elsewhere), widespread discounting in the apparel industry, store closures, tariffs, and slow customer traffic in department stores.",
+    "sentence2": "All three of PVH's segments suffered sales declines in North America in 2019 on weak international traffic (from China and elsewhere), widespread discounting in the apparel industry, store closures, tariffs, and slow customer traffic in department stores",
+    "label": "ENTAILMENT",
+    "id": "69dd764d"
+  },
+  {
+    "sentence1": "The commitment to better merchandising and an efficient supply chain has led the firm to achieve operating margins and adjusted returns on invested capital, excluding goodwill, of 14.4% and 34%, respectively, in 2019.",
+    "sentence2": "The commitment to better merchandising and an efficient supply chain has led the firm to achieve operating margins and adjusted returns on invested capital, excluding goodwill, of 14.4% and 34%, respectively, in 2019",
+    "label": "ENTAILMENT",
+    "id": "ffe7cac1"
+  },
+  {
+    "sentence1": "With competition rising, we anticipate margins will be pressured long term, though improved pricing practices as well as supply chain, marketing, and distribution capabilities should help offset the strain, as should a growing private-label portfolio and procurement leverage.",
+    "sentence2": "The success of ongoing initiatives should set the operating margin back on a improving trajectory in 2022, as investments wind down",
+    "label": "NEUTRAL",
+    "id": "9761c592"
+  },
+  {
+    "sentence1": "We believe it was a positive that preliminary weather-adjusted sales growth is estimated to be 3% due to strong industrial growth in the Mississippi Delta and expected recovery of commercial volumes.",
+    "sentence2": "it was a positive that preliminary weather-adjusted sales growth is estimated to be 3% due to strong industrial growth in the Mississippi Delta and expected recovery of commercial volumes",
+    "label": "ENTAILMENT",
+    "id": "0a61e65d"
+  },
+  {
+    "sentence1": "Patterson's operations in this space are subject to a number of federal and state regulatory actions aiming to curb the potentially negative outcomes typically associated with the practice, which increase the cost of providing services.",
+    "sentence2": "curb the potentially negative outcomes typically associated with the practice, which increase the cost of providing services",
+    "label": "ENTAILMENT",
+    "id": "19b7fcfa"
+  },
+  {
+    "sentence1": "As retailers seek additional distribution facilities closer to population centers to accommodate this trend, Prologis will tap into its deep land bank to complete lucrative developments.",
+    "sentence2": "Wiley's products targeted to the professional community are affected by economic conditions, which can cause firms to change head count and training expenditures",
+    "label": "NEUTRAL",
+    "id": "9e81977b"
+  },
+  {
+    "sentence1": "To meet demand, higher cost supply will need to come online from lower quality resources that will require higher processing costs.",
+    "sentence2": "a healthy uptick in construction activity results in rising material costs",
+    "label": "NEUTRAL",
+    "id": "856a277a"
+  },
+  {
+    "sentence1": "Cheaper equipment can increase the likelihood of machine failure during operation, leading to lost productivity that cuts into an operator's profitability (mission-critical equipment).",
+    "sentence2": "investments into identified growth areas, such as the midmarket tool-cutting market, to be met with greater competition and thus lower margins than some of Sandvik's high-margin-generating core businesses",
+    "label": "NEUTRAL",
+    "id": "0c2b4674"
+  },
+  {
+    "sentence1": "We think there is a risk these partners will look elsewhere if Neogen does not successfully scale licensed products, and partners could also demand a greater share of profits if co-developed products are highly successful.",
+    "sentence2": "partners could also demand a greater share of profits if co-developed products are highly successful",
+    "label": "ENTAILMENT",
+    "id": "589bb83b"
+  },
+  {
+    "sentence1": "Although the company faces an intense competitive landscape, it should succeed in the coming years as the handset industry focuses on 5G devices, which usually require higher radio frequency, or RF, dollar content per phone.",
+    "sentence2": "Although the company faces an intense competitive landscape, it should succeed in the coming years as the handset industry focuses on 5G devices, which usually require higher radio frequency, or RF, dollar content per phone",
+    "label": "ENTAILMENT",
+    "id": "7d01874f"
+  },
+  {
+    "sentence1": "Xylem's risk is somewhat mitigated by its large installed base, as almost half of the company's revenue is recurring, driven by aftermarket service and part replacement in the water infrastructure and applied water segments as well as long-term customer contracts in the measurement and control solutions segment.",
+    "sentence2": "almost half of the company's revenue is recurring, driven by aftermarket service and part replacement in the water infrastructure and applied water segments as well as long-term customer contracts in the measurement and control solutions segment",
+    "label": "ENTAILMENT",
+    "id": "4622038b"
+  },
+  {
+    "sentence1": "A key factor in the historical margin improvement was the divestiture of animal health (to Eli Lilly) and vaccine (to Glaxo) units, which were carrying very low margins and not driving much cash flow for the company.",
+    "sentence2": "Canon has developed a strong hook with customers on DSLR cameras, which prevents customers from choosing other brands when buying new products",
+    "label": "NEUTRAL",
+    "id": "10c0a095"
+  },
+  {
+    "sentence1": "In our base case, we assume contractual rent growth and releasing spreads decline in New York City due to significant class A supply additions on the island of Manhattan and a coronavirus-related downturn.",
+    "sentence2": "In our base case, we assume contractual rent growth and releasing spreads decline in New York City due to significant class A supply additions on the island of Manhattan and a coronavirus-related downturn",
+    "label": "ENTAILMENT",
+    "id": "35064ca1"
+  },
+  {
+    "sentence1": "Airlines generally do not switch between the major manufacturers because it is expensive to update maintenance procedures, which are designed for each aircraft product, and crews and pilots would need to be retrained and certified on the new aircraft.",
+    "sentence2": "the change in consumer preferences has created a demand dislocation",
+    "label": "NEUTRAL",
+    "id": "c6e49d14"
+  },
+  {
+    "sentence1": "Unlike many of its peers, MetLife does not have a meaningful third-party asset management business as historically MetLife has decided to focus on its core life insurance operations.",
+    "sentence2": "MetLife does not have a meaningful third-party asset management business as historically MetLife has decided to focus on its core life insurance operations",
+    "label": "ENTAILMENT",
+    "id": "55682fd8"
+  },
+  {
+    "sentence1": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",
+    "sentence2": "EA to continue to benefit from the upcoming new generation of consoles, the ongoing revitalization of PC gaming, and the growth in mobile gaming space",
+    "label": "NEUTRAL",
+    "id": "458044d5"
+  },
+  {
+    "sentence1": "We believe Mattel's operating margins and returns on invested capital could rise as the firm's structural simplification and asset-light efforts continue to bear fruit; the Optimizing for Growth initiative could provide an incremental boost to cash flow.",
+    "sentence2": "Mattel's operating margins and returns on invested capital could rise as the firm's structural simplification and asset-light efforts continue to bear fruit",
+    "label": "ENTAILMENT",
+    "id": "fdcfacde"
+  },
+  {
+    "sentence1": "Packaged-goods manufacturers have taken advantage of the recently benign commodity cost environment to lower prices in some markets, a strategy designed to help mitigate the loss of middle-market retailers to both discounters and high-end stores, but it has weighed on most manufacturers' organic growth.",
+    "sentence2": "Packaged-goods manufacturers have taken advantage of the recently benign commodity cost environment to lower prices in some markets, a strategy designed to help mitigate the loss of middle-market retailers to both discounters and high-end stores, but it has weighed on most manufacturers' organic growth",
+    "label": "ENTAILMENT",
+    "id": "823ae092"
+  },
+  {
+    "sentence1": "Costs to the tower provider are mostly fixed per tower, meaning costs to operate a tower are virtually the same whether a tower has one tenant or several tenants.",
+    "sentence2": "Costs to the tower provider are mostly fixed per tower, meaning costs to operate a tower are virtually the same",
+    "label": "ENTAILMENT",
+    "id": "1fd3f36a"
+  },
+  {
+    "sentence1": "Furthermore, a lack of financial flexibility limited the company's ability to respond to consumers' changing desires, resulting in declining sales as low-carb diets and clean eating movements swept the nation.",
+    "sentence2": "a lack of financial flexibility limited the company's ability to respond to consumers' changing desires",
+    "label": "ENTAILMENT",
+    "id": "4a3d41b2"
+  },
+  {
+    "sentence1": "Should all major high-end OEMs utilize only in-house application processors, Qualcomm's chips would be relegated to lower-priced handsets that would curb chip margins.",
+    "sentence2": "We estimate annual revPAR growth to average 8.6% over the next decade, aided by strong growth rates during the recovery years of 2021-22.",
+    "label": "NEUTRAL",
+    "id": "e1c906cf"
+  },
+  {
+    "sentence1": "However, given Autodesk's strength in building and construction versus SolidWorks' specialty in product design, we think it's fair to assume that SolidWorks dominates design in product engineering over Autodesk.",
+    "sentence2": "While we expect the segment will continue gain leverage on its sales, we project that gross margins will continue to remain below 44% over the next five years. As a result, we expect the consolidated operating margin for Sirius XM will rebound from the low of 21% in 2019 but will take until 2025 to match the 30% level of 2018",
+    "label": "NEUTRAL",
+    "id": "22617f6b"
+  },
+  {
+    "sentence1": "New York City has averaged 5% supply growth since 2013, and that trend should continue for at least two more years as the city continues to approve midblock upscale and midscale hotels in the most desired submarkets. This has kept New York City's revPAR growth below the national average over this time frame, and Host's Manhattan portfolio saw negative revPAR growth in 2015, 2016, and 2017 as a result of high supply.",
+    "sentence2": "uneven near-term industry guest traffic volatility as consumers adjust to restaurant operating changes, a reduction in government assistance, and the return of COVID-19-containment restrictions",
+    "label": "NEUTRAL",
+    "id": "b8722f19"
+  },
+  {
+    "sentence1": "To have long-term success, Bio-Techne needs to maintain a dominant position in proteins, and at the same time expand its presence in genomics, without compromising on quality standards across the firm's large protein portfolio.",
+    "sentence2": "Church & Dwight continues to purchase leading brands to capture market share, we worry it will extend itself too far into categories with which it is not as familiar",
+    "label": "NEUTRAL",
+    "id": "6c818b34"
+  },
+  {
+    "sentence1": "We expect Abbott can partially close the operating margin gap and project 450 basis points of improvement by 2024, as the firm leverages the distribution infrastructure it has built out for penetration of emerging markets across its product segments and extracts cost synergies from its recent acquisitions.",
+    "sentence2": "United Airlines came into the crisis with a middling amount of debt relative to peers but structurally lower profit margins due to a smaller frequent flier program relative to its size",
+    "label": "NEUTRAL",
+    "id": "0f0f9254"
+  },
+  {
+    "sentence1": "After digesting PFG's fiscal second-quarter earnings, we're increasing our fair value estimate to $34 from $32.50 as bad debt expense is coming in much more favorably than we expected, causing us to lower our bad debt expense estimate to $45 million from $230 million previously.",
+    "sentence2": "bad debt expense is coming in much more favorably than we expected, causing us to lower our bad debt expense estimate",
+    "label": "ENTAILMENT",
+    "id": "8dfa6e11"
+  },
+  {
+    "sentence1": "We believe margins should also benefit from better growth over time, but the impact will be more modest, given the limited fixed costs in the business model.",
+    "sentence2": "the impact will be more modest, given the limited fixed costs in the business model",
+    "label": "ENTAILMENT",
+    "id": "73340dd9"
+  },
+  {
+    "sentence1": "Lyft's number of riders has increased since 2016, driven mainly by increased adoption of overall ride-sharing services plus Lyft's gradual expansion in other markets mainly in the U.S.",
+    "sentence2": "adoption by generic manufacturers can create an even longer benefit period for Agilent on a specific molecule",
+    "label": "NEUTRAL",
+    "id": "d746d1b4"
+  },
+  {
+    "sentence1": "Activewear was weak even before the virus, as it suffered a 3% sales decline in 2019 on poor consumer demand and distributor de-stocking in imprintables.",
+    "sentence2": "Liberty Latin America struck an agreement to buy the Costa Rican business, expanding its relatively modest presence in Central America.",
+    "label": "NEUTRAL",
+    "id": "71323aa6"
+  },
+  {
+    "sentence1": "We believe it was a positive that preliminary weather-adjusted sales growth is estimated to be 3% due to strong industrial growth in the Mississippi Delta and expected recovery of commercial volumes.",
+    "sentence2": "EAFs are less labor- and energy-intensive, thereby allowing Nucor to recognize low total costs per unit of steel produced",
+    "label": "NEUTRAL",
+    "id": "52b49e87"
+  },
+  {
+    "sentence1": "Recurring revenue now makes up roughly 50% of Nasdaq total revenue and will likely continue to increase, as the company's acquisition of Verafin and its sale of its fixed-income trading business to Tradeweb continues to push the firm toward its end goal of being a diversified technology company. This should increase the stability of Nasdaq's earnings and lead the company to having a lower risk profile than it once did.",
+    "sentence2": "Recurring revenue now makes up roughly 50% of Nasdaq total revenue and will likely continue to increase, as the company's acquisition of Verafin and its sale of its fixed-income trading business to Tradeweb continues to push the firm toward its end goal of being a diversified technology company. This should increase the stability of Nasdaq's earnings and lead the company to having a lower risk profile than it once did",
+    "label": "ENTAILMENT",
+    "id": "f632b4e1"
+  },
+  {
+    "sentence1": "If WhatsApp, or any of the firm's other large customers terminate their relationship with Twilio, it will adversely impact returns.",
+    "sentence2": "a reduction in snowfall from warmer winter temperatures as warmer climates shift north over time",
+    "label": "NEUTRAL",
+    "id": "2bd4445f"
+  },
+  {
+    "sentence1": "Unlike many of its peers, MetLife does not have a meaningful third-party asset management business as historically MetLife has decided to focus on its core life insurance operations.",
+    "sentence2": "diverse range of products and an excellent reputation with clients, this enables Julius Baer to retain and attract the best relationship managers",
+    "label": "NEUTRAL",
+    "id": "76096d51"
+  },
+  {
+    "sentence1": "We forecast operating income to be broadly flat over the next five years as we await the outcome of the planned merger and acquisition spending to boost the growth rate.",
+    "sentence2": "e-commerce warehousing requires about three times more space as traditional warehousing, so the increased demand has allowed the company to construct speculative developments",
+    "label": "NEUTRAL",
+    "id": "74d31758"
+  },
+  {
+    "sentence1": "We increased our fair value estimate to $81 per share from $80 per share as Dominion begins to implement its long-term plan to comply with Virginia's Clean Energy Act.",
+    "sentence2": "We increased our fair value estimate to $81 per share from $80 per share as Dominion begins to implement its long-term plan to comply with Virginia's Clean Energy Act",
+    "label": "ENTAILMENT",
+    "id": "79d68dff"
+  },
+  {
+    "sentence1": "Fee rates for the contracts are typically set based on independent analysis of similar assets at other refineries in the region. As a result, we see returns on invested capital averaging around 10%-11% over the next five years (including the acquisition of Andeavor Logistics), in excess of our weighted average cost of capital.",
+    "sentence2": "Fee rates for the contracts are typically set based on independent analysis of similar assets at other refineries in the region. As a result, we see returns on invested capital averaging around 10%-11% over the next five years (including the acquisition of Andeavor Logistics), in excess of our weighted average cost of capital",
+    "label": "ENTAILMENT",
+    "id": "c31abef4"
+  },
+  {
+    "sentence1": "Horton's home sales gross profit margin will trend down over the next few years as price appreciation moderates with little relief in labor and land costs.",
+    "sentence2": "Horton's home sales gross profit margin will trend down over the next few years as price appreciation moderates with little relief in labor and land costs",
+    "label": "ENTAILMENT",
+    "id": "934feafd"
+  },
+  {
+    "sentence1": "Our uncertainty rating for Grubhub is very high, as the firm is in a crowded space with competition from both larger and smaller companies.",
+    "sentence2": "higher usage and engagement on one social network could come at a cost to other social networks, reducing user engagement and the potential return on investment for advertisers",
+    "label": "NEUTRAL",
+    "id": "a87c7c6b"
+  },
+  {
+    "sentence1": "Further, with the bank's solid mix of fee income, Wells Fargo will be better insulated if rates decline when compared with smaller regional competitors, as it is less dependent on rate-sensitive net interest income.",
+    "sentence2": "margin improvement was the divestiture of animal health (to Eli Lilly) and vaccine (to Glaxo) units",
+    "label": "NEUTRAL",
+    "id": "96d213b8"
+  },
+  {
+    "sentence1": "We expect the Internet of Things segment to increase by an average of 11% over the duration of our forecast with touch, display, audio and video solutions proliferating in smart homes, automotive, and future devices like AR and VR headsets.",
+    "sentence2": "the Internet of Things segment to increase by an average of 11% over the duration of our forecast with touch, display, audio and video solutions proliferating in smart homes, automotive, and future devices like AR and VR headsets",
+    "label": "ENTAILMENT",
+    "id": "9a631423"
+  },
+  {
+    "sentence1": "The company has significant cash needs looming, and liquidity will be constrained given the roughly $1.5 billion purchase of Big River Steel and sizable reinvestment needs tied to the company's ongoing asset revitalization program.",
+    "sentence2": "We are increasing our fair value estimate for Coty to $5.50 from $4.54 after incorporating first-quarter earnings that showed encouraging signs",
+    "label": "NEUTRAL",
+    "id": "a0d53d07"
+  },
+  {
+    "sentence1": "Hyperconverged infrastructure and software-defined networking are budding IT equipment trends as enterprises enjoy flexible scalability of their computing and storage resources.",
+    "sentence2": "Hyperconverged infrastructure and software-defined networking are budding IT equipment trends as enterprises enjoy flexible scalability of their computing and storage resources",
+    "label": "ENTAILMENT",
+    "id": "c31a5d2f"
+  },
+  {
+    "sentence1": "We have raised our long-term tax rate by 5 percentage points to 29% in anticipation of a corporate tax increase in the United States in 2022.",
+    "sentence2": "We have raised our long-term tax rate by 5 percentage points to 29% in anticipation of a corporate tax increase in the United States in 2022",
+    "label": "ENTAILMENT",
+    "id": "80e89972"
+  },
+  {
+    "sentence1": "As a result, large swaths of the phone network remain incapable of delivering the speeds beyond around 20 megabits/second or so, increasingly falling short of customer demand.",
+    "sentence2": "large swaths of the phone network remain incapable of delivering the speeds beyond around 20 megabits/second or so, increasingly falling short of customer demand",
+    "label": "ENTAILMENT",
+    "id": "57af9156"
+  },
+  {
+    "sentence1": "But even this modest impact overstates the economic reality, as much of the decline in growth is expected to come from a fall-off in deconversion fees, given that M&A activity among banks has declined significantly due to the uncertainty created by COVID-19.",
+    "sentence2": "M&A activity among banks has declined significantly due to the uncertainty created by COVID-19.",
+    "label": "ENTAILMENT",
+    "id": "c4165ad7"
+  },
+  {
+    "sentence1": "Additionally, we expect a small decrease in adjusted income from operations as a percentage of revenue (17.2%) as we expect incremental coronavirus-related expenses to continue to offset operating expense leverage.",
+    "sentence2": "millennials ascend age and income demographic segments, upgrading their living arrangements or purchasing a new home, the company can move to market higher-ticket and age-appropriate Pottery Barn and Williams-Sonoma products to the right consumer",
+    "label": "NEUTRAL",
+    "id": "cd92ffe2"
+  },
+  {
+    "sentence1": "Zebra has also relied on hefty R&D investment and add-on acquisitions to fuel top-line growth and stave off competition; any slowdown in these activities could open the firm up to a greater competitive threat.",
+    "sentence2": "any slowdown in these activities could open the firm up to a greater competitive threat",
+    "label": "ENTAILMENT",
+    "id": "2b60bbef"
+  },
+  {
+    "sentence1": "However, we now subscribe to the belief that the firm's procurement scale and leverage over advertising, technological, and administrative expenditures offers a sustainable cost advantage over peers.",
+    "sentence2": "falling production costs and higher adoption rates to catalyze RFID sales growth for Avery throughout our forecast period",
+    "label": "NEUTRAL",
+    "id": "55e10ce7"
+  },
+  {
+    "sentence1": "We have remodeled our interest-rate forecast and our net interest margin projections for the bank considering the current macroeconomic situation.",
+    "sentence2": "We have remodeled our interest-rate forecast and our net interest margin projections for the bank considering the current macroeconomic situation",
+    "label": "ENTAILMENT",
+    "id": "c079ccee"
+  },
+  {
+    "sentence1": "If the two sides are unable to extend the lease, SQM would see a substantial decline in cash flows after 2030.",
+    "sentence2": "If the two sides are unable to extend the lease, SQM would see a substantial decline in cash flows after 2030",
+    "label": "ENTAILMENT",
+    "id": "7a4af1b8"
+  },
+  {
+    "sentence1": "While an increased focus on diagnostics due to the coronavirus pandemic could be a tailwind, direct competition is likely to increase to meet this rising demand, and Bio-Rad may not benefit meaningfully from this trend despite a growing market.",
+    "sentence2": "direct competition is likely to increase to meet this rising demand, and Bio-Rad may not benefit",
+    "label": "ENTAILMENT",
+    "id": "c236a1db"
+  },
+  {
+    "sentence1": "The government solutions segment accounted for roughly 83% of the firm's backlog as of December 2020 (compared with only about 16% as of December 2014), and we expect the shift to long-term government contracts to result in a more stable portfolio.",
+    "sentence2": "the shift to long-term government contracts to result in a more stable portfolio",
+    "label": "ENTAILMENT",
+    "id": "35e915d9"
+  },
+  {
+    "sentence1": "Additionally, SBA's strategy to take on debt to fund share repurchases results in it targeting a net debt/EBITDA ratio of greater than 7 times.",
+    "sentence2": "tend to pressure near-term results, but we think the company is about at the trough, and operating improvement should follow over the next several years.",
+    "label": "NEUTRAL",
+    "id": "36f77ec8"
+  },
+  {
+    "sentence1": "While a cursory analysis of West's design service may lead one to conclude customers could feasibly in-source design and cut out the middleman, West often provides services that smaller customers are unable to do themselves, for cost reasons and/or lack of expertise.",
+    "sentence2": "We project that EBITDA margins for Discovery International will dip to 21% from 26% in 2019 and then expand to 28% in 2024 as the revenue growth will outpace the growth in content costs",
+    "label": "NEUTRAL",
+    "id": "4ecea33e"
+  },
+  {
+    "sentence1": "In the event of a revolutionary leap in battery technology, adoption of electric powertrains for heavy vehicles could accelerate rapidly.",
+    "sentence2": "the firm is unable to effectively source and integrate new employees, it could stymie innovation and affect Twilio's competitive positioning",
+    "label": "NEUTRAL",
+    "id": "9fe5b0a4"
+  },
+  {
+    "sentence1": "For example, Boston has maintained its strong position in drug-coated coronary stents and is developing some transcatheter mitral valve repair technologies, building on its footprint in the cardiac and vascular markets.",
+    "sentence2": "Boston has maintained its strong position in drug-coated coronary stents and is developing some transcatheter mitral valve repair technologies, building on its footprint in the cardiac and vascular markets",
+    "label": "ENTAILMENT",
+    "id": "87043817"
+  },
+  {
+    "sentence1": "Surface Transportation Board oversees railroads' pricing, thus there will always be underlying risk of reregulation for some of CP's U.S.",
+    "sentence2": "Splunk is not yet profitable on a GAAP basis, as the firm maintains high level of investments in product development and sales and marketing",
+    "label": "NEUTRAL",
+    "id": "1c569fc1"
+  },
+  {
+    "sentence1": "We think US Foods' channel diversity, vast adoption of carryout, and the eventual containment of the COVID-19 virus (most likely after a 2021 vaccine), should return US Foods' pro forma revenue (including SGA Food Group and Smart Foodservice Warehouse acquisitions) to a prepandemic level by 2022.",
+    "sentence2": "US Foods' channel diversity, vast adoption of carryout, and the eventual containment of the COVID-19 virus (most likely after a 2021 vaccine), should return US Foods' pro forma revenue (including SGA Food Group and Smart Foodservice Warehouse acquisitions) to a prepandemic level by 2022",
+    "label": "ENTAILMENT",
+    "id": "f9efa2a1"
+  },
+  {
+    "sentence1": "If a malicious attempt is detected in one location, all of the enterprise's security is updated instead of only having an update in a particular location.",
+    "sentence2": "a malicious attempt is detected in one location, all of the enterprise's security is updated instead of only having an update in a particular location",
+    "label": "ENTAILMENT",
+    "id": "2e5c9723"
+  },
+  {
+    "sentence1": "Trip.com now focuses on domestic travel such as high-frequency travel like staycation, which will help its topline recover faster amid international border closures, but has lower margin.",
+    "sentence2": "Trip.com now focuses on domestic travel such as high-frequency travel like staycation, which will help its topline recover faster amid international border closures",
+    "label": "ENTAILMENT",
+    "id": "5f4d2cb9"
+  },
+  {
+    "sentence1": "Within personal lines, we expect Travelers to maintain good underwriting results due to the pandemic and the resulting reduction in miles driven, but for the combined ratio to deteriorate over time as the line mean reverts to more normalized results.",
+    "sentence2": "the combined ratio to deteriorate over time as the line mean reverts to more normalized results",
+    "label": "ENTAILMENT",
+    "id": "34ef0212"
+  },
+  {
+    "sentence1": "Only Samsung, which holds the leading share of both the NAND and DRAM memory markets, has been able to squeak out a cost advantage with its unparalleled scale.",
+    "sentence2": "Zebra has an end-to-end portfolio of specialized AIDC solutions that enables it to achieve a wide footprint within its customers",
+    "label": "NEUTRAL",
+    "id": "96f9c694"
+  },
+  {
+    "sentence1": "For the core telehealth services, we believe the company is likely to retain its first-mover advantage and scale by penetrating members of existing customers in addition to adding members of new clients under new logos.",
+    "sentence2": "For the core telehealth services, we believe the company is likely to retain its first-mover advantage and scale by penetrating members of existing customers in addition to adding members of new clients under new logos",
+    "label": "ENTAILMENT",
+    "id": "5f54fa85"
+  },
+  {
+    "sentence1": "Additionally, higher inflation could limit earnings growth since Mettler may find it difficult to pass along price increases to customers above the typical 2%-3% range.",
+    "sentence2": "higher inflation could limit earnings growth since Mettler may find it difficult to pass along price increases to customers above the typical 2%-3% range",
+    "label": "ENTAILMENT",
+    "id": "57026f9e"
+  },
+  {
+    "sentence1": "And, Bio-Rad's academic research end market could face headwinds from cuts to academic research budgets due to the ongoing pandemic, as many academic research institutions are facing the prospect of both state budget cuts and revenue shortfalls at academic institutions.",
+    "sentence2": "Bio-Rad's academic research end market could face headwinds from cuts to academic research budgets due to the ongoing pandemic, as many academic research institutions are facing the prospect of both state budget cuts and revenue shortfalls at academic institutions",
+    "label": "ENTAILMENT",
+    "id": "3e633ee0"
+  },
+  {
+    "sentence1": "Here, because the city is home to China's wealthy and political elite, CITIC Prudential Life focuses on selling wealth management products as well as advice on legacy planning and intergenerational insurance solutions.",
+    "sentence2": "these higher domain fees should not lead to significant customer attrition given that they comprise a relatively small proportion of a business' budget",
+    "label": "NEUTRAL",
+    "id": "f59f7817"
+  },
+  {
+    "sentence1": "With the lifting of lockdown restrictions and speed of vaccine rollout representing the key (and unfortunately, exogenous) variables, we've modeled revenue growth of 14.3% and 7.5% in 2021 and 2022, as demand begins to stabilize in key European markets (notably, U.S.",
+    "sentence2": "the lifting of lockdown restrictions and speed of vaccine rollout representing the key (and unfortunately, exogenous) variables, we've modeled revenue growth of 14.3% and 7.5% in 2021 and 2022, as demand begins to stabilize in key European markets",
+    "label": "ENTAILMENT",
+    "id": "38bd0fb7"
+  },
+  {
+    "sentence1": "This is especially true for CMC, given that the company manufactures undifferentiated long-rolled products that require little to no value-added processing.",
+    "sentence2": "This is especially true for CMC, given that the company manufactures undifferentiated long-rolled products",
+    "label": "ENTAILMENT",
+    "id": "02b24d5c"
+  },
+  {
+    "sentence1": "Given the substantial costs at failure, we don't expect the military will switch its provider for missile defense systems any day soon.",
+    "sentence2": "the substantial costs at failure, we don't expect the military will switch its provider for missile defense systems any day soon",
+    "label": "ENTAILMENT",
+    "id": "8ee94b59"
+  },
+  {
+    "sentence1": "We're raising our fair value estimate for Monster to $73 from $67, largely due to time value after rolling our model to 2021, as well as near-term sales momentum as the top line continues to belie any disruption from COVID-19.",
+    "sentence2": "near-term sales momentum as the top line continues to belie any disruption from COVID-19",
+    "label": "ENTAILMENT",
+    "id": "a06fd6bb"
+  },
+  {
+    "sentence1": "The short life-cycles and transient tastes of the smartphone market, and consumer products generally, mean research and development programs may develop costly products only to be unable to realize a suitable market.",
+    "sentence2": "aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business",
+    "label": "NEUTRAL",
+    "id": "bd9216a7"
+  },
+  {
+    "sentence1": "We think that Accenture derives excess returns from reputation as an intangible asset, as unlike traditional advertising projects, digital work means more uncertainty for customers, so they might again turn to best-in-breed providers like Accenture.",
+    "sentence2": "digital work means more uncertainty for customers, so they might again turn to best-in-breed providers like Accenture",
+    "label": "ENTAILMENT",
+    "id": "ba6d0035"
+  },
+  {
+    "sentence1": "Intel's manufacturing struggles have also led to major customers such as Apple, Amazon, and Microsoft developing their own ARM-based CPUs for PCs and servers, which is likely to curb overall growth for Intel's core CPU business as these chips are likely made at TSMC.",
+    "sentence2": "Omnicom was relatively quiet on the acquisition front in 2016, two years after it ended merger talks with Publicis, which would have made the combined company larger than the U.K.'s WPP",
+    "label": "NEUTRAL",
+    "id": "a380fced"
+  },
+  {
+    "sentence1": "This clause could be nullified if VeriSign faces a severe data breach that it may be unable to resolve in reasonable time.",
+    "sentence2": "increased our 2020 revenue growth estimate to 42% from 32%, as early indications are than ad spending has bounced back faster from the pandemic than we had expected",
+    "label": "NEUTRAL",
+    "id": "85f316ef"
+  },
+  {
+    "sentence1": "As current iPhone users are familiar with the iOS environment (Apple-centric apps, services, and so on), it may take multiple subpar product releases to warrant an exodus to an Android OS, as these customers are likely loath to leave Apple's seemingly superior walled garden.",
+    "sentence2": "current iPhone users are familiar with the iOS environment (Apple-centric apps, services, and so on), it may take multiple subpar product releases to warrant an exodus to an Android OS",
+    "label": "ENTAILMENT",
+    "id": "ca14ad09"
+  },
+  {
+    "sentence1": "As the number of contacts increases, more developers will choose to develop miniprograms for WeChat or mobile QQ, and existing users can benefit from having access to additional miniprograms.",
+    "sentence2": "demand is likely to fall in future, as low-cost supply expands, flattening the steep cost curve tail",
+    "label": "NEUTRAL",
+    "id": "4078779e"
+  },
+  {
+    "sentence1": "Amphenol competes against myriad competitors in the fragmented electrical component industry, but its broad array of end markets allows it to grow the top line even in the midst of an individual market downturn.",
+    "sentence2": "oil prices crashing, the firm doesn't have much near-term cash flow potential from any of its product streams",
+    "label": "NEUTRAL",
+    "id": "06a9e778"
+  },
+  {
+    "sentence1": "With appeal to a wide variety of consumers, we anticipate the concept should translate well to new markets as the chain grows toward its 2,500-unit target (from 1,020 at the end of fiscal 2020).",
+    "sentence2": "We are more comfortable with acquisitions in the security sector as we believe the firm can better leverage its business telecom relationships and can bundle these products with its other IT and telecom offerings",
+    "label": "NEUTRAL",
+    "id": "3c799309"
+  },
+  {
+    "sentence1": "Beyond the legal power of patents, even slightly differentiated technical features can cause an end user to prefer one tool over a similar tool in the company's precise scientific end markets, so we think those other intangible assets contribute to Illumina's competitive advantages, too.",
+    "sentence2": "The central government's sustained crackdown on graft is also hurting gambling demand in Macao as VIPs maintain a low profile",
+    "label": "NEUTRAL",
+    "id": "4f9eeea4"
+  },
+  {
+    "sentence1": "Overall, net sales per unit in the Malibu segment have increased 33% since 2016, driven primarily by customer acquisition of more expensive models and by add-on features such as Surf Gate.",
+    "sentence2": "the cyclical supply and demand nature of commodities and related pricing can have an indirect impact on the business as shippers may choose to accelerate or delay certain projects",
+    "label": "NEUTRAL",
+    "id": "02f02199"
+  },
+  {
+    "sentence1": "Furthermore, customers loathe changing identity cybersecurity vendors due to criticality of ensuring internal and external users can readily access only what they need.",
+    "sentence2": "customers loathe changing identity cybersecurity vendors due to criticality of ensuring internal and external users can readily access only what they need",
+    "label": "ENTAILMENT",
+    "id": "c4cf357a"
+  }
+]
