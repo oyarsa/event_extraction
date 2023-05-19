@@ -44,7 +44,7 @@
 (defn set->map
   "Set and create a map from each element to an index."
   [s]
-  (into {} (map vector s (range))))
+  (zipmap s (range)))
 
 (defn word-vector
   "Helper function for bag-of-words. Creates a vector of size |vocab|
@@ -71,7 +71,8 @@
 (defn make-vocab
   "Create a vocabulary from a collection of strings."
   [coll]
-  (set->map (set (mapcat #(split-words %) coll))))
+  (let [words (set (mapcat #(split-words %) coll))]
+    (set->map words)))
 ;; END OF BAG OF WORDS
 
 (defn jaccard
