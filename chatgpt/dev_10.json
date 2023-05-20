@@ -1,0 +1,62 @@
+[
+  {
+    "sentence1": "We also expect lower relative selling and distribution costs as scale grows and route structures are optimized (through planning and sequencing) and densified.",
+    "sentence2": "margin expansion is reasonable as management has implemented several cost-reduction initiatives during the pandemic",
+    "label": "NEUTRAL",
+    "id": "79d8f8a1"
+  },
+  {
+    "sentence1": "Biosimilar competition is a looming threat, but we think the significant manufacturing and development costs that biosimilar makers are expected to incur would slow any erosion of sales of these products, limiting the number of contenders and their ability to compete on price.",
+    "sentence2": "the significant manufacturing and development costs that biosimilar makers are expected to incur would slow any erosion of sales of these products, limiting the number of contenders and their ability to compete on price",
+    "label": "ENTAILMENT",
+    "id": "add02f53"
+  },
+  {
+    "sentence1": "Our bookings growth forecast is now for 23.5% average annual growth during 2021-30 versus 21% prior, as demand recovery for Airbnb accommodations has ramped more quickly than previously expected.",
+    "sentence2": "governance risk from the large investment and cash outlay for the Lunar projects given the uncertainty on whether these investments will create long-term value for shareholders",
+    "label": "NEUTRAL",
+    "id": "de37e0f5"
+  },
+  {
+    "sentence1": "Targeting a wide consumer base with a core customer who is female, 35-65 years old with household income of $50,000-over $175,000 also means Wayfair is competing with mass-market retailers, specialty retail, and low-cost providers, making it harder to stay top of mind.",
+    "sentence2": "In 2019, pricing in primary lines also started to improve, and commentary from carriers suggests that this trend has only gained more momentum in 2020, as coronavirus-related claims appear to be acting as an additional prompt",
+    "label": "NEUTRAL",
+    "id": "3b4e0520"
+  },
+  {
+    "sentence1": "Due to the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures, 2020 revenue declined 28%, but we forecast a 30% rebound in 2021 as backlog starts to ramp-up, with a return to normalized light vehicle demand in 2023.",
+    "sentence2": "the strong premiumization trends in beer, which should add a percentage point to the industry's secular growth rate",
+    "label": "NEUTRAL",
+    "id": "67ddbd62"
+  },
+  {
+    "sentence1": "We applaud that SS&C has shown a willingness to get outbid if the valuation is too high as we believe it makes sense for management to be disciplined on valuation.",
+    "sentence2": "SS&C has shown a willingness to get outbid if the valuation is too high as we believe it makes sense for management to be disciplined on valuation",
+    "label": "ENTAILMENT",
+    "id": "2d688ba8"
+  },
+  {
+    "sentence1": "Because of its R&amp;D efforts and technical know-how, Honeywell has virtually shut out other competitors in awarded contracts for avionics (aviation electronics), auxiliary power units, and mechanical systems (for example landing gear) since 2013.",
+    "sentence2": "its R&amp;D efforts and technical know-how, Honeywell has virtually shut out other competitors in awarded contracts for avionics (aviation electronics), auxiliary power units, and mechanical systems (for example landing gear) since 2013",
+    "label": "ENTAILMENT",
+    "id": "af0ce6f7"
+  },
+  {
+    "sentence1": "We acknowledge that P&G's mix of essential, trusted items are being propped up at present by the pandemic, with consumers' proclivity for personal and home cleaning and health-related fare.",
+    "sentence2": "P&G's mix of essential, trusted items are being propped up at present by the pandemic, with consumers' proclivity for personal and home cleaning and health-related fare",
+    "label": "ENTAILMENT",
+    "id": "009d7eda"
+  },
+  {
+    "sentence1": "In our view, Teleflex's Hem-O-Lock system has some trace switching costs because of the exclusivity agreement with the da Vinci surgical system, a robotic system made by Intuitive Surgical that is used for a wide range of surgical procedures, including prostatectomies, cardiac repair, and gynecologic procedures.",
+    "sentence2": "Teleflex's Hem-O-Lock system has some trace switching costs because of the exclusivity agreement with the da Vinci surgical system",
+    "label": "ENTAILMENT",
+    "id": "e25d4b23"
+  },
+  {
+    "sentence1": "Further, refining and processing margins are generally slim, so squeezing every possible drop of efficiency out of the assets is critical.",
+    "sentence2": "refining and processing margins are generally slim, so squeezing every possible drop of efficiency out of the assets is critical",
+    "label": "ENTAILMENT",
+    "id": "39108e54"
+  }
+]

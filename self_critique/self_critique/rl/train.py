@@ -127,7 +127,6 @@ def load_entailment_model(
     )
     model.config.label2id = labeller.label2id
     model.config.id2label = labeller.id2label
-
     return model, tokenizer
 
 
@@ -144,9 +143,9 @@ def load_seq2seq_model(
 
 def label_to_reward(label: str) -> float:
     return {
-        "CONTRADICTION": -1.0,
         "ENTAILMENT": 1.0,
-        "NEUTRAL": 0.0,
+        "CONTRADICTION": -1.0,
+        "NEUTRAL": -1.0,
     }[label]
 
 
@@ -489,6 +488,7 @@ def main() -> None:
     entailment_model, entailment_tokenizer = load_entailment_model(
         model_name_or_path=args.entailment_model, labeller=labeller
     )
+    print("Loading entailment from ", Path(args.entailment_model).resolve())
 
     output_dir = args.output_dir / datetime.now().isoformat()
     output_dir.mkdir(exist_ok=True, parents=True)
