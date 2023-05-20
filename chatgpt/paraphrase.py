@@ -1,5 +1,4 @@
 import json
-from collections.abc import Iterator
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
@@ -18,33 +17,18 @@ from common import (
     make_msg,
 )
 
-PARAPHRASE_PROMPTS = [
-    "Given the following causes and effects, generate a sentence:",  # 0
-]
+PARAPHRASE_PROMPT = "Paraphrase the following text:"
 
 
-def gen_example_exchange(
-    examples: list[dict[str, str]], prompt: str
-) -> Iterator[dict[str, str]]:
-    prompt_msg = make_msg("user", prompt)
-    for example in examples:
-        yield prompt_msg
-        yield make_msg("user", example["context"])
-        yield make_msg("assistant", example["answers"])
-
-
-def gen_paraphrase(
-    model: str, sentence: str, prompt: str, examples: list[dict[str, str]]
-) -> dict[str, Any]:
+def gen_paraphrase(model: str, sentence: str, prompt: str) -> dict[str, Any]:
     response = make_chat_request(
         model=model,
         messages=[
             make_msg(
                 "system",
-                "You are a helpful assistant that generates sentences from causes,"
-                " effects and relations.",
+                "You are a helpful assistant that paraphrases sentences using different"
+                " words but the same meaning.",
             ),
-            *gen_example_exchange(examples, prompt),
             make_msg("user", prompt),
             make_msg("user", sentence),
         ],
@@ -55,28 +39,23 @@ def gen_paraphrase(
 
 def run_paraphrase(
     model: str,
-    examples_path: Path,
-    prompt: str,
     input_path: Path,
     output_path: Path | None,
 ) -> None:
     data = json.loads(input_path.read_text())
-    demonstration_examples = json.loads(examples_path.read_text())
+    sentences = [d["sentence2"] for d in data if d["sentence2"].strip()]
 
-    inputs = [inst["sentence2"] for inst in data]
-    responses = [
-        gen_paraphrase(
-            model=model, sentence=inst, prompt=prompt, examples=demonstration_examples
+    responses: list[dict[str, Any]] = []
+    for sentence in tqdm(sentences):
+        responses.append(
+            gen_paraphrase(model=model, sentence=sentence, prompt=PARAPHRASE_PROMPT)
         )
-        for inst in tqdm(inputs)
-        if inst is not None
-    ]
 
     output_sentences = (get_result(response) for response in responses)
     output = deepcopy(data)
-    for inst, sentence in zip(output, output_sentences):
-        inst["sentence2_orig"] = inst["sentence2"]
-        inst["sentence2"] = sentence
+    for sentence, new_sentence in zip(output, output_sentences):
+        sentence["sentence2_orig"] = sentence["sentence2"]
+        sentence["sentence2"] = new_sentence
 
     if output_path is not None:
         output_path.write_text(json.dumps(output, indent=2))
@@ -88,34 +67,15 @@ def run_paraphrase(
 
 
 def main() -> None:
-    parser = init_argparser()
-    parser.add_argument(
-        "--examples",
-        type=Path,
-        default="./data/paraphrase/paraphrase_examples_3.json",
-        help="Path to the demonstration examples.",
-    )
+    parser = init_argparser(prompt=False)
     args = parser.parse_args()
     log_args(args, args.args_path)
 
     logger.config(args.log_file, args.print_logs)
     openai.api_key = get_key(args.key_file, args.key_name)
 
-    if args.prompt < 0 or args.prompt >= len(PARAPHRASE_PROMPTS):
-        raise IndexError(
-            f"Invalid prompt index: {args.prompt}. Choose one between 0 and"
-            f" {len(PARAPHRASE_PROMPTS)})"
-        )
-
-    run_paraphrase(
-        model=args.model,
-        examples_path=args.examples,
-        input_path=args.input,
-        output_path=args.output,
-        prompt=PARAPHRASE_PROMPTS[args.prompt],
-    )
+    run_paraphrase(model=args.model, input_path=args.input, output_path=args.output)
 
 
 if __name__ == "__main__":
-    if not hasattr(__builtins__, "__IPYTHON__"):
-        main()
+    main()

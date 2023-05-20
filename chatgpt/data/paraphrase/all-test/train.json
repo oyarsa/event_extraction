@@ -1,0 +1,62 @@
+[
+  {
+    "sentence1": "As such, while we forecast an average of 13% ROICs including goodwill annually over the next five years, the actual results reported will probably be more volatile.",
+    "sentence2": "an average of 13% ROICs including goodwill annually over the next five years, the actual results reported will probably be more volatile",
+    "label": "ENTAILMENT",
+    "id": "60518670"
+  },
+  {
+    "sentence1": "Well expenditure, which is variable with respect to operating days, is quite high; each operating day adds $1 million or more to the costs associated with rig day rates and other services. Thus, even if Frank's charges an extra 20% on its casing services (exact pricing is not provided), this $500,000 or so in incremental costs is easily outweighed by the millions of dollars in direct incremental costs associated with nonperforming time created by an inferior casing operation.",
+    "sentence2": "Well expenditure, which is variable with respect to operating days, is quite high; each operating day adds $1 million or more to the costs associated with rig day rates and other services. Thus, even if Frank's charges an extra 20% on its casing services (exact pricing is not provided), this $500,000 or so in incremental costs is easily outweighed by the millions of dollars in direct incremental costs associated with nonperforming time created by an inferior casing operation",
+    "label": "ENTAILMENT",
+    "id": "05e6c40c"
+  },
+  {
+    "sentence1": "Customers tend to be loyal, and chips have long product lives because switching to a competing MCU could involve redesigning the entire end product.",
+    "sentence2": "chips have long product lives because switching to a competing MCU could involve redesigning the entire end product",
+    "label": "ENTAILMENT",
+    "id": "c1931704"
+  },
+  {
+    "sentence1": "While we expect Astra will decelerate these asset sales as newly Drug Manufacturers - Generallaunched drugs offset patent pressures, a prolonged period of low returns could ensue if these avenues of divestments dry up quicker than anticipated.",
+    "sentence2": "we expect Astra will decelerate these asset sales as newly Drug Manufacturers - Generallaunched drugs offset patent pressures",
+    "label": "ENTAILMENT",
+    "id": "4b5f4eee"
+  },
+  {
+    "sentence1": "While we expect Astra will decelerate these asset sales as newly Drug Manufacturers - Generallaunched drugs offset patent pressures, a prolonged period of low returns could ensue if these avenues of divestments dry up quicker than anticipated.",
+    "sentence2": "a prolonged period of low returns could ensue if these avenues of divestments dry up quicker than anticipated",
+    "label": "ENTAILMENT",
+    "id": "baf8aec4"
+  },
+  {
+    "sentence1": "We estimate fines and penalties from the San Bruno disaster and allegations of poor recordkeeping resulted in $3 billion of lost shareholder value.",
+    "sentence2": "fines and penalties from the San Bruno disaster and allegations of poor recordkeeping resulted in $3 billion of lost shareholder value",
+    "label": "ENTAILMENT",
+    "id": "ff41e7d0"
+  },
+  {
+    "sentence1": "Over the years, these differentiators have allowed the firm to build a large installed base, which can have long useful lives (up to 40 years for applied HVAC systems).",
+    "sentence2": "these differentiators have allowed the firm to build a large installed base",
+    "label": "ENTAILMENT",
+    "id": "c923c36e"
+  },
+  {
+    "sentence1": "Our fair value uncertainty rating for Qorvo is high, given the company's customer concentration, the intense competition in the RF and smartphone industries, and the cyclicality of the semiconductor industry.",
+    "sentence2": "Our fair value uncertainty rating for Qorvo is high, given the company's customer concentration, the intense competition in the RF and smartphone industries, and the cyclicality of the semiconductor industry",
+    "label": "ENTAILMENT",
+    "id": "e66e41e5"
+  },
+  {
+    "sentence1": "We think that while this has historically tracked the mid-single digit growth rate of semiconductor R&D spend, expansion of in-house chip design by systems companies will allow this to outpace historical rates.",
+    "sentence2": "expansion of in-house chip design by systems companies will allow this to outpace historical rates",
+    "label": "ENTAILMENT",
+    "id": "6b40beed"
+  },
+  {
+    "sentence1": "This operational concentration creates relatively higher cash flow uncertainty than its less concentrated managed-care peers, which explains Centene's higher uncertainty rating.",
+    "sentence2": "This operational concentration creates relatively higher cash flow uncertainty than its less concentrated managed-care peers, which explains Centene's higher uncertainty rating",
+    "label": "ENTAILMENT",
+    "id": "2b24d69c"
+  }
+]

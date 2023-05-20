@@ -60,7 +60,11 @@ def make_chat_request(**kwargs: Any) -> dict[str, Any]:
                 response = cast(dict[str, Any], openai.ChatCompletion.create(**kwargs))
             except Exception as e:
                 ts = datetime.now().isoformat()
-                print(f"{ts} - Connection error - {e} - Attempt {attempts + 1}")
+                print(
+                    f'{ts} | Connection error - "{e}" | Kwargs | "{kwargs}"'
+                    f" | Attempt {attempts + 1}"
+                )
+                attempts += 1
 
                 if isinstance(e, OpenAIError) and e.http_status == 429:
                     print("Rate limit exceeded. Waiting 10 seconds.")
@@ -99,7 +103,7 @@ def log_args(args: argparse.Namespace, path: Path | None) -> None:
         print(json.dumps(args_dict, indent=2))
 
 
-def init_argparser() -> argparse.ArgumentParser:
+def init_argparser(*, prompt: bool = True) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         allow_abbrev=False, formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
@@ -116,12 +120,15 @@ def init_argparser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--input", "-i", type=Path, help="Input file")
     parser.add_argument("--output", "-o", type=Path, help="Output file for predictions")
-    parser.add_argument(
-        "--prompt",
-        type=int,
-        default=0,
-        help="Prompt index to use for the chat session",
-    )
     parser.add_argument("--metrics-path", type=Path, help="Path where to save metrics")
     parser.add_argument("--args-path", type=Path, help="Path where to save args")
+
+    if prompt:
+        parser.add_argument(
+            "--prompt",
+            type=int,
+            default=0,
+            help="Prompt index to use for the chat session",
+        )
+
     return parser
