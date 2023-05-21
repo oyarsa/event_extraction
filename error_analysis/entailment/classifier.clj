@@ -1,4 +1,4 @@
-(ns classifier
+(ns entailment.classifier
   "Classification script to demonstrate how the entailment data is biased
   because of how it's constructed.
 
@@ -27,8 +27,8 @@
         (let [cost (if (= (nth str1 i) (nth str2 j)) 0 1)]
           (aset-int dp (inc i) (inc j)
                     (min (+ (aget dp i j) cost)
-                         (+ 1 (aget dp (inc i) j))
-                         (+ 1 (aget dp i (inc j))))))))
+                         (inc (aget dp (inc i) j))
+                         (inc (aget dp i (inc j))))))))
 
     (aget dp m n)))
 
@@ -71,7 +71,7 @@
 (defn make-vocab
   "Create a vocabulary from a collection of strings."
   [coll]
-  (let [words (set (mapcat #(split-words %) coll))]
+  (let [words (set (mapcat split-words coll))]
     (set->map words)))
 ;; END OF BAG OF WORDS
 
@@ -85,7 +85,7 @@
 (defn norm
   "2-norm of a vector."
   [vector]
-  (Math/sqrt (reduce + (map #(* % %) vector))))
+  (clojure.math/sqrt (reduce + (map #(* % %) vector))))
 
 (defn cosine
   "Cosine similarity between two vectors."
