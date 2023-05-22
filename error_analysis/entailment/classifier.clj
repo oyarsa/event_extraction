@@ -163,24 +163,28 @@
                :threshold similarity-threshold}
    :args->opts [:data-file]})
 
-(let [opts (babashka.cli/parse-opts *command-line-args* opt-spec)
-      data-file (:data-file opts)
-      sim-fn (get-sim-fn (:similarity opts))
-      max-samples (:max-samples opts)
-      threshold (:threshold opts)]
-  (when (empty? data-file)
-    (println "Usage: bb levenshtein.clj <data-file>")
-    (System/exit 1))
+(defn -main [& args]
+  (let [opts (babashka.cli/parse-opts args opt-spec)
+        data-file (:data-file opts)
+        sim-fn (get-sim-fn (:similarity opts))
+        max-samples (:max-samples opts)
+        threshold (:threshold opts)]
+    (when (empty? data-file)
+      (println "Usage: bb levenshtein.clj <data-file>")
+      (System/exit 1))
 
-  (let [data (json/parse-stream (io/reader data-file) true)
-        n (or max-samples (count data))
-        score (calc-accuracy (take n data) sim-fn threshold)]
-    (println "Accuracy" (format "%.2f%%" (* 100 score)))))
+    (let [data (json/parse-stream (io/reader data-file) true)
+          n (or max-samples (count data))
+          score (calc-accuracy (take n data) sim-fn threshold)]
+      (println "Accuracy" (format "%.2f%%" (* 100 score)))))
 
-(let [str1 "hey there man hey"
-      str2 "hey there girl there there"
-      vocab (make-vocab [str1 str2])
-      bow1 (bag-of-words vocab str1)
-      bow2 (bag-of-words vocab str2)]
-  (println bow1 "=>" str1)
-  (println bow2 "=>" str2))
+  (let [str1 "hey there man hey"
+        str2 "hey there girl there there"
+        vocab (make-vocab [str1 str2])
+        bow1 (bag-of-words vocab str1)
+        bow2 (bag-of-words vocab str2)]
+    (println bow1 "=>" str1)
+    (println bow2 "=>" str2)))
+
+(when (= *file* (System/getProperty "babashka.file"))
+  (apply -main *command-line-args*))
