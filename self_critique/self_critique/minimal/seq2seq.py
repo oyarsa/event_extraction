@@ -1,6 +1,7 @@
 # pyright: basic
 import json
 import logging
+import sys
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
@@ -143,7 +144,7 @@ def eval(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
-    mode: str,
+    config: Seq2SeqConfig,
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -172,7 +173,12 @@ def eval(
             )
             total_loss += loss.item()
 
-            predicted_ids = torch.argmax(outputs.logits, dim=-1)
+            predicted_ids = model.generate(
+                inputs["input_ids"],
+                num_beams=config.generation_num_beams or model.config.num_beams,
+                max_length=config.max_seq_length,
+            )
+
             all_predictions.extend(predicted_ids)
             all_data.append(inputs)
 
@@ -183,7 +189,7 @@ def eval(
 
     model_data = collect_model_data(all_data)
     logging.info("Calculating metrics")
-    metrics = calculate_metrics(model_data, predicted_texts, mode)
+    metrics = calculate_metrics(model_data, predicted_texts, config.mode)
     log_metrics(metrics, desc)
     avg_loss = total_loss / num_batches
     return EvalResult(
@@ -280,7 +286,7 @@ def train(
                 model,
                 tokeniser,
                 eval_loader,
-                config.mode,
+                config,
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
