@@ -40,3 +40,17 @@ extend-ignore = ["UP007"]  # HF doesn't like T | None
 typeCheckingMode = "off"
 useLibraryCodeForTypes = false
 reportMissingImports = false
+
+[tool.mypy]
+disallow_untyped_calls = false
+warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = [
+	"torch.*",
+	"transformers",
+	"datasets",
+	"trl",
+	"evaluate",
+]
+ignore_missing_imports = true

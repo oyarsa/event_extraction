@@ -31,6 +31,12 @@ from self_critique.minimal.util import (
 
 
 @dataclass
+class Seq2SeqConfig(Config):
+    # Seq2Seq mode: 'extract' or 'reconstruct. Changes the loss function and metrics.
+    mode: str = "extract"
+
+
+@dataclass
 class Seq2SeqEntry:
     id: str
     context: str
@@ -49,7 +55,7 @@ def load_data(file_path: Path) -> list[Seq2SeqEntry]:
 def preprocess_data(
     tokeniser: PreTrainedTokenizer,
     data: list[Seq2SeqEntry],
-    config: Config,
+    config: Seq2SeqConfig,
     shuffle: bool,
     batch_size: int,
     desc: str | None = None,
@@ -137,6 +143,7 @@ def eval(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
+    mode: str,
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -176,7 +183,7 @@ def eval(
 
     model_data = collect_model_data(all_data)
     logging.info("Calculating metrics")
-    metrics = calculate_metrics(model_data, predicted_texts)
+    metrics = calculate_metrics(model_data, predicted_texts, mode)
     log_metrics(metrics, desc)
     avg_loss = total_loss / num_batches
     return EvalResult(
@@ -192,8 +199,8 @@ def collect_model_data(
     model_data: list[Seq2SeqDatasetEntry] = []
     for d in all_data:
         for i in range(len(d["id"])):
-            entry = {k: d[k][i] for k in d}
-            model_data.append(Seq2SeqDatasetEntry(**entry))
+            entry = {k: d[k][i] for k in d}  # type: ignore[literal-required]
+            model_data.append(Seq2SeqDatasetEntry(**entry))  # type: ignore[misc]
     return model_data
 
 
@@ -202,7 +209,7 @@ def train(
     tokeniser: PreTrainedTokenizer,
     train_data: list[Seq2SeqEntry],
     eval_data: list[Seq2SeqEntry] | None,
-    config: Config,
+    config: Seq2SeqConfig,
 ) -> PreTrainedModel:
     train_data = train_data[: config.max_train_samples]
     train_loader = preprocess_data(
@@ -273,6 +280,7 @@ def train(
                 model,
                 tokeniser,
                 eval_loader,
+                config.mode,
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
@@ -303,7 +311,9 @@ def train(
 
 
 def calculate_metrics(
-    data: list[Seq2SeqDatasetEntry], output: list[str]
+    data: list[Seq2SeqDatasetEntry],
+    output: list[str],
+    mode: str,
 ) -> dict[str, float]:
     references: list[metric.MetricReference] = [
         {
@@ -321,6 +331,10 @@ def calculate_metrics(
         for entry, out in zip(data, output)
     ]
 
+    if mode == "reconstruct":
+        return metric.ReconstructMetric()._compute(
+            predictions=predictions, references=references
+        )
     return metric.FGCRCls()._compute(predictions=predictions, references=references)
 
 
@@ -334,7 +348,7 @@ def infer(
     model: PreTrainedModel,
     tokeniser: PreTrainedTokenizer,
     data: list[Seq2SeqEntry],
-    config: Config,
+    config: Seq2SeqConfig,
     desc: str,
     max_samples: int | None = None,
 ) -> InferenceResult:
@@ -372,7 +386,7 @@ def infer(
     predicted_texts = tokeniser.batch_decode(predicted_ids, skip_special_tokens=True)
 
     model_data = collect_model_data(all_data)
-    metrics = calculate_metrics(model_data, predicted_texts)
+    metrics = calculate_metrics(model_data, predicted_texts, config.mode)
     log_metrics(metrics, desc)
 
     output = [
@@ -406,7 +420,10 @@ def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
 
 
 def main() -> None:
-    config = simple_parsing.parse(Config, add_config_path_arg=True)
+    config = simple_parsing.parse(Seq2SeqConfig, add_config_path_arg=True)
+    if config.mode not in ["reconstruct", "extract"]:
+        print(f"Invalid mode: {config.mode}")
+        sys.exit(1)
     set_seed(config.seed)
 
     setup_logging(config.log_level)
