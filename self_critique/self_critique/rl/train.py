@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import json
+from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass, field, fields
 from datetime import datetime
@@ -433,6 +434,17 @@ def evaluate(
             for label in entailment_labels
         ]
 
+        ref_entailment_labels = run_entailment(
+            model=entailment_model,
+            tokenizer=entailment_tokenizer,
+            max_seq_length=args.max_seq_length,
+            batch_size=args.batch_size,
+            labeller=labeller,
+            sentence1=batch["original"],
+            sentence2=ref_response,
+            device=device,
+        )
+
         assert len(rewards) == len(entailment_labels) == len(batch["input_ids"])
         for i in range(len(rewards)):
             output.append(
@@ -445,11 +457,25 @@ def evaluate(
                     "rl_response": rl_response[i],
                     "ref_response": ref_response[i],
                     "entailment_label": entailment_labels[i],
+                    "ref_entailment_label": ref_entailment_labels[i],
                     "reward": rewards[i].tolist(),
                 }
             )
 
+    log_label_distribution([d["entailment_label"] for d in output], desc="RL model")
+    log_label_distribution(
+        [d["ref_entailment_label"] for d in output], desc="Ref model"
+    )
+
     return output
+
+
+def log_label_distribution(labels: list[str], desc: str = "Model") -> None:
+    label_dist = Counter(labels)
+    print(f"\n{desc} label distribution:")
+    for label, count in label_dist.items():
+        print(f"  {label}: {count} ({count / len(labels)})")
+    print()
 
 
 def save_results(

@@ -6,11 +6,11 @@
     "per_device_train_batch_size": 32,
     "per_device_eval_batch_size": 32,
     "learning_rate": 5e-4,
-    "num_train_epochs": 2,
-    "max_seq_length": 250,
+    "num_train_epochs": 20,
+    "max_seq_length": 128,
     "output_dir": "output/t5-base-reconstruct",
-    "train_file": "../data/reconstruct/original/train.json",
-    "validation_file": "../data/reconstruct/original/dev.json",
-    "test_file": "../data/reconstruct/original/test.json",
+    "train_file": "../data/reconstruct/paraphrased/train.json",
+    "validation_file": "../data/reconstruct/paraphrased/dev.json",
+    "test_file": "../data/reconstruct/paraphrased/test.json",
     "mode": "reconstruct"
 }

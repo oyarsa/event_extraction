@@ -1,12 +1,13 @@
 {
 	"train_file": "../../../data/reconstruct_rl/train.json",
 	"eval_file": "../../../data/reconstruct_rl/dev.json",
-	"seq2seq_model": "../../output/t5-small-reconstruct",
-	"entailment_model": "../../output/shuf-deberta-xsmall",
-	"max_train_samples": 128,
-	"max_eval_samples": 128,
-	"max_predict_samples": 128,
+	"seq2seq_model": "../../output/t5-base-reconstruct",
+	"entailment_model": "../../output/entailment_deberta_paraphrased",
+	"max_train_samples": null,
+	"max_eval_samples": null,
+	"max_predict_samples": null,
 	"num_epochs": 2,
-	"max_generation_length": 5,
+	"max_generation_length": 128,
+	"max_seq_length": 128,
 	"batch_size": 32
 }

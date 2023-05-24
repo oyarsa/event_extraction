@@ -465,6 +465,7 @@ def main() -> None:
     if config.do_predict:
         if predict_data is None:
             raise ValueError("test_file must be specified when training")
+        model, tokeniser = load_model(config.output_dir, config.device, labeller)
         result = infer(model, tokeniser, predict_data, config, labeller, "prediction")
         save_results("predict", config.output_dir, result)
 
