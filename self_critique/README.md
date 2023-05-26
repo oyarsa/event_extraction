@@ -18,29 +18,50 @@ limitations under the License.
 The code is based on Huggingface transformer examples: [`question-answering`](https://github.com/huggingface/transformers/blob/master/examples/pytorch/question-answering)
 
 # Instruction:
-Data preprocess:
+
+## Data preprocess:
 
 ```sh
 # From the repository root:
-$ python preprocess/reconstruct.py
-$ python preprocess/genqa_joint.py
-$ python preprocess/entailment.py
+python preprocess/reconstruct.py
+python preprocess/genqa_joint.py
+python preprocess/entailment.py
 ```
 
-For training, use the `genqa` environment (see the `requirements` folder).
+## Train:
+
+This subproject uses PDM to manage dependencies and virtual environments. To
+install PDM, run: check [their
+website](https://pdm.fming.dev/latest/#installation).
+
+Python 3.10+ is required. I recommend using
+[pyenv](https://github.com/pyenv/pyenv#installation) to manage Python versions.
+
+After that, run the following commands to install dependencies and create a
+virtual environment:
+
+```sh
+pdm install
+source .venv/bin/activate
+```
 
 Train joint extraction and classification model:
 ```sh
-python run_seq2seq_qa.py config/genqa_joint.json
+python self_critique/minimal/seq2seq.py --config config/extraction.json
 ```
 
 Train reconstruction model:
-```
-python run_seq2seq_qa.py config/reconstruct.json
+```sh
+python self_critique/minimal/seq2seq.py --config config/reconstruct.json
 ```
 
 Train text entailment model:
-```
-python run_classification.py config/entailment.json
+```sh
+python self_critique/minimal/entailment.py --config config/entailment_deberta.json
 ```
 
+Train Reinforcement Learning model:
+```sh
+cd self_critique/rl
+python train.py --config config.json
+```
