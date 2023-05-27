@@ -13,9 +13,9 @@ dependencies = [
     "torch==2.0.0",
     "tqdm==4.65.0",
     "transformers==4.28.1",
-    "tensorboard>=2.12.2",
     "trl @ git+https://github.com/lvwerra/trl.git@c85cdbdbd0d956bbc6f5a8e04b0036648480e7a1",
     "typer>=0.9.0",
+    "numpy>=1.24.3",
 ]
 requires-python = ">=3.10"
 license = {text = "GPL-3.0-only"}
@@ -31,6 +31,7 @@ dev = [
     "ruff>=0.0.263",
     "black>=23.3.0",
     "ipykernel>=6.23.1",
+    "tensorboard>=2.12.2",
 ]
 [tool.ruff]
 extend = "../pyproject.toml"
