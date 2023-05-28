@@ -29,6 +29,7 @@ from transformers import (
     AutoConfig,
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    BatchEncoding,
     PreTrainedModel,
     PreTrainedTokenizer,
 )
@@ -123,30 +124,25 @@ class Module:
     tokenizer: PreTrainedTokenizer
 
 
-def load_entailment_model(
-    model_name_or_path: str,
-    labeller: Labeller,
-) -> Module:
+def load_entailment_model(model_name_or_path: str, labeller: Labeller) -> Module:
     config = AutoConfig.from_pretrained(
         model_name_or_path, num_labels=labeller.num_classes, revision="main"
     )
     tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, revision="main")
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name_or_path, config=config, revision="main"
-    )
+    ).train(False)
     model.config.label2id = labeller.label2id
     model.config.id2label = labeller.id2label
 
     return Module(model, tokenizer)
 
 
-def load_seq2seq_model(
-    model_name: str,
-) -> Module:
+def load_seq2seq_model(model_name: str, train: bool = True) -> Module:
     model_config = AutoConfig.from_pretrained(model_name)
     model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(
         model_name, config=model_config
-    )
+    ).train(train)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     return Module(model, tokenizer)
 
@@ -159,6 +155,27 @@ def label_to_reward(label: str) -> float:
     }[label]
 
 
+def text_decode(tokenizer: PreTrainedTokenizer, tensor: torch.Tensor) -> list[str]:
+    output = tokenizer.batch_decode([r[1:] for r in tensor])
+    return [clean_response(o) for o in output]
+
+
+def text_encode(
+    tokenizer: PreTrainedTokenizer,
+    max_seq_length: int,
+    text: list[str],
+    text_pair: list[str] | None = None,
+) -> BatchEncoding:
+    return tokenizer(
+        text=text,
+        text_pair=text_pair,
+        padding="max_length",
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_seq_length,
+    )
+
+
 def run_entailment(
     entailment: Module,
     labeller: Labeller,
@@ -168,14 +185,7 @@ def run_entailment(
     sentence2: list[str],
     device: torch.device,
 ) -> list[str]:
-    inputs = entailment.tokenizer(
-        sentence1,
-        sentence2,
-        padding="max_length",
-        return_tensors="pt",
-        truncation=True,
-        max_length=max_seq_length,
-    )
+    inputs = text_encode(entailment.tokenizer, max_seq_length, sentence1, sentence2)
     dataset = TensorDataset(inputs["input_ids"], inputs["attention_mask"])
     loader = DataLoader(dataset, batch_size=batch_size)
 
@@ -404,11 +414,6 @@ def clean_response(s: str, eos_tag: str = "</s>") -> str:
         return s
 
 
-def text_decode(tokenizer: PreTrainedTokenizer, tensor: torch.Tensor) -> list[str]:
-    output = tokenizer.batch_decode([r[1:] for r in tensor])
-    return [clean_response(o) for o in output]
-
-
 def run_reconstruct(
     reconstruct: Module,
     max_seq_length: int,
@@ -417,20 +422,14 @@ def run_reconstruct(
     structured_inputs: list[str],
     device: torch.device,
 ):
-    inputs = reconstruct.tokenizer(
-        structured_inputs,
-        padding="max_length",
-        return_tensors="pt",
-        truncation=True,
-        max_length=max_seq_length,
-    )
+    inputs = text_encode(reconstruct.tokenizer, max_seq_length, structured_inputs)
     dataset = TensorDataset(inputs["input_ids"])
     loader = DataLoader(dataset, batch_size=batch_size)
 
     reconstruct.model.eval()
     predictions: list[str] = []
     with torch.no_grad():
-        for input_ids in loader:
+        for (input_ids,) in loader:
             output_ids = reconstruct.model.generate(
                 input_ids.to(device),
                 num_beams=reconstruct.model.config.num_beams,
@@ -471,8 +470,11 @@ def evaluate(
         )
         extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
+        extract_response_tokens = text_encode(
+            reconstruct.tokenizer, args.max_seq_length, extract_response_txt
+        )
         reconstruct_response_tensor = reconstruct.model.generate(
-            extract_response_txt,
+            extract_response_tokens["input_ids"].to(device),
             num_beams=reconstruct.model.config.num_beams,
             max_length=args.max_generation_length,
         )
@@ -572,9 +574,9 @@ def main() -> None:
         }
     )
 
-    extract = load_seq2seq_model(args.extraction_model)
+    extract = load_seq2seq_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(extract.model)
-    reconstruct = load_seq2seq_model(args.reconstruction_model)
+    reconstruct = load_seq2seq_model(args.reconstruction_model, train=False)
     entailment = load_entailment_model(args.entailment_model, labeller)
 
     train_data = load_data(args.train_file, args.max_train_samples)
