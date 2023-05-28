@@ -4,3 +4,5 @@ runs
 output
 .pdm-python
 pdm.lock
+
+.portal
