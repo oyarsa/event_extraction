@@ -13,10 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import dataclasses
 import json
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, TypedDict
@@ -40,6 +41,7 @@ from trl import (
     create_reference_model,
 )
 
+import self_critique.util
 from self_critique.minimal.util import (
     save_model,
     set_seed,
@@ -88,13 +90,13 @@ class Config:
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
-        for f in fields(self):
+        for f in dataclasses.fields(self):
             if f.name in kwargs:
                 setattr(self, f.name, kwargs[f.name])
 
     def __str__(self) -> str:
         config_lines = [">>>> CONFIGURATION"]
-        for key, val in asdict(self).items():
+        for key, val in dataclasses.asdict(self).items():
             value = val.resolve() if isinstance(val, Path) else val
             config_lines.append(f"  {key}: {value}")
         return "\n".join(config_lines)
@@ -107,8 +109,8 @@ def data_collator(data: Sequence[Mapping[str, Any]]) -> dict[str, list[Any]]:
 @dataclass
 class Labeller:
     label2id: dict[str, int]
-    id2label: dict[int, str] = field(init=False)
-    num_classes: int = field(init=False)
+    id2label: dict[int, str] = dataclasses.field(init=False)
+    num_classes: int = dataclasses.field(init=False)
 
     def __post_init__(self) -> None:
         self.id2label = {id: label for label, id in self.label2id.items()}
@@ -234,11 +236,32 @@ def train_extract(
     reconstruct.model = reconstruct.model.to(device)
     entailment.model = entailment.model.to(device)
 
+    # Evaluate before training to facilitate comparison with batches
+    if eval_dataset is not None:
+        eval_result = evaluate(
+            dataset=eval_dataset,
+            extract=extract,
+            extract_ref=extract_ref,
+            reconstruct=reconstruct,
+            entailment=entailment,
+            labeller=labeller,
+            args=args,
+            device=device,
+            desc="Eval (-1)",
+        )
+        save_results(
+            result=eval_result,
+            dir=output_dir,
+            file_name="eval_result_-1.json",
+        )
+
     for epoch in range(args.num_epochs):
-        for batch in tqdm(
-            ppo_trainer.dataloader,
-            total=len(ppo_trainer.dataloader),
-            desc=f"Train ({epoch})",
+        for i, batch in enumerate(
+            tqdm(
+                ppo_trainer.dataloader,
+                total=len(ppo_trainer.dataloader),
+                desc=f"Train ({epoch})",
+            )
         ):
             query_tensors = batch["input_ids"]
 
@@ -279,6 +302,25 @@ def train_extract(
                 "response": response_tensors,
             }
             ppo_trainer.log_stats(stats, log_batch, rewards)
+
+            # Evaluate every batch to see how things are deteriorating
+            if eval_dataset is not None:
+                eval_result = evaluate(
+                    dataset=eval_dataset,
+                    extract=extract,
+                    extract_ref=extract_ref,
+                    reconstruct=reconstruct,
+                    entailment=entailment,
+                    labeller=labeller,
+                    args=args,
+                    device=device,
+                    desc=f"Eval  ({epoch}.{i})",
+                )
+                save_results(
+                    result=eval_result,
+                    dir=output_dir,
+                    file_name=f"eval_result_{epoch}.{i}.json",
+                )
 
         if eval_dataset is not None:
             eval_result = evaluate(
@@ -556,8 +598,31 @@ def save_results(
     (dir / file_name).write_text(json.dumps(result))
 
 
+def resolve(path_or_name: str | Path) -> str:
+    """Resolve the path to from the project root. If it exists, return it,
+    otherwise return the original path.
+    """
+    resolved = self_critique.util.resolve_path(path_or_name)
+    if Path(resolved).exists():
+        return str(resolved)
+    return str(path_or_name)
+
+
+def resolve_arg_paths(args: Config) -> Config:
+    return dataclasses.replace(
+        args,
+        extraction_model=resolve(args.extraction_model),
+        reconstruction_model=resolve(args.reconstruction_model),
+        entailment_model=resolve(args.entailment_model),
+        train_file=Path(resolve(args.train_file)),
+        eval_file=Path(resolve(args.eval_file)) if args.eval_file else None,
+        output_dir=Path(resolve(args.output_dir)),
+    )
+
+
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
+    args = resolve_arg_paths(args)
     print(f"{args}\n")
 
     set_seed(args.seed)
