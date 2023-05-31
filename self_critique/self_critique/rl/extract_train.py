@@ -203,7 +203,7 @@ def run_entailment(
     return predictions
 
 
-def train(
+def train_extract(
     extract: Module,
     extract_ref: PreTrainedModel,
     reconstruct: Module,
@@ -222,10 +222,10 @@ def train(
         gradient_accumulation_steps=args.gradient_accumulation_steps,
     )
     ppo_trainer = PPOTrainer(
-        ppo_config,
-        extract.model,
-        extract_ref,
-        extract.tokenizer,
+        config=ppo_config,
+        model=extract.model,
+        ref_model=extract_ref,
+        tokenizer=extract.tokenizer,
         dataset=train_dataset,
         data_collator=data_collator,
     )
@@ -297,7 +297,7 @@ def train(
                 dir=output_dir,
                 file_name=f"eval_result_{epoch}.json",
             )
-    return Module(ppo_trainer.model, reconstruct.tokenizer), device
+    return Module(ppo_trainer.model, extract.tokenizer), device
 
 
 @dataclass
@@ -602,7 +602,7 @@ def main() -> None:
             desc="evaluation",
         )
 
-    reconstruct, device = train(
+    extract, device = train_extract(
         extract=extract,
         extract_ref=extract_ref,
         reconstruct=reconstruct,
@@ -613,7 +613,7 @@ def main() -> None:
         eval_dataset=eval_dataset,
         output_dir=output_dir,
     )
-    save_model(reconstruct.model, reconstruct.tokenizer, output_dir)
+    save_model(extract.model, extract.tokenizer, output_dir)
 
     if eval_dataset is not None:
         eval_result = evaluate(
