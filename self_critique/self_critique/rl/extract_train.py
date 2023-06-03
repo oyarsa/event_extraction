@@ -252,7 +252,7 @@ def train_extract(
         save_results(
             result=eval_result,
             dir=output_dir,
-            file_name="eval_result_-1.json",
+            file_name="mini_eval_result_0.0.json",
         )
 
     for epoch in range(args.num_epochs):
@@ -314,12 +314,12 @@ def train_extract(
                     labeller=labeller,
                     args=args,
                     device=device,
-                    desc=f"Eval  ({epoch}.{i})",
+                    desc=f"Eval  ({epoch}.{i+1})",
                 )
                 save_results(
                     result=eval_result,
                     dir=output_dir,
-                    file_name=f"eval_result_{epoch}.{i}.json",
+                    file_name=f"mini_eval_result_{epoch}.{i+1}.json",
                 )
 
         if eval_dataset is not None:
