@@ -623,7 +623,14 @@ def resolve_arg_paths(args: Config) -> Config:
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
     args = resolve_arg_paths(args)
-    print(f"{args}\n")
+    print(f"{args}")
+
+    output_dir = args.output_dir / datetime.now().isoformat()
+    output_dir.mkdir(exist_ok=True, parents=True)
+    print(f"  (real) output_dir: {output_dir}\n")
+    (output_dir / "args.json").write_text(
+        json.dumps(dataclasses.asdict(args), default=str, indent=2)
+    )
 
     set_seed(args.seed)
     supress_transformers_warnings()
@@ -652,9 +659,6 @@ def main() -> None:
         device="cpu",
         desc="training",
     )
-
-    output_dir = args.output_dir / datetime.now().isoformat()
-    output_dir.mkdir(exist_ok=True, parents=True)
 
     eval_dataset = None
     if args.eval_file is not None:
