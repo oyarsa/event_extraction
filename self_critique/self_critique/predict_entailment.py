@@ -19,9 +19,10 @@ import argparse
 import json
 import logging
 import sys
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import datasets
 import numpy as np
@@ -93,12 +94,11 @@ class DataTrainingArguments:
     def __post_init__(self):
         if self.test_file is None:
             raise ValueError("Need a test file")
-        else:
-            test_extension = self.test_file.split(".")[-1]
-            assert test_extension in [
-                "csv",
-                "json",
-            ], "`test_file` should be a csv or a json file."
+        test_extension = self.test_file.split(".")[-1]
+        assert test_extension in [
+            "csv",
+            "json",
+        ], "`test_file` should be a csv or a json file."
 
 
 @dataclass
@@ -159,7 +159,7 @@ class ModelArguments:
     )
 
 
-def main():
+def main() -> None:
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
@@ -202,8 +202,7 @@ def main():
 
     # Log on each process the small summary:
     logger.warning(
-        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
+        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}distributed training: {training_args.local_rank != -1}, 16-bits training: {training_args.fp16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
 
@@ -222,27 +221,23 @@ def main():
     # Trying to have good defaults here, don't hesitate to tweak to your needs.
     # A useful fast method:
     # https://huggingface.co/docs/datasets/package_reference/main_classes.html#datasets.Dataset.unique
-    label_list = raw_datasets["test"].unique("label")
-    label_list.sort()  # Let's sort it for determinism
-    num_labels = len(label_list)
+    labels = raw_datasets["test"].unique("label")
+    labels.sort()  # Let's sort it for determinism
+    num_labels = len(labels)
 
     # Load pretrained model and tokenizer
     #
     # In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
     config = AutoConfig.from_pretrained(
-        model_args.config_name
-        if model_args.config_name
-        else model_args.model_name_or_path,
+        model_args.config_name or model_args.model_name_or_path,
         num_labels=num_labels,
         cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        model_args.tokenizer_name
-        if model_args.tokenizer_name
-        else model_args.model_name_or_path,
+        model_args.tokenizer_name or model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
         use_fast=model_args.use_fast_tokenizer,
         revision=model_args.model_revision,
@@ -250,7 +245,7 @@ def main():
     )
     model = AutoModelForSequenceClassification.from_pretrained(
         model_args.model_name_or_path,
-        from_tf=bool(".ckpt" in model_args.model_name_or_path),
+        from_tf=".ckpt" in model_args.model_name_or_path,
         config=config,
         cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
@@ -270,7 +265,7 @@ def main():
         padding = False
 
     # Some models have set the order of the labels to use, so let's make sure we do use it.
-    label_to_id = {v: i for i, v in enumerate(label_list)}
+    label_to_id = {v: i for i, v in enumerate(labels)}
 
     model.config.label2id = label_to_id
     model.config.id2label = {id: label for label, id in config.label2id.items()}
@@ -282,7 +277,7 @@ def main():
         )
     max_seq_length = min(data_args.max_seq_length, tokenizer.model_max_length)
 
-    def preprocess_function(examples):
+    def preprocess_function(examples: Mapping[str, Sequence[str]]) -> Mapping[str, Any]:
         # Tokenize the texts
         args = (
             (examples[sentence1_key],)
@@ -375,7 +370,7 @@ def main():
             logger.info(f"Logging predictions to {output_predict_file}")
             writer.write("index\tprediction\n")
             for index, item in enumerate(predictions):
-                label = label_list[item]
+                label = labels[item]
                 writer.write(f"{index}\t{label}\n")
 
     output_predict_json = output_dir / "predict_results.json"
@@ -386,8 +381,8 @@ def main():
             tid = predict_dataset["id"][index]
             sentence1 = predict_dataset["sentence1"][index]
             sentence2 = predict_dataset["sentence2"][index]
-            gold = label_list[predict_dataset["label"][index]]
-            pred = label_list[item]
+            gold = labels[predict_dataset["label"][index]]
+            pred = labels[item]
             results.append(
                 {
                     "id": tid,

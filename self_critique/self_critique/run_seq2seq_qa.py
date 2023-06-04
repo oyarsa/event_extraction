@@ -23,6 +23,7 @@ import json
 import logging
 import os
 import sys
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional, cast
@@ -273,25 +274,24 @@ class DataTrainingArguments:
             raise ValueError(
                 "Need either a dataset name or a training/validation file/test_file."
             )
-        else:
-            if self.train_file is not None:
-                extension = self.train_file.split(".")[-1]
-                assert extension in [
-                    "csv",
-                    "json",
-                ], "`train_file` should be a csv or a json file."
-            if self.validation_file is not None:
-                extension = self.validation_file.split(".")[-1]
-                assert extension in [
-                    "csv",
-                    "json",
-                ], "`validation_file` should be a csv or a json file."
-            if self.test_file is not None:
-                extension = self.test_file.split(".")[-1]
-                assert extension in [
-                    "csv",
-                    "json",
-                ], "`test_file` should be a csv or a json file."
+        if self.train_file is not None:
+            extension = self.train_file.split(".")[-1]
+            assert extension in [
+                "csv",
+                "json",
+            ], "`train_file` should be a csv or a json file."
+        if self.validation_file is not None:
+            extension = self.validation_file.split(".")[-1]
+            assert extension in [
+                "csv",
+                "json",
+            ], "`validation_file` should be a csv or a json file."
+        if self.test_file is not None:
+            extension = self.test_file.split(".")[-1]
+            assert extension in [
+                "csv",
+                "json",
+            ], "`test_file` should be a csv or a json file."
         if self.val_max_answer_length is None:
             self.val_max_answer_length = self.max_answer_length
 
@@ -301,7 +301,7 @@ question_answering_column_name_mapping = {
 }
 
 
-def main():
+def main() -> None:
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
@@ -334,8 +334,7 @@ def main():
 
     # Log on each process the small summary:
     logger.warning(
-        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
+        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}distributed training: {training_args.local_rank != -1}, 16-bits training: {training_args.fp16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
     logger.info(f"Data parameters {data_args}")
@@ -409,17 +408,13 @@ def main():
     # The .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
     config = AutoConfig.from_pretrained(
-        model_args.config_name
-        if model_args.config_name
-        else model_args.model_name_or_path,
+        model_args.config_name or model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        model_args.tokenizer_name
-        if model_args.tokenizer_name
-        else model_args.model_name_or_path,
+        model_args.tokenizer_name or model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
         use_fast=True,
         revision=model_args.model_revision,
@@ -427,12 +422,12 @@ def main():
     )
     model = AutoModelForSeq2SeqLM.from_pretrained(
         model_args.model_name_or_path,
-        from_tf=bool(".ckpt" in model_args.model_name_or_path),
+        from_tf=".ckpt" in model_args.model_name_or_path,
         config=config,
         cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
-    )  # type: ignore
+    )
 
     model.resize_token_embeddings(len(tokenizer))
 
@@ -456,9 +451,7 @@ def main():
         return
 
     # Get the column names for input/target.
-    dataset_columns = question_answering_column_name_mapping.get(
-        data_args.dataset_name, None
-    )
+    dataset_columns = question_answering_column_name_mapping.get(data_args.dataset_name)
     if data_args.question_column is None:
         question_column = (
             dataset_columns[0] if dataset_columns is not None else column_names[0]
@@ -510,7 +503,7 @@ def main():
     max_seq_length = min(data_args.max_seq_length, tokenizer.model_max_length)
 
     def preprocess_squad_batch(
-        examples,
+        examples: Mapping[str, Sequence[str]],
         question_column: str,
         context_column: str,
         answer_column: str,
@@ -525,7 +518,7 @@ def main():
         ]
         return inputs, answers
 
-    def preprocess_function(examples):
+    def preprocess_function(examples: Mapping[str, Sequence[str]]) -> Mapping[str, Any]:
         inputs, targets = preprocess_squad_batch(
             examples, question_column, context_column, answer_column
         )
@@ -645,7 +638,7 @@ def main():
     else:
         metric = FGCRCls()
 
-    def compute_metrics(p: EvalPrediction):
+    def compute_metrics(p: EvalPrediction) -> dict[str, float]:
         return metric.compute(predictions=p.predictions, references=p.label_ids)
 
     # Post-processing:

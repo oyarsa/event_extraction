@@ -36,7 +36,7 @@ class QuestionAnsweringSeq2SeqTrainer(Seq2SeqTrainer):
     def evaluate(
         self,
         eval_dataset: Dataset | None = None,
-        eval_examples=None,
+        eval_examples: Dataset | None = None,
         ignore_keys: list[str] | None = None,
         metric_key_prefix: str = "eval",
         **gen_kwargs,
@@ -124,12 +124,12 @@ class QuestionAnsweringSeq2SeqTrainer(Seq2SeqTrainer):
 
     def predict(
         self,
-        predict_dataset,
-        predict_examples,
-        ignore_keys=None,
+        predict_dataset: Dataset,
+        predict_examples: Dataset,
+        ignore_keys: list[str] | None = None,
         metric_key_prefix: str = "test",
         **gen_kwargs,
-    ):
+    ) -> PredictionOutput:
         self._gen_kwargs = gen_kwargs.copy()
 
         predict_dataloader = self.get_test_dataloader(predict_dataset)
