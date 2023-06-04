@@ -13,13 +13,17 @@ def get_ratio(data: list[dict[str, str]]) -> float:
 def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
     pairs: list[tuple[float, float]] = []
 
-    for filename in path.glob("eval_result_?.??.json"):
-        num = re.search(r"eval_result_(.*).json", filename.name)[1]
+    for filename in path.iterdir():
+        matches = re.findall(r"mini_eval_result_(\d+)\.(\d+).json", filename.name)
+        if not matches:
+            continue
         data = json.loads(filename.read_text())
-        pairs.append((float(num), get_ratio(data)))
 
-    for num, ratio in sorted(pairs):
-        print(f"{num:.2f},{ratio:.5f}")
+        epoch, batch = matches[0]
+        pairs.append((int(epoch + batch), get_ratio(data)))
+
+    for batch, ratio in sorted(pairs):
+        print(f"{batch},{ratio:.5f}")
 
 
 if __name__ == "__main__":
