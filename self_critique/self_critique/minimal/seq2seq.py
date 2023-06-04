@@ -87,8 +87,7 @@ def preprocess_data(
         data=data,
         device=config.device,
     )
-    loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
-    return loader
+    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
 
 class Seq2SeqDatasetEntry(TypedDict):

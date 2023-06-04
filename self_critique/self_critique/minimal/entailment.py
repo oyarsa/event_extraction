@@ -47,9 +47,9 @@ class Labeller:
 
     def __init__(self, *datasets: Iterable[EntailmentEntry] | None) -> None:
         data = [d for d in datasets if d][0]
-        label_list = sorted(set(d.label for d in data))
-        self.num_labels = len(label_list)
-        self.id2label = {i: label for i, label in enumerate(label_list)}
+        labels = sorted({d.label for d in data})
+        self.num_labels = len(labels)
+        self.id2label = dict(enumerate(labels))
         self.label2id = {label: i for i, label in self.id2label.items()}
 
     def encode(self, txt_labels: Iterable[str]) -> list[int]:
@@ -86,8 +86,7 @@ def preprocess_data(
         data=data,
         device=config.device,
     )
-    loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
-    return loader
+    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
 
 class EntailmentDatasetEntry(TypedDict):

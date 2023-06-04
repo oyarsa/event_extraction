@@ -319,13 +319,12 @@ def preprocess_data(
         truncation=True,
     )
 
-    dataset = Seq2SeqDataset(
+    return Seq2SeqDataset(
         input_tokens=model_inputs,
         target_tokens=labels,
         data=data,
         device=device,
     )
-    return dataset
 
 
 class Seq2SeqDatasetEntry(TypedDict):
@@ -446,22 +445,21 @@ def evaluate(
         )
 
         assert len(rewards) == len(entailment_labels) == len(batch["input_ids"])
-        for i in range(len(rewards)):
-            output.append(
-                {
-                    "id": batch["id"][i],
-                    "original": batch["original"][i],
-                    "answers": batch["answers"][i],
-                    "question_type": batch["question_type"][i],
-                    "context": batch["context"][i],
-                    "rl_response": rl_response[i],
-                    "ref_response": ref_response[i],
-                    "entailment_label": entailment_labels[i],
-                    "ref_entailment_label": ref_entailment_labels[i],
-                    "reward": rewards[i].tolist(),
-                }
-            )
-
+        output.extend(
+            {
+                "id": batch["id"][i],
+                "original": batch["original"][i],
+                "answers": batch["answers"][i],
+                "question_type": batch["question_type"][i],
+                "context": batch["context"][i],
+                "rl_response": rl_response[i],
+                "ref_response": ref_response[i],
+                "entailment_label": entailment_labels[i],
+                "ref_entailment_label": ref_entailment_labels[i],
+                "reward": rewards[i].tolist(),
+            }
+            for i in range(len(rewards))
+        )
     log_label_distribution([d["entailment_label"] for d in output], desc="RL model")
     log_label_distribution(
         [d["ref_entailment_label"] for d in output], desc="Ref model"

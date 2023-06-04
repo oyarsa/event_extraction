@@ -395,13 +395,12 @@ def preprocess_data(
         truncation=True,
     )
 
-    dataset = Seq2SeqDataset(
+    return Seq2SeqDataset(
         input_tokens=model_inputs,
         target_tokens=labels,
         data=data,
         device=device,
     )
-    return dataset
 
 
 class Seq2SeqDatasetEntry(TypedDict):
@@ -463,7 +462,7 @@ def run_reconstruct(
     batch_size: int,
     structured_inputs: list[str],
     device: torch.device,
-):
+) -> list[str]:
     inputs = text_encode(reconstruct.tokenizer, max_seq_length, structured_inputs)
     dataset = TensorDataset(inputs["input_ids"])
     loader = DataLoader(dataset, batch_size=batch_size)

@@ -28,7 +28,9 @@ rule_settings:
   - gpsg-lambda
   - gpsg-type-annotations
   - gpsg-naming
-  disable: []  # A list of rule IDs Sourcery will never suggest.
+  disable:
+  - assign-if-exp
+  - avoid-single-character-names-variables
   rule_types:
   - refactoring
   - suggestion
