@@ -34,7 +34,7 @@ def main(module_file: Path, data_classes: list[str]) -> None:
     for data_class in data_classes:
         print(f"Data Class: {data_class}\n")
 
-        fields = set(f.name for f in dataclasses.fields(getattr(mod, data_class)))
+        fields = {f.name for f in dataclasses.fields(getattr(mod, data_class))}
         mod_lines = module_file.read_text().splitlines()
         main_line = next(i for i, line in enumerate(mod_lines) if "def main(" in line)
         used, lines = used_fields(mod_lines[main_line:], fields)

@@ -28,7 +28,7 @@ def load_data(dir: Path) -> list[tuple[int | float, list[dict[str, Any]]]]:
 
     sorted_files = [dir / f"eval_result_{x}.json" for x in nums]
     og_data = [json.loads(p.read_text()) for p in sorted_files]
-    return [(n, d) for n, d in zip(nums, og_data)]
+    return list(zip(nums, og_data))
 
 
 def keep_non_entailment(instances: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -71,11 +71,10 @@ def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
     sys.stdout.write(json.dumps(instances, indent=2))
 
 
-if __name__ == "__main__":
-    if not hasattr(sys, "ps1"):  # not in interactive mode
-        typer.run(main)
+if __name__ == "__main__" and not hasattr(sys, "ps1"):  # not in interactive mode
+    typer.run(main)
 
 
-def richcomments():
+def rcf() -> None:
+    "Rich comments"
     type(Path().name)
-    pass

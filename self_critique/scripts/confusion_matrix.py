@@ -11,12 +11,10 @@ def class_acc(y_true: list[str], y_pred: list[str]) -> dict[str, int]:
     true_counts = Counter(y_true)
     class_accuracies: dict[str, int] = {}
 
-    for label in true_counts:
-        true_count = true_counts[label]
+    for label, true_count in true_counts.items():
         correct_count = sum(
-            1
+            true_label == label and pred_label == label
             for true_label, pred_label in zip(y_true, y_pred)
-            if true_label == label and pred_label == label
         )
         class_accuracies[label] = correct_count / true_count
 
@@ -33,8 +31,8 @@ def print_confusion(cm: np.ndarray, labels: list[str]) -> None:
 
     # Print each row of the confusion matrix
     for i, row in enumerate(cm):
-        row_str = "  ".join(str(val).ljust(label_width) for val in row)
-        print(f"{labels[i].ljust(label_width)}  {row_str}")
+        row_render = "  ".join(str(val).ljust(label_width) for val in row)
+        print(f"{labels[i].ljust(label_width)}  {row_render}")
 
 
 def print_acc(accuracies: dict[str, int]) -> None:

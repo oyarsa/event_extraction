@@ -7,14 +7,14 @@ import typer
 
 
 def get_ratio(data: list[dict[str, str]]) -> float:
-    return sum(1 for x in data if x["entailment_label"] == "ENTAILMENT") / len(data)
+    return sum(x["entailment_label"] == "ENTAILMENT" for x in data) / len(data)
 
 
 def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
     pairs: list[tuple[float, float]] = []
 
     for filename in path.glob("eval_result_?.??.json"):
-        num = re.search(r"eval_result_(.*).json", filename.name).group(1)
+        num = re.search(r"eval_result_(.*).json", filename.name)[1]
         data = json.loads(filename.read_text())
         pairs.append((float(num), get_ratio(data)))
 
