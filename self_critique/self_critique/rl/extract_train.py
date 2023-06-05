@@ -15,6 +15,8 @@
 
 import dataclasses
 import json
+import logging
+import sys
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -47,6 +49,8 @@ from self_critique.minimal.util import (
     set_seed,
     supress_transformers_warnings,
 )
+
+logger = logging.getLogger("extract_train")
 
 
 @dataclass
@@ -265,6 +269,7 @@ def train_extract(
         ):
             query_tensors = batch["input_ids"]
 
+            # Contrastive generation
             response_tensors = ppo_trainer.generate(
                 query_tensors,
                 max_length=args.max_generation_length,
@@ -505,6 +510,7 @@ def evaluate(
         inputs: torch.Tensor,
         original_sentence: list[str],
     ) -> BlockOutput:
+        # Contrastive generation
         extract_response_tensor = extract_model.generate(
             inputs,
             max_length=args.max_generation_length,
@@ -577,9 +583,11 @@ def evaluate(
                 }
             )
 
-    log_label_distribution([d["entailment_label"] for d in output], desc="RL model")
     log_label_distribution(
-        [d["ref_entailment_label"] for d in output], desc="Ref model"
+        [d["entailment_label"] for d in output], desc=f"{desc}: RL model"
+    )
+    log_label_distribution(
+        [d["ref_entailment_label"] for d in output], desc=f"{desc}: Ref model"
     )
 
     return output
@@ -587,10 +595,16 @@ def evaluate(
 
 def log_label_distribution(labels: list[str], desc: str = "Model") -> None:
     label_dist = Counter(labels)
-    print(f"\n{desc} label distribution:")
-    for label, count in label_dist.items():
-        print(f"  {label}: {count} ({count / len(labels)})")
-    print()
+    msg = "\n".join(
+        [
+            f"\n{desc} label distribution:",
+            *(
+                f"  {label}: {count} ({count / len(labels)})"
+                for label, count in label_dist.items()
+            ),
+        ]
+    )
+    logger.info(f"{msg}\n")
 
 
 def save_results(
@@ -621,14 +635,29 @@ def resolve_arg_paths(args: Config) -> Config:
     )
 
 
+def setup_logger(output_dir: Path) -> None:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=[
+            logging.FileHandler(output_dir / "train.log"),
+            logging.StreamHandler(sys.stdout),
+        ],
+    )
+
+
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
     args = resolve_arg_paths(args)
-    print(f"{args}")
 
     output_dir = args.output_dir / datetime.now().isoformat()
     output_dir.mkdir(exist_ok=True, parents=True)
-    print(f"  (real) output_dir: {output_dir}\n")
+    setup_logger(output_dir)
+
+    logger.info(f"\n{args}")
+    logger.info(f"output files: {output_dir}")
+
     (output_dir / "args.json").write_text(
         json.dumps(dataclasses.asdict(args), default=str, indent=2)
     )
