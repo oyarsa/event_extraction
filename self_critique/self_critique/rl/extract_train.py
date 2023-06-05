@@ -267,8 +267,9 @@ def train_extract(
 
             response_tensors = ppo_trainer.generate(
                 query_tensors,
-                num_beams=reconstruct.model.config.num_beams,
                 max_length=args.max_generation_length,
+                penalty_alpha=0.6,
+                top_k=4,
             )
             extract_response = text_decode(reconstruct.tokenizer, response_tensors)
 
@@ -506,8 +507,9 @@ def evaluate(
     ) -> BlockOutput:
         extract_response_tensor = extract_model.generate(
             inputs,
-            num_beams=extract_model.config.num_beams,
             max_length=args.max_generation_length,
+            penalty_alpha=0.6,
+            top_k=4,
         )
         extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
