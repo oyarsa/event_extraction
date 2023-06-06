@@ -91,6 +91,10 @@ class Config:
     output_dir: Path = Path("output")
     # Path to evaluation data
     eval_file: Path | None = None
+    # Contrastive top-k used for reranking
+    contrastive_top_k: int = 5
+    # Contrastiv degeneration penalty (alphe)
+    degeneration_penalty: float = 0.5
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -273,8 +277,8 @@ def train_extract(
             response_tensors = ppo_trainer.generate(
                 query_tensors,
                 max_length=args.max_generation_length,
-                penalty_alpha=0.6,
-                top_k=4,
+                penalty_alpha=args.degeneration_penalty,
+                top_k=args.contrastive_top_k,
             )
             extract_response = text_decode(reconstruct.tokenizer, response_tensors)
 
@@ -514,8 +518,8 @@ def evaluate(
         extract_response_tensor = extract_model.generate(
             inputs,
             max_length=args.max_generation_length,
-            penalty_alpha=0.6,
-            top_k=4,
+            penalty_alpha=args.degeneration_penalty,
+            top_k=args.contrastive_top_k,
         )
         extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
