@@ -20,8 +20,9 @@ def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
             continue
         data = json.loads(filename.read_text())
 
-        epoch, batch = matches[0]
-        pairs.append((int(epoch + batch), get_ratio(data)))
+        epoch, batch = map(int, matches[0])
+        num = (epoch + 1) * batch
+        pairs.append((num, get_ratio(data)))
 
     for batch, ratio in sorted(pairs):
         print(f"{batch},{ratio:.5f}")
