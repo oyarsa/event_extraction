@@ -727,6 +727,8 @@ def main() -> None:
         )
         save_results(result=eval_result, dir=output_dir, file_name="eval_result.json")
 
+    logger.info(f"Reminder: output files are in {output_dir}")
+
 
 if __name__ == "__main__":
     main()
