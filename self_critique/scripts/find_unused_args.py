@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import dataclasses
 import re
 from importlib import util

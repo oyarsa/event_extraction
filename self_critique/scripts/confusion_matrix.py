@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 from collections import Counter
 from pathlib import Path
