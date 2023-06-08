@@ -1,72 +1,72 @@
 [
   {
-    "context": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",
-    "question": "What are the events?",
-    "question_type": "cause",
-    "answers": "[Cause] one or more of Ecolab's customers were to experience a disastrous outcome [Relation] cause [Effec]: the firm's reputation could suffer and it could lose multiple customers",
-    "id": "86951ffe"
-  },
-  {
-    "context": "As grocery customers regularly visit the store, they are continually exposed to the firm's higher margin offerings, spurring lucrative general merchandise sales.",
-    "question": "What are the events?",
-    "question_type": "cause",
-    "answers": "[Cause] hey are continually exposed to the firm's higher margin offerings [Relation] cause [Effect] spurring lucrative general merchandise sales",
-    "id": "cf9c3fbb"
-  },
-  {
-    "context": "We think that QuickBooks exhibits high switching costs given the regularity in bookkeeping and the pain of transferring a business' accounting record as well as learning a new software to record entries.",
-    "question": "What are the events?",
-    "question_type": "cause",
-    "answers": "[Cause] learning a new software| the pain of transferring a business' accounting record| the regularity in bookkeeping [Relation] cause [Effect] QuickBooks exhibits high switching costs",
-    "id": "195835e4"
-  },
-  {
-    "context": "We think Lululemon protects the integrity of its brand by selling only high-quality apparel and it has continued to grow and improve margins despite the introduction of competing products by others.",
-    "question": "0 What are the events?",
-    "question_type": "prevent",
-    "answers": "[Cause] the introduction of competing products by others [Relation] prevent [Effect] it has continued to grow and improve margins",
-    "id": "74ee2c69"
-  },
-  {
-    "context": "In times of crises a AAA or AA rating is imperative within reinsurance as a flight to quality for renewals takes hold.",
+    "context": "We expect Robert Half to increase permanent placements by providing employers access to its deep bench of highly skilled professionals.",
     "question": "What are the events?",
     "question_type": "enable",
-    "answers": "[Cause] a flight to quality for renewals takes hold [Relation] enable [Effect] In times of crises a AAA or AA rating is imperative within reinsurance",
-    "id": "4dc868f3"
+    "answers": "[Cause]  providing employers access to its deep bench of highly skilled professionals [Relation] enable [Effect] Robert Half to increase permanent placements",
+    "id": "57d64189"
   },
   {
-    "context": "By our assessment, MPS' returns on invested capital haven't dipped below 20%--even when its business was barely breaking $100 million in revenue--and have steadily grown with its top line and margin expansion.",
-    "question": "What are the events?",
-    "question_type": "prevent",
-    "answers": "[Cause] its business was barely breaking $100 million in revenue--and have steadily grown with its top line and margin expansion [Relation] prevent [Effect] MPS' returns on invested capital| dipped below 20%",
-    "id": "47805e07"
-  },
-  {
-    "context": "Airlines have a long history of irrational competition, due to low entry barriers, high exit barriers, and a price-sensitive customer.",
+    "context": "Burlington has faced inventory flow challenges (despite ample product availability) as it and its vendors restart their supply and distribution networks; freight costs are also rising sharply.",
     "question": "What are the events?",
     "question_type": "cause",
-    "answers": "[Cause] a price-sensitive customer| high exit barriers| low entry barriers [Relation] cause [Effect] Airlines have a long history of irrational competition",
-    "id": "3f76cdde"
+    "answers": "[Cause]  it and its vendors restart their supply and distribution networks; freight costs are also rising sharply [Relation] cause [Effect] Burlington has faced inventory flow challenges (despite ample product availability)",
+    "id": "581af36a"
   },
   {
-    "context": "But as these risks are well managed by the firm, with no material outstanding controversies, we do not expect any meaningful impacts to the firm's valuation.",
-    "question": "What are the events?",
-    "question_type": "cause",
-    "answers": "[Cause] these risks are well managed by the firm, with no material outstanding controversies [Relation] cause [Effect]: not expect any meaningful impacts to the firm's valuation",
-    "id": "dd48c8d1"
-  },
-  {
-    "context": "However, we believe the use of research models will remain an integral part of the drug development process, as alternatives such as in vitro (test tubes) and in silico (computer simulation) testing do not fully replicate the in vivo dynamics.",
+    "context": "The firm owns and operates fabrication yards in China and Mexico, and its fabrication and modular construction capabilities allow it to complete parts of large projects off-site and ship them in modules. This strategy gives Fluor flexibility and more control over costs when working in areas with scarce and expensive local labor.",
     "question": "What are the events?",
     "question_type": "enable",
-    "answers": "[Cause] However, we believe the use of research models will remain an integral part of the drug development process [Relation] enable [Effect] as alternatives such as in vitro (test tubes) and in silico (computer simulation) testing do not fully replicate the in vivo dynamics",
-    "id": "cb4ebd7d"
+    "answers": "[Cause] The firm owns and operates fabrication yards in China and Mexico, and its fabrication and modular construction capabilities allow it to complete parts of large projects off-site and ship them in modules [Relation] enable [Effect] gives Fluor flexibility and more control over costs when working in areas with scarce and expensive local labor",
+    "id": "4075835c"
   },
   {
-    "context": "We also expect previous and ongoing PSR initiatives to drive the rail's OR down to 61% in 2021 (slightly better than guidance), with further gains to 59%-59.5% in 2022.",
+    "context": "They would not have the advantage Cogent had 20 years ago, when top providers in a more nascent Internet business were phone and cable companies, and fiber assets could be procured on the cheap due to the collapse of the tech and telecom bubble.",
     "question": "What are the events?",
     "question_type": "cause",
-    "answers": "[Cause] previous and ongoing PSR initiatives [Relation] cause [Effect] the rail's OR down to 61% in 2021 (slightly better than guidance), with further gains to 59%-59.5% in 2022",
-    "id": "af8efad4"
+    "answers": "[Cause] the collapse of the tech and telecom bubble [Relation] cause [Effect] fiber assets could be procured on the cheap",
+    "id": "2a64e8dd"
+  },
+  {
+    "context": "Consistent product and process technological advancement enables more favorable pricing relative to many automotive industry suppliers that lack the capability or the desire to innovate.",
+    "question": "What are the events?",
+    "question_type": "enable",
+    "answers": "[Cause] Consistent product and process technological advancement enables more favorable pricing [Relation] enable [Effect] relative to many automotive industry suppliers that lack the capability or the desire to innovate",
+    "id": "a62b3c49"
+  },
+  {
+    "context": "In connected care we assume slower growth in monitoring and analytics, offset by higher growth in sleep and respiratory care.",
+    "question": "What are the events?",
+    "question_type": "prevent",
+    "answers": "[Cause] higher growth in sleep and respiratory care [Relation] prevent [Effect] slower growth in monitoring and analytics",
+    "id": "ff14eb55"
+  },
+  {
+    "context": "For 2021, we have marginally lifted our sales estimate (to $18.4 billion from $18.3 billion) but have significantly raised our operating margin forecast to 4.8% from 3.9%, leading to an adjusted EPS forecast that improves to $2.85 from our prior $2.29 estimate.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause]  marginally lifted our sales estimate | significantly raised our operating margin forecast to 4.8% from 3.9%, [Relation] cause [Effect] adjusted EPS forecast that improves to $2.85 from our prior $2.29 estimate.",
+    "id": "f1330f5c"
+  },
+  {
+    "context": "Its operating income (excluding charges) dropped more than $1.5 billion between 2014 and 2019 (to $1.2 billion from $2.8 billion) on store closures, declining sales, and increased expenses.",
+    "question": "What are the events?",
+    "question_type": "prevent",
+    "answers": "[Cause] on store closures, declining sales, and increased expenses [Relation] prevent [Effect] operating income (excluding charges) dropped more than $1.5 billion",
+    "id": "59422bb1"
+  },
+  {
+    "context": "Alliance Data Systems gathers data on its client's customers, helping to better tailor these programs, which can create some switching costs in the process.",
+    "question": "1 What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause] Alliance Data Systems gathers data on its client's customers [Relation] cause [Effect] create some switching costs in the process",
+    "id": "77d6a30b"
+  },
+  {
+    "context": "After several years of mixed results, Merck's R&D productivity is improving as the company shifts more toward areas of unmet medical need.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause] the company shifts more toward areas of unmet medical need [Relation] cause [Effect] After several years of mixed results, Merck's R&D productivity is improving",
+    "id": "47352f8f"
   }
 ]

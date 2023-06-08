@@ -1,23 +1,23 @@
 [
   {
-    "context": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",
+    "context": "We expect Robert Half to increase permanent placements by providing employers access to its deep bench of highly skilled professionals.",
     "question": "What are the events?",
-    "question_type": "cause",
-    "answers": "[Cause] one or more of Ecolab's customers were to experience a disastrous outcome [Relation] cause [Effec]: the firm's reputation could suffer and it could lose multiple customers",
-    "id": "86951ffe"
+    "question_type": "enable",
+    "answers": "[Cause]  providing employers access to its deep bench of highly skilled professionals [Relation] enable [Effect] Robert Half to increase permanent placements",
+    "id": "57d64189"
   },
   {
-    "context": "As grocery customers regularly visit the store, they are continually exposed to the firm's higher margin offerings, spurring lucrative general merchandise sales.",
+    "context": "Burlington has faced inventory flow challenges (despite ample product availability) as it and its vendors restart their supply and distribution networks; freight costs are also rising sharply.",
     "question": "What are the events?",
     "question_type": "cause",
-    "answers": "[Cause] hey are continually exposed to the firm's higher margin offerings [Relation] cause [Effect] spurring lucrative general merchandise sales",
-    "id": "cf9c3fbb"
+    "answers": "[Cause]  it and its vendors restart their supply and distribution networks; freight costs are also rising sharply [Relation] cause [Effect] Burlington has faced inventory flow challenges (despite ample product availability)",
+    "id": "581af36a"
   },
   {
-    "context": "We think that QuickBooks exhibits high switching costs given the regularity in bookkeeping and the pain of transferring a business' accounting record as well as learning a new software to record entries.",
+    "context": "In connected care we assume slower growth in monitoring and analytics, offset by higher growth in sleep and respiratory care.",
     "question": "What are the events?",
-    "question_type": "cause",
-    "answers": "[Cause] learning a new software| the pain of transferring a business' accounting record| the regularity in bookkeeping [Relation] cause [Effect] QuickBooks exhibits high switching costs",
-    "id": "195835e4"
+    "question_type": "prevent",
+    "answers": "[Cause] higher growth in sleep and respiratory care [Relation] prevent [Effect] slower growth in monitoring and analytics",
+    "id": "ff14eb55"
   }
 ]
