@@ -1,0 +1,75 @@
+{
+  "version": "v1.0",
+  "data": [
+    {
+      "context": "Our volume forecast is muted by the emergence of cheaper suppliers in lower-cost labor countries; however, Canopy's production expansion into Colombia and Lesotho helps protect its share.",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] Canopy's production expansion into Colombia and Lesotho [Relation] enable [Effect] helps protect its share",
+      "id": "8069743f"
+    },
+    {
+      "context": "There are high upfront costs in large-scale device sterilization because the process requires building large, complex sterilization plants. This makes it difficult for competitors to ramp production and gives an advantage to established players that can invest to keep up with growing demand.",
+      "question": "What are the events?",
+      "question_type": "prevent",
+      "answers": "[Cause] There are high upfront costs in large-scale device sterilization because the process requires building large, complex sterilization plants [Relation] prevent [Effect] competitors to ramp production and gives an advantage to established players that can invest to keep up with growing demand",
+      "id": "a142e3c6"
+    },
+    {
+      "context": "The Charter acquisition led to depressed returns on invested capital including goodwill, which declined to the midsingle digits in recent years.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] The Charter acquisition [Relation] cause [Effect] depressed returns on invested capital including goodwill",
+      "id": "8e7e2a34"
+    },
+    {
+      "context": "As Uber benefits from its network effect, we think it gains access to valuable intangible assets in the form of user data, which we suspect helps the firm improve its services and increase its vehicles' capacity utilization.",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] it gains access to valuable intangible assets in the form of user data [Relation] enable [Effect] the firm improve its services and increase its vehicles' capacity utilization",
+      "id": "ae399cb5"
+    },
+    {
+      "context": "As millennials ascend age and income demographic segments, upgrading their living arrangements or purchasing a new home, the company can move to market higher-ticket and age-appropriate Pottery Barn and Williams-Sonoma products to the right consumer.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] millennials ascend age and income demographic segments, upgrading their living arrangements or purchasing a new home [Relation] enable [Effect] the company can move to market higher-ticket and age-appropriate Pottery Barn and Williams-Sonoma products to the right consumer",
+      "id": "1c0d1501"
+    },
+    {
+      "context": "In addition, without Weixin/Weixin ID and QQ ID, users may need to spend more time registering on a new Internet service or a new mobile app, as many sites and apps allow fast login through Weixin ID and QQ ID.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] many sites and apps allow fast login through Weixin ID and QQ ID [Relation] cause [Effect] without Weixin/Weixin ID and QQ ID, users may need to spend more time registering on a new Internet service or a new mobile app",
+      "id": "3391c8aa"
+    },
+    {
+      "context": "The new coal-fired power pricing framework shifts to the \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"base+floating\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" mechanism, which will be likely to reduce volatility in margins for coal-power producers.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] The new coal-fired power pricing framework shifts to the \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"base+floating\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" mechanism [Relation] cause [Effect] reduce volatility in margins for coal-power producers",
+      "id": "f0809099"
+    },
+    {
+      "context": "Furthermore, while populous metropolitan areas are the centers of construction activity, new quarry permits are difficult to obtain as a result of not-in-my-backyard tendencies.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] not-in-my-backyard tendencies [Relation] cause [Effect] new quarry permits are difficult to obtain",
+      "id": "f6993caf"
+    },
+    {
+      "context": "Because Fastenal has national scale, a global reach, and a robust portfolio of products and inventory-management services, it's well positioned to capitalize on this trend and take share from smaller local and regional distributors that do not have the scale to profitably service these customers.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] Because Fastenal has national scale, a global reach, and a robust portfolio of products and inventory-management services, [Relation] enable [Effect] it's well positioned to capitalize on this trend and take share from smaller local and regional distributors that do not have the scale to profitably service these customers.",
+      "id": "fb4fe371"
+    },
+    {
+      "context": "Therefore, continued deceleration in subscriptions, or growth that does not materialize as expected in PaaS or emerging products would likely have an adverse impact on the stock in our view.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] continued deceleration in subscriptions, or growth that does not materialize as expected in PaaS or emerging products [Relation] cause [Effect] an adverse impact on the stock",
+      "id": "fa631755"
+    }
+  ]
+}

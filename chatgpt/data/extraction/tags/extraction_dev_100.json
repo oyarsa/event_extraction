@@ -1,0 +1,705 @@
+{
+  "version": "v1.0",
+  "data": [
+    {
+      "context": "Collins Aerospace has significant component placement on the MAX and faces coronavirus headwinds, but we still expect narrow-body sales will allow Collins to produce a revenue CAGR of 8.2%, higher than usual due to a post-pandemic commercial aerospace recovery.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] higher than usual [Relation] cause [Effect] a post-pandemic commercial aerospace recovery",
+      "id": "d1939ba4"
+    },
+    {
+      "context": "The expense deleverage that the company faces during periods of softer recruitment underscores the intensity that competitive pressures can have on its business model, as well as the need to develop more comprehensive health and wellness offerings across its marketing and other consumer engagement efforts.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] The expense deleverage that the company faces during periods of softer recruitment [Relation] cause [Effect]  the intensity that competitive pressures can have on its business model, as well as the need to develop more comprehensive health and wellness offerings across its marketing and other consumer engagement efforts",
+      "id": "940de2b0"
+    },
+    {
+      "context": "We see myriad risks on the horizon as Keurig Dr Pepper seeks to maintain and enhance its positioning in the broader beverage industry.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Keurig Dr Pepper seeks to maintain and enhance its positioning in the broader beverage industry [Relation] cause [Effect] myriad risks",
+      "id": "25996286"
+    },
+    {
+      "context": "With discretionary services set to bounce back as the pandemic recedes, Willis Towers Watson could see unusually strong growth in the near term.",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] discretionary services set to bounce back [Relation] enable [Effect] Willis Towers Watson could see unusually strong growth in the near term",
+      "id": "4bc941e8"
+    },
+    {
+      "context": "We project operating margins to reach 13% before moderating to our nearly 12% midcycle assumption, as we assume customers will increasingly adopt higher-margin fuel-efficient engines.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] we assume customers will increasingly adopt higher-margin fuel-efficient engines [Relation] cause [Effect] We project operating margins to reach 13% before moderating to our nearly 12% midcycle assumption",
+      "id": "ad6723a9"
+    },
+    {
+      "context": "ADI and its chipmaking peers tend to profit from these high switching costs by having lower ongoing R&amp;D and capital expenditure investments than digital chipmakers, which helps to contribute to healthy returns on capital for shareholders.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] ADI and its chipmaking peers tend to profit from these high switching costs by having lower ongoing R&amp;D and capital expenditure investments than digital chipmakers [Relation] enable [Effect] helps to contribute to healthy returns on capital for shareholders",
+      "id": "43192944"
+    },
+    {
+      "context": "In the near term, ConvaTec faces considerable operational risk as it transitions more of its manufacturing to lower-cost locations, re-engineers manufacturing processes, recovers from recalls, and navigates the process of management change.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause]  it transitions more of its manufacturing to lower-cost locations, re-engineers manufacturing processes, recovers from recalls, and navigates the process of management change [Relation] enable [Effect] ConvaTec faces considerable operational risk",
+      "id": "2a013148"
+    },
+    {
+      "context": "This could result in more stable cash flows, a sustainable dividend, and Utilities - Independent Power Producersmore share buybacks if management does a good job executing its strategy.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause]  management does a good job executing its strategy [Relation] enable [Effect]  more stable cash flows, a sustainable dividend, and Utilities - Independent Power Producersmore share buybacks",
+      "id": "14f38987"
+    },
+    {
+      "context": "Thanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.",
+      "question": "2 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] accelerating digital commerce trends [Relation] cause [Effect] capitalize",
+      "id": "5f132c76"
+    },
+    {
+      "context": "We believe Dunkin' can extend its brand reach beyond core markets, supported by solid franchise unit economics, national advertising efforts, and more technological-leveraged and drive-thru-focused restaurant formats.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] solid franchise unit economics, national advertising efforts, and more technological-leveraged and drive-thru-focused restaurant formats [Relation] enable [Effect] Dunkin' can extend its brand reach beyond core markets",
+      "id": "dfe56531"
+    },
+    {
+      "context": "We believe it was a positive that preliminary weather-adjusted sales growth is estimated to be 3% due to strong industrial growth in the Mississippi Delta and expected recovery of commercial volumes.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  strong industrial growth in the Mississippi Delta and expected recovery of commercial volumes [Relation] cause [Effect]  it was a positive that preliminary weather-adjusted sales growth is estimated to be 3%",
+      "id": "40c9ebf4"
+    },
+    {
+      "context": "After a very strong 2020, we expect some constraints on its margins going forward, as business operations normalize following the pandemic.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] business operations normalize following the pandemic [Relation] cause [Effect] some constraints on its margins going forward",
+      "id": "f2c0a36d"
+    },
+    {
+      "context": "Snap's revenue growth will be driven primarily by growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads [Relation] cause [Effect] Snap's revenue growth",
+      "id": "ff061bf1"
+    },
+    {
+      "context": "Chevron's profits and cash flow are largely tied to oil and gas production and could suffer as a result of a significant fall in prices.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] a significant fall in prices [Relation] cause [Effect] Chevron's profits and cash flow are largely tied to oil and gas production and could suffer",
+      "id": "9ae0bbb9"
+    },
+    {
+      "context": "Biosimilars (follow-on versions of branded biologics) are associated with significantly higher costs of manufacturing, clinical trials, and marketing than traditional small-molecule generics, and therefore have not had as dramatic an impact on branded drug sales at launch.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Biosimilars (follow-on versions of branded biologics) are associated with significantly higher costs of manufacturing, clinical trials, and marketing [Relation] cause [Effect] have not had as dramatic an impact on branded drug sales at launch",
+      "id": "39b28100"
+    },
+    {
+      "context": "We think the runaway cost of living in West Coast metros is an area of concern, given that this has the potential to push the tech industry's center of gravity away from these high-cost regions.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] this has the potential to push the tech industry's center of gravity away from these high-cost regions [Relation] cause [Effect] the runaway cost of living in West Coast metros is an area of concern",
+      "id": "9bc3e7af"
+    },
+    {
+      "context": "During our 2021-25 forecast period, we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] revenue to grow at about a 9% CAGR [Relation] cause [Effect] strong growth in ESG and indexes",
+      "id": "aa8ee912"
+    },
+    {
+      "context": "We believe the global services business will also support future growth due to greater spares, tool refurbishments, and collaboration with customers to troubleshoot high-value problems that reduce cost, improve product yields, and accelerate new technology ramps.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  greater spares, tool refurbishments, and collaboration with customers to troubleshoot high-value problems [Relation] cause [Effect] support future growth",
+      "id": "66223477"
+    },
+    {
+      "context": "Accelerated by the pandemic, the critical supplier status has been extended to the firm by a much wider audience, including governments.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause]  the pandemic [Relation] enable [Effect] the critical supplier status has been extended to the firm by a much wider audience, including governments",
+      "id": "ef92b87f"
+    },
+    {
+      "context": "We think management has a good record when it comes to balancing expansion opportunities and maintaining the company's competitive position, which gives us confidence.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] management has a good record when it comes to balancing expansion opportunities and maintaining the company's competitive position [Relation] enable [Effect] gives us confidence",
+      "id": "2aff9b67"
+    },
+    {
+      "context": "While acquisitions allow Sensata to enter new, high-growth markets, a consolidating marketplace could cause Sensata to be outbid for, or overpay for, targets, diluting firm value.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] a consolidating marketplace [Relation] cause [Effect] cause Sensata to be outbid for, or overpay for, targets",
+      "id": "56255381"
+    },
+    {
+      "context": "M&T derives about two thirds of its income from net interest income, and with the bank's cheaper deposit base, it is more sensitive to movements in interest rates.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] with the bank's cheaper deposit base, it is more sensitive to movements in interest rates [Relation] enable [Effect] M&T derives about two thirds of its income from net interest income",
+      "id": "145b8bb9"
+    },
+    {
+      "context": "In this regard, the company's success can be attributed to its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] aggressive approach at building a recognizable brand [Relation] cause [Effect] attract consumers and consequently the agents seeking their business",
+      "id": "2f588ca2"
+    },
+    {
+      "context": "Capri has big plans for Versace and Jimmy Choo, primarily based on store growth and expansions of their accessory businesses.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] store growth and expansions of their accessory businesses [Relation] enable [Effect] Capri has big plans for Versace and Jimmy Choo",
+      "id": "f56cd823"
+    },
+    {
+      "context": "We also expect comp growth to come through new menu items and daypart expansion, delivery (aided by a second make-line for digital ordering at many locations), \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"Chipotlane\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" pickup window locations and other alternative restaurant formats (which should allow for unit growth acceleration in later years), and employee investments.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] new menu items and daypart expansion, delivery (aided by a second make-line for digital ordering at many locations), \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"Chipotlane\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" pickup window locations and other alternative restaurant formats (which should allow for unit growth acceleration in later years), and employee investments [Relation] enable [Effect] comp growth to come",
+      "id": "8d0c0860"
+    },
+    {
+      "context": "This year, Expeditors is seeing air and ocean volume pressure from pandemic lockdowns, though airfreight rates (to shippers) are spiking on tight capacity, providing a strong offset, and demand is rebounding sequentially in the second half.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] pandemic lockdowns [Relation] cause [Effect] Expeditors is seeing air and ocean volume pressure",
+      "id": "1bbebf7e"
+    },
+    {
+      "context": "Fee rates for the contracts are typically set based on independent analysis of similar assets at other refineries in the region. As a result, we see returns on invested capital averaging around 10%-11% over the next five years (including the acquisition of Andeavor Logistics), in excess of our weighted average cost of capital.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Fee rates for the contracts are typically set based on independent analysis of similar assets at other refineries in the region [Relation] cause [Effect] we see returns on invested capital averaging around 10%-11% over the next five years (including the acquisition of Andeavor Logistics), in excess of our weighted average cost of capital",
+      "id": "4ebe2ac3"
+    },
+    {
+      "context": "We believe the rise in passive investing will weigh on FactSet's target market through asset manager fee compression, resulting in slower growth.",
+      "question": "0 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] FactSet's target market through asset manager fee compression [Relation] cause [Effect] the rise in passive investing",
+      "id": "6dac7b0f"
+    },
+    {
+      "context": "Through a prior joint venture with Intel, Micron developed its own unique flavor of 3D NAND, though this JV is now defunct.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] Through a prior joint venture with Intel [Relation] enable [Effect] Micron developed its own unique flavor of 3D NAND",
+      "id": "159fee00"
+    },
+    {
+      "context": "Similarly, engineers loathe to swap out an analog from an existing design (again, only to save a few pennies on cost) because of the onerous re-design and re-testing costs associated with the switch.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the onerous re-design and re-testing costs associated with the switch [Relation] cause [Effect] engineers loathe to swap out an analog from an existing design (again, only to save a few pennies on cost)",
+      "id": "994612b3"
+    },
+    {
+      "context": "Because of lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates, adjusted 2020 EBIT margin fell 110 basis points to 3.4%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates [Relation] cause [Effect]  adjusted 2020 EBIT margin fell 110 basis points to 3.4%",
+      "id": "9133058a"
+    },
+    {
+      "context": "As the company has yet to generate positive free cash flow, it will continue to rely on outside capital raises, especially as it expands production to meet growing demand.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  the company has yet to generate positive free cash flow [Relation] cause [Effect] it will continue to rely on outside capital raises",
+      "id": "52ed7d9d"
+    },
+    {
+      "context": "It is much more efficient for customers to trade two different equity index futures on the same exchange as this allows futures traders to net their positions out when posting collateral.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] this allows futures traders to net their positions out when posting collateral [Relation] cause [Effect] It is much more efficient for customers to trade two different equity index futures on the same exchange",
+      "id": "0456aa1d"
+    },
+    {
+      "context": "Slack offers a freemium model and caters to companies of all sizes, which means revenue is concentrated among the largest customers.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] Slack offers a freemium model and caters to companies of all sizes [Relation] enable [Effect]  revenue is concentrated among the largest customers",
+      "id": "11eb45e4"
+    },
+    {
+      "context": "Consumers' ever-increasing need for mobile data results and little geographic overlap with competitors results in normalized churn of about 1%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Consumers' ever-increasing need for mobile data results and little geographic overlap with competitors [Relation] cause [Effect] normalized churn of about 1%",
+      "id": "66b6d27c"
+    },
+    {
+      "context": "While we see the possibility that enterprises will have less need for data centers if they use infrastructure as a service, or IaaS, to a greater extent, our bigger concern is that companies that don't make that move will be able to satisfy their needs with less space.",
+      "question": "0 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  they use infrastructure as a service, or IaaS [Relation] cause [Effect] that enterprises will have less need for data centers",
+      "id": "04fb05b0"
+    },
+    {
+      "context": "Due to decreasing reliance on its personnel base, we assume Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025.",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause]  Accenture will benefit from some operating leverage on the SG&A line [Relation] enable [Effect]  operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025",
+      "id": "8047738d"
+    },
+    {
+      "context": "Seagate's consumer HDD revenue has been declining in the high-teens over the past several years as consumer SSDs have come close enough to cost parity to establish mainstream crossover.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  consumer SSDs have come close enough to cost parity to establish mainstream crossover [Relation] cause [Effect] Seagate's consumer HDD revenue has been declining in the high-teens over the past several years",
+      "id": "974c7267"
+    },
+    {
+      "context": "We have reduced our fair value estimate for Telefonica Brasil to $11 from $12 per ADR due to weakness in the Brazilian real, offset in part by expectations that the weak real will push telecom services pricing higher over the next five years.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] weakness in the Brazilian real [Relation] cause [Effect] We have reduced our fair value estimate for Telefonica Brasil to $11 from $12 per ADR",
+      "id": "08e05cc0"
+    },
+    {
+      "context": "The industry's pricing transparency and significantly lower regulatory oversight have allowed the rise of competition from Internet retailers and equipment manufacturers, eroding most of these firms' switching costs and shifting the competitive landscape.",
+      "question": "0 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] The industry's pricing transparency and significantly lower regulatory oversight [Relation] cause [Effect]  the rise of competition from Internet retailers and equipment manufacturers",
+      "id": "b5577bb9"
+    },
+    {
+      "context": "During the course of his campaign, Donald Trump claimed that he would shut down U.S.-to-Mexico remittances to leverage the Mexican government to pay for the construction of the wall.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] shut down U.S.-to-Mexico remittances [Relation] cause [Effect] leverage the Mexican government to pay for the construction of the wall",
+      "id": "1813bb8c"
+    },
+    {
+      "context": "We see upside in margins for the F-35, as more sustainment enters the business mix as well and the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the aircraft becomes a major defense acquisition program [Relation] cause [Effect]  the potential to move to a more fixed-price contract",
+      "id": "65f696ad"
+    },
+    {
+      "context": "Low prices and an unmatched selection have come to define the company in consumer's minds, giving rise to intangible assets from branding and technology (search capabilities and recommendation engine).",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Low prices and an unmatched selection have come to define the company in consumer's minds [Relation] cause [Effect] giving rise to intangible assets from branding and technology",
+      "id": "1e39e616"
+    },
+    {
+      "context": "With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction, we do not foresee any immediate credit issues.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction [Relation] cause [Effect] do not foresee any immediate credit issues",
+      "id": "5a06c26e"
+    },
+    {
+      "context": "The firm has been a leader in deploying the latest network technologies, which we think will insulate it from unexpected changes in the future.",
+      "question": "What are the events?",
+      "question_type": "prevent",
+      "answers": "[Cause] The firm has been a leader in deploying the latest network technologies [Relation] prevent [Effect]  unexpected changes in the future",
+      "id": "1b1a10fa"
+    },
+    {
+      "context": "As we expect Vontier to follow the Danaher and Fortive business model and continue to drive growth through M&A, another threat to our thesis is acquisition risk as the company could overpay for acquisitions and experience challenges integrating acquired companies.",
+      "question": "0 What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] we expect Vontier to follow the Danaher and Fortive business model and continue to drive growth through M&A [Relation] enable [Effect] another threat to our thesis is acquisition risk",
+      "id": "702ff1cd"
+    },
+    {
+      "context": "Risks surrounding additional waves of COVID-19 cases remain, leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Risks surrounding additional waves of COVID-19 cases remain [Relation] cause [Effect] potential needs for incremental liquidity",
+      "id": "10d5f169"
+    },
+    {
+      "context": "If Grifols is unable to bring an IG product to market with higher pricing power (like Takeda's HyQvia or CSL's Hizentra), it could lose market share.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  Grifols is unable to bring an IG product to market with higher pricing power [Relation] cause [Effect]  it could lose market share",
+      "id": "600b39c6"
+    },
+    {
+      "context": "Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020, and while volumes have recovered in late 2020, the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020 [Relation] cause [Effect] the challenging basin economics for producers and thus volume security for Oneok",
+      "id": "502a3eab"
+    },
+    {
+      "context": "In 2021, we expect a rebound in refined products demand and weaker crude volumes, to be somewhat offset by expense savings and storage benefits to result in distributable cash flow of about $1.03 billion, similar to 2020 levels.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  a rebound in refined products demand and weaker crude volumes [Relation] cause [Effect]  distributable cash flow of about $1.03 billion",
+      "id": "ea6445cd"
+    },
+    {
+      "context": "While the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline, as the projects have yielded high returns and supported continued distribution growth.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline [Relation] cause [Effect]  the projects have yielded high returns and supported continued distribution growth",
+      "id": "bc20d801"
+    },
+    {
+      "context": "There's ample historical precedent, such as Venezuela, where rampant inflation combined with an unstable government and currency controls led to irreparable degradation in the company's operations.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  rampant inflation combined with an unstable government and currency controls [Relation] cause [Effect] irreparable degradation in the company's operations",
+      "id": "f9910362"
+    },
+    {
+      "context": "In recent years, customers have been consolidating their maintenance, repair, and operations, or MRO, spending with large distributors to leverage their purchasing power and increase operational efficiency.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] customers have been consolidating their maintenance, repair, and operations, or MRO, spending with large distributors [Relation] enable [Effect]  increase operational efficiency",
+      "id": "4a401a29"
+    },
+    {
+      "context": "Though we do not expect specific ESG risks to materially affect Alcon, product governance failures leading to poor health outcomes could have a significant impact on Alcon's financial results.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] product governance failures leading to poor health outcomes [Relation] cause [Effect] have a significant impact on Alcon's financial results",
+      "id": "c0145fb6"
+    },
+    {
+      "context": "Additionally, long-term price depreciation would expose the company to weakening returns on capital, as its large queue of new projects coming on line would be unlikely to generate their projected economic results.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] its large queue of new projects coming on line would be unlikely to generate their projected economic results [Relation] cause [Effect] long-term price depreciation would expose the company to weakening returns on capital",
+      "id": "130666b6"
+    },
+    {
+      "context": "Following significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic, we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Following significant core sales declines across all three segments in 2020 [Relation] cause [Effect] an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+      "id": "4e7fe661"
+    },
+    {
+      "context": "Outside of the New York market, as Altice increases its share of total customer telecom spending in a given neighborhood, we expect it will be able to further outspend rivals on network maintenance and upgrades while gaining operating cost efficiencies.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] Altice increases its share of total customer telecom spending in a given neighborhood [Relation] enable [Effect] it will be able to further outspend rivals on network maintenance and upgrades while gaining operating cost efficiencies",
+      "id": "0a5361af"
+    },
+    {
+      "context": "While Accenture has stressed its desire to rely less on commoditized outsourcing, we think that this could pose risks to Accenture's familiarity proposition, which is that switching costs are derived from having such large client accounts.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Accenture has stressed its desire to rely less on commoditized outsourcing [Relation] cause [Effect] pose risks to Accenture's familiarity proposition",
+      "id": "9f48ca50"
+    },
+    {
+      "context": "Contrary to other publications, digital journal products are often priced at a premium to their print counterparts, as searchability is an especially valued, critical upgrade from a physical copy.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] searchability is an especially valued, critical upgrade from a physical copy [Relation] cause [Effect] digital journal products are often priced at a premium to their print counterparts",
+      "id": "48122388"
+    },
+    {
+      "context": "Also, the recent acquisition of Ceratti, a Brazil-based producer of deli products, gives Hormel access to the fast-growing Brazilian market.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] the recent acquisition of Ceratti [Relation] enable [Effect] Hormel access to the fast-growing Brazilian market",
+      "id": "1e130295"
+    },
+    {
+      "context": "Due to the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures, 2020 revenue declined 28%, but we forecast a 30% rebound in 2021 as backlog starts to ramp-up, with a return to normalized light vehicle demand in 2023.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the sale of most of its brake control business [Relation] cause [Effect] 2020 revenue declined 28%",
+      "id": "4a90fb9e"
+    },
+    {
+      "context": "A decade of consolidation in the corrugated packaging industry has allowed WestRock and its peers to push more aggressively on prices, resulting in a period of higher margins.",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] WestRock and its peers to push more aggressively on prices [Relation] enable [Effect] a period of higher margins",
+      "id": "612b971d"
+    },
+    {
+      "context": "We expect fairly consistent results in soybean processing over the long run despite quarterly fluctuations caused by changes in crush margin and capacity utilization.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] changes in crush margin and capacity utilization [Relation] cause [Effect] quarterly fluctuations",
+      "id": "3045845c"
+    },
+    {
+      "context": "Demand for the firm's barcode printers and relevant supplies and services should remain high as healthcare needs rise in the near term.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] healthcare needs rise in the near term [Relation] cause [Effect] Demand for the firm's barcode printers and relevant supplies and services",
+      "id": "3f05ec39"
+    },
+    {
+      "context": "This gives the bank scale and exposure to this higher-margin, fee-based business, which we don't think will change in the near term as the banks still have the most dominant branch and distribution networks.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the banks still have the most dominant branch and distribution networks [Relation] cause [Effect] we don't think will change in the near term",
+      "id": "c311850d"
+    },
+    {
+      "context": "Durable cost advantages for industry participants are elusive because low-cost carriers and ultra-low-cost carriers' business model is predicated on continuously driving down yields to attract customers with lower fares.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] low-cost carriers and ultra-low-cost carriers' business model is predicated on continuously driving down yields to attract customers with lower fares [Relation] cause [Effect] Durable cost advantages for industry participants are elusive",
+      "id": "a4672767"
+    },
+    {
+      "context": "Its previously strong brand intangible asset has been degraded by consumer trends that allowed for competition in the intimates space, as the Victoria's Secret, or VS, brand failed to adapt to trends.",
+      "question": "0 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the Victoria's Secret, or VS, brand failed to adapt to trends [Relation] cause [Effect] Its previously strong brand intangible asset has been degraded by consumer trends",
+      "id": "1f348732"
+    },
+    {
+      "context": "Attempts to fill unused capacity by competing for existing contracts tend to prove challenging because staggered multiyear supply contracts reduce the volume of production open to competition in any given year.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] staggered multiyear supply contracts reduce the volume of production open to competition in any given year [Relation] enable [Effect] Attempts to fill unused capacity by competing for existing contracts tend to prove challenging",
+      "id": "8b502688"
+    },
+    {
+      "context": "These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk, all of which allow the banks to achieve greater risk-adjusted returns.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk [Relation] enable [Effect] the banks to achieve greater risk-adjusted returns",
+      "id": "aa56bf6f"
+    },
+    {
+      "context": "History suggests this could Drug Manufacturers - Specialty & Genericbe possible, as Illinois's early plans for recreational legalization would hand an advantage to companies with medical cultivation and dispensary licenses.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Illinois's early plans for recreational legalization would hand an advantage to companies with medical cultivation and dispensary licenses [Relation] cause [Effect] this could Drug Manufacturers - Specialty & Genericbe possible",
+      "id": "fd0010a3"
+    },
+    {
+      "context": "Wireless penetration stood at nearly 140% in 2015 as consumers regularly carried multiple carrier accounts to take advantage of whichever one was offering the best rates at any point in time.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] consumers regularly carried multiple carrier accounts to take advantage of whichever one was offering the best rates at any point in time [Relation] cause [Effect] Wireless penetration stood at nearly 140% in 2015",
+      "id": "0467c8b2"
+    },
+    {
+      "context": "The good news is that, on average, e-commerce warehousing requires about three times more space as traditional warehousing, so the increased demand has allowed the company to construct speculative developments, which often carry higher margins, albeit with more risk.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the increased demand has allowed the company to construct speculative developments [Relation] cause [Effect] higher margins, albeit with more risk",
+      "id": "30c6b9cb"
+    },
+    {
+      "context": "Worldwide, there are hundreds of lodging management companies but only a few of those currently manage more than 100 properties with Hyatt one of them, making it a prime partner for third-party owners looking to outsource management responsibilities.  As a result of increasing third-party confidence in Hyatt's brands, the company's asset-light business became the majority of adjusted EBITDA (before corporate) in 2018 and reached 57% in 2019, and we estimate it will be around mid-70% in 2029.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Worldwide, there are hundreds of lodging management companies but only a few of those currently manage more than 100 properties with Hyatt one of them, making it a prime partner for third-party owners looking to outsource management responsibilities [Relation] cause [Effect] increasing third-party confidence in Hyatt's brands, the company's asset-light business became the majority of adjusted EBITDA (before corporate) in 2018 and reached 57% in 2019, and we estimate it will be around mid-70% in 2029",
+      "id": "b193e72f"
+    },
+    {
+      "context": "Biosimilar competition is a looming threat, but we think the significant manufacturing and development costs that biosimilar makers are expected to incur would slow any erosion of sales of these products, limiting the number of contenders and their ability to compete on price.",
+      "question": "1 What are the events?",
+      "question_type": "prevent",
+      "answers": "[Cause] the significant manufacturing and development costs that biosimilar makers are expected to incur [Relation] prevent [Effect] the number of contenders and their ability to compete on price",
+      "id": "e6d6af02"
+    },
+    {
+      "context": "Despite having a model that requires franchisees to shoulder significant risk, Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] exclusive routes and its premium brand reputation [Relation] cause [Effect] Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes",
+      "id": "3520087a"
+    },
+    {
+      "context": "Finally, the increasingly viral nature of the media creates omnipresent ESG risk in the form of potential brand degradation, which is quite acute for most corporations, in our view.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the increasingly viral nature of the media [Relation] cause [Effect] omnipresent ESG risk in the form of potential brand degradation",
+      "id": "9083ccfc"
+    },
+    {
+      "context": "In this regard, the company's success can be attributed to its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.",
+      "question": "0 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] aggressive approach at building a recognizable brand [Relation] cause [Effect]  the company's success",
+      "id": "7dd67be4"
+    },
+    {
+      "context": "Years of government efforts have done little to stem illegal cannabis, but a change to the ease of accessing black market supplies could have a significant impact on the pricing power, and thus the profitability of legal cannabis companies.",
+      "question": "1 What are the events?",
+      "question_type": "prevent",
+      "answers": "[Cause] a change to the ease of accessing black market supplies [Relation] prevent [Effect] the profitability of legal cannabis companies",
+      "id": "3e373b37"
+    },
+    {
+      "context": "A period of low economic growth could coincide with fewer organic growth opportunities for companies, leading them to try growing via acquisition, but this type of M&A activity probably won't be enough to prevent lackluster earnings.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] fewer organic growth opportunities for companies [Relation] cause [Effect] leading them to try growing via acquisition",
+      "id": "09824725"
+    },
+    {
+      "context": "Also, although Knight's cost execution is quite strong, limited driver availability is placing upward pressure on driver wages and recruiting costs.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  limited driver availability [Relation] cause [Effect] placing upward pressure on driver wages and recruiting costs",
+      "id": "ebebb207"
+    },
+    {
+      "context": "As one of the world's leading volume producers, Volkswagen's economies of scale from common platforms across a growing number of models enable cost savings unattainable by smaller competitors.",
+      "question": "2 What are the events?",
+      "question_type": "prevent",
+      "answers": "[Cause] Volkswagen's economies of scale [Relation] prevent [Effect] smaller competitors",
+      "id": "21d4a0a1"
+    },
+    {
+      "context": "Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets, we rate Medtronic's uncertainty as medium.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic market [Relation] enable [Effect] we rate Medtronic's uncertainty as medium",
+      "id": "b3634d47"
+    },
+    {
+      "context": "We believe the biggest risk is a slowdown in the real estate market, which could be indicated by increased home inventories for sale, slower growth in prices, or higher mortgage interest rates.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] We believe the biggest risk is a slowdown in the real estate market [Relation] enable [Effect] could be indicated by increased home inventories for sale, slower growth in prices, or higher mortgage interest rates.",
+      "id": "4b92cbd3"
+    },
+    {
+      "context": "We think it would need to open cultivation internationally if it wants to compete in the global medical cannabis market--an unlikely event until federal laws are changed.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause]  it wants to compete in the global medical cannabis market [Relation] cause [Effect] it would need to open cultivation internationally",
+      "id": "8b5887af"
+    },
+    {
+      "context": "Also, once customers are comfortable with a product, they are unlikely to change lenses for a minor improvement or small reduction in price.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] customers are comfortable with a product [Relation] cause [Effect] they are unlikely to change lenses for a minor improvement or small reduction in price",
+      "id": "748b493b"
+    },
+    {
+      "context": "We contend that the chain's rapidly changing product assortment encourages repeat customer visits while reducing the risk of potential fashion trend- or weather-related missteps (as the assortment quickly turns over and Burlington buys inventory year-round).",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause]  the assortment quickly turns over and Burlington buys inventory year-round [Relation] enable [Effect] reducing the risk of potential fashion trend- or weather-related missteps",
+      "id": "5c2499c2"
+    },
+    {
+      "context": "Beyond the legal power of patents, even slightly differentiated technical features can cause an end user to prefer one tool over a similar tool in the company's precise scientific end markets, so we think those other intangible assets contribute to Illumina's competitive advantages, too.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] even slightly differentiated technical features can cause an end user to prefer one tool over a similar tool in the company's precise scientific end markets [Relation] cause [Effect] those other intangible assets contribute to Illumina's competitive advantages, too",
+      "id": "a3d043f9"
+    },
+    {
+      "context": "The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft because there are not material aftermarket servicing opportunities for aerostructures.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] there are not material aftermarket servicing opportunities for aerostructures [Relation] cause [Effect] The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft",
+      "id": "a73d30ba"
+    },
+    {
+      "context": "Our volume forecast is muted by the emergence of cheaper suppliers in lower-cost labor countries; however, Canopy's production expansion into Colombia and Lesotho helps protect its share.",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] Canopy's production expansion into Colombia and Lesotho [Relation] enable [Effect] helps protect its share",
+      "id": "8069743f"
+    },
+    {
+      "context": "We think there is a risk these partners will look elsewhere if Neogen does not successfully scale licensed products, and partners could also demand a greater share of profits if co-developed products are highly successful.",
+      "question": "0 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Neogen does not successfully scale licensed products [Relation] cause [Effect] these partners will look elsewhere",
+      "id": "3a108747"
+    },
+    {
+      "context": "We believe the combination of Azure, DBMS, Dynamics 365, and Office 365 will drive above-market growth as CIOs continue to consolidate vendors.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] CIOs continue to consolidate vendors [Relation] cause [Effect]  the combination of Azure, DBMS, Dynamics 365, and Office 365 will drive above-market growth",
+      "id": "20030f15"
+    },
+    {
+      "context": "Targeting a wide consumer base with a core customer who is female, 35-65 years old with household income of $50,000-over $175,000 also means Wayfair is competing with mass-market retailers, specialty retail, and low-cost providers, making it harder to stay top of mind.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] Wayfair is competing with mass-market retailers, specialty retail, and low-cost providers [Relation] cause [Effect] harder to stay top of mind",
+      "id": "9025b074"
+    },
+    {
+      "context": "We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021, with some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022 [Relation] cause [Effect] We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021",
+      "id": "494f9097"
+    },
+    {
+      "context": "Because of the size of NYSE's market share, this data is necessary for traders to have a complete view of the market, giving ICE pricing power.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] the size of NYSE's market share [Relation] cause [Effect] data is necessary for traders to have a complete view of the market",
+      "id": "06b5f30d"
+    },
+    {
+      "context": "We anticipate elevated commercial HVAC sales for the foreseeable future driven by heightened demand for more energy-efficient systems that deliver better air quality, and we believe Trane, along with other leading HVAC companies, are well positioned to serve this growing market.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] heightened demand for more energy-efficient systems [Relation] cause [Effect] elevated commercial HVAC sales for the foreseeable",
+      "id": "f403a698"
+    },
+    {
+      "context": "There were a few new, stringent rules on licensing and operations in after-school tutoring in China, which would require providers to fulfil fire safety, space requirement, and obtain both operating licenses and education permits.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] There were a few new, stringent rules on licensing and operations in after-school tutoring in China [Relation] enable [Effect]  require providers to fulfil fire safety, space requirement, and obtain both operating licenses and education permits",
+      "id": "4aff2437"
+    },
+    {
+      "context": "Additionally, the service business backed by a major national brand, as the commercial business coming from Interline and HD Supply could build brand loyalty and keep consumers returning to a trusted source, something that could be hard to duplicate for a new entrant.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] the service business backed by a major national brand, as the commercial business coming from Interline and HD Supply [Relation] enable [Effect] build brand loyalty and keep consumers returning to a trusted source",
+      "id": "32a1ece0"
+    },
+    {
+      "context": "Furthermore, for products such as these with minimal differentiation across brands, consumers base their purchasing decision to a greater extent on price, rather than brand.",
+      "question": "1 What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] products such as these with minimal differentiation across brands [Relation] cause [Effect] consumers base their purchasing decision to a greater extent on price, rather than brand.",
+      "id": "9e987cd3"
+    },
+    {
+      "context": "To continue winning contracts, the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "[Cause] To continue winning contracts [Relation] cause [Effect] the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets",
+      "id": "771245be"
+    },
+    {
+      "context": "However, we expect margins to recover and return to the low to mid-30% range as the company continues to develop new downstream products that provide some pricing power.",
+      "question": "What are the events?",
+      "question_type": "enable",
+      "answers": "[Cause] the company continues to develop new downstream products [Relation] enable [Effect]  margins to recover and return to the low to mid-30% range",
+      "id": "24cb96b4"
+    }
+  ]
+}

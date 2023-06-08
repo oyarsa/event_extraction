@@ -1,0 +1,72 @@
+[
+  {
+    "context": "If one or more of Ecolab's customers were to experience a disastrous outcome, the firm's reputation could suffer and it could lose multiple customers as a result.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause] one or more of Ecolab's customers were to experience a disastrous outcome [Relation] cause [Effec]: the firm's reputation could suffer and it could lose multiple customers",
+    "id": "86951ffe"
+  },
+  {
+    "context": "As grocery customers regularly visit the store, they are continually exposed to the firm's higher margin offerings, spurring lucrative general merchandise sales.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause] hey are continually exposed to the firm's higher margin offerings [Relation] cause [Effect] spurring lucrative general merchandise sales",
+    "id": "cf9c3fbb"
+  },
+  {
+    "context": "We think that QuickBooks exhibits high switching costs given the regularity in bookkeeping and the pain of transferring a business' accounting record as well as learning a new software to record entries.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause] learning a new software| the pain of transferring a business' accounting record| the regularity in bookkeeping [Relation] cause [Effect] QuickBooks exhibits high switching costs",
+    "id": "195835e4"
+  },
+  {
+    "context": "We think Lululemon protects the integrity of its brand by selling only high-quality apparel and it has continued to grow and improve margins despite the introduction of competing products by others.",
+    "question": "0 What are the events?",
+    "question_type": "prevent",
+    "answers": "[Cause] the introduction of competing products by others [Relation] prevent [Effect] it has continued to grow and improve margins",
+    "id": "74ee2c69"
+  },
+  {
+    "context": "In times of crises a AAA or AA rating is imperative within reinsurance as a flight to quality for renewals takes hold.",
+    "question": "What are the events?",
+    "question_type": "enable",
+    "answers": "[Cause] a flight to quality for renewals takes hold [Relation] enable [Effect] In times of crises a AAA or AA rating is imperative within reinsurance",
+    "id": "4dc868f3"
+  },
+  {
+    "context": "By our assessment, MPS' returns on invested capital haven't dipped below 20%--even when its business was barely breaking $100 million in revenue--and have steadily grown with its top line and margin expansion.",
+    "question": "What are the events?",
+    "question_type": "prevent",
+    "answers": "[Cause] its business was barely breaking $100 million in revenue--and have steadily grown with its top line and margin expansion [Relation] prevent [Effect] MPS' returns on invested capital| dipped below 20%",
+    "id": "47805e07"
+  },
+  {
+    "context": "Airlines have a long history of irrational competition, due to low entry barriers, high exit barriers, and a price-sensitive customer.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause] a price-sensitive customer| high exit barriers| low entry barriers [Relation] cause [Effect] Airlines have a long history of irrational competition",
+    "id": "3f76cdde"
+  },
+  {
+    "context": "But as these risks are well managed by the firm, with no material outstanding controversies, we do not expect any meaningful impacts to the firm's valuation.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause] these risks are well managed by the firm, with no material outstanding controversies [Relation] cause [Effect]: not expect any meaningful impacts to the firm's valuation",
+    "id": "dd48c8d1"
+  },
+  {
+    "context": "However, we believe the use of research models will remain an integral part of the drug development process, as alternatives such as in vitro (test tubes) and in silico (computer simulation) testing do not fully replicate the in vivo dynamics.",
+    "question": "What are the events?",
+    "question_type": "enable",
+    "answers": "[Cause] However, we believe the use of research models will remain an integral part of the drug development process [Relation] enable [Effect] as alternatives such as in vitro (test tubes) and in silico (computer simulation) testing do not fully replicate the in vivo dynamics",
+    "id": "cb4ebd7d"
+  },
+  {
+    "context": "We also expect previous and ongoing PSR initiatives to drive the rail's OR down to 61% in 2021 (slightly better than guidance), with further gains to 59%-59.5% in 2022.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "[Cause] previous and ongoing PSR initiatives [Relation] cause [Effect] the rail's OR down to 61% in 2021 (slightly better than guidance), with further gains to 59%-59.5% in 2022",
+    "id": "af8efad4"
+  }
+]
