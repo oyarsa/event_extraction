@@ -2,74 +2,74 @@
   "version": "v1.0",
   "data": [
     {
-      "context": "Additionally, the transition to the cloud is prompting enterprises to change software vendors away from all-in-one ERP systems to application specific that are best of breed.",
+      "context": "Our volume forecast is muted by the emergence of cheaper suppliers in lower-cost labor countries; however, Canopy's production expansion into Colombia and Lesotho helps protect its share.",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "Cause: Canopy's production expansion into Colombia and Lesotho\nEffect: helps protect its share\nRelation: enable",
+      "id": "8069743f"
+    },
+    {
+      "context": "There are high upfront costs in large-scale device sterilization because the process requires building large, complex sterilization plants. This makes it difficult for competitors to ramp production and gives an advantage to established players that can invest to keep up with growing demand.",
+      "question": "What are the events?",
+      "question_type": "prevent",
+      "answers": "Cause: There are high upfront costs in large-scale device sterilization because the process requires building large, complex sterilization plants\nEffect: competitors to ramp production and gives an advantage to established players that can invest to keep up with growing demand\nRelation: prevent",
+      "id": "a142e3c6"
+    },
+    {
+      "context": "The Charter acquisition led to depressed returns on invested capital including goodwill, which declined to the midsingle digits in recent years.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The Charter acquisition\nEffect: depressed returns on invested capital including goodwill\nRelation: cause",
+      "id": "8e7e2a34"
+    },
+    {
+      "context": "As Uber benefits from its network effect, we think it gains access to valuable intangible assets in the form of user data, which we suspect helps the firm improve its services and increase its vehicles' capacity utilization.",
+      "question": "1 What are the events?",
+      "question_type": "enable",
+      "answers": "Cause: it gains access to valuable intangible assets in the form of user data\nEffect: the firm improve its services and increase its vehicles' capacity utilization\nRelation: enable",
+      "id": "ae399cb5"
+    },
+    {
+      "context": "As millennials ascend age and income demographic segments, upgrading their living arrangements or purchasing a new home, the company can move to market higher-ticket and age-appropriate Pottery Barn and Williams-Sonoma products to the right consumer.",
       "question": "What are the events?",
       "question_type": "enable",
-      "answers": "Cause: the transition to the cloud\nEffect: prompting enterprises to change software vendors away from all-in-one ERP systems to application specific\nRelation: enable",
-      "id": "ee8e5a82"
+      "answers": "Cause: millennials ascend age and income demographic segments, upgrading their living arrangements or purchasing a new home\nEffect: the company can move to market higher-ticket and age-appropriate Pottery Barn and Williams-Sonoma products to the right consumer\nRelation: enable",
+      "id": "1c0d1501"
     },
     {
-      "context": "We expect annual earnings growth at Georgia Power to accelerate to high-single digits after Vogtle is completed and penalty returns on equity fade.",
+      "context": "In addition, without Weixin/Weixin ID and QQ ID, users may need to spend more time registering on a new Internet service or a new mobile app, as many sites and apps allow fast login through Weixin ID and QQ ID.",
       "question": "What are the events?",
       "question_type": "cause",
-      "answers": "Cause: Vogtle is completed and penalty returns on equity fade\nEffect: annual earnings growth at Georgia Power to accelerate to high-single digits\nRelation: cause",
-      "id": "1ddb02bc"
+      "answers": "Cause: many sites and apps allow fast login through Weixin ID and QQ ID\nEffect: without Weixin/Weixin ID and QQ ID, users may need to spend more time registering on a new Internet service or a new mobile app\nRelation: cause",
+      "id": "3391c8aa"
     },
     {
-      "context": "Healthpeak has established itself as a desirable partner with some of the top hospitals, as 94% of its medical office building assets are affiliated with a health system.",
+      "context": "The new coal-fired power pricing framework shifts to the \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"base+floating\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" mechanism, which will be likely to reduce volatility in margins for coal-power producers.",
       "question": "What are the events?",
       "question_type": "cause",
-      "answers": "Cause: 94% of its medical office building assets are affiliated with a health system\nEffect: Healthpeak has established itself as a desirable partner with some of the top hospitals\nRelation: cause",
-      "id": "8682fd11"
+      "answers": "Cause: The new coal-fired power pricing framework shifts to the \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"base+floating\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" mechanism\nEffect: reduce volatility in margins for coal-power producers\nRelation: cause",
+      "id": "f0809099"
     },
     {
-      "context": "Given the substantial costs at failure, we don't expect the military will switch its provider for missile defense systems any day soon.",
+      "context": "Furthermore, while populous metropolitan areas are the centers of construction activity, new quarry permits are difficult to obtain as a result of not-in-my-backyard tendencies.",
       "question": "What are the events?",
       "question_type": "cause",
-      "answers": "Cause: the substantial costs at failure\nEffect: we don't expect the military will switch its provider for missile defense systems any day soon\nRelation: cause",
-      "id": "51f55ad1"
+      "answers": "Cause: not-in-my-backyard tendencies\nEffect: new quarry permits are difficult to obtain\nRelation: cause",
+      "id": "f6993caf"
     },
     {
-      "context": "Following Wesco's third-quarter results, we increased our fair value estimate 10% to $100 per share primarily due to our upwardly revised cost synergy assumptions but also lower share count.",
-      "question": "What are the events?",
-      "question_type": "cause",
-      "answers": "Cause: upwardly revised cost synergy\nEffect: lower share count\nRelation: cause",
-      "id": "f2419149"
-    },
-    {
-      "context": "Department of Justice wrapped up its investigation into off-label use of the Infuse product without issuing any charges, the controversy around the investigation added uncertainty and contributed to a decline in Infuse sales during that period.",
-      "question": "What are the events?",
-      "question_type": "cause",
-      "answers": "Cause: Department of Justice wrapped up its investigation into off-label use of the Infuse product without issuing any charges\nEffect: the controversy around the investigation added uncertainty and contributed to a decline in Infuse sales during that period\nRelation: cause",
-      "id": "17121f81"
-    },
-    {
-      "context": "During periods of rapid fuel price increases, truckload carriers often see modest temporary margin headwinds because of the time lag associated with adjusting fuel surcharges to shippers.",
-      "question": "What are the events?",
-      "question_type": "cause",
-      "answers": "Cause: the time lag associated with adjusting fuel surcharges to shippers\nEffect: During periods of rapid fuel price increases, truckload carriers often see modest temporary margin headwinds\nRelation: cause",
-      "id": "8054e842"
-    },
-    {
-      "context": "State and federal regulators grant PSE&amp;G exclusive rights to charge customers rates that allow it to earn a fair return on and return of the capital it invests to build, operate, and maintain its distribution networks.",
-      "question": "What are the events?",
-      "question_type": "cause",
-      "answers": "Cause: State and federal regulators grant PSE&amp;G exclusive rights to charge customers rates\nEffect: earn a fair return on and return of the capital it invests to build, operate, and maintain its distribution networks\nRelation: cause",
-      "id": "4bfe3445"
-    },
-    {
-      "context": "However, the cyclical supply and demand nature of commodities and related pricing can have an indirect impact on the business as shippers may choose to accelerate or delay certain projects.",
-      "question": "What are the events?",
-      "question_type": "cause",
-      "answers": "Cause: shippers may choose to accelerate or delay certain projects\nEffect: the cyclical supply and demand nature of commodities and related pricing can have an indirect impact on the business\nRelation: cause",
-      "id": "6d7e7704"
-    },
-    {
-      "context": "State and federal regulators typically grant regulated utilities exclusive rights to charge customers rates that allow the utilities to earn a fair return on and of the capital they invest to build, operate, and maintain their distribution networks.",
+      "context": "Because Fastenal has national scale, a global reach, and a robust portfolio of products and inventory-management services, it's well positioned to capitalize on this trend and take share from smaller local and regional distributors that do not have the scale to profitably service these customers.",
       "question": "What are the events?",
       "question_type": "enable",
-      "answers": "Cause: State and federal regulators typically grant regulated utilities exclusive rights to charge customers rates\nEffect: the utilities to earn a fair return on and of the capital they invest to build, operate, and maintain their distribution networks.\nRelation: enable",
-      "id": "80e6b592"
+      "answers": "Cause: Because Fastenal has national scale, a global reach, and a robust portfolio of products and inventory-management services,\nEffect: it's well positioned to capitalize on this trend and take share from smaller local and regional distributors that do not have the scale to profitably service these customers.\nRelation: enable",
+      "id": "fb4fe371"
+    },
+    {
+      "context": "Therefore, continued deceleration in subscriptions, or growth that does not materialize as expected in PaaS or emerging products would likely have an adverse impact on the stock in our view.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: continued deceleration in subscriptions, or growth that does not materialize as expected in PaaS or emerging products\nEffect: an adverse impact on the stock\nRelation: cause",
+      "id": "fa631755"
     }
   ]
 }
