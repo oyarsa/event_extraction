@@ -1,15 +1,23 @@
 #!/usr/bin/env fish
 
-argparse 'env=' 'mode=' 'prompt=' 'key=' -- $argv
+argparse 'env=' 'mode=' 'key=' 'data=' 'ts=' -- $argv
 or return
 
 set -q _flag_env; or set _flag_env dev
 set -q _flag_mode; or set _flag_mode lines
-set -q _flag_prompt; or set _flag_prompt 0
 set -q _flag_key; or set _flag_key kcl
+set -q _flag_ts; or set _flag_ts (date -u +%Y-%m-%dT%H.%M.%SZ)
 
-if [ $_flag_env = exp ]
+if ! [ $_flag_mode = tags ] && ! [ $_flag_mode = lines ]
+    echo Invalid mode: $_flag_mode
+    exit 1
+end
+
+if [ $_flag_env = full ]
     set input_file "extraction_dev_full.json"
+    set examples_file "extraction_examples.json"
+else if [ $_flag_env = exp ]
+    set input_file "extraction_dev_100.json"
     set examples_file "extraction_examples.json"
 else if [ $_flag_env = dev ]
     set input_file "extraction_dev_10.json"
@@ -24,23 +32,28 @@ end
 
 cd (dirname (dirname (realpath (status -f))))
 
-set timestamp (date -u +%Y-%m-%dT%H.%M.%SZ)
-set input ./data/$_flag_mode/$input_file
-set examples ./data/$_flag_mode/$examples_file
+if set -q _flag_data
+    set input $_flag_data
+else
+    set input (realpath ./data/extraction/$_flag_mode/$input_file)
+end
 
-set description {$timestamp}_{$_flag_mode}_{$_flag_env}_prompt{$_flag_prompt}
-set output_folder ./output/$description
-mkdir -p $output_folder
+set examples ./data/extraction/$_flag_mode/$examples_file
 
-echo $description
+set output_dir ./output/extraction/$_flag_env/$_flag_mode/$_flag_ts
+mkdir -p $output_dir
+
+echo Output dir: $output_dir
 
 .venv/bin/python extraction.py \
     keys.json $_flag_key \
-    --prompt $_flag_prompt \
     --input $input \
-    --output $output_folder/output.json \
-    --metrics-path $output_folder/metrics.json \
-    --args-path $output_folder/args.json \
-    --log-file $output_folder/log.jsonl \
+    --output $output_dir/output.json \
+    --metrics-path $output_dir/metrics.json \
+    --args-path $output_dir/args.json \
+    --log-file $output_dir/log.jsonl \
     --examples $examples \
     --mode $_flag_mode
+
+echo "METRICS:"
+cat $output_dir/metrics.json

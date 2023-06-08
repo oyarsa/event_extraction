@@ -34,11 +34,10 @@ def make_extraction_request(
     examples: list[dict[str, str]],
     prompt: str,
 ) -> dict[str, Any]:
-    response = make_chat_request(
-        model=model, messages=generate_extraction_messages(text, examples, prompt)
+    return make_chat_request(
+        model=model,
+        messages=generate_extraction_messages(text, examples, prompt),
     )
-
-    return response
 
 
 def gen_extraction_example_exchange(
@@ -175,5 +174,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    if not hasattr(__builtins__, "__IPYTHON__"):
-        main()
+    main()
