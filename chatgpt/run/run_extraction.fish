@@ -9,11 +9,14 @@ set -q _flag_key; or set _flag_key kcl
 set -q _flag_ts; or set _flag_ts (date -u +%Y-%m-%dT%H.%M.%SZ)
 
 if ! [ $_flag_mode = tags ] && ! [ $_flag_mode = lines ]
-    echo Invalid mode: $_flag_mode
+    echo Invalid mode: $_flag_mode. Must be one of 'tags', 'lines'.
     exit 1
 end
 
-if [ $_flag_env = full ]
+if [ $_flag_env = test ]
+    set input_file "extraction_test_full.json"
+    set examples_file "extraction_examples.json"
+else if [ $_flag_env = full ]
     set input_file "extraction_dev_full.json"
     set examples_file "extraction_examples.json"
 else if [ $_flag_env = exp ]

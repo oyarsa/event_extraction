@@ -57,7 +57,8 @@ def generate_extraction_messages(
         make_msg(
             "system",
             "You are a helpful assistant that extract causes, effects, and"
-            " relations.",
+            " relations from text. The format is `[Cause] <cause text> [Relation]"
+            " <relation> [Effect] <effect text>`.",
         ),
         *gen_extraction_example_exchange(examples, prompt),
         make_msg("user", prompt),
