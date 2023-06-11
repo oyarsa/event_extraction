@@ -93,7 +93,7 @@ class Config:
     eval_file: Path | None = None
     # Contrastive top-k used for reranking
     contrastive_top_k: int = 5
-    # Contrastiv degeneration penalty (alphe)
+    # Contrastive degeneration penalty (alphe)
     degeneration_penalty: float = 0.5
 
     def __init__(self, **kwargs: Any) -> None:
@@ -126,6 +126,15 @@ class Labeller:
 
     def decode(self, labels: Iterable[int | float]) -> list[str]:
         return [self.id2label[int(label)] for label in labels]
+
+
+LABELLER = Labeller(
+    {
+        "CONTRADICTION": 0,
+        "ENTAILMENT": 1,
+        "NEUTRAL": 2,
+    }
+)
 
 
 @dataclass
@@ -672,18 +681,10 @@ def main() -> None:
     if args.train_file is None:
         raise ValueError("Must provide a training file")
 
-    labeller = Labeller(
-        {
-            "CONTRADICTION": 0,
-            "ENTAILMENT": 1,
-            "NEUTRAL": 2,
-        }
-    )
-
     extract = load_seq2seq_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(extract.model)
     reconstruct = load_seq2seq_model(args.reconstruction_model, train=False)
-    entailment = load_entailment_model(args.entailment_model, labeller)
+    entailment = load_entailment_model(args.entailment_model, LABELLER)
 
     train_data = load_data(args.train_file, args.max_train_samples)
     train_dataset = preprocess_data(
@@ -711,7 +712,7 @@ def main() -> None:
         reconstruct=reconstruct,
         entailment=entailment,
         train_dataset=train_dataset,
-        labeller=labeller,
+        labeller=LABELLER,
         args=args,
         eval_dataset=eval_dataset,
         output_dir=output_dir,
@@ -725,7 +726,7 @@ def main() -> None:
             reconstruct=reconstruct,
             entailment=entailment,
             extract_ref=extract_ref,
-            labeller=labeller,
+            labeller=LABELLER,
             args=args,
             device=device,
         )
