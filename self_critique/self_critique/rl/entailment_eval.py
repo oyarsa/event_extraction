@@ -1,6 +1,7 @@
 # pyright: basic
 import dataclasses
 import json
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
@@ -27,8 +28,6 @@ from self_critique.rl.extract_train import (
 
 @dataclass
 class Config:
-    "The name of the Casual LM model we wish to fine with PPO."
-
     # Extraction model name or path
     extraction_model: str
     # Reconstruct model name or path
@@ -54,7 +53,7 @@ class Config:
     # Contrastive degeneration penalty (alphe)
     degeneration_penalty: float = 0.5
     # Device for inference
-    device: torch.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device: str = "cuda" if torch.cuda.is_available() else "cpu"
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -86,8 +85,9 @@ def evaluate(
     reconstruct: Module,
     entailment: Module,
     args: Config,
-    device: torch.device,
+    device: str,
 ) -> list[dict[str, Any]]:
+    device_pt = torch.device(device)
     loader = DataLoader(dataset, batch_size=args.batch_size)
 
     output: list[dict[str, Any]] = []
@@ -113,7 +113,7 @@ def evaluate(
             labeller=LABELLER,
             sentence1=original_sentence,
             sentence2=reconstruct_response_txt,
-            device=device,
+            device=device_pt,
         )
 
         output.extend(
@@ -133,13 +133,34 @@ def evaluate(
 
 
 def get_eval_result(eval_output: list[dict[str, Any]]) -> dict[str, Any]:
+    freqs = Counter(d["entailment_label"] for d in eval_output)
     return {
-        "entailment_ratio": sum(
-            d["entailment_label"] == "ENTAILMENT" for d in eval_output
-        )
-        / len(eval_output),
-        "class_frequencies": Counter(d["question_type"] for d in eval_output).items(),
+        "entailment_ratio": freqs["ENTAILMENT"] / len(eval_output),
+        "class_frequencies": freqs,
     }
+
+
+@dataclass
+class ExtractDataset(Dataset):
+    original: list[str] = dataclasses.field(init=False)
+    extracted: list[str] = dataclasses.field(init=False)
+    gold: list[str] = dataclasses.field(init=False)
+
+    def __init__(self, data: list[dict[str, Any]], max_samples: int | None) -> None:
+        data = data[:max_samples]
+        self.original = [d["input"] for d in data]
+        self.extracted = [d["output"] for d in data]
+        self.gold = [d["gold"] for d in data]
+
+    def __len__(self) -> int:
+        return len(self.original)
+
+    def __getitem__(self, idx: int) -> dict[str, Any]:
+        return {
+            "original": self.original[idx],
+            "extracted": self.extracted[idx],
+            "gold": self.gold[idx],
+        }
 
 
 def main() -> None:
@@ -161,12 +182,9 @@ def main() -> None:
 
     reconstruction_model = load_seq2seq_model(args.reconstruction_model, train=False)
     entailment_model = load_entailment_model(args.entailment_model, LABELLER)
-    # TODO: load data as just text passage and answer
-    data = load_data(args.eval_file, args.max_samples)
-    # There might not be a preprocess function
-    dataset = preprocess_data(
-        data, reconstruction_model.tokenizer, entailment_model.tokenizer, device="cpu"
-    )
+
+    data = json.loads(args.eval_file.read_text())
+    dataset = ExtractDataset(data, args.max_samples)
 
     output = evaluate(
         dataset=dataset,
@@ -182,3 +200,7 @@ def main() -> None:
         "result": eval_result,
     }
     (output_dir / "eval_result.json").write_text(json.dumps(result))
+
+
+if __name__ == "__main__" and not hasattr(sys, "ps1"):
+    main()
