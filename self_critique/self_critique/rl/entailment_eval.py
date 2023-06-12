@@ -88,6 +88,9 @@ def evaluate(
     device: str,
 ) -> list[dict[str, Any]]:
     device_pt = torch.device(device)
+    reconstruct.model = reconstruct.model.to(device_pt)
+    entailment.model = entailment.model.to(device_pt)
+
     loader = DataLoader(dataset, batch_size=args.batch_size)
 
     output: list[dict[str, Any]] = []
@@ -99,8 +102,10 @@ def evaluate(
         )
         reconstruct_response_tensor = reconstruct.model.generate(
             extract_response_tokens["input_ids"].to(device),
-            num_beams=reconstruct.model.config.num_beams,
+            # num_beams=reconstruct.model.config.num_beams,
             max_length=args.max_generation_length,
+            penalty_alpha=args.degeneration_penalty,
+            top_k=args.contrastive_top_k,
         )
         reconstruct_response_txt = text_decode(
             reconstruct.tokenizer, reconstruct_response_tensor
@@ -118,13 +123,10 @@ def evaluate(
 
         output.extend(
             {
-                "id": batch["id"][i],
                 "original": batch["original"][i],
-                "answers": batch["answers"][i],
-                "question_type": batch["question_type"][i],
-                "context": batch["context"][i],
-                "extracted": batch["extracted"]["i"],
-                "rl_reconstruct_txt": reconstruct_response_txt[i],
+                "gold": batch["gold"][i],
+                "extracted": batch["extracted"][i],
+                "reconstructed": reconstruct_response_txt[i],
                 "entailment_label": entailment_labels[i],
             }
             for i in range(len(entailment_labels))
@@ -167,7 +169,7 @@ def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
     args = resolve_arg_paths(args)
 
-    output_dir = args.output_dir / datetime.now().isoformat()
+    output_dir = args.output_dir / f"{datetime.now().isoformat()}_{args.eval_file.stem}"
     output_dir.mkdir(exist_ok=True, parents=True)
 
     print(f"\n{args}")
@@ -193,13 +195,11 @@ def main() -> None:
         args=args,
         device=args.device,
     )
-    eval_result = get_eval_result(output)
+    result = get_eval_result(output)
 
-    result = {
-        "output": output,
-        "result": eval_result,
-    }
     (output_dir / "eval_result.json").write_text(json.dumps(result))
+    (output_dir / "eval_output.json").write_text(json.dumps(output))
+    json.dump(result, sys.stdout, indent=2)
 
 
 if __name__ == "__main__" and not hasattr(sys, "ps1"):
