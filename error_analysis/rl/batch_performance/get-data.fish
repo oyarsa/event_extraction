@@ -21,4 +21,6 @@ else
     exit 1
 end
 
-python plot.py (ssh vm-free $cmd | psub) $n $label
+set data (ssh vm-free $cmd | string split0)
+echo $data >(string replace " " "_" $label).csv
+python plot.py (echo $data | psub) $n $label
