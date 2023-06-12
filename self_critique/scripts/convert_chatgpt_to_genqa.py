@@ -1,40 +1,39 @@
 #!/usr/bin/env python3
+# pyright: basic
 """Convert ChatGPT's line format to GenQA's tagged format.
 
 Also convert field names: answer -> gold, pred -> output, text -> input.
 """
 import json
+import re
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 
-def find_part(part: str, lines: list[str]) -> str:
-    for line in lines:
-        if line.startswith(part):
-            return line.split(":", 1)[1].strip()
-    return ""
+@dataclass
+class Instance:
+    cause: str
+    effect: str
+    relation: str
+
+
+def parse_instance_lines(extract: str) -> Instance:
+    matches = re.findall(r"Cause:(.*)Effect:(.*)Relation:(.*)", extract, re.DOTALL)
+    if not matches:
+        return Instance(cause="", effect="", relation="cause")
+
+    cause, effect, relation = matches[0]
+    return Instance(
+        cause=cause.strip(),
+        effect=effect.strip(),
+        relation=relation.strip(),
+    )
 
 
 def convert_extract(extract: str) -> str:
-    lines = extract.splitlines()
-    cause = find_part("Cause", lines)
-    effect = find_part("Effect", lines)
-    relation = find_part("Relation", lines)
-    return f"[Cause] {cause} [Relation] {relation} [Effect] {effect}"
-
-
-def rcf() -> None:
-    convert_extract(
-        "Cause: The price of oil has risen by 50% in the last year.\n"
-        "Effect: The price of nuclear uranium decreased.\n"
-        "Relation: cause"
-    )
-    convert_extract(
-        "Effect: The price of nuclear uranium decreased.\n"
-        "Cause: War in Iraq.\n"
-        "Cause: The price of oil has risen by 50% in the last year.\n"
-        "Relation: cause"
-    )
+    inst = parse_instance_lines(extract)
+    return f"[Cause] {inst.cause} [Relation] {inst.relation} [Effect] {inst.effect}"
 
 
 def main() -> None:
@@ -42,8 +41,7 @@ def main() -> None:
         print("Usage: python convert.py <data.json>")
         sys.exit(1)
 
-    data_file = Path(sys.argv[1])
-    data = json.loads(data_file.read_text())
+    data = json.loads(Path(sys.argv[1]).read_text())
     converted = [
         {
             "input": d["text"],
