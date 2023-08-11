@@ -30,6 +30,7 @@ from torch.utils.data import DataLoader, Dataset, TensorDataset
 from tqdm import tqdm
 from transformers import (
     AutoConfig,
+    AutoModelForSeq2SeqLM,
     AutoModelForSequenceClassification,
     AutoTokenizer,
     BatchEncoding,
@@ -157,7 +158,7 @@ def load_entailment_model(model_name_or_path: str, labeller: Labeller) -> Module
     return Module(model, tokenizer)
 
 
-def load_seq2seq_model(model_name: str, train: bool = True) -> Module:
+def load_seq2seq_valuehead_model(model_name: str, *, train: bool) -> Module:
     model_config = AutoConfig.from_pretrained(model_name)
     model = AutoModelForSeq2SeqLMWithValueHead.from_pretrained(
         model_name, config=model_config
@@ -166,11 +167,20 @@ def load_seq2seq_model(model_name: str, train: bool = True) -> Module:
     return Module(model, tokenizer)
 
 
+def load_seq2seq_model(model_name: str, *, train: bool) -> Module:
+    model_config = AutoConfig.from_pretrained(model_name)
+    model = AutoModelForSeq2SeqLM.from_pretrained(
+        model_name, config=model_config
+    ).train(train)
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    return Module(model, tokenizer)
+
+
 def label_to_reward(label: str) -> float:
     return {
-        "CONTRADICTION": -1.0,
         "ENTAILMENT": 1.0,
         "NEUTRAL": 0.0,
+        "CONTRADICTION": 0.0,
     }[label]
 
 
@@ -681,7 +691,7 @@ def main() -> None:
     if args.train_file is None:
         raise ValueError("Must provide a training file")
 
-    extract = load_seq2seq_model(args.extraction_model, train=True)
+    extract = load_seq2seq_valuehead_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(extract.model)
     reconstruct = load_seq2seq_model(args.reconstruction_model, train=False)
     entailment = load_entailment_model(args.entailment_model, LABELLER)
