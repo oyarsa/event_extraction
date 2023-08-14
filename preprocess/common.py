@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
 from typing import Any
 
@@ -74,7 +74,7 @@ def convert_file_qa(
         json.dump(transformed, f)
 
 
-def deduplicate(list: Iterator[dict[str, str]]) -> list[dict[str, str]]:
+def deduplicate(list: Iterable[dict[str, str]]) -> list[dict[str, str]]:
     """Remove duplicate instances from the list based on `id`."""
     seen: set[str] = set()
     deduped: list[dict[str, str]] = []
