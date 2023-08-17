@@ -62,8 +62,6 @@ class Config:
     train_file: Path
     # Extraction model name or path
     extraction_model: str
-    # Reconstruct model name or path
-    reconstruction_model: str
     # Entailment model name or path
     entailment_model: str
     # Learning rate
@@ -235,7 +233,6 @@ def run_entailment(
 def train_extract(
     extract: Module,
     extract_ref: PreTrainedModel,
-    reconstruct: Module,
     entailment: Module,
     train_dataset: Dataset,
     labeller: Labeller,
@@ -260,7 +257,6 @@ def train_extract(
     )
 
     device = ppo_trainer.accelerator.device
-    reconstruct.model = reconstruct.model.to(device)
     entailment.model = entailment.model.to(device)
 
     # Evaluate before training to facilitate comparison with batches
@@ -269,7 +265,6 @@ def train_extract(
             dataset=eval_dataset,
             extract=extract,
             extract_ref=extract_ref,
-            reconstruct=reconstruct,
             entailment=entailment,
             labeller=labeller,
             args=args,
@@ -283,10 +278,8 @@ def train_extract(
         )
 
     for epoch in range(args.num_epochs):
-        for batch in tqdm(
-            ppo_trainer.dataloader,
-            # total=len(ppo_trainer.dataloader),
-            desc=f"Train ({epoch})",
+        for i, batch in enumerate(
+            tqdm(ppo_trainer.dataloader, desc=f"Train ({epoch})")
         ):
             query_tensors = batch["input_ids"]
 
@@ -298,15 +291,6 @@ def train_extract(
                 top_k=args.contrastive_top_k,
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
-
-            # reconstruct_response = run_reconstruct(
-            #     reconstruct=reconstruct,
-            #     max_seq_length=args.max_seq_length,
-            #     max_generation_length=args.max_generation_length,
-            #     batch_size=args.batch_size,
-            #     structured_inputs=extract_response,
-            #     device=device,
-            # )
 
             entailment_labels = run_entailment(
                 entailment=entailment,
@@ -330,30 +314,28 @@ def train_extract(
             }
             ppo_trainer.log_stats(stats, log_batch, rewards)
 
-            # # Evaluate every batch to see how things are deteriorating
-            # if eval_dataset is not None:
-            #     eval_result = evaluate(
-            #         dataset=eval_dataset,
-            #         extract=extract,
-            #         extract_ref=extract_ref,
-            #         reconstruct=reconstruct,
-            #         entailment=entailment,
-            #         labeller=labeller,
-            #         args=args,
-            #         device=device,
-            #         desc=f"Eval  ({epoch}.{i+1})",
-            #     )
-            #     save_results(
-            #         result=eval_result,
-            #         dir=output_dir,
-            #         file_name=f"mini_eval_result_{epoch}.{i+1}.json",
-            #     )
+            # Evaluate every batch to see how things are deteriorating
+            if eval_dataset is not None:
+                eval_result = evaluate(
+                    dataset=eval_dataset,
+                    extract=extract,
+                    extract_ref=extract_ref,
+                    entailment=entailment,
+                    labeller=labeller,
+                    args=args,
+                    device=device,
+                    desc=f"Eval  ({epoch}.{i+1})",
+                )
+                save_results(
+                    result=eval_result,
+                    dir=output_dir,
+                    file_name=f"mini_eval_result_{epoch}.{i+1}.json",
+                )
 
         if eval_dataset is not None:
             eval_result = evaluate(
                 dataset=eval_dataset,
                 extract=extract,
-                reconstruct=reconstruct,
                 entailment=entailment,
                 extract_ref=extract_ref,
                 labeller=labeller,
@@ -482,38 +464,10 @@ def clean_response(s: str, eos_tag: str = "</s>") -> str:
         return s
 
 
-def run_reconstruct(
-    reconstruct: Module,
-    max_seq_length: int,
-    max_generation_length: int,
-    batch_size: int,
-    structured_inputs: list[str],
-    device: torch.device,
-) -> list[str]:
-    inputs = text_encode(reconstruct.tokenizer, max_seq_length, structured_inputs)
-    dataset = TensorDataset(inputs["input_ids"])
-    loader = DataLoader(dataset, batch_size=batch_size)
-
-    reconstruct.model.eval()
-    predictions: list[str] = []
-    with torch.no_grad():
-        for (input_ids,) in loader:
-            output_ids = reconstruct.model.generate(
-                input_ids.to(device),
-                num_beams=reconstruct.model.config.num_beams,
-                max_length=max_generation_length,
-            )
-            output_text = text_decode(reconstruct.tokenizer, output_ids)
-            predictions.extend(output_text)
-
-    return predictions
-
-
 def evaluate(
     dataset: Dataset,
     extract: Module,
     extract_ref: PreTrainedModel,
-    reconstruct: Module,
     entailment: Module,
     labeller: Labeller,
     device: torch.device,
@@ -523,7 +477,6 @@ def evaluate(
     @dataclass
     class BlockOutput:
         extract_txt: list[str]
-        reconstruct_txt: list[str]
         entailment_labels: list[str]
 
     def run_block(
@@ -540,18 +493,6 @@ def evaluate(
         )
         extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
-        # extract_response_tokens = text_encode(
-        #     reconstruct.tokenizer, args.max_seq_length, extract_response_txt
-        # )
-        # reconstruct_response_tensor = reconstruct.model.generate(
-        #     extract_response_tokens["input_ids"].to(device),
-        #     num_beams=reconstruct.model.config.num_beams,
-        #     max_length=args.max_generation_length,
-        # )
-        # reconstruct_response_txt = text_decode(
-        #     reconstruct.tokenizer, reconstruct_response_tensor
-        # )
-
         entailment_labels = run_entailment(
             entailment=entailment,
             max_seq_length=args.max_seq_length,
@@ -562,10 +503,7 @@ def evaluate(
             device=device,
         )
 
-        reconstruct_response_txt = [""] * len(extract_response_txt)
-        return BlockOutput(
-            extract_response_txt, reconstruct_response_txt, entailment_labels
-        )
+        return BlockOutput(extract_response_txt, entailment_labels)
 
     desc = desc or "Evaluate"
     loader = DataLoader(dataset, batch_size=args.batch_size)
@@ -597,8 +535,6 @@ def evaluate(
                     "context": batch["context"][i],
                     "rl_extract_txt": rl_output.extract_txt[i],
                     "ref_extract_txt": ref_output.extract_txt[i],
-                    "rl_reconstruct_txt": rl_output.reconstruct_txt[i],
-                    "ref_reconstruct_txt": ref_output.reconstruct_txt[i],
                     "entailment_label": rl_output.entailment_labels[i],
                     "ref_entailment_label": ref_output.entailment_labels[i],
                     "reward": rewards[i].tolist(),
@@ -649,7 +585,6 @@ def resolve_arg_paths(args: Config) -> Config:
     return dataclasses.replace(
         args,
         extraction_model=resolve(args.extraction_model),
-        reconstruction_model=resolve(args.reconstruction_model),
         entailment_model=resolve(args.entailment_model),
         train_file=Path(resolve(args.train_file)),
         eval_file=Path(resolve(args.eval_file)) if args.eval_file else None,
@@ -692,12 +627,11 @@ def main() -> None:
 
     extract = load_seq2seq_valuehead_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(extract.model)
-    reconstruct = load_seq2seq_model(args.reconstruction_model, train=False)
     entailment = load_entailment_model(args.entailment_model, LABELLER)
 
     train_data = load_data(args.train_file, args.max_train_samples)
     train_dataset = preprocess_data(
-        tokeniser=reconstruct.tokenizer,
+        tokeniser=extract.tokenizer,
         data=train_data,
         max_seq_length=args.max_seq_length,
         device="cpu",
@@ -708,7 +642,7 @@ def main() -> None:
     if args.eval_file is not None:
         eval_dataset = load_data(args.eval_file, args.max_eval_samples)
         eval_dataset = preprocess_data(
-            tokeniser=reconstruct.tokenizer,
+            tokeniser=extract.tokenizer,
             data=eval_dataset,
             max_seq_length=args.max_seq_length,
             device="cpu",
@@ -718,7 +652,6 @@ def main() -> None:
     extract, device = train_extract(
         extract=extract,
         extract_ref=extract_ref,
-        reconstruct=reconstruct,
         entailment=entailment,
         train_dataset=train_dataset,
         labeller=LABELLER,
@@ -732,7 +665,6 @@ def main() -> None:
         eval_result = evaluate(
             dataset=eval_dataset,
             extract=extract,
-            reconstruct=reconstruct,
             entailment=entailment,
             extract_ref=extract_ref,
             labeller=LABELLER,
