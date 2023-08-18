@@ -111,11 +111,10 @@ def evaluate(
             reconstruct.tokenizer, reconstruct_response_tensor
         )
 
-        entailment_labels = run_entailment(
+        _, entailment_labels = run_entailment(
             entailment=entailment,
             max_seq_length=args.max_seq_length,
             batch_size=args.batch_size,
-            labeller=LABELLER,
             sentence1=original_sentence,
             sentence2=reconstruct_response_txt,
             device=device_pt,

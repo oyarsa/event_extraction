@@ -18,7 +18,7 @@ import json
 import logging
 import sys
 from collections import Counter
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -114,44 +114,21 @@ def data_collator(data: Sequence[Mapping[str, Any]]) -> dict[str, list[Any]]:
 
 
 @dataclass
-class Labeller:
-    label2id: dict[str, int]
-    id2label: dict[int, str] = dataclasses.field(init=False)
-    num_classes: int = dataclasses.field(init=False)
-
-    def __post_init__(self) -> None:
-        self.id2label = {id: label for label, id in self.label2id.items()}
-        self.num_classes = len(self.label2id)
-
-    def decode(self, labels: Iterable[int | float]) -> list[str]:
-        return [self.id2label[int(label)] for label in labels]
-
-
-LABELLER = Labeller(
-    {
-        "CONTRADICTION": 0,
-        "ENTAILMENT": 1,
-        "NEUTRAL": 2,
-    }
-)
-
-
-@dataclass
 class Module:
     model: PreTrainedModel
     tokenizer: PreTrainedTokenizer
 
 
-def load_entailment_model(model_name_or_path: str, labeller: Labeller) -> Module:
+def load_entailment_model(model_name_or_path: str) -> Module:
     config = AutoConfig.from_pretrained(
-        model_name_or_path, num_labels=labeller.num_classes, revision="main"
+        model_name_or_path, num_labels=len(LABEL2ID), revision="main"
     )
     tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, revision="main")
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name_or_path, config=config, revision="main"
     ).train(False)
-    model.config.label2id = labeller.label2id
-    model.config.id2label = labeller.id2label
+    model.config.label2id = LABEL2ID
+    model.config.id2label = ID2LABEL
 
     return Module(model, tokenizer)
 
@@ -203,20 +180,28 @@ def text_encode(
     )
 
 
+LABEL2ID = {
+    "CONTRADICTION": 0,
+    "ENTAILMENT": 1,
+    "NEUTRAL": 2,
+}
+ID2LABEL = {id: label for label, id in LABEL2ID.items()}
+
+
 def run_entailment(
     entailment: Module,
-    labeller: Labeller,
     max_seq_length: int,
     batch_size: int,
     sentence1: list[str],
     sentence2: list[str],
     device: torch.device,
-) -> list[str]:
+) -> tuple[torch.Tensor, list[str]]:
     inputs = text_encode(entailment.tokenizer, max_seq_length, sentence1, sentence2)
     dataset = TensorDataset(inputs["input_ids"], inputs["attention_mask"])
     loader = DataLoader(dataset, batch_size=batch_size)
 
     entailment.model.eval()
+    scores: list[torch.Tensor] = []
     predictions: list[str] = []
     with torch.no_grad():
         for input_ids, attention_mask in loader:
@@ -224,10 +209,13 @@ def run_entailment(
                 input_ids=input_ids.to(device),
                 attention_mask=attention_mask.to(device),
             )
-            preds = torch.argmax(outputs.logits, dim=-1)
-            predictions.extend(labeller.decode(x.item() for x in preds))
+            # Get logit for the entailment class and use it as a score
+            scores.append(outputs.logits.select(dim=-1, index=LABEL2ID["ENTAILMENT"]))
 
-    return predictions
+            preds = torch.argmax(outputs.logits, dim=-1)  # B x N x 3
+            predictions.extend(ID2LABEL[int(x.item())] for x in preds)
+
+    return torch.cat(scores, dim=0), predictions
 
 
 def train_extract(
@@ -235,7 +223,6 @@ def train_extract(
     extract_ref: PreTrainedModel,
     entailment: Module,
     train_dataset: Dataset,
-    labeller: Labeller,
     args: Config,
     eval_dataset: Dataset | None,
     output_dir: Path,
@@ -266,7 +253,6 @@ def train_extract(
             extract=extract,
             extract_ref=extract_ref,
             entailment=entailment,
-            labeller=labeller,
             args=args,
             device=device,
             desc="Eval (-1)",
@@ -278,7 +264,7 @@ def train_extract(
         )
 
     for epoch in range(args.num_epochs):
-        for i, batch in enumerate(
+        for batch_idx, batch in enumerate(
             tqdm(ppo_trainer.dataloader, desc=f"Train ({epoch})")
         ):
             query_tensors = batch["input_ids"]
@@ -292,44 +278,38 @@ def train_extract(
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
 
-            entailment_labels = run_entailment(
+            scores, _ = run_entailment(
                 entailment=entailment,
                 max_seq_length=args.max_seq_length,
                 batch_size=args.batch_size,
-                labeller=labeller,
                 sentence1=batch["original"],
                 sentence2=extract_response,
                 device=device,
             )
-
-            rewards = [
-                torch.tensor(label_to_reward(label)).to(device)
-                for label in entailment_labels
-            ]
+            rewards = list(scores)
 
             stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
             log_batch = {
                 "query": query_tensors,
                 "response": response_tensors,
             }
-            ppo_trainer.log_stats(stats, log_batch, rewards)
+            ppo_trainer.log_stats(stats, log_batch, scores)
 
-            # Evaluate every batch to see how things are deteriorating
-            if eval_dataset is not None:
+            # Evaluate every 10 batches to see how things are deteriorating
+            if eval_dataset is not None and batch_idx % 10 == 0:
                 eval_result = evaluate(
                     dataset=eval_dataset,
                     extract=extract,
                     extract_ref=extract_ref,
                     entailment=entailment,
-                    labeller=labeller,
                     args=args,
                     device=device,
-                    desc=f"Eval  ({epoch}.{i+1})",
+                    desc=f"Eval  ({epoch}.{batch_idx+1})",
                 )
                 save_results(
                     result=eval_result,
                     dir=output_dir,
-                    file_name=f"mini_eval_result_{epoch}.{i+1}.json",
+                    file_name=f"mini_eval_result_{epoch}.{batch_idx+1}.json",
                 )
 
         if eval_dataset is not None:
@@ -338,7 +318,6 @@ def train_extract(
                 extract=extract,
                 entailment=entailment,
                 extract_ref=extract_ref,
-                labeller=labeller,
                 args=args,
                 device=device,
                 desc=f"Eval  ({epoch})",
@@ -469,7 +448,6 @@ def evaluate(
     extract: Module,
     extract_ref: PreTrainedModel,
     entailment: Module,
-    labeller: Labeller,
     device: torch.device,
     args: Config,
     desc: str | None = None,
@@ -478,6 +456,7 @@ def evaluate(
     class BlockOutput:
         extract_txt: list[str]
         entailment_labels: list[str]
+        scores: torch.Tensor
 
     def run_block(
         extract_model: PreTrainedModel,
@@ -493,39 +472,30 @@ def evaluate(
         )
         extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
-        entailment_labels = run_entailment(
+        scores, entailment_labels = run_entailment(
             entailment=entailment,
             max_seq_length=args.max_seq_length,
             batch_size=args.batch_size,
-            labeller=labeller,
             sentence1=original_sentence,
             sentence2=extract_response_txt,
             device=device,
         )
 
-        return BlockOutput(extract_response_txt, entailment_labels)
+        return BlockOutput(extract_response_txt, entailment_labels, scores)
 
     desc = desc or "Evaluate"
     loader = DataLoader(dataset, batch_size=args.batch_size)
 
     output: list[dict[str, Any]] = []
-    # TODO: Is total needed here? tqdm should be able to infer the length I guess this
-    # is necessary when I'm using tqdm(enumerate(loader)), but I'm not doing that here,
-    # and I probably should do enumerate(tqdm(loader)) anyway.
-    for batch in tqdm(loader, desc=desc, total=len(loader)):
+    for batch in tqdm(loader, desc=desc):
         inputs = batch["input_ids"].to(device)
         original_sentence = batch["original"]
 
         rl_output = run_block(extract.model, inputs, original_sentence)
         ref_output = run_block(extract_ref, inputs, original_sentence)
 
-        rewards = [
-            torch.tensor(label_to_reward(label)).to(device)
-            for label in rl_output.entailment_labels
-        ]
-
-        assert len(rewards) == len(rl_output.entailment_labels) == len(inputs)
-        for i in range(len(rewards)):
+        assert len(rl_output.entailment_labels) == len(inputs)
+        for i in range(len(inputs)):
             output.append(
                 {
                     "id": batch["id"][i],
@@ -537,7 +507,7 @@ def evaluate(
                     "ref_extract_txt": ref_output.extract_txt[i],
                     "entailment_label": rl_output.entailment_labels[i],
                     "ref_entailment_label": ref_output.entailment_labels[i],
-                    "reward": rewards[i].tolist(),
+                    "scores": rl_output.scores[i].tolist(),
                 }
             )
 
@@ -627,7 +597,7 @@ def main() -> None:
 
     extract = load_seq2seq_valuehead_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(extract.model)
-    entailment = load_entailment_model(args.entailment_model, LABELLER)
+    entailment = load_entailment_model(args.entailment_model)
 
     train_data = load_data(args.train_file, args.max_train_samples)
     train_dataset = preprocess_data(
@@ -654,7 +624,6 @@ def main() -> None:
         extract_ref=extract_ref,
         entailment=entailment,
         train_dataset=train_dataset,
-        labeller=LABELLER,
         args=args,
         eval_dataset=eval_dataset,
         output_dir=output_dir,
@@ -667,7 +636,6 @@ def main() -> None:
             extract=extract,
             entailment=entailment,
             extract_ref=extract_ref,
-            labeller=LABELLER,
             args=args,
             device=device,
         )
