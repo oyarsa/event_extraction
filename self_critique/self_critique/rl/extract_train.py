@@ -66,7 +66,7 @@ class Config:
     # Entailment model name or path
     entailment_model: str
     # Learning rate
-    learning_rate: float = 5e-5
+    learning_rate: float = 1e-5
     # PPO minibatch size
     mini_batch_size: int = 16
     # Reward model batch size
@@ -95,6 +95,16 @@ class Config:
     contrastive_top_k: int = 5
     # Contrastive degeneration penalty (alphe)
     degeneration_penalty: float = 0.5
+    # KL penalty options:
+    #    'kl': model_logp - ref_logp
+    #    'abs': abs(kl)
+    #    'mse': mean squared error mse(kl)
+    #    'full': the actual kl for all tokens in the distribution"
+    kl_penalty: str = "kl"
+    # Use adaptive KL control, otherwise linear
+    adaptive_kl_ctrl: bool = True
+    # Initial KL penalty coefficient (used for adaptive and linear control)
+    init_kl_coef: float = 0.2
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -150,14 +160,6 @@ def load_seq2seq_model(model_name: str, *, train: bool) -> Module:
     ).train(train)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     return Module(model, tokenizer)
-
-
-def label_to_reward(label: str) -> float:
-    return {
-        "ENTAILMENT": 1.0,
-        "NEUTRAL": 0.0,
-        "CONTRADICTION": 0.0,
-    }[label]
 
 
 def text_decode(tokenizer: PreTrainedTokenizer, tensor: torch.Tensor) -> list[str]:
@@ -245,6 +247,9 @@ def train_extract(
         mini_batch_size=args.mini_batch_size,
         batch_size=args.batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
+        adap_kl_ctrl=args.adaptive_kl_ctrl,
+        # kl_penalty=args.kl_penalty,
+        init_kl_coef=args.init_kl_coef,
     )
     ppo_trainer = PPOTrainer(
         config=ppo_config,
