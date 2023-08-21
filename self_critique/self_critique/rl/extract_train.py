@@ -27,6 +27,7 @@ from typing import Any, TypedDict
 import simple_parsing
 import torch
 from torch.utils.data import DataLoader, Dataset, TensorDataset
+from torch.utils.tensorboard.writer import SummaryWriter
 from tqdm import tqdm
 from transformers import (
     AutoConfig,
@@ -218,6 +219,17 @@ def run_entailment(
     return torch.cat(scores, dim=0), predictions
 
 
+def log_tensorboard(
+    writer: SummaryWriter,
+    eval_output: list[dict[str, Any]],
+    n_iter: int,
+) -> None:
+    ratio = sum(x["entailment_label"] == "ENTAILMENT" for x in eval_output) / len(
+        eval_output
+    )
+    writer.add_scalar("eval/entailment_ratio", ratio, n_iter)
+
+
 def train_extract(
     extract: Module,
     extract_ref: PreTrainedModel,
@@ -245,6 +257,7 @@ def train_extract(
 
     device = ppo_trainer.accelerator.device
     entailment.model = entailment.model.to(device)
+    tb_writer = SummaryWriter(log_dir=output_dir / "tb")
 
     # Evaluate before training to facilitate comparison with batches
     if eval_dataset is not None:
@@ -262,6 +275,7 @@ def train_extract(
             dir=output_dir,
             file_name="mini_eval_result_0.0.json",
         )
+        log_tensorboard(tb_writer, eval_result, -1)
 
     for epoch in range(args.num_epochs):
         for batch_idx, batch in enumerate(
@@ -310,6 +324,11 @@ def train_extract(
                     result=eval_result,
                     dir=output_dir,
                     file_name=f"mini_eval_result_{epoch}.{batch_idx+1}.json",
+                )
+                log_tensorboard(
+                    tb_writer,
+                    eval_result,
+                    epoch * len(ppo_trainer.dataloader) + batch_idx,
                 )
 
         if eval_dataset is not None:
