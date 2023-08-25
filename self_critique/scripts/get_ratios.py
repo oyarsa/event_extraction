@@ -21,11 +21,12 @@ def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
         data = json.loads(filename.read_text())
 
         epoch, batch = map(int, matches[0])
-        num = (epoch + 1) * batch
-        pairs.append((num, get_ratio(data)))
+        pairs.append((epoch, batch, get_ratio(data)))
 
-    for batch, ratio in sorted(pairs):
-        print(f"{batch},{ratio:.5f}")
+    max_batch = max(batch for _, batch, _ in pairs)
+    for epoch, batch, ratio in sorted(pairs):
+        idx = epoch * max_batch + batch
+        print(f"{idx},{ratio:.5f}")
 
 
 if __name__ == "__main__":
