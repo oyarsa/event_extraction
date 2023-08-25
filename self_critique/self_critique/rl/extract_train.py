@@ -105,6 +105,8 @@ class Config:
     adaptive_kl_ctrl: bool = True
     # Initial KL penalty coefficient (used for adaptive and linear control)
     init_kl_coef: float = 0.2
+    # Log with either 'wandb' or 'tensorboard'
+    log_with: str | None = None
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -198,14 +200,15 @@ def run_entailment(
     sentence1: list[str],
     sentence2: list[str],
     device: torch.device,
-) -> tuple[torch.Tensor, list[str]]:
+) -> tuple[list[torch.FloatTensor], list[str]]:
     inputs = text_encode(entailment.tokenizer, max_seq_length, sentence1, sentence2)
     dataset = TensorDataset(inputs["input_ids"], inputs["attention_mask"])
     loader = DataLoader(dataset, batch_size=batch_size)
 
-    entailment.model.eval()
-    scores: list[torch.Tensor] = []
+    scores: list[torch.FloatTensor] = []
     predictions: list[str] = []
+
+    entailment.model.eval()
     with torch.no_grad():
         for input_ids, attention_mask in loader:
             outputs = entailment.model(
@@ -213,12 +216,12 @@ def run_entailment(
                 attention_mask=attention_mask.to(device),
             )
             # Get logit for the entailment class and use it as a score
-            scores.append(outputs.logits.select(dim=-1, index=LABEL2ID["ENTAILMENT"]))
+            scores.extend(outputs.logits.select(dim=-1, index=LABEL2ID["ENTAILMENT"]))
 
-            preds = torch.argmax(outputs.logits, dim=-1)  # B x N x 3
+            preds = torch.argmax(outputs.logits, dim=-1)
             predictions.extend(ID2LABEL[int(x.item())] for x in preds)
 
-    return torch.cat(scores, dim=0), predictions
+    return scores, predictions
 
 
 def log_tensorboard(
@@ -250,6 +253,7 @@ def train_extract(
         adap_kl_ctrl=args.adaptive_kl_ctrl,
         # kl_penalty=args.kl_penalty,
         init_kl_coef=args.init_kl_coef,
+        log_with=args.log_with,
     )
     ppo_trainer = PPOTrainer(
         config=ppo_config,
@@ -297,22 +301,25 @@ def train_extract(
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
 
-            scores, _ = run_entailment(
+            scores, labels = run_entailment(
                 entailment=entailment,
                 max_seq_length=args.max_seq_length,
                 batch_size=args.batch_size,
-                sentence1=batch["original"],
+                sentence1=batch["context"],
                 sentence2=extract_response,
                 device=device,
             )
-            rewards = list(scores)
+            rewards = scores
 
             stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
+            stats["metrics/entailment_ratio"] = sum(
+                label == "ENTAILMENT" for label in labels
+            ) / len(labels)
             log_batch = {
                 "query": query_tensors,
                 "response": response_tensors,
             }
-            ppo_trainer.log_stats(stats, log_batch, scores)
+            ppo_trainer.log_stats(stats, log_batch, rewards)
 
             # Evaluate every 10 batches to see how things are deteriorating
             if eval_dataset is not None and batch_idx % 10 == 0:
@@ -357,7 +364,6 @@ def train_extract(
 @dataclass
 class Seq2SeqEntry:
     id: str
-    original: str
     context: str
     question: str
     answers: str
@@ -371,7 +377,6 @@ def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEn
     return [
         Seq2SeqEntry(
             id=d["id"],
-            original=d["original"],
             context=d["context"],
             question=d["question"],
             answers=d["answers"],
@@ -420,7 +425,6 @@ class Seq2SeqDatasetEntry(TypedDict):
     attention_mask: torch.Tensor
     labels: torch.Tensor
     id: str
-    original: str
     answers: str
     question_type: str
     context: str
@@ -431,7 +435,6 @@ class Seq2SeqDatasetSeries(TypedDict):
     attention_mask: torch.Tensor
     labels: torch.Tensor
     id: list[str]
-    original: list[str]
     answers: list[str]
     question_type: list[str]
     context: list[str]
@@ -453,7 +456,6 @@ class Seq2SeqDataset(Dataset):
             "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
             "labels": self.target_tokens["input_ids"][idx].to(self.device),
             "id": self.data[idx].id,
-            "original": self.data[idx].original,
             "answers": self.data[idx].answers,
             "question_type": self.data[idx].question_type,
             "context": self.data[idx].context,
@@ -480,7 +482,7 @@ def evaluate(
     class BlockOutput:
         extract_txt: list[str]
         entailment_labels: list[str]
-        scores: torch.Tensor
+        scores: list[torch.FloatTensor]
 
     def run_block(
         extract_model: PreTrainedModel,
@@ -513,7 +515,7 @@ def evaluate(
     output: list[dict[str, Any]] = []
     for batch in tqdm(loader, desc=desc):
         inputs = batch["input_ids"].to(device)
-        original_sentence = batch["original"]
+        original_sentence = batch["context"]
 
         rl_output = run_block(extract.model, inputs, original_sentence)
         ref_output = run_block(extract_ref, inputs, original_sentence)
@@ -523,7 +525,6 @@ def evaluate(
             output.append(
                 {
                     "id": batch["id"][i],
-                    "original": batch["original"][i],
                     "answers": batch["answers"][i],
                     "question_type": batch["question_type"][i],
                     "context": batch["context"][i],

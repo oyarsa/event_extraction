@@ -6,3 +6,4 @@ output
 pdm.lock
 
 .portal
+wandb
