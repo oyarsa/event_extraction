@@ -10,5 +10,8 @@
 	"output_dir": "output/rl",
 	"max_generation_length": 128,
 	"max_seq_length": 128,
-	"batch_size": 32
+	"batch_size": 32,
+	"kl_penalty": "mse",
+	"adaptive_kl_ctrl": true,
+	"init_kl_coef": 0.2
 }
