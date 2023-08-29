@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import copy
 import dataclasses
 import json
 import logging
@@ -251,7 +252,7 @@ def train_extract(
         batch_size=args.batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         adap_kl_ctrl=args.adaptive_kl_ctrl,
-        # kl_penalty=args.kl_penalty,
+        kl_penalty=args.kl_penalty,
         init_kl_coef=args.init_kl_coef,
         log_with=args.log_with,
     )
@@ -263,6 +264,9 @@ def train_extract(
         dataset=train_dataset,
         data_collator=data_collator,
     )
+
+    best_model = copy.deepcopy(ppo_trainer.model)
+    best_ratio = 0.0
 
     device = ppo_trainer.accelerator.device
     entailment.model = entailment.model.to(device)
@@ -342,6 +346,18 @@ def train_extract(
                     eval_result,
                     epoch * len(ppo_trainer.dataloader) + batch_idx,
                 )
+
+                eval_ratio = sum(
+                    d["entailment_label"] == "ENTAILMENT" for d in eval_result
+                ) / len(eval_result)
+                if eval_ratio > best_ratio:
+                    best_model = copy.deepcopy(ppo_trainer.model)
+                    best_ratio = eval_ratio
+                    save_model(
+                        model=best_model,
+                        tokeniser=extract.tokenizer,
+                        output_dir=output_dir / "best",
+                    )
 
         if eval_dataset is not None:
             eval_result = evaluate(
