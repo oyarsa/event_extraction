@@ -108,6 +108,8 @@ class Config:
     init_kl_coef: float = 0.2
     # Log with either 'wandb' or 'tensorboard'
     log_with: str | None = None
+    # Every N batches to evaluate the model
+    eval_batches: int = 10
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -244,6 +246,7 @@ def train_extract(
     args: Config,
     eval_dataset: Dataset | None,
     output_dir: Path,
+    eval_batches: int,
 ) -> tuple[Module, torch.device]:
     ppo_config = PPOConfig(
         model_name=args.extraction_model,
@@ -325,8 +328,7 @@ def train_extract(
             }
             ppo_trainer.log_stats(stats, log_batch, rewards)
 
-            # Evaluate every 10 batches to see how things are deteriorating
-            if eval_dataset is not None and batch_idx % 10 == 0:
+            if eval_dataset is not None and batch_idx % eval_batches == 0:
                 eval_result = evaluate(
                     dataset=eval_dataset,
                     extract=extract,
@@ -353,10 +355,21 @@ def train_extract(
                 if eval_ratio > best_ratio:
                     best_model = copy.deepcopy(ppo_trainer.model)
                     best_ratio = eval_ratio
+                    path = output_dir / "best"
                     save_model(
-                        model=best_model,
-                        tokeniser=extract.tokenizer,
-                        output_dir=output_dir / "best",
+                        model=best_model, tokeniser=extract.tokenizer, output_dir=path
+                    )
+                    (path / "stats.json").write_text(
+                        json.dumps(
+                            {
+                                "epoch": epoch,
+                                "batch": batch_idx,
+                                "ratio": eval_ratio,
+                            }
+                        )
+                    )
+                    logger.info(
+                        "New best model at epoch %d. Saving to %s.", epoch, path
                     )
 
         if eval_dataset is not None:
@@ -374,7 +387,12 @@ def train_extract(
                 dir=output_dir,
                 file_name=f"eval_result_{epoch}.json",
             )
-    return Module(ppo_trainer.model, extract.tokenizer), device
+    logger.info(
+        "Finished training. Best model at %s with ratio %f.",
+        output_dir / "best",
+        best_ratio,
+    )
+    return Module(best_model, extract.tokenizer), device
 
 
 @dataclass
@@ -668,6 +686,7 @@ def main() -> None:
         args=args,
         eval_dataset=eval_dataset,
         output_dir=output_dir,
+        eval_batches=args.eval_batches,
     )
     save_model(extract.model, extract.tokenizer, output_dir)
 
