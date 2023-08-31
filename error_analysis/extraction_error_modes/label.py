@@ -1,5 +1,4 @@
 import json
-import random
 import sys
 from pathlib import Path
 from typing import Any, Optional
@@ -83,7 +82,6 @@ def label(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def main(data_path: Path, output_path: Path, max_samples: Optional[int] = None) -> None:
     data = json.loads(data_path.read_text())[:max_samples]
-    random.shuffle(data)
     labelled_data = label(data)
     output_path.write_text(json.dumps(labelled_data))
 
