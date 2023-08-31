@@ -71,19 +71,49 @@ def label_entry(entry: dict[str, Any]) -> dict[str, Any] | None:
 def label(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
     labelled_data: list[dict[str, Any]] = []
     for i, entry in enumerate(data):
+        if "valid" in entry:
+            labelled_data.append(entry)
+            continue
+
         print(f"ENTRY {i+1}/{len(data)}")
 
         new_data = label_entry(entry)
+        if new_data is None:
+            break
         labelled_data.append(new_data)
 
         print("\n###########\n")
     return labelled_data
 
 
+def merge(
+    previous: list[dict[str, Any]], new: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    previous_hashes = {entry["input"]: entry for entry in previous}
+    merged: list[dict[str, Any]] = []
+
+    for entry in new:
+        if entry["input"] in previous_hashes:
+            merged.append(previous_hashes[entry["input"]])
+        else:
+            merged.append(entry)
+
+    return merged
+
+
 def main(data_path: Path, output_path: Path, max_samples: Optional[int] = None) -> None:
     data = json.loads(data_path.read_text())[:max_samples]
+    n_samples = len(data)
+    print("Loaded", n_samples, "samples")
+    if output_path.exists():
+        previous = json.loads(output_path.read_text())
+        data = merge(previous, data)
+        n_skipped = sum("valid" in entry for entry in data)
+        print(f"Skipping {n_skipped} already labelled samples")
+    print()
+
     labelled_data = label(data)
-    output_path.write_text(json.dumps(labelled_data))
+    output_path.write_text(json.dumps(labelled_data, indent=2))
 
 
 if __name__ == "__main__":
