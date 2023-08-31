@@ -50,16 +50,20 @@ def show(entry: dict[str, Any]) -> str:
     return "\n".join(out)
 
 
-def label_entry(entry: dict[str, Any]) -> dict[str, Any]:
+def label_entry(entry: dict[str, Any]) -> dict[str, Any] | None:
     print(show(entry))
 
     while True:
-        print("Valid extraction? y/n: ", end="")
+        print("Valid extraction? y/n/q: ", end="")
         sys.stdout.flush()
+
         answer = readkey().lower()
+        if answer == "q":
+            return None
         if answer not in ["y", "n"]:
             print("Invalid answer")
             continue
+
         valid = answer == "y"
         print("valid" if valid else "invalid")
         return {**entry, "valid": valid}
