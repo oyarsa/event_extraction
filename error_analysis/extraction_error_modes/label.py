@@ -1,7 +1,6 @@
 import json
-import sys
 from pathlib import Path
-from typing import Any, Optional
+from typing import Annotated, Any, Optional
 
 import typer
 from readchar import readkey
@@ -19,14 +18,19 @@ def show(entry: dict[str, Any]) -> str:
             (
                 "CAUSE",
                 "gold:",
-                "  " + repr(entry["gold_cause"]),
+                f"  {entry['gold_cause']!r}",
                 "pred:",
-                "  " + repr(entry["pred_cause"]),
+                f"  {entry['pred_cause']!r}",
                 f"excess count: {entry['cause_excess_count']}",
             )
         )
     else:
-        out.append("CAUSE: same")
+        out.extend(
+            (
+                "CAUSE",
+                f"  {entry['gold_cause']!r}",
+            )
+        )
 
     out.append("\n")
 
@@ -35,14 +39,19 @@ def show(entry: dict[str, Any]) -> str:
             (
                 "EFFECT",
                 "gold:",
-                "  " + repr(entry["gold_effect"]),
+                f"  {entry['gold_effect']!r}",
                 "pred:",
-                "  " + repr(entry["pred_effect"]),
+                f"  {entry['pred_effect']!r}",
                 f"excess count: {entry['effect_excess_count']}",
             )
         )
     else:
-        out.append("EFFECT: same")
+        out.extend(
+            (
+                "EFFECT",
+                f"  {entry['gold_effect']!r}",
+            )
+        )
 
     out.append("\n")
 
@@ -50,11 +59,11 @@ def show(entry: dict[str, Any]) -> str:
 
 
 def label_entry(entry: dict[str, Any]) -> dict[str, Any] | None:
+    "Gets user input for an entry label. Returns None if user quits."
     print(show(entry))
 
     while True:
-        print("Valid extraction? y/n/q: ", end="")
-        sys.stdout.flush()
+        print("Valid extraction? y/n/q: ", end="", flush=True)
 
         answer = readkey().lower()
         if answer == "q":
@@ -80,6 +89,7 @@ def label(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         new_data = label_entry(entry)
         if new_data is None:
             break
+
         labelled_data.append(new_data)
 
         print("\n###########\n")
@@ -89,31 +99,38 @@ def label(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def merge(
     previous: list[dict[str, Any]], new: list[dict[str, Any]]
 ) -> list[dict[str, Any]]:
-    previous_hashes = {entry["input"]: entry for entry in previous}
+    previous_entries = {entry["input"]: entry for entry in previous}
     merged: list[dict[str, Any]] = []
 
     for entry in new:
-        if entry["input"] in previous_hashes:
-            merged.append(previous_hashes[entry["input"]])
+        if entry["input"] in previous_entries:
+            merged.append(previous_entries[entry["input"]])
         else:
             merged.append(entry)
 
     return merged
 
 
-def main(data_path: Path, output_path: Path, max_samples: Optional[int] = None) -> None:
+def main(
+    data_path: Path,
+    output_path: Annotated[Optional[Path], typer.Option("--output", "-o")] = None,
+    max_samples: Annotated[Optional[int], typer.Option("--max-samples", "-n")] = None,
+) -> None:
     data = json.loads(data_path.read_text())[:max_samples]
-    n_samples = len(data)
-    print("Loaded", n_samples, "samples")
+    print("Loaded", len(data), "samples")
+
+    output_path = output_path or data_path.with_suffix(".labelled.json")
     if output_path.exists():
         previous = json.loads(output_path.read_text())
         data = merge(previous, data)
+
         n_skipped = sum("valid" in entry for entry in data)
         print(f"Skipping {n_skipped} already labelled samples")
     print()
 
-    labelled_data = label(data)
-    output_path.write_text(json.dumps(labelled_data, indent=2))
+    if labelled_data := label(data):
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(json.dumps(labelled_data, indent=2))
 
 
 if __name__ == "__main__":
