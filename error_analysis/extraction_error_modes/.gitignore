@@ -1,3 +1,4 @@
 *.json
 !prediction_output.json
 !prediction_substr.json
+!**/*labelled*.json
