@@ -6,7 +6,7 @@ import typer
 from readchar import readkey
 
 
-def show(entry: dict[str, Any]) -> str:
+def show(entry: dict[str, Any], use_excess: bool) -> str:
     out: list[str] = [
         "PASSAGE",
         entry["input"],
@@ -21,9 +21,10 @@ def show(entry: dict[str, Any]) -> str:
                 f"  {entry['gold_cause']!r}",
                 "pred:",
                 f"  {entry['pred_cause']!r}",
-                f"excess count: {entry['cause_excess_count']}",
             )
         )
+        if use_excess:
+            out.append(f"excess count: {entry['cause_excess_count']}")
     else:
         out.extend(
             (
@@ -42,9 +43,10 @@ def show(entry: dict[str, Any]) -> str:
                 f"  {entry['gold_effect']!r}",
                 "pred:",
                 f"  {entry['pred_effect']!r}",
-                f"excess count: {entry['effect_excess_count']}",
             )
         )
+        if use_excess:
+            out.append(f"excess count: {entry['effect_excess_count']}")
     else:
         out.extend(
             (
@@ -58,9 +60,9 @@ def show(entry: dict[str, Any]) -> str:
     return "\n".join(out)
 
 
-def label_entry(entry: dict[str, Any]) -> dict[str, Any] | None:
+def label_entry(entry: dict[str, Any], use_excess: bool) -> dict[str, Any] | None:
     "Gets user input for an entry label. Returns None if user quits."
-    print(show(entry))
+    print(show(entry, use_excess))
 
     while True:
         print("Valid extraction? y/n/q: ", end="", flush=True)
@@ -77,7 +79,7 @@ def label_entry(entry: dict[str, Any]) -> dict[str, Any] | None:
         return {**entry, "valid": valid}
 
 
-def label(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def label(data: list[dict[str, Any]], use_excess: bool) -> list[dict[str, Any]]:
     labelled_data: list[dict[str, Any]] = []
     for i, entry in enumerate(data):
         if "valid" in entry:
@@ -86,7 +88,7 @@ def label(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
         print(f"ENTRY {i+1}/{len(data)}")
 
-        new_data = label_entry(entry)
+        new_data = label_entry(entry, use_excess)
         if new_data is None:
             break
 
@@ -115,6 +117,7 @@ def main(
     data_path: Path,
     output_path: Annotated[Optional[Path], typer.Option("--output", "-o")] = None,
     max_samples: Annotated[Optional[int], typer.Option("--max-samples", "-n")] = None,
+    use_excess: Annotated[bool, typer.Option("--use-excess", "-x")] = False,
 ) -> None:
     data = json.loads(data_path.read_text())[:max_samples]
     print("Loaded", len(data), "samples")
@@ -128,7 +131,7 @@ def main(
         print(f"Skipping {n_skipped} already labelled samples")
     print()
 
-    if labelled_data := label(data):
+    if labelled_data := label(data, use_excess):
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(json.dumps(labelled_data, indent=2))
 
