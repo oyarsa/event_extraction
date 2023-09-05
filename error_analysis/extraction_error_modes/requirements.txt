@@ -116,6 +116,7 @@ pytz==2023.3
 PyYAML==6.0.1
 pyzmq==24.0.1
 rapidfuzz==3.2.0
+readchar==4.0.5
 referencing==0.30.2
 regex==2023.8.8
 requests==2.31.0
@@ -125,7 +126,7 @@ rfc3986-validator==0.1.1
 rpds-py==0.10.0
 scikit-learn==1.2.2
 scipy==1.11.2
--e git+ssh://git@github.com/oyarsa/event_extraction.git@4a5a8ae7bec8eb035bafe0b7cd238803b9454ce1#egg=self_critique&subdirectory=self_critique
+-e git+ssh://git@github.com/oyarsa/event_extraction.git@9b329a31326f5e91a24258f074380aa465afd673#egg=self_critique&subdirectory=self_critique
 Send2Trash==1.8.2
 simple-parsing==0.1.2.post1
 six==1.16.0
