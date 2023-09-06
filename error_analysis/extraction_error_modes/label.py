@@ -1,9 +1,21 @@
+import difflib
 import json
 from pathlib import Path
 from typing import Annotated, Any, Optional
 
 import typer
 from readchar import readkey
+
+
+def overlap(s1: str, s2: str) -> int:
+    """
+    Returns the length of the longest overlapping sequence of words between two strings.
+    """
+    words1 = s1.split()
+    words2 = s2.split()
+    matcher = difflib.SequenceMatcher(None, words1, words2)
+    _, _, size = matcher.find_longest_match(0, len(words1), 0, len(words2))
+    return size
 
 
 def show(entry: dict[str, Any], use_excess: bool) -> str:
@@ -25,6 +37,13 @@ def show(entry: dict[str, Any], use_excess: bool) -> str:
         )
         if use_excess:
             out.append(f"excess count: {entry['cause_excess_count']}")
+        is_substr_passage = entry["gold_cause"] in entry["input"]
+        out.extend(
+            (
+                f"substr passage: {is_substr_passage}",
+                f"overlap: {overlap(entry['gold_cause'], entry['pred_cause'])}",
+            )
+        )
     else:
         out.extend(
             (
@@ -47,6 +66,13 @@ def show(entry: dict[str, Any], use_excess: bool) -> str:
         )
         if use_excess:
             out.append(f"excess count: {entry['effect_excess_count']}")
+        is_substr_passage = entry["gold_effect"] in entry["input"]
+        out.extend(
+            (
+                f"substr passage: {is_substr_passage}",
+                f"overlap: {overlap(entry['gold_effect'], entry['pred_effect'])}",
+            )
+        )
     else:
         out.extend(
             (
@@ -62,6 +88,14 @@ def show(entry: dict[str, Any], use_excess: bool) -> str:
 
 def label_entry(entry: dict[str, Any], use_excess: bool) -> dict[str, Any] | None:
     "Gets user input for an entry label. Returns None if user quits."
+
+    overlap_cause = overlap(entry["gold_cause"], entry["pred_cause"])
+    overlap_effect = overlap(entry["gold_effect"], entry["pred_effect"])
+
+    if overlap_cause <= 1 or overlap_effect <= 1:
+        print(f"Skipping due to low overlap (C:{overlap_cause} E:{overlap_effect}))")
+        return {**entry, "valid": False}
+
     print(show(entry, use_excess))
 
     while True:
