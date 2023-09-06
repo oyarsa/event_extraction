@@ -3,17 +3,24 @@ import copy
 import dataclasses
 import json
 import logging
+import os
+import random
 import sys
+import warnings
+from collections.abc import Mapping
 from datetime import datetime
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 
+import numpy as np
 import torch
 import torch.backends.mps
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+import transformers
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from torch.optim import AdamW
 from torch.utils.data import DataLoader, Dataset, random_split
+from tqdm import tqdm
 from transformers import (
-    AdamW,
     AutoConfig,
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -44,12 +51,19 @@ class Config:
     max_samples: int | None = None
     # Output directory for model
     output_dir: Path = Path("output")
+    # Random seed for reproducibility
+    seed: int = 0
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
         for f in dataclasses.fields(self):
-            if f.name in kwargs:
-                setattr(self, f.name, kwargs[f.name])
+            if f.name not in kwargs:
+                continue
+
+            value = kwargs[f.name]
+            if f.name in ["data_path", "output_dir"]:
+                value = Path(value)
+            setattr(self, f.name, value)
 
     def __str__(self) -> str:
         config_lines = [">>>> CONFIGURATION"]
@@ -59,40 +73,23 @@ class Config:
         return "\n".join(config_lines)
 
 
-class CustomDataset(Dataset):
-    def __init__(
-        self, data: list[dict[str, Any]], tokenizer: PreTrainedTokenizer, max_len: int
-    ) -> None:
-        self.data = data
-        self.tokenizer = tokenizer
-        self.max_len = max_len
+@dataclasses.dataclass
+class ClassifierDataset(Dataset):
+    input_tokens: Mapping[str, torch.Tensor]
+    labels: torch.Tensor
+    data: list[dict[str, Any]]
 
     def __len__(self) -> int:
-        return len(self.data)
+        return self.input_tokens["input_ids"].size(0)
 
     def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
-        row = self.data[idx]
-        text = row["input"]
-        text_pair = row["gold"] + " [SEP] " + row["output"]
-
-        encoding = self.tokenizer(
-            text=text,
-            text_pair=text_pair,
-            padding="max_length",
-            return_tensors="pt",
-            truncation=True,
-            max_length=self.max_len,
-        )
-        input_ids = cast(torch.Tensor, encoding["input_ids"])
-        attention_mask = cast(torch.Tensor, encoding["attention_mask"])
-        token_type_ids = cast(torch.Tensor, encoding["token_type_ids"])
-        label = torch.tensor(row["valid"], dtype=torch.long)
-
         return {
-            "input_ids": input_ids,
-            "attention_mask": attention_mask,
-            "token_type_ids": token_type_ids,
-            "label": label,
+            "input_ids": self.input_tokens["input_ids"][idx],
+            "attention_mask": self.input_tokens["attention_mask"][idx],
+            "labels": self.labels[idx],
+            "input": self.data[idx]["input"],
+            "output": self.data[idx]["output"],
+            "gold": self.data[idx]["gold"],
         }
 
 
@@ -100,10 +97,8 @@ def init_model(model_name: str) -> tuple[PreTrainedTokenizer, PreTrainedModel]:
     config = AutoConfig.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSequenceClassification.from_pretrained(
-        model_name, config=config, num_labels=2
+        model_name, config=config
     )
-    model.config.label2id = {True: 1, False: 0}
-    model.config.id2label = {1: True, 0: False}
     return tokenizer, model
 
 
@@ -112,60 +107,109 @@ def train_epoch(
     train_loader: DataLoader,
     optimizer: AdamW,
     device: torch.device,
+    desc: str,
 ) -> float:
-    model.train()
     total_loss = 0
-    for batch in train_loader:
+
+    model.train()
+    for batch in tqdm(train_loader, desc=desc):
         optimizer.zero_grad()
+
         input_ids = batch["input_ids"].to(device)
         attention_mask = batch["attention_mask"].to(device)
-        token_type_ids = batch["token_type_ids"].to(device)
-        labels = batch["label"].to(device)
+        labels = batch["labels"].to(device)
 
         outputs = model(
             input_ids,
             attention_mask=attention_mask,
-            token_type_ids=token_type_ids,
             labels=labels,
         )
         loss = outputs.loss
         loss.backward()
         optimizer.step()
         total_loss += loss.item()
+
     return total_loss / len(train_loader)
 
 
+@dataclasses.dataclass
+class EvaluationResult:
+    golds: list[int]
+    preds: list[int]
+    passages: list[str]
+    outputs: list[str]
+    annotations: list[str]
+
+
 def evaluate(
-    model: torch.nn.Module, val_loader: DataLoader, device: torch.device
-) -> tuple[list[int], list[int]]:
-    model.eval()
+    model: PreTrainedModel,
+    val_loader: DataLoader,
+    device: torch.device,
+    desc: str,
+) -> EvaluationResult:
     preds: list[int] = []
     golds: list[int] = []
-    for batch in val_loader:
+    passages: list[str] = []
+    outputs: list[str] = []
+    annotations: list[str] = []
+
+    model.eval()
+    for batch in tqdm(val_loader, desc=desc):
         input_ids = batch["input_ids"].to(device)
         attention_mask = batch["attention_mask"].to(device)
-        token_type_ids = batch["token_type_ids"].to(device)
-        labels = batch["label"].to(device)
+        labels = batch["labels"].to(device)
 
         with torch.no_grad():
-            outputs = model(
-                input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids
-            )
-            logits = outputs.logits
-            preds.extend(torch.argmax(logits, dim=1).tolist())
+            model_outputs = model(input_ids, attention_mask=attention_mask)
+
+            preds.extend(torch.argmax(model_outputs.logits, dim=1).tolist())
             golds.extend(labels.tolist())
 
-    return golds, preds
+            passages.extend(batch["input"])
+            outputs.extend(batch["output"])
+            annotations.extend(batch["gold"])
+
+    return EvaluationResult(
+        golds=golds,
+        preds=preds,
+        passages=passages,
+        outputs=outputs,
+        annotations=annotations,
+    )
+
+
+def calc_metrics(results: EvaluationResult) -> dict[str, float]:
+    acc = accuracy_score(results.golds, results.preds)
+    prec, rec, f1, _ = precision_recall_fscore_support(
+        results.golds, results.preds, average="binary", zero_division=0  # type: ignore
+    )
+
+    return {
+        "accuracy": float(acc),
+        "precision": float(prec),
+        "recall": float(rec),
+        "f1": float(f1),
+    }
+
+
+def report_metrics(metrics: dict[str, float]) -> None:
+    logger.info(
+        "Evaluation results\n"
+        f"    Accuracy : {metrics['accuracy']:.4f}\n"
+        f"    Precision: {metrics['precision']:.4f}\n"
+        f"    Recall   : {metrics['recall']:.4f}\n"
+        f"    F1       : {metrics['f1']:.4f}\n",
+    )
 
 
 def train(
     model: PreTrainedModel,
     train_loader: DataLoader,
     val_loader: DataLoader,
+    device: torch.device,
     num_epochs: int,
     learning_rate: float,
 ) -> PreTrainedModel:
-    device = get_device()
     model = model.to(device)
     optimizer = AdamW(model.parameters(), lr=learning_rate)
 
@@ -173,21 +217,24 @@ def train(
     best_model = model
 
     for epoch in range(num_epochs):
-        avg_train_loss = train_epoch(model, train_loader, optimizer, device)
-        true_labels, preds = evaluate(model, val_loader, device)
-
-        acc = accuracy_score(true_labels, preds)
-        prec = precision_score(true_labels, preds)
-        rec = recall_score(true_labels, preds)
-        f1 = f1_score(true_labels, preds)
-
-        print(
-            f"Epoch {epoch + 1}/{num_epochs} -> Loss: {avg_train_loss},"
-            f" Accuracy: {acc}, Precision: {prec}, Recall: {rec}, F1: {f1}"
+        avg_train_loss = train_epoch(
+            model,
+            train_loader,
+            optimizer,
+            device,
+            desc=f"Training ({epoch + 1}/{num_epochs})",
+        )
+        results = evaluate(
+            model, val_loader, device, desc=f"Evaluation ({epoch + 1}/{num_epochs})"
         )
 
-        if f1 > best_f1:
-            best_f1 = f1
+        logger.info(f"Epoch {epoch + 1}/{num_epochs} -> Loss: {avg_train_loss}")
+
+        metrics = calc_metrics(results)
+        report_metrics(metrics)
+
+        if metrics["f1"] > best_f1:
+            best_f1 = metrics["f1"]
             best_model = copy.deepcopy(model)
 
     return best_model
@@ -210,7 +257,20 @@ def preprocess_data(
     split_percentage: float,
     batch_size: int,
 ) -> tuple[DataLoader, DataLoader]:
-    dataset = CustomDataset(data, tokenizer, max_len=max_seq_length)
+    model_inputs = tokenizer(
+        # [d["passage"] for d in data],
+        # [d["gold"] + " [SEP] " + d["output"] for d in data],
+        [d["gold"] for d in data],
+        [d["output"] for d in data],
+        padding="max_length",
+        truncation=True,
+        return_tensors="pt",
+        max_length=max_seq_length,
+    )
+    labels = [int(d["valid"]) for d in data]
+    dataset = ClassifierDataset(
+        input_tokens=model_inputs, labels=torch.tensor(labels), data=data
+    )
     train_size = int(split_percentage * len(dataset))
     val_size = len(dataset) - train_size
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
@@ -241,6 +301,35 @@ def setup_logger(output_dir: Path) -> None:
     )
 
 
+def suppress_transformers_warnings() -> None:
+    "Remove annoying messages about tokenisers and unititialised weights."
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
+    transformers.logging.set_verbosity_error()
+
+
+def set_seed(seed: int) -> None:
+    "Set random seed for reproducibility."
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+
+def save_results(results: EvaluationResult, output_dir: Path) -> None:
+    r = [
+        {
+            "gold": results.golds[i],
+            "pred": results.preds[i],
+            "passage": results.passages[i],
+            "output": results.outputs[i],
+            "annotation": results.annotations[i],
+        }
+        for i in range(len(results.golds))
+    ]
+    (output_dir / "results.json").write_text(json.dumps(r, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train a model using the config file")
     parser.add_argument("config_path", type=Path, help="Path to the config JSON file")
@@ -248,17 +337,21 @@ def main() -> None:
 
     config = Config(**json.loads(args.config_path.read_text()))
 
+    set_seed(config.seed)
+    suppress_transformers_warnings()
+
     output_dir = config.output_dir / datetime.now().isoformat()
     output_dir.mkdir(exist_ok=True, parents=True)
     setup_logger(output_dir)
 
     logger.info(f"\n{config}")
-    logger.info(f"\nOutput directory: {output_dir}\n")
+    logger.info(f"Output directory: {output_dir.resolve()}\n")
     (output_dir / "args.json").write_text(
         json.dumps(dataclasses.asdict(config), default=str, indent=2)
     )
 
     tokenizer, model = init_model(config.model_name)
+    device = get_device()
 
     data = json.loads(config.data_path.read_text())[: config.max_samples]
     train_loader, val_loader = preprocess_data(
@@ -273,10 +366,14 @@ def main() -> None:
         model,
         train_loader,
         val_loader,
+        device,
         config.num_epochs,
         config.learning_rate,
     )
     save_model(trained_model, tokenizer, output_dir)
+
+    results = evaluate(model, val_loader, device, desc="Final evaluation")
+    save_results(results, output_dir)
 
 
 if __name__ == "__main__":

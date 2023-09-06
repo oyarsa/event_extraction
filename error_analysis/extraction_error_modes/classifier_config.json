@@ -1,0 +1,10 @@
+{
+    "model_name": "microsoft/deberta-base",
+	"data_path": "./substr_labelled.json",
+    "learning_rate": 1e-5,
+    "split_percentage": 0.8,
+    "num_epochs": 3,
+    "max_seq_length": 256,
+    "batch_size": 8,
+    "output_dir": "output"
+}

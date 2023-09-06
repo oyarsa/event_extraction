@@ -2,3 +2,5 @@
 !prediction_output.json
 !prediction_substr.json
 !**/*labelled*.json
+!classifier_config.json
+output/
