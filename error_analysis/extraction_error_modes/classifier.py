@@ -373,6 +373,7 @@ def main() -> None:
     save_model(trained_model, tokenizer, output_dir)
 
     results = evaluate(model, val_loader, device, desc="Final evaluation")
+    report_metrics(calc_metrics(results))
     save_results(results, output_dir)
 
 

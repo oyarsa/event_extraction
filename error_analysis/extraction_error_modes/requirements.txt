@@ -102,6 +102,7 @@ Pillow==10.0.0
 platformdirs==3.10.0
 prometheus-client==0.17.1
 prompt-toolkit==3.0.39
+protobuf==3.20.0
 psutil==5.9.5
 ptyprocess==0.7.0
 pure-eval==0.2.2
@@ -127,6 +128,7 @@ rpds-py==0.10.0
 scikit-learn==1.2.2
 scipy==1.11.2
 -e git+ssh://git@github.com/oyarsa/event_extraction.git@5752e7a85a370a0e41ebb6824d2ce2b34eb0fb41#egg=self_critique&subdirectory=self_critique
+sentencepiece==0.1.99
 Send2Trash==1.8.2
 simple-parsing==0.1.2.post1
 six==1.16.0
