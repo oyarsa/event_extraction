@@ -127,7 +127,6 @@ rfc3986-validator==0.1.1
 rpds-py==0.10.0
 scikit-learn==1.2.2
 scipy==1.11.2
--e git+ssh://git@github.com/oyarsa/event_extraction.git@5752e7a85a370a0e41ebb6824d2ce2b34eb0fb41#egg=self_critique&subdirectory=self_critique
 sentencepiece==0.1.99
 Send2Trash==1.8.2
 simple-parsing==0.1.2.post1
