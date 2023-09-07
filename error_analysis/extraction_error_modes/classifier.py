@@ -1,4 +1,3 @@
-import argparse
 import copy
 import dataclasses
 import json
@@ -13,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+import simple_parsing
 import torch
 import torch.backends.mps
 import transformers
@@ -45,14 +45,17 @@ class Config:
     num_epochs: int
     # Maximum length for model output (tokens)
     max_seq_length: int
-    # Batch size
+    # Output directory for model Batch size
     batch_size: int
     # Number of samples to use from data
     max_samples: int | None = None
-    # Output directory for model
-    output_dir: Path = Path("output")
+    # Path to the directory where the output will be saved
+    output_path: Path = Path("output")
     # Random seed for reproducibility
     seed: int = 0
+    # Name of the output directory. If unspecified, will be generated the current
+    # ISO timestamp.
+    output_name: str | None = None
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -241,6 +244,7 @@ def train(
 
 
 def get_device() -> torch.device:
+    "Returns MPS if available, CUDA if available, otherwise CPU device."
     if torch.cuda.is_available():
         device = "cuda"
     elif torch.backends.mps.is_available():
@@ -316,7 +320,9 @@ def set_seed(seed: int) -> None:
     torch.cuda.manual_seed_all(seed)
 
 
-def save_results(results: EvaluationResult, output_dir: Path) -> None:
+def save_results(
+    results: EvaluationResult, metrics: dict[str, float], output_dir: Path
+) -> None:
     r = [
         {
             "gold": results.golds[i],
@@ -328,22 +334,20 @@ def save_results(results: EvaluationResult, output_dir: Path) -> None:
         for i in range(len(results.golds))
     ]
     (output_dir / "results.json").write_text(json.dumps(r, indent=2))
+    (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Train a model using the config file")
-    parser.add_argument("config_path", type=Path, help="Path to the config JSON file")
-    args = parser.parse_args()
-
-    config = Config(**json.loads(args.config_path.read_text()))
+    config = simple_parsing.parse(Config, add_config_path_arg=True)
 
     set_seed(config.seed)
     suppress_transformers_warnings()
 
-    output_dir = config.output_dir / datetime.now().isoformat()
+    output_name = config.output_name or datetime.now().isoformat()
+    output_dir = config.output_path / output_name
     output_dir.mkdir(exist_ok=True, parents=True)
-    setup_logger(output_dir)
 
+    setup_logger(output_dir)
     logger.info(f"\n{config}")
     logger.info(f"Output directory: {output_dir.resolve()}\n")
     (output_dir / "args.json").write_text(
@@ -373,8 +377,9 @@ def main() -> None:
     save_model(trained_model, tokenizer, output_dir)
 
     results = evaluate(model, val_loader, device, desc="Final evaluation")
-    report_metrics(calc_metrics(results))
-    save_results(results, output_dir)
+    metrics = calc_metrics(results)
+    report_metrics(metrics)
+    save_results(results, metrics, output_dir)
 
 
 if __name__ == "__main__":
