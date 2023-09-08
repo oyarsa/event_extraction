@@ -1,3 +1,4 @@
+import collections
 import copy
 import dataclasses
 import json
@@ -60,6 +61,12 @@ class Config:
     output_name: str | None = None
     # Whether to use the passage as part of the model input
     use_passage: bool = False
+    # Test data
+    test_data_path: Path | None = None
+    # Do train
+    do_train: bool = True
+    # Do prediction
+    do_prediction: bool = False
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -83,21 +90,23 @@ class Config:
 @dataclasses.dataclass
 class ClassifierDataset(Dataset):
     input_tokens: Mapping[str, torch.Tensor]
-    labels: torch.Tensor
+    labels: torch.Tensor | None
     data: list[dict[str, Any]]
 
     def __len__(self) -> int:
         return self.input_tokens["input_ids"].size(0)
 
     def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
-        return {
+        d = {
             "input_ids": self.input_tokens["input_ids"][idx],
             "attention_mask": self.input_tokens["attention_mask"][idx],
-            "labels": self.labels[idx],
             "input": self.data[idx]["input"],
             "output": self.data[idx]["output"],
             "gold": self.data[idx]["gold"],
         }
+        if self.labels is not None:
+            d["labels"] = self.labels[idx]
+        return d
 
 
 def init_model(model_name: str) -> tuple[PreTrainedTokenizer, PreTrainedModel]:
@@ -178,6 +187,47 @@ def evaluate(
 
     return EvaluationResult(
         golds=golds,
+        preds=preds,
+        passages=passages,
+        outputs=outputs,
+        annotations=annotations,
+    )
+
+
+@dataclasses.dataclass
+class PredictionResult:
+    preds: list[int]
+    passages: list[str]
+    outputs: list[str]
+    annotations: list[str]
+
+
+def predict(
+    model: PreTrainedModel,
+    val_loader: DataLoader,
+    device: torch.device,
+    desc: str,
+) -> PredictionResult:
+    preds: list[int] = []
+    passages: list[str] = []
+    outputs: list[str] = []
+    annotations: list[str] = []
+
+    model.eval()
+    for batch in tqdm(val_loader, desc=desc):
+        input_ids = batch["input_ids"].to(device)
+        attention_mask = batch["attention_mask"].to(device)
+
+        with torch.no_grad():
+            model_outputs = model(input_ids, attention_mask=attention_mask)
+
+            preds.extend(torch.argmax(model_outputs.logits, dim=1).tolist())
+
+            passages.extend(batch["input"])
+            outputs.extend(batch["output"])
+            annotations.extend(batch["gold"])
+
+    return PredictionResult(
         preds=preds,
         passages=passages,
         outputs=outputs,
@@ -273,6 +323,7 @@ def preprocess_data(
     split_percentage: float,
     batch_size: int,
     use_passage: bool,
+    is_train: bool = True,
 ) -> tuple[DataLoader, DataLoader]:
     if use_passage:
         text = [d["input"] for d in data]
@@ -288,10 +339,11 @@ def preprocess_data(
         return_tensors="pt",
         max_length=max_seq_length,
     )
-    labels = [int(d["valid"]) for d in data]
-    dataset = ClassifierDataset(
-        input_tokens=model_inputs, labels=torch.tensor(labels), data=data
-    )
+    if is_train:
+        labels = torch.tensor([int(d["valid"]) for d in data])
+    else:
+        labels = None
+    dataset = ClassifierDataset(input_tokens=model_inputs, labels=labels, data=data)
     train_size = int(split_percentage * len(dataset))
     val_size = len(dataset) - train_size
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
@@ -337,7 +389,7 @@ def set_seed(seed: int) -> None:
     torch.cuda.manual_seed_all(seed)
 
 
-def save_results(
+def save_eval_results(
     results: EvaluationResult, metrics: dict[str, float], output_dir: Path
 ) -> None:
     r = [
@@ -350,8 +402,94 @@ def save_results(
         }
         for i in range(len(results.golds))
     ]
-    (output_dir / "results.json").write_text(json.dumps(r, indent=2))
-    (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
+    (output_dir / "eval_results.json").write_text(json.dumps(r, indent=2))
+    (output_dir / "eval_metrics.json").write_text(json.dumps(metrics, indent=2))
+
+
+def save_prediction_results(results: PredictionResult, output_dir: Path) -> None:
+    r = [
+        {
+            "valid": bool(results.preds[i]),
+            "input": results.passages[i],
+            "output": results.outputs[i],
+            "gold": results.annotations[i],
+        }
+        for i in range(len(results.preds))
+    ]
+    (output_dir / "prediction_results.json").write_text(json.dumps(r, indent=2))
+
+
+def run_training(
+    model: PreTrainedModel,
+    config: Config,
+    tokenizer: PreTrainedTokenizer,
+    device: torch.device,
+    output_dir: Path,
+) -> PreTrainedModel:
+    logger.info(">>>> TRAINING <<<<")
+    data = json.loads(config.data_path.read_text())[: config.max_samples]
+    train_loader, val_loader = preprocess_data(
+        data,
+        tokenizer,
+        config.max_seq_length,
+        config.split_percentage,
+        config.batch_size,
+        config.use_passage,
+    )
+
+    trained_model = train(
+        model,
+        train_loader,
+        val_loader,
+        device,
+        config.num_epochs,
+        config.learning_rate,
+        config.early_stopping_patience,
+    )
+    save_model(trained_model, tokenizer, output_dir)
+
+    results = evaluate(trained_model, val_loader, device, desc="Final evaluation")
+    metrics = calc_metrics(results)
+    report_metrics(metrics)
+    save_eval_results(results, metrics, output_dir)
+
+    return trained_model
+
+
+def report_prediction(results: PredictionResult) -> None:
+    c = collections.Counter(results.preds)
+    logger.info("Prediction results:")
+    logger.info(f"  Valid: {c[True]}")
+    logger.info(f"  Invalid: {c[False]}")
+
+
+def run_prediction(
+    model: PreTrainedModel,
+    config: Config,
+    tokenizer: PreTrainedTokenizer,
+    device: torch.device,
+    output_dir: Path,
+) -> None:
+    model = model.to(device)
+
+    logger.info(">>>> TESTING <<<<")
+    if config.test_data_path is None:
+        raise ValueError("Test data path must be specified for testing.")
+
+    data = json.loads(config.test_data_path.read_text())[: config.max_samples]
+    loader, _ = preprocess_data(
+        data,
+        tokenizer,
+        config.max_seq_length,
+        1,
+        config.batch_size,
+        config.use_passage,
+        is_train=False,
+    )
+
+    results = predict(model, loader, device, desc="Prediction")
+    report_prediction(results)
+    save_prediction_results(results, output_dir)
 
 
 def main() -> None:
@@ -374,31 +512,11 @@ def main() -> None:
     tokenizer, model = init_model(config.model_name)
     device = get_device()
 
-    data = json.loads(config.data_path.read_text())[: config.max_samples]
-    train_loader, val_loader = preprocess_data(
-        data,
-        tokenizer,
-        config.max_seq_length,
-        config.split_percentage,
-        config.batch_size,
-        config.use_passage,
-    )
+    if config.do_train:
+        model = run_training(model, config, tokenizer, device, output_dir)
 
-    trained_model = train(
-        model,
-        train_loader,
-        val_loader,
-        device,
-        config.num_epochs,
-        config.learning_rate,
-        config.early_stopping_patience,
-    )
-    save_model(trained_model, tokenizer, output_dir)
-
-    results = evaluate(model, val_loader, device, desc="Final evaluation")
-    metrics = calc_metrics(results)
-    report_metrics(metrics)
-    save_results(results, metrics, output_dir)
+    if config.do_prediction:
+        run_prediction(model, config, tokenizer, device, output_dir)
 
 
 if __name__ == "__main__":
