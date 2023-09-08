@@ -3,8 +3,9 @@
 	"data_path": "./substr_labelled.json",
     "learning_rate": 5e-5,
     "split_percentage": 0.8,
-    "num_epochs": 20,
+    "num_epochs": 100,
+	"early_stopping_patience": 5,
     "max_seq_length": 256,
     "batch_size": 32,
-    "output_dir": "output"
+    "output_path": "output"
 }

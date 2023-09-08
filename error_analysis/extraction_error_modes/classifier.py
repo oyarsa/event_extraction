@@ -47,6 +47,8 @@ class Config:
     max_seq_length: int
     # Output directory for model Batch size
     batch_size: int
+    # Maximum number of epochs without improvement
+    early_stopping_patience: int
     # Number of samples to use from data
     max_samples: int | None = None
     # Path to the directory where the output will be saved
@@ -212,12 +214,14 @@ def train(
     device: torch.device,
     num_epochs: int,
     learning_rate: float,
+    early_stopping_patience: int,
 ) -> PreTrainedModel:
     model = model.to(device)
     optimizer = AdamW(model.parameters(), lr=learning_rate)
 
     best_f1 = 0
     best_model = model
+    epochs_without_improvement = 0
 
     for epoch in range(num_epochs):
         avg_train_loss = train_epoch(
@@ -239,6 +243,12 @@ def train(
         if metrics["f1"] > best_f1:
             best_f1 = metrics["f1"]
             best_model = copy.deepcopy(model)
+        else:
+            logger.info(f"{epochs_without_improvement} epochs without improvement")
+            epochs_without_improvement += 1
+            if epochs_without_improvement >= early_stopping_patience:
+                logger.info("Early stopping")
+                break
 
     return best_model
 
@@ -373,6 +383,7 @@ def main() -> None:
         device,
         config.num_epochs,
         config.learning_rate,
+        config.early_stopping_patience,
     )
     save_model(trained_model, tokenizer, output_dir)
 
