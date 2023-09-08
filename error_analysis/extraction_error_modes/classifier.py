@@ -58,6 +58,8 @@ class Config:
     # Name of the output directory. If unspecified, will be generated the current
     # ISO timestamp.
     output_name: str | None = None
+    # Whether to use the passage as part of the model input
+    use_passage: bool = False
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -270,12 +272,17 @@ def preprocess_data(
     max_seq_length: int,
     split_percentage: float,
     batch_size: int,
+    use_passage: bool,
 ) -> tuple[DataLoader, DataLoader]:
+    if use_passage:
+        text = [d["input"] for d in data]
+        pair = [d["gold"] + " [SEP] " + d["output"] for d in data]
+    else:
+        text = [d["gold"] for d in data]
+        pair = [d["output"] for d in data]
     model_inputs = tokenizer(
-        # [d["passage"] for d in data],
-        # [d["gold"] + " [SEP] " + d["output"] for d in data],
-        [d["gold"] for d in data],
-        [d["output"] for d in data],
+        text,
+        pair,
         padding="max_length",
         truncation=True,
         return_tensors="pt",
@@ -374,6 +381,7 @@ def main() -> None:
         config.max_seq_length,
         config.split_percentage,
         config.batch_size,
+        config.use_passage,
     )
 
     trained_model = train(
