@@ -328,7 +328,7 @@ def preprocess_data(
     split_percentage: float,
     batch_size: int,
     use_passage: bool,
-    is_train: bool = True,
+    has_labels: bool,
 ) -> tuple[DataLoader, DataLoader]:
     if use_passage:
         text = [d["input"] for d in data]
@@ -344,7 +344,7 @@ def preprocess_data(
         return_tensors="pt",
         max_length=max_seq_length,
     )
-    if is_train:
+    if has_labels:
         labels = torch.tensor([int(d["valid"]) for d in data])
     else:
         labels = None
@@ -489,7 +489,7 @@ def run_evaluation(
         1,
         config.batch_size,
         config.use_passage,
-        is_train=False,
+        has_labels=True,
     )
 
     results = evaluate(model, loader, device, desc="Validation evaluation")
@@ -519,7 +519,7 @@ def run_prediction(
         1,
         config.batch_size,
         config.use_passage,
-        is_train=False,
+        has_labels=False,
     )
 
     results = predict(model, loader, device, desc="Prediction")
