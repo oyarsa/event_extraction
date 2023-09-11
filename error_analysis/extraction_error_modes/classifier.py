@@ -272,7 +272,7 @@ def train(
     optimizer = AdamW(model.parameters(), lr=learning_rate)
 
     best_f1 = 0
-    best_model = model
+    best_model = copy.deepcopy(model)
     epochs_without_improvement = 0
 
     for epoch in range(num_epochs):
@@ -283,11 +283,11 @@ def train(
             device,
             desc=f"Training ({epoch + 1}/{num_epochs})",
         )
+        logger.info(f"Epoch {epoch + 1}/{num_epochs} -> Loss: {avg_train_loss}")
+
         results = evaluate(
             model, val_loader, device, desc=f"Evaluation ({epoch + 1}/{num_epochs})"
         )
-
-        logger.info(f"Epoch {epoch + 1}/{num_epochs} -> Loss: {avg_train_loss}")
 
         metrics = calc_metrics(results)
         report_metrics(metrics)
@@ -295,9 +295,10 @@ def train(
         if metrics["f1"] > best_f1:
             best_f1 = metrics["f1"]
             best_model = copy.deepcopy(model)
+            logger.info(f"New best: {best_f1:.4f} F1")
         else:
-            logger.info(f"{epochs_without_improvement} epochs without improvement")
             epochs_without_improvement += 1
+            logger.info(f"{epochs_without_improvement} epochs without improvement")
             if epochs_without_improvement >= early_stopping_patience:
                 logger.info("Early stopping")
                 break
