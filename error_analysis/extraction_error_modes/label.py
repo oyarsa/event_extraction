@@ -30,9 +30,9 @@ def show(entry: dict[str, Any], use_excess: bool, use_overlap: bool) -> str:
             (
                 "CAUSE",
                 "gold:",
-                f"  {entry['gold_cause']!r}",
+                f"  -> {entry['gold_cause']!r}",
                 "pred:",
-                f"  {entry['pred_cause']!r}",
+                f"  -> {entry['pred_cause']!r}",
             )
         )
 
@@ -62,9 +62,9 @@ def show(entry: dict[str, Any], use_excess: bool, use_overlap: bool) -> str:
             (
                 "EFFECT",
                 "gold:",
-                f"  {entry['gold_effect']!r}",
+                f"  -> {entry['gold_effect']!r}",
                 "pred:",
-                f"  {entry['pred_effect']!r}",
+                f"  -> {entry['pred_effect']!r}",
             )
         )
 
