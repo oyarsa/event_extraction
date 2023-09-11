@@ -63,10 +63,14 @@ class Config:
     use_passage: bool = False
     # Test data
     test_data_path: Path | None = None
+    # Evaluation data
+    eval_data_path: Path | None = None
     # Do train
     do_train: bool = True
     # Do prediction
     do_prediction: bool = False
+    # Do evaluation
+    do_evaluation: bool = False
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -391,7 +395,7 @@ def set_seed(seed: int) -> None:
 
 
 def save_eval_results(
-    results: EvaluationResult, metrics: dict[str, float], output_dir: Path
+    results: EvaluationResult, metrics: dict[str, float], output_dir: Path, desc: str
 ) -> None:
     r = [
         {
@@ -403,8 +407,8 @@ def save_eval_results(
         }
         for i in range(len(results.golds))
     ]
-    (output_dir / "eval_results.json").write_text(json.dumps(r, indent=2))
-    (output_dir / "eval_metrics.json").write_text(json.dumps(metrics, indent=2))
+    (output_dir / f"{desc}_results.json").write_text(json.dumps(r, indent=2))
+    (output_dir / f"{desc}_metrics.json").write_text(json.dumps(metrics, indent=2))
 
 
 def save_prediction_results(results: PredictionResult, output_dir: Path) -> None:
@@ -452,7 +456,7 @@ def run_training(
     results = evaluate(trained_model, val_loader, device, desc="Final evaluation")
     metrics = calc_metrics(results)
     report_metrics(metrics)
-    save_eval_results(results, metrics, output_dir)
+    save_eval_results(results, metrics, output_dir, desc="eval")
 
     return trained_model
 
@@ -462,6 +466,36 @@ def report_prediction(results: PredictionResult) -> None:
     logger.info("Prediction results:")
     logger.info(f"  Valid: {c[True]}")
     logger.info(f"  Invalid: {c[False]}")
+
+
+def run_evaluation(
+    model: PreTrainedModel,
+    config: Config,
+    tokenizer: PreTrainedTokenizer,
+    device: torch.device,
+    output_dir: Path,
+) -> None:
+    model = model.to(device)
+
+    logger.info(">>>> EVALUATION <<<<")
+    if config.eval_data_path is None:
+        raise ValueError("Eval data path must be specified for evaluation.")
+
+    data = json.loads(config.eval_data_path.read_text())[: config.max_samples]
+    loader, _ = preprocess_data(
+        data,
+        tokenizer,
+        config.max_seq_length,
+        1,
+        config.batch_size,
+        config.use_passage,
+        is_train=False,
+    )
+
+    results = evaluate(model, loader, device, desc="Validation evaluation")
+    metrics = calc_metrics(results)
+    report_metrics(metrics)
+    save_eval_results(results, metrics, output_dir, desc="val")
 
 
 def run_prediction(
@@ -515,6 +549,9 @@ def main() -> None:
 
     if config.do_train:
         model = run_training(model, config, tokenizer, device, output_dir)
+
+    if config.do_evaluation:
+        run_evaluation(model, config, tokenizer, device, output_dir)
 
     if config.do_prediction:
         run_prediction(model, config, tokenizer, device, output_dir)
