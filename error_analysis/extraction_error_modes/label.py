@@ -18,7 +18,7 @@ def overlap(s1: str, s2: str) -> int:
     return size
 
 
-def show(entry: dict[str, Any], use_excess: bool) -> str:
+def show(entry: dict[str, Any], use_excess: bool, use_overlap: bool) -> str:
     out: list[str] = [
         "PASSAGE",
         entry["input"],
@@ -35,15 +35,18 @@ def show(entry: dict[str, Any], use_excess: bool) -> str:
                 f"  {entry['pred_cause']!r}",
             )
         )
+
         if use_excess:
             out.append(f"excess count: {entry['cause_excess_count']}")
-        is_substr_passage = entry["gold_cause"] in entry["input"]
-        out.extend(
-            (
-                f"substr passage: {is_substr_passage}",
-                f"overlap: {overlap(entry['gold_cause'], entry['pred_cause'])}",
+
+        if use_overlap:
+            is_substr_passage = entry["gold_cause"] in entry["input"]
+            out.extend(
+                (
+                    f"substr passage: {is_substr_passage}",
+                    f"overlap: {overlap(entry['gold_cause'], entry['pred_cause'])}",
+                )
             )
-        )
     else:
         out.extend(
             (
@@ -64,15 +67,18 @@ def show(entry: dict[str, Any], use_excess: bool) -> str:
                 f"  {entry['pred_effect']!r}",
             )
         )
+
         if use_excess:
             out.append(f"excess count: {entry['effect_excess_count']}")
-        is_substr_passage = entry["gold_effect"] in entry["input"]
-        out.extend(
-            (
-                f"substr passage: {is_substr_passage}",
-                f"overlap: {overlap(entry['gold_effect'], entry['pred_effect'])}",
+
+        if use_overlap:
+            is_substr_passage = entry["gold_effect"] in entry["input"]
+            out.extend(
+                (
+                    f"substr passage: {is_substr_passage}",
+                    f"overlap: {overlap(entry['gold_effect'], entry['pred_effect'])}",
+                )
             )
-        )
     else:
         out.extend(
             (
@@ -86,17 +92,22 @@ def show(entry: dict[str, Any], use_excess: bool) -> str:
     return "\n".join(out)
 
 
-def label_entry(entry: dict[str, Any], use_excess: bool) -> dict[str, Any] | None:
+def label_entry(
+    entry: dict[str, Any], use_excess: bool, use_overlap: bool
+) -> dict[str, Any] | None:
     "Gets user input for an entry label. Returns None if user quits."
 
-    overlap_cause = overlap(entry["gold_cause"], entry["pred_cause"])
-    overlap_effect = overlap(entry["gold_effect"], entry["pred_effect"])
+    if use_overlap:
+        overlap_cause = overlap(entry["gold_cause"], entry["pred_cause"])
+        overlap_effect = overlap(entry["gold_effect"], entry["pred_effect"])
 
-    if overlap_cause <= 1 or overlap_effect <= 1:
-        print(f"Skipping due to low overlap (C:{overlap_cause} E:{overlap_effect}))")
-        return {**entry, "valid": False}
+        if overlap_cause <= 1 or overlap_effect <= 1:
+            print(
+                f"Skipping due to low overlap (C:{overlap_cause} E:{overlap_effect}))"
+            )
+            return {**entry, "valid": False}
 
-    print(show(entry, use_excess))
+    print(show(entry, use_excess, use_overlap))
 
     while True:
         print("Valid extraction? y/n/q: ", end="", flush=True)
@@ -113,7 +124,9 @@ def label_entry(entry: dict[str, Any], use_excess: bool) -> dict[str, Any] | Non
         return {**entry, "valid": valid}
 
 
-def label(data: list[dict[str, Any]], use_excess: bool) -> list[dict[str, Any]]:
+def label(
+    data: list[dict[str, Any]], use_excess: bool, use_overlap: bool
+) -> list[dict[str, Any]]:
     labelled_data: list[dict[str, Any]] = []
     for i, entry in enumerate(data):
         if "valid" in entry:
@@ -122,7 +135,7 @@ def label(data: list[dict[str, Any]], use_excess: bool) -> list[dict[str, Any]]:
 
         print(f"ENTRY {i+1}/{len(data)}")
 
-        new_data = label_entry(entry, use_excess)
+        new_data = label_entry(entry, use_excess, use_overlap)
         if new_data is None:
             break
 
@@ -152,6 +165,7 @@ def main(
     output_path: Annotated[Optional[Path], typer.Option("--output", "-o")] = None,
     max_samples: Annotated[Optional[int], typer.Option("--max-samples", "-n")] = None,
     use_excess: Annotated[bool, typer.Option("--use-excess", "-x")] = False,
+    use_overlap: Annotated[bool, typer.Option("--use-overlap", "-O")] = False,
 ) -> None:
     data = json.loads(data_path.read_text())[:max_samples]
     print("Loaded", len(data), "samples")
@@ -165,7 +179,7 @@ def main(
         print(f"Skipping {n_skipped} already labelled samples")
     print()
 
-    if labelled_data := label(data, use_excess):
+    if labelled_data := label(data, use_excess, use_overlap):
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(json.dumps(labelled_data, indent=2))
 
