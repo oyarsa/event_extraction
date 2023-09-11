@@ -1,5 +1,6 @@
 *.json
 !prediction_output.json
+!evaluation_output.json
 !prediction_substr.json
 !**/*labelled*.json
 !classifier_config.json
