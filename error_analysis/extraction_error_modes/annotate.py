@@ -38,9 +38,9 @@ def symm_substr(a: str, b: str) -> bool:
     return a in b or b in a
 
 
-def annotate_entry(entry: dict[str, str]) -> bool | None:
-    cause_pred, effect_pred = parse_instance(entry["output"])
-    cause_gold, effect_gold = parse_instance(entry["gold"])
+def annotate_entry(gold: str, pred: str) -> bool | None:
+    cause_pred, effect_pred = parse_instance(pred)
+    cause_gold, effect_gold = parse_instance(gold)
 
     if not (cause_pred and effect_pred and cause_gold and effect_gold):
         return False
@@ -55,7 +55,10 @@ def annotate_entry(entry: dict[str, str]) -> bool | None:
 
 
 def annotate(data: list[dict[str, str]]) -> list[dict[str, Any]]:
-    return [{**entry, "valid": annotate_entry(entry)} for entry in data]
+    return [
+        {**entry, "valid": annotate_entry(entry["gold"], entry["output"])}
+        for entry in data
+    ]
 
 
 def main() -> None:
