@@ -19,7 +19,7 @@ import torch.backends.mps
 import transformers
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from torch.optim import AdamW
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 from transformers import (
     AutoConfig,
@@ -37,11 +37,11 @@ class Config:
     # Classifier model name or path
     model_name: str
     # Path to data. Will be used for both train and dev.
-    data_path: Path
+    train_data_path: Path
+    # Evaluation data
+    eval_data_path: Path
     # Learning rate for AdamW optimizer
     learning_rate: float
-    # Percentage of data to use for training
-    split_percentage: float
     # Number of epochs to train
     num_epochs: int
     # Maximum length for model output (tokens)
@@ -61,16 +61,18 @@ class Config:
     output_name: str | None = None
     # Whether to use the passage as part of the model input
     use_passage: bool = False
-    # Test data
-    test_data_path: Path | None = None
-    # Evaluation data
-    eval_data_path: Path | None = None
     # Do train
     do_train: bool = True
+    # Do test
+    do_test: bool = False
     # Do prediction
     do_prediction: bool = False
     # Do evaluation
     do_evaluation: bool = False
+    # Test data
+    test_data_path: Path | None = None
+    # Prediction data
+    prediction_data_path: Path | None = None
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -325,17 +327,14 @@ def preprocess_data(
     data: list[dict[str, Any]],
     tokenizer: PreTrainedTokenizer,
     max_seq_length: int,
-    split_percentage: float,
     batch_size: int,
     use_passage: bool,
     has_labels: bool,
-) -> tuple[DataLoader, DataLoader]:
-    if use_passage:
-        text = [d["input"] for d in data]
-        pair = [d["gold"] + " [SEP] " + d["output"] for d in data]
-    else:
-        text = [d["gold"] for d in data]
-        pair = [d["output"] for d in data]
+) -> DataLoader:
+    text_key = "input" if use_passage else "gold"
+    text = [d[text_key] for d in data]
+    pair = [d["output"] for d in data]
+
     model_inputs = tokenizer(
         text,
         pair,
@@ -348,15 +347,9 @@ def preprocess_data(
         labels = torch.tensor([int(d["valid"]) for d in data])
     else:
         labels = None
+
     dataset = ClassifierDataset(input_tokens=model_inputs, labels=labels, data=data)
-    train_size = int(split_percentage * len(dataset))
-    val_size = len(dataset) - train_size
-    train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
-
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
-
-    return train_loader, val_loader
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
 
 def save_model(
@@ -432,20 +425,30 @@ def run_training(
     output_dir: Path,
 ) -> PreTrainedModel:
     logger.info(">>>> TRAINING <<<<")
-    data = json.loads(config.data_path.read_text())[: config.max_samples]
-    train_loader, val_loader = preprocess_data(
-        data,
+    train_data = json.loads(config.train_data_path.read_text())[: config.max_samples]
+    train_loader = preprocess_data(
+        train_data,
         tokenizer,
         config.max_seq_length,
-        config.split_percentage,
         config.batch_size,
         config.use_passage,
+        has_labels=True,
+    )
+
+    eval_data = json.loads(config.eval_data_path.read_text())[: config.max_samples]
+    eval_loader = preprocess_data(
+        eval_data,
+        tokenizer,
+        config.max_seq_length,
+        config.batch_size,
+        config.use_passage,
+        has_labels=True,
     )
 
     trained_model = train(
         model,
         train_loader,
-        val_loader,
+        eval_loader,
         device,
         config.num_epochs,
         config.learning_rate,
@@ -453,7 +456,7 @@ def run_training(
     )
     save_model(trained_model, tokenizer, output_dir)
 
-    results = evaluate(trained_model, val_loader, device, desc="Final evaluation")
+    results = evaluate(trained_model, eval_loader, device, desc="Final evaluation")
     metrics = calc_metrics(results)
     report_metrics(metrics)
     save_eval_results(results, metrics, output_dir, desc="eval")
@@ -470,6 +473,7 @@ def report_prediction(results: PredictionResult) -> None:
 
 def run_evaluation(
     model: PreTrainedModel,
+    data_path: Path,
     config: Config,
     tokenizer: PreTrainedTokenizer,
     device: torch.device,
@@ -478,15 +482,12 @@ def run_evaluation(
     model = model.to(device)
 
     logger.info(">>>> EVALUATION <<<<")
-    if config.eval_data_path is None:
-        raise ValueError("Eval data path must be specified for evaluation.")
 
-    data = json.loads(config.eval_data_path.read_text())[: config.max_samples]
-    loader, _ = preprocess_data(
+    data = json.loads(data_path.read_text())[: config.max_samples]
+    loader = preprocess_data(
         data,
         tokenizer,
         config.max_seq_length,
-        1,
         config.batch_size,
         config.use_passage,
         has_labels=True,
@@ -500,6 +501,7 @@ def run_evaluation(
 
 def run_prediction(
     model: PreTrainedModel,
+    data_path: Path,
     config: Config,
     tokenizer: PreTrainedTokenizer,
     device: torch.device,
@@ -508,15 +510,12 @@ def run_prediction(
     model = model.to(device)
 
     logger.info(">>>> TESTING <<<<")
-    if config.test_data_path is None:
-        raise ValueError("Test data path must be specified for testing.")
 
-    data = json.loads(config.test_data_path.read_text())[: config.max_samples]
-    loader, _ = preprocess_data(
+    data = json.loads(data_path.read_text())[: config.max_samples]
+    loader = preprocess_data(
         data,
         tokenizer,
         config.max_seq_length,
-        1,
         config.batch_size,
         config.use_passage,
         has_labels=False,
@@ -551,10 +550,28 @@ def main() -> None:
         model = run_training(model, config, tokenizer, device, output_dir)
 
     if config.do_evaluation:
-        run_evaluation(model, config, tokenizer, device, output_dir)
+        if config.eval_data_path is None:
+            raise ValueError("Eval data path must be specified for evaluation.")
+
+        run_evaluation(
+            model, config.eval_data_path, config, tokenizer, device, output_dir
+        )
+
+    if config.do_test:
+        if config.test_data_path is None:
+            raise ValueError("Test data path must be specified for testing.")
+
+        run_evaluation(
+            model, config.test_data_path, config, tokenizer, device, output_dir
+        )
 
     if config.do_prediction:
-        run_prediction(model, config, tokenizer, device, output_dir)
+        if config.prediction_data_path is None:
+            raise ValueError("Prediction data path must be specified for prediction.")
+
+        run_prediction(
+            model, config.prediction_data_path, config, tokenizer, device, output_dir
+        )
 
 
 if __name__ == "__main__":
