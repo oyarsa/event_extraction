@@ -1,7 +1,6 @@
 import collections
 import copy
 import dataclasses
-import json
 import logging
 import os
 import random
@@ -12,6 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import json5 as json
 import numpy as np
 import simple_parsing
 import torch
@@ -65,14 +65,14 @@ class Config:
     do_train: bool = True
     # Do test
     do_test: bool = False
-    # Do prediction
-    do_prediction: bool = False
+    # Do inference
+    do_inference: bool = False
     # Do evaluation
     do_evaluation: bool = False
     # Test data
     test_data_path: Path | None = None
-    # Prediction data
-    prediction_data_path: Path | None = None
+    # Inference data
+    infer_data_path: Path | None = None
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -91,6 +91,13 @@ class Config:
             value = val.resolve() if isinstance(val, Path) else val
             config_lines.append(f"  {key}: {value}")
         return "\n".join(config_lines)
+
+
+def load_json(path: Path, n: int | None) -> list[dict[str, Any]]:
+    data = json.loads(path.read_text())
+    assert isinstance(data, list), "JSON file should be a list of objects"
+    assert isinstance(data[0], dict), "JSON list should contain objects"
+    return data[:n]
 
 
 @dataclasses.dataclass
@@ -201,19 +208,19 @@ def evaluate(
 
 
 @dataclasses.dataclass
-class PredictionResult:
+class InferenceResult:
     preds: list[int]
     passages: list[str]
     outputs: list[str]
     annotations: list[str]
 
 
-def predict(
+def infer(
     model: PreTrainedModel,
     val_loader: DataLoader,
     device: torch.device,
     desc: str,
-) -> PredictionResult:
+) -> InferenceResult:
     preds: list[int] = []
     passages: list[str] = []
     outputs: list[str] = []
@@ -233,7 +240,7 @@ def predict(
             outputs.extend(batch["output"])
             annotations.extend(batch["gold"])
 
-    return PredictionResult(
+    return InferenceResult(
         preds=preds,
         passages=passages,
         outputs=outputs,
@@ -404,7 +411,9 @@ def save_eval_results(
     (output_dir / f"{desc}_metrics.json").write_text(json.dumps(metrics, indent=2))
 
 
-def save_prediction_results(results: PredictionResult, output_dir: Path) -> None:
+def save_inference_results(
+    results: InferenceResult, output_dir: Path, desc: str = "inference"
+) -> None:
     r = [
         {
             "valid": bool(results.preds[i]),
@@ -414,7 +423,7 @@ def save_prediction_results(results: PredictionResult, output_dir: Path) -> None
         }
         for i in range(len(results.preds))
     ]
-    (output_dir / "prediction_results.json").write_text(json.dumps(r, indent=2))
+    (output_dir / f"{desc}_results.json").write_text(json.dumps(r, indent=2))
 
 
 def run_training(
@@ -425,7 +434,7 @@ def run_training(
     output_dir: Path,
 ) -> PreTrainedModel:
     logger.info(">>>> TRAINING <<<<")
-    train_data = json.loads(config.train_data_path.read_text())[: config.max_samples]
+    train_data = load_json(config.train_data_path, config.max_samples)
     train_loader = preprocess_data(
         train_data,
         tokenizer,
@@ -435,7 +444,7 @@ def run_training(
         has_labels=True,
     )
 
-    eval_data = json.loads(config.eval_data_path.read_text())[: config.max_samples]
+    eval_data = load_json(config.eval_data_path, config.max_samples)
     eval_loader = preprocess_data(
         eval_data,
         tokenizer,
@@ -464,11 +473,11 @@ def run_training(
     return trained_model
 
 
-def report_prediction(results: PredictionResult) -> None:
+def report_inference(results: InferenceResult) -> None:
     c = collections.Counter(results.preds)
-    logger.info("Prediction results:")
-    logger.info(f"  Valid: {c[True]}")
-    logger.info(f"  Invalid: {c[False]}")
+    logger.info("Inference results:")
+    logger.info(f"  Valid: {c[True]} ({c[True] / len(results.preds):.2%})")
+    logger.info(f"  Invalid: {c[False]} ({c[False] / len(results.preds):.2%})")
 
 
 def run_evaluation(
@@ -478,12 +487,13 @@ def run_evaluation(
     tokenizer: PreTrainedTokenizer,
     device: torch.device,
     output_dir: Path,
+    desc: str,
 ) -> None:
     model = model.to(device)
 
     logger.info(">>>> EVALUATION <<<<")
 
-    data = json.loads(data_path.read_text())[: config.max_samples]
+    data = load_json(data_path, config.max_samples)
     loader = preprocess_data(
         data,
         tokenizer,
@@ -496,10 +506,10 @@ def run_evaluation(
     results = evaluate(model, loader, device, desc="Validation evaluation")
     metrics = calc_metrics(results)
     report_metrics(metrics)
-    save_eval_results(results, metrics, output_dir, desc="val")
+    save_eval_results(results, metrics, output_dir, desc=desc)
 
 
-def run_prediction(
+def run_inference(
     model: PreTrainedModel,
     data_path: Path,
     config: Config,
@@ -511,7 +521,7 @@ def run_prediction(
 
     logger.info(">>>> TESTING <<<<")
 
-    data = json.loads(data_path.read_text())[: config.max_samples]
+    data = load_json(data_path, config.max_samples)
     loader = preprocess_data(
         data,
         tokenizer,
@@ -521,9 +531,9 @@ def run_prediction(
         has_labels=False,
     )
 
-    results = predict(model, loader, device, desc="Prediction")
-    report_prediction(results)
-    save_prediction_results(results, output_dir)
+    results = infer(model, loader, device, desc="Inference")
+    report_inference(results)
+    save_inference_results(results, output_dir)
 
 
 def main() -> None:
@@ -554,7 +564,13 @@ def main() -> None:
             raise ValueError("Eval data path must be specified for evaluation.")
 
         run_evaluation(
-            model, config.eval_data_path, config, tokenizer, device, output_dir
+            model,
+            config.eval_data_path,
+            config,
+            tokenizer,
+            device,
+            output_dir,
+            desc="eval",
         )
 
     if config.do_test:
@@ -562,15 +578,21 @@ def main() -> None:
             raise ValueError("Test data path must be specified for testing.")
 
         run_evaluation(
-            model, config.test_data_path, config, tokenizer, device, output_dir
+            model,
+            config.test_data_path,
+            config,
+            tokenizer,
+            device,
+            output_dir,
+            desc="test",
         )
 
-    if config.do_prediction:
-        if config.prediction_data_path is None:
-            raise ValueError("Prediction data path must be specified for prediction.")
+    if config.do_inference:
+        if config.infer_data_path is None:
+            raise ValueError("Inference data path must be specified for inference.")
 
-        run_prediction(
-            model, config.prediction_data_path, config, tokenizer, device, output_dir
+        run_inference(
+            model, config.infer_data_path, config, tokenizer, device, output_dir
         )
 
 
