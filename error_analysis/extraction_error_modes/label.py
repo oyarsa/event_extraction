@@ -110,16 +110,16 @@ def label_entry(
     print(show(entry, use_excess, use_overlap))
 
     while True:
-        print("Valid extraction? y/n/q: ", end="", flush=True)
+        print("Valid extraction? (y|space)/n/q: ", end="", flush=True)
 
         answer = readkey().lower()
         if answer == "q":
             return None
-        if answer not in ["y", "n"]:
+        if answer not in ["y", "n", " "]:
             print("Invalid answer")
             continue
 
-        valid = answer == "y"
+        valid = answer in ["y", " "]
         print("valid" if valid else "invalid")
         return {**entry, "valid": valid}
 
