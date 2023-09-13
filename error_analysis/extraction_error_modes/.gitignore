@@ -4,4 +4,5 @@
 !prediction_substr.json
 !**/*labelled*.json
 !classifier_config.json
+!training/*.json
 output/
