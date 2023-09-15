@@ -69,12 +69,12 @@ def main() -> None:
     for value in [True, False, None]:
         print(f"{value}: {sum(entry['valid'] is value for entry in annotated)}")
 
-    good_to_go = [entry for entry in annotated if entry["valid"] is not None]
+    rule_labelled = [entry for entry in annotated if entry["valid"] is not None]
     to_classify = [entry for entry in annotated if entry["valid"] is None]
 
     config.output_path.mkdir(exist_ok=True, parents=True)
-    (config.output_path / "good_to_go.json").write_text(
-        json.dumps(good_to_go, indent=2)
+    (config.output_path / "rule_labelled.json").write_text(
+        json.dumps(rule_labelled, indent=2)
     )
     (config.output_path / "to_classify.json").write_text(
         json.dumps(to_classify, indent=2)
