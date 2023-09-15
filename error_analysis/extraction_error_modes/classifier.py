@@ -1,6 +1,7 @@
 import collections
 import copy
 import dataclasses
+import json
 import logging
 import os
 import random
@@ -11,7 +12,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-import json5 as json
 import numpy as np
 import simple_parsing
 import torch
@@ -491,7 +491,7 @@ def run_evaluation(
 ) -> None:
     model = model.to(device)
 
-    logger.info(">>>> EVALUATION <<<<")
+    logger.info(f">>>> {desc.upper()} <<<<")
 
     data = load_json(data_path, config.max_samples)
     loader = preprocess_data(
@@ -503,7 +503,7 @@ def run_evaluation(
         has_labels=True,
     )
 
-    results = evaluate(model, loader, device, desc="Validation evaluation")
+    results = evaluate(model, loader, device, desc=f"{desc.capitalize()} evaluation")
     metrics = calc_metrics(results)
     report_metrics(metrics)
     save_eval_results(results, metrics, output_dir, desc=desc)
@@ -519,7 +519,7 @@ def run_inference(
 ) -> None:
     model = model.to(device)
 
-    logger.info(">>>> TESTING <<<<")
+    logger.info(">>>> INFERENCE <<<<")
 
     data = load_json(data_path, config.max_samples)
     loader = preprocess_data(
