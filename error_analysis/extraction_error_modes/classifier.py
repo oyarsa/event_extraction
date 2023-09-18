@@ -262,13 +262,13 @@ def calc_metrics(results: EvaluationResult) -> dict[str, float]:
     }
 
 
-def report_metrics(metrics: dict[str, float]) -> None:
+def report_metrics(metrics: dict[str, float], desc: str) -> None:
     logger.info(
-        "Evaluation results\n"
+        f"{desc} results\n"
         f"    Accuracy : {metrics['accuracy']:.4f}\n"
         f"    Precision: {metrics['precision']:.4f}\n"
         f"    Recall   : {metrics['recall']:.4f}\n"
-        f"    F1       : {metrics['f1']:.4f}\n",
+        f"    F1       : {metrics['f1']:.4f}\n"
     )
 
 
@@ -280,6 +280,7 @@ def train(
     num_epochs: int,
     learning_rate: float,
     early_stopping_patience: int,
+    metrics_file: Path,
 ) -> PreTrainedModel:
     model = model.to(device)
     optimizer = AdamW(model.parameters(), lr=learning_rate)
@@ -303,7 +304,8 @@ def train(
         )
 
         metrics = calc_metrics(results)
-        report_metrics(metrics)
+        report_metrics(metrics, "Train evaluation")
+        save_metrics(metrics_file, **metrics, loss=avg_train_loss)
 
         if metrics["f1"] > best_f1:
             best_f1 = metrics["f1"]
@@ -317,6 +319,11 @@ def train(
                 break
 
     return best_model
+
+
+def save_metrics(metrics_file: Path, **kwargs: float) -> None:
+    with metrics_file.open("a") as f:
+        f.write(json.dumps(kwargs) + "\n")
 
 
 def get_device() -> torch.device:
@@ -454,6 +461,9 @@ def run_training(
         has_labels=True,
     )
 
+    metrics_file = output_dir / "training_metrics.jsonl"
+    metrics_file.unlink(missing_ok=True)
+    metrics_file.touch()
     trained_model = train(
         model,
         train_loader,
@@ -462,12 +472,13 @@ def run_training(
         config.num_epochs,
         config.learning_rate,
         config.early_stopping_patience,
+        metrics_file,
     )
     save_model(trained_model, tokenizer, output_dir)
 
     results = evaluate(trained_model, eval_loader, device, desc="Final evaluation")
     metrics = calc_metrics(results)
-    report_metrics(metrics)
+    report_metrics(metrics, "Final train evaluation")
     save_eval_results(results, metrics, output_dir, desc="eval")
 
     return trained_model
@@ -505,7 +516,7 @@ def run_evaluation(
 
     results = evaluate(model, loader, device, desc=f"{desc.capitalize()} evaluation")
     metrics = calc_metrics(results)
-    report_metrics(metrics)
+    report_metrics(metrics, desc)
     save_eval_results(results, metrics, output_dir, desc=desc)
 
 
