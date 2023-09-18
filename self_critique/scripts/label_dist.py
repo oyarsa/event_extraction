@@ -16,5 +16,5 @@ freqs = Counter(preds)
 
 print(f"Total: {len(preds)}\n")
 
-for k, v in freqs.items():
+for k, v in sorted(freqs.items()):
     print(f"{k}: {v} ({v/len(preds):.2%})")
