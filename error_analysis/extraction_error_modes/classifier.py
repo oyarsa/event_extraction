@@ -77,13 +77,8 @@ class Config:
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
         for f in dataclasses.fields(self):
-            if f.name not in kwargs:
-                continue
-
-            value = kwargs[f.name]
-            if f.name in ["data_path", "output_dir"]:
-                value = Path(value)
-            setattr(self, f.name, value)
+            if f.name in kwargs:
+                setattr(self, f.name, kwargs[f.name])
 
     def __str__(self) -> str:
         config_lines = [">>>> CONFIGURATION"]
@@ -113,6 +108,7 @@ class ClassifierDataset(Dataset):
         d = {
             "input_ids": self.input_tokens["input_ids"][idx],
             "attention_mask": self.input_tokens["attention_mask"][idx],
+            "token_type_ids": self.input_tokens["token_type_ids"][idx],
             "input": self.data[idx]["input"],
             "output": self.data[idx]["output"],
             "gold": self.data[idx]["gold"],
@@ -146,11 +142,13 @@ def train_epoch(
 
         input_ids = batch["input_ids"].to(device)
         attention_mask = batch["attention_mask"].to(device)
+        token_type_ids = batch["token_type_ids"].to(device)
         labels = batch["labels"].to(device)
 
         outputs = model(
             input_ids,
             attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
             labels=labels,
         )
         loss = outputs.loss
@@ -186,10 +184,13 @@ def evaluate(
     for batch in tqdm(val_loader, desc=desc):
         input_ids = batch["input_ids"].to(device)
         attention_mask = batch["attention_mask"].to(device)
+        token_type_ids = batch["token_type_ids"].to(device)
         labels = batch["labels"].to(device)
 
         with torch.no_grad():
-            model_outputs = model(input_ids, attention_mask=attention_mask)
+            model_outputs = model(
+                input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids
+            )
 
             preds.extend(torch.argmax(model_outputs.logits, dim=1).tolist())
             golds.extend(labels.tolist())
@@ -230,9 +231,12 @@ def infer(
     for batch in tqdm(val_loader, desc=desc):
         input_ids = batch["input_ids"].to(device)
         attention_mask = batch["attention_mask"].to(device)
+        token_type_ids = batch["token_type_ids"].to(device)
 
         with torch.no_grad():
-            model_outputs = model(input_ids, attention_mask=attention_mask)
+            model_outputs = model(
+                input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids
+            )
 
             preds.extend(torch.argmax(model_outputs.logits, dim=1).tolist())
 
@@ -356,6 +360,7 @@ def preprocess_data(
         truncation=True,
         return_tensors="pt",
         max_length=max_seq_length,
+        return_token_type_ids=True,
     )
     if has_labels:
         labels = torch.tensor([int(d["valid"]) for d in data])
