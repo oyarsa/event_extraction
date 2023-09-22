@@ -73,6 +73,8 @@ class Config:
     test_data_path: Path | None = None
     # Inference data
     infer_data_path: Path | None = None
+    # Dropout percentage for transformer model
+    dropout: float | None = None
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -88,38 +90,14 @@ class Config:
         return "\n".join(config_lines)
 
 
-def load_json(path: Path, n: int | None) -> list[dict[str, Any]]:
-    data = json.loads(path.read_text())
-    assert isinstance(data, list), "JSON file should be a list of objects"
-    assert isinstance(data[0], dict), "JSON list should contain objects"
-    return data[:n]
-
-
-@dataclasses.dataclass
-class ClassifierDataset(Dataset):
-    input_tokens: Mapping[str, torch.Tensor]
-    labels: torch.Tensor | None
-    data: list[dict[str, Any]]
-
-    def __len__(self) -> int:
-        return self.input_tokens["input_ids"].size(0)
-
-    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
-        d = {
-            "input_ids": self.input_tokens["input_ids"][idx],
-            "attention_mask": self.input_tokens["attention_mask"][idx],
-            "token_type_ids": self.input_tokens["token_type_ids"][idx],
-            "input": self.data[idx]["input"],
-            "output": self.data[idx]["output"],
-            "gold": self.data[idx]["gold"],
-        }
-        if self.labels is not None:
-            d["labels"] = self.labels[idx]
-        return d
-
-
-def init_model(model_name: str) -> tuple[PreTrainedTokenizer, PreTrainedModel]:
+def init_model(
+    model_name: str, dropout: float | None
+) -> tuple[PreTrainedTokenizer, PreTrainedModel]:
     config = AutoConfig.from_pretrained(model_name)
+    if dropout is not None:
+        config.hidden_dropout_prob = dropout
+        config.attention_probs_dropout_prob = dropout
+
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name, config=config
@@ -166,6 +144,7 @@ class EvaluationResult:
     passages: list[str]
     outputs: list[str]
     annotations: list[str]
+    loss: float
 
 
 def evaluate(
@@ -179,6 +158,7 @@ def evaluate(
     passages: list[str] = []
     outputs: list[str] = []
     annotations: list[str] = []
+    loss: float = 0
 
     model.eval()
     for batch in tqdm(val_loader, desc=desc):
@@ -189,11 +169,15 @@ def evaluate(
 
         with torch.no_grad():
             model_outputs = model(
-                input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids
+                input_ids,
+                attention_mask=attention_mask,
+                token_type_ids=token_type_ids,
+                labels=labels,
             )
 
             preds.extend(torch.argmax(model_outputs.logits, dim=1).tolist())
             golds.extend(labels.tolist())
+            loss += model_outputs.loss.item()
 
             passages.extend(batch["input"])
             outputs.extend(batch["output"])
@@ -205,6 +189,7 @@ def evaluate(
         passages=passages,
         outputs=outputs,
         annotations=annotations,
+        loss=loss / len(val_loader),
     )
 
 
@@ -263,16 +248,18 @@ def calc_metrics(results: EvaluationResult) -> dict[str, float]:
         "precision": float(prec),
         "recall": float(rec),
         "f1": float(f1),
+        "eval_loss": results.loss,
     }
 
 
 def report_metrics(metrics: dict[str, float], desc: str) -> None:
     logger.info(
         f"{desc} results\n"
-        f"    Accuracy : {metrics['accuracy']:.4f}\n"
-        f"    Precision: {metrics['precision']:.4f}\n"
-        f"    Recall   : {metrics['recall']:.4f}\n"
-        f"    F1       : {metrics['f1']:.4f}\n"
+        f"    Accuracy      : {metrics['accuracy']:.4f}\n"
+        f"    Precision     : {metrics['precision']:.4f}\n"
+        f"    Recall        : {metrics['recall']:.4f}\n"
+        f"    F1            : {metrics['f1']:.4f}\n"
+        f"    Eval Loss     : {metrics['eval_loss']:.4f}\n"
     )
 
 
@@ -309,7 +296,7 @@ def train(
 
         metrics = calc_metrics(results)
         report_metrics(metrics, "Train evaluation")
-        save_metrics(metrics_file, **metrics, loss=avg_train_loss)
+        save_metrics(metrics_file, **metrics, train_loss=avg_train_loss)
 
         if metrics["f1"] > best_f1:
             best_f1 = metrics["f1"]
@@ -341,17 +328,65 @@ def get_device() -> torch.device:
     return torch.device(device)
 
 
+@dataclasses.dataclass
+class DataEntry:
+    input: str
+    output: str
+    gold: str
+    valid: bool
+
+
+@dataclasses.dataclass
+class ClassifierDataset(Dataset):
+    input_tokens: Mapping[str, torch.Tensor]
+    labels: torch.Tensor | None
+    data: list[DataEntry]
+
+    def __len__(self) -> int:
+        return self.input_tokens["input_ids"].size(0)
+
+    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
+        d = {
+            "input_ids": self.input_tokens["input_ids"][idx],
+            "attention_mask": self.input_tokens["attention_mask"][idx],
+            "token_type_ids": self.input_tokens["token_type_ids"][idx],
+            "input": self.data[idx].input,
+            "output": self.data[idx].output,
+            "gold": self.data[idx].gold,
+        }
+        if self.labels is not None:
+            d["labels"] = self.labels[idx]
+        return d
+
+
+def load_json(path: Path, n: int | None) -> list[DataEntry]:
+    data = json.loads(path.read_text())
+    assert isinstance(data, list), "JSON file should be a list of objects"
+    assert isinstance(data[0], dict), "JSON list should contain objects"
+    return [
+        DataEntry(
+            input=d["input"],
+            output=d["output"],
+            gold=d["gold"],
+            valid=d["valid"],
+        )
+        for d in data[:n]
+    ]
+
+
 def preprocess_data(
-    data: list[dict[str, Any]],
+    data: list[DataEntry],
     tokenizer: PreTrainedTokenizer,
     max_seq_length: int,
     batch_size: int,
     use_passage: bool,
     has_labels: bool,
 ) -> DataLoader:
-    text_key = "input" if use_passage else "gold"
-    text = [d[text_key] for d in data]
-    pair = [d["output"] for d in data]
+    if use_passage:
+        text = [d.input for d in data]
+    else:
+        text = [d.gold for d in data]
+    pair = [d.output for d in data]
 
     model_inputs = tokenizer(
         text,
@@ -363,7 +398,7 @@ def preprocess_data(
         return_token_type_ids=True,
     )
     if has_labels:
-        labels = torch.tensor([int(d["valid"]) for d in data])
+        labels = torch.tensor([int(d.valid) for d in data])
     else:
         labels = None
 
@@ -569,7 +604,7 @@ def main() -> None:
         json.dumps(dataclasses.asdict(config), default=str, indent=2)
     )
 
-    tokenizer, model = init_model(config.model_name)
+    tokenizer, model = init_model(config.model_name, config.dropout)
     device = get_device()
 
     if config.do_train:
