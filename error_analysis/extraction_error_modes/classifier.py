@@ -145,6 +145,7 @@ class EvaluationResult:
     outputs: list[str]
     annotations: list[str]
     loss: float
+    tags: list[str] | None = None
 
 
 def evaluate(
@@ -158,6 +159,7 @@ def evaluate(
     passages: list[str] = []
     outputs: list[str] = []
     annotations: list[str] = []
+    tags: list[str] = []
     loss: float = 0
 
     model.eval()
@@ -183,6 +185,9 @@ def evaluate(
             outputs.extend(batch["output"])
             annotations.extend(batch["gold"])
 
+            if "tag" in batch:
+                tags.extend(batch["tag"])
+
     return EvaluationResult(
         golds=golds,
         preds=preds,
@@ -190,6 +195,7 @@ def evaluate(
         outputs=outputs,
         annotations=annotations,
         loss=loss / len(val_loader),
+        tags=tags or None,
     )
 
 
@@ -199,6 +205,7 @@ class InferenceResult:
     passages: list[str]
     outputs: list[str]
     annotations: list[str]
+    tags: list[str] | None = None
 
 
 def infer(
@@ -211,6 +218,7 @@ def infer(
     passages: list[str] = []
     outputs: list[str] = []
     annotations: list[str] = []
+    tags: list[str] = []
 
     model.eval()
     for batch in tqdm(val_loader, desc=desc):
@@ -229,11 +237,15 @@ def infer(
             outputs.extend(batch["output"])
             annotations.extend(batch["gold"])
 
+            if "tag" in batch:
+                tags.extend(batch["tag"])
+
     return InferenceResult(
         preds=preds,
         passages=passages,
         outputs=outputs,
         annotations=annotations,
+        tags=tags or None,
     )
 
 
@@ -273,7 +285,7 @@ def train(
     early_stopping_patience: int,
     metrics_file: Path,
 ) -> PreTrainedModel:
-    model = model.to(device)
+    model = model.to(device)  # type: ignore
     optimizer = AdamW(model.parameters(), lr=learning_rate)
 
     best_f1 = 0
@@ -334,6 +346,7 @@ class DataEntry:
     output: str
     gold: str
     valid: bool
+    tag: str | None = None
 
 
 @dataclasses.dataclass
@@ -356,6 +369,8 @@ class ClassifierDataset(Dataset):
         }
         if self.labels is not None:
             d["labels"] = self.labels[idx]
+        if tag := self.data[idx].tag:
+            d["tag"] = tag
         return d
 
 
@@ -369,6 +384,8 @@ def load_json(path: Path, n: int | None) -> list[DataEntry]:
             output=d["output"],
             gold=d["gold"],
             valid=d["valid"],
+            tag=d["tag"],
+            # tag=d.get("tag"),
         )
         for d in data[:n]
     ]
@@ -451,6 +468,7 @@ def save_eval_results(
             "passage": results.passages[i],
             "output": results.outputs[i],
             "annotation": results.annotations[i],
+            "tag": results.tags[i] if results.tags else None,
         }
         for i in range(len(results.golds))
     ]
@@ -467,6 +485,7 @@ def save_inference_results(
             "input": results.passages[i],
             "output": results.outputs[i],
             "gold": results.annotations[i],
+            "tag": results.tags[i] if results.tags else None,
         }
         for i in range(len(results.preds))
     ]
@@ -540,7 +559,7 @@ def run_evaluation(
     output_dir: Path,
     desc: str,
 ) -> None:
-    model = model.to(device)
+    model = model.to(device)  # type: ignore
 
     logger.info(f">>>> {desc.upper()} <<<<")
 
@@ -568,7 +587,7 @@ def run_inference(
     device: torch.device,
     output_dir: Path,
 ) -> None:
-    model = model.to(device)
+    model = model.to(device)  # type: ignore
 
     logger.info(">>>> INFERENCE <<<<")
 
