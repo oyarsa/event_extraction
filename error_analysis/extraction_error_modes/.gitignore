@@ -6,3 +6,4 @@
 !classifier_config.json
 !training/*.json
 output/
+.virtual_documents
