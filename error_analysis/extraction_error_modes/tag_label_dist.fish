@@ -1,12 +1,14 @@
 #!/usr/bin/env fish
-set tags (jq 'map(.tag)|sort[]' -r output/weak-test/best-weak-original/test_results.json | uniq)
+
+set data_path $argv[1]
+set tags (jq 'map(.tag)|sort[]' -r $data_path | uniq)
 
 for tag in $tags
-    set data (jq --arg tag $tag 'map(select(.tag == $tag))' output/weak-test/best-weak-original/test_results.json)
+    set data (jq --arg tag $tag 'map(select(.tag == $tag))' $data_path)
     echo '>' $tag
     echo PRED
-    ../../self_critique/scripts/label_dist.py --short pred <(echo $data | psub)
+    echo $data | ../../self_critique/scripts/label_dist.py pred --compact
     echo GOLD
-    ../../self_critique/scripts/label_dist.py --short gold <(echo $data | psub)
+    echo $data | ../../self_critique/scripts/label_dist.py gold --compact
     echo
-end
+end | sed -e 's/\b0\b/invalid/' -e 's/\b1\b/valid/'

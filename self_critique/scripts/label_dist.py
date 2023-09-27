@@ -7,7 +7,7 @@ from collections import Counter
 
 parser = argparse.ArgumentParser()
 parser.add_argument("label", type=str)
-parser.add_argument("--short", action="store_true")
+parser.add_argument("--compact", action="store_true")
 
 args = parser.parse_args()
 data = json.load(sys.stdin)
@@ -15,7 +15,7 @@ data = json.load(sys.stdin)
 preds = [d[args.label] for d in data]
 freqs = Counter(preds)
 
-if not args.short:
+if not args.compact:
     print(f"Total: {len(preds)}\n")
 
 for k, v in sorted(freqs.items()):
