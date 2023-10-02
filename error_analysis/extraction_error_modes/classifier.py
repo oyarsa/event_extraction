@@ -19,6 +19,7 @@ import torch.backends.mps
 import transformers
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from torch.optim import AdamW
+from torch.optim.lr_scheduler import LRScheduler
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 from transformers import (
@@ -27,6 +28,7 @@ from transformers import (
     AutoTokenizer,
     PreTrainedModel,
     PreTrainedTokenizer,
+    get_scheduler,
 )
 
 logger = logging.getLogger("classifier")
@@ -46,7 +48,7 @@ class Config:
     num_epochs: int
     # Maximum length for model output (tokens)
     max_seq_length: int
-    # Output directory for model Batch size
+    # Batch size
     batch_size: int
     # Maximum number of epochs without improvement
     early_stopping_patience: int
@@ -75,6 +77,8 @@ class Config:
     infer_data_path: Path | None = None
     # Dropout percentage for transformer model
     dropout: float | None = None
+    # LR scheduler: 'constant', 'linear', 'cosine', etc. See transformers.get_scheduler.
+    lr_scheduler: str = "constant"
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -109,6 +113,7 @@ def train_epoch(
     model: torch.nn.Module,
     train_loader: DataLoader,
     optimizer: AdamW,
+    lr_scheduler: LRScheduler,
     device: torch.device,
     desc: str,
 ) -> float:
@@ -116,8 +121,6 @@ def train_epoch(
 
     model.train()
     for batch in tqdm(train_loader, desc=desc):
-        optimizer.zero_grad()
-
         input_ids = batch["input_ids"].to(device)
         attention_mask = batch["attention_mask"].to(device)
         token_type_ids = batch["token_type_ids"].to(device)
@@ -130,9 +133,12 @@ def train_epoch(
             labels=labels,
         )
         loss = outputs.loss
+        total_loss += loss.item()
+
         loss.backward()
         optimizer.step()
-        total_loss += loss.item()
+        lr_scheduler.step()
+        optimizer.zero_grad()
 
     return total_loss / len(train_loader)
 
@@ -283,10 +289,17 @@ def train(
     num_epochs: int,
     learning_rate: float,
     early_stopping_patience: int,
+    scheduler_type: str,
     metrics_file: Path,
 ) -> PreTrainedModel:
     model = model.to(device)  # type: ignore
     optimizer = AdamW(model.parameters(), lr=learning_rate)
+    lr_scheduler = get_scheduler(
+        name=scheduler_type,
+        optimizer=optimizer,
+        num_warmup_steps=0,
+        num_training_steps=(len(train_loader) * num_epochs),
+    )
 
     best_f1 = 0
     best_model = copy.deepcopy(model)
@@ -297,6 +310,7 @@ def train(
             model,
             train_loader,
             optimizer,
+            lr_scheduler,
             device,
             desc=f"Training ({epoch + 1}/{num_epochs})",
         )
@@ -531,6 +545,7 @@ def run_training(
         config.num_epochs,
         config.learning_rate,
         config.early_stopping_patience,
+        config.lr_scheduler,
         metrics_file,
     )
     save_model(trained_model, tokenizer, output_dir)
