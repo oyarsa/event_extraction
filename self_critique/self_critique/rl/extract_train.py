@@ -64,8 +64,8 @@ class Config:
     train_file: Path
     # Extraction model name or path
     extraction_model: str
-    # Entailment model name or path
-    entailment_model: str
+    # Reward model name or path
+    reward_model: str
     # Learning rate
     learning_rate: float = 1e-5
     # PPO minibatch size
@@ -110,6 +110,8 @@ class Config:
     log_with: str | None = None
     # Every N batches to evaluate the model
     eval_batches: int = 10
+    # Reward type: 'entailment' or 'valid'
+    reward_type: str = "entailment"
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -135,16 +137,18 @@ class Module:
     tokenizer: PreTrainedTokenizer
 
 
-def load_entailment_model(model_name_or_path: str) -> Module:
+def load_reward_model(
+    model_name_or_path: str, label2id: dict[str, int], id2label: dict[int, str]
+) -> Module:
     config = AutoConfig.from_pretrained(
-        model_name_or_path, num_labels=len(LABEL2ID), revision="main"
+        model_name_or_path, num_labels=len(label2id), revision="main"
     )
     tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, revision="main")
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name_or_path, config=config, revision="main"
     ).train(False)
-    model.config.label2id = LABEL2ID
-    model.config.id2label = ID2LABEL
+    model.config.label2id = label2id
+    model.config.id2label = id2label
 
     return Module(model, tokenizer)
 
@@ -188,41 +192,36 @@ def text_encode(
     )
 
 
-LABEL2ID = {
-    "CONTRADICTION": 0,
-    "ENTAILMENT": 1,
-    "NEUTRAL": 2,
-}
-ID2LABEL = {id: label for label, id in LABEL2ID.items()}
-
-
-def run_entailment(
-    entailment: Module,
+def run_reward(
+    reward: Module,
     max_seq_length: int,
     batch_size: int,
     sentence1: list[str],
     sentence2: list[str],
     device: torch.device,
+    label2id: dict[str, int],
+    id2label: dict[int, str],
+    true_class: str,
 ) -> tuple[list[torch.FloatTensor], list[str]]:
-    inputs = text_encode(entailment.tokenizer, max_seq_length, sentence1, sentence2)
+    inputs = text_encode(reward.tokenizer, max_seq_length, sentence1, sentence2)
     dataset = TensorDataset(inputs["input_ids"], inputs["attention_mask"])
     loader = DataLoader(dataset, batch_size=batch_size)
 
     scores: list[torch.FloatTensor] = []
     predictions: list[str] = []
 
-    entailment.model.eval()
+    reward.model.eval()
     with torch.no_grad():
         for input_ids, attention_mask in loader:
-            outputs = entailment.model(
+            outputs = reward.model(
                 input_ids=input_ids.to(device),
                 attention_mask=attention_mask.to(device),
             )
-            # Get logit for the entailment class and use it as a score
-            scores.extend(outputs.logits.select(dim=-1, index=LABEL2ID["ENTAILMENT"]))
+            # Get logit for the reward class and use it as a score
+            scores.extend(outputs.logits.select(dim=-1, index=label2id[true_class]))
 
             preds = torch.argmax(outputs.logits, dim=-1)
-            predictions.extend(ID2LABEL[int(x.item())] for x in preds)
+            predictions.extend(id2label[int(x.item())] for x in preds)
 
     return scores, predictions
 
@@ -231,22 +230,24 @@ def log_tensorboard(
     writer: SummaryWriter,
     eval_output: list[dict[str, Any]],
     n_iter: int,
+    true_class: str,
 ) -> None:
-    ratio = sum(x["entailment_label"] == "ENTAILMENT" for x in eval_output) / len(
-        eval_output
-    )
-    writer.add_scalar("eval/entailment_ratio", ratio, n_iter)
+    ratio = sum(x["reward_label"] == true_class for x in eval_output) / len(eval_output)
+    writer.add_scalar("eval/reward_ratio", ratio, n_iter)
 
 
 def train_extract(
     extract: Module,
     extract_ref: PreTrainedModel,
-    entailment: Module,
+    reward: Module,
     train_dataset: Dataset,
     args: Config,
     eval_dataset: Dataset | None,
     output_dir: Path,
     eval_batches: int,
+    true_class: str,
+    label2id: dict[str, int],
+    id2label: dict[int, str],
 ) -> tuple[Module, torch.device]:
     ppo_config = PPOConfig(
         model_name=args.extraction_model,
@@ -272,7 +273,7 @@ def train_extract(
     best_ratio = 0.0
 
     device = ppo_trainer.accelerator.device
-    entailment.model = entailment.model.to(device)
+    reward.model = reward.model.to(device)
     tb_writer = SummaryWriter(log_dir=output_dir / "tb")
 
     # Evaluate before training to facilitate comparison with batches
@@ -281,9 +282,12 @@ def train_extract(
             dataset=eval_dataset,
             extract=extract,
             extract_ref=extract_ref,
-            entailment=entailment,
+            reward=reward,
             args=args,
             device=device,
+            true_class=true_class,
+            label2id=label2id,
+            id2label=id2label,
             desc="Eval (-1)",
         )
         save_results(
@@ -291,7 +295,7 @@ def train_extract(
             dir=output_dir,
             file_name="mini_eval_result_0.0.json",
         )
-        log_tensorboard(tb_writer, eval_result, -1)
+        log_tensorboard(tb_writer, eval_result, -1, true_class)
 
     for epoch in range(args.num_epochs):
         for batch_idx, batch in enumerate(
@@ -308,19 +312,22 @@ def train_extract(
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
 
-            scores, labels = run_entailment(
-                entailment=entailment,
+            scores, labels = run_reward(
+                reward=reward,
                 max_seq_length=args.max_seq_length,
                 batch_size=args.batch_size,
                 sentence1=batch["context"],
                 sentence2=extract_response,
                 device=device,
+                true_class=true_class,
+                label2id=label2id,
+                id2label=id2label,
             )
             rewards = scores
 
             stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
-            stats["metrics/entailment_ratio"] = sum(
-                label == "ENTAILMENT" for label in labels
+            stats["metrics/reward_ratio"] = sum(
+                label == true_class for label in labels
             ) / len(labels)
             log_batch = {
                 "query": query_tensors,
@@ -333,9 +340,12 @@ def train_extract(
                     dataset=eval_dataset,
                     extract=extract,
                     extract_ref=extract_ref,
-                    entailment=entailment,
+                    reward=reward,
                     args=args,
                     device=device,
+                    true_class=true_class,
+                    label2id=label2id,
+                    id2label=id2label,
                     desc=f"Eval  ({epoch}.{batch_idx+1})",
                 )
                 save_results(
@@ -347,10 +357,11 @@ def train_extract(
                     tb_writer,
                     eval_result,
                     epoch * len(ppo_trainer.dataloader) + batch_idx,
+                    true_class,
                 )
 
                 eval_ratio = sum(
-                    d["entailment_label"] == "ENTAILMENT" for d in eval_result
+                    d["reward_label"] == true_class for d in eval_result
                 ) / len(eval_result)
                 if eval_ratio > best_ratio:
                     best_model = copy.deepcopy(ppo_trainer.model)
@@ -376,10 +387,13 @@ def train_extract(
             eval_result = evaluate(
                 dataset=eval_dataset,
                 extract=extract,
-                entailment=entailment,
+                reward=reward,
                 extract_ref=extract_ref,
                 args=args,
                 device=device,
+                true_class=true_class,
+                label2id=label2id,
+                id2label=id2label,
                 desc=f"Eval  ({epoch})",
             )
             save_results(
@@ -507,15 +521,18 @@ def evaluate(
     dataset: Dataset,
     extract: Module,
     extract_ref: PreTrainedModel,
-    entailment: Module,
+    reward: Module,
     device: torch.device,
     args: Config,
+    true_class: str,
+    label2id: dict[str, int],
+    id2label: dict[int, str],
     desc: str | None = None,
 ) -> list[dict[str, Any]]:
     @dataclass
     class BlockOutput:
         extract_txt: list[str]
-        entailment_labels: list[str]
+        reward_labels: list[str]
         scores: list[torch.FloatTensor]
 
     def run_block(
@@ -532,16 +549,19 @@ def evaluate(
         )
         extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
-        scores, entailment_labels = run_entailment(
-            entailment=entailment,
+        scores, reward_labels = run_reward(
+            reward=reward,
             max_seq_length=args.max_seq_length,
             batch_size=args.batch_size,
             sentence1=original_sentence,
             sentence2=extract_response_txt,
             device=device,
+            true_class=true_class,
+            label2id=label2id,
+            id2label=id2label,
         )
 
-        return BlockOutput(extract_response_txt, entailment_labels, scores)
+        return BlockOutput(extract_response_txt, reward_labels, scores)
 
     desc = desc or "Evaluate"
     loader = DataLoader(dataset, batch_size=args.batch_size)
@@ -554,7 +574,7 @@ def evaluate(
         rl_output = run_block(extract.model, inputs, original_sentence)
         ref_output = run_block(extract_ref, inputs, original_sentence)
 
-        assert len(rl_output.entailment_labels) == len(inputs)
+        assert len(rl_output.reward_labels) == len(inputs)
         for i in range(len(inputs)):
             output.append(
                 {
@@ -564,17 +584,17 @@ def evaluate(
                     "context": batch["context"][i],
                     "rl_extract_txt": rl_output.extract_txt[i],
                     "ref_extract_txt": ref_output.extract_txt[i],
-                    "entailment_label": rl_output.entailment_labels[i],
-                    "ref_entailment_label": ref_output.entailment_labels[i],
+                    "reward_label": rl_output.reward_labels[i],
+                    "ref_reward_label": ref_output.reward_labels[i],
                     "scores": rl_output.scores[i].tolist(),
                 }
             )
 
     log_label_distribution(
-        [d["entailment_label"] for d in output], desc=f"{desc}: RL model"
+        [d["reward_label"] for d in output], desc=f"{desc}: RL model"
     )
     log_label_distribution(
-        [d["ref_entailment_label"] for d in output], desc=f"{desc}: Ref model"
+        [d["ref_reward_label"] for d in output], desc=f"{desc}: Ref model"
     )
 
     return output
@@ -614,7 +634,7 @@ def resolve_arg_paths(args: Config) -> Config:
     return dataclasses.replace(
         args,
         extraction_model=resolve(args.extraction_model),
-        entailment_model=resolve(args.entailment_model),
+        reward_model=resolve(args.reward_model),
         train_file=Path(resolve(args.train_file)),
         eval_file=Path(resolve(args.eval_file)) if args.eval_file else None,
         output_dir=Path(resolve(args.output_dir)),
@@ -651,12 +671,29 @@ def main() -> None:
     set_seed(args.seed)
     supress_transformers_warnings()
 
+    if args.reward_type.casefold() == "entailment":
+        label2id = {
+            "CONTRADICTION": 0,
+            "ENTAILMENT": 1,
+            "NEUTRAL": 2,
+        }
+        true_class = "ENTAILMENT"
+    elif args.reward_type.casefold() == "valid":
+        label2id = {
+            "INVALID": 0,
+            "VALID": 1,
+        }
+        true_class = "VALID"
+    else:
+        raise ValueError(f"Unknown reward type: {args.reward_type}")
+    id2label = {id: label for label, id in label2id.items()}
+
     if args.train_file is None:
         raise ValueError("Must provide a training file")
 
     extract = load_seq2seq_valuehead_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(extract.model)
-    entailment = load_entailment_model(args.entailment_model)
+    reward = load_reward_model(args.reward_model, label2id=label2id, id2label=id2label)
 
     train_data = load_data(args.train_file, args.max_train_samples)
     train_dataset = preprocess_data(
@@ -681,12 +718,15 @@ def main() -> None:
     extract, device = train_extract(
         extract=extract,
         extract_ref=extract_ref,
-        entailment=entailment,
+        reward=reward,
         train_dataset=train_dataset,
         args=args,
         eval_dataset=eval_dataset,
         output_dir=output_dir,
         eval_batches=args.eval_batches,
+        true_class=true_class,
+        label2id=label2id,
+        id2label=id2label,
     )
     save_model(extract.model, extract.tokenizer, output_dir)
 
@@ -694,9 +734,12 @@ def main() -> None:
         eval_result = evaluate(
             dataset=eval_dataset,
             extract=extract,
-            entailment=entailment,
+            reward=reward,
             extract_ref=extract_ref,
             args=args,
+            label2id=label2id,
+            id2label=id2label,
+            true_class=true_class,
             device=device,
         )
         save_results(result=eval_result, dir=output_dir, file_name="eval_result.json")
