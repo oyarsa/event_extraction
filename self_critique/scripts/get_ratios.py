@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pyright: basic
 import json
 import re
 from pathlib import Path
@@ -7,12 +8,12 @@ from typing import Annotated
 import typer
 
 
-def get_ratio(data: list[dict[str, str]]) -> float:
-    return sum(x["entailment_label"] == "ENTAILMENT" for x in data) / len(data)
-
-
-def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
-    pairs: list[tuple[float, float]] = []
+def main(
+    path: Annotated[Path, typer.Argument()] = Path("."),
+    key: str = "reward_label",
+    class_: Annotated[str, typer.Option("--class", "-c")] = "entailment",
+) -> None:
+    pairs: list[tuple[float, float, float]] = []
 
     for filename in path.iterdir():
         matches = re.findall(r"mini_eval_result_(\d+)\.(\d+).json", filename.name)
@@ -21,7 +22,8 @@ def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
         data = json.loads(filename.read_text())
 
         epoch, batch = map(int, matches[0])
-        pairs.append((epoch, batch, get_ratio(data)))
+        ratio = sum(x[key].casefold() == class_.casefold() for x in data) / len(data)
+        pairs.append((epoch, batch, ratio))
 
     max_batch = max(batch for _, batch, _ in pairs)
     for epoch, batch, ratio in sorted(pairs):
