@@ -2,7 +2,7 @@
 	"max_train_samples": null,
 	"max_eval_samples": null,
 	"max_predict_samples": null,
-	"num_epochs": 2,
+	"num_epochs": 1,
 	"train_file": "../data/genqa_joint/train.json",
 	"eval_file": "../data/genqa_joint/dev.json",
 	"reward_model": "output/valid_classifier",
