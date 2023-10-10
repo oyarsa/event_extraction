@@ -1,17 +1,10 @@
 "Annotate train and test output with valid label where possible."
 import json
 import re
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import simple_parsing
-
-
-@dataclass
-class Config:
-    data_path: Path
-    output_path: Path
+import typer
 
 
 def parse_instance(answer: str) -> tuple[str | None, str | None]:
@@ -61,9 +54,8 @@ def annotate(data: list[dict[str, str]]) -> list[dict[str, Any]]:
     ]
 
 
-def main() -> None:
-    config = simple_parsing.parse(Config, add_config_path_arg=True)
-    data = json.loads(config.data_path.read_text())
+def main(data_path: Path, output_path: Path, add_classify: bool = False) -> None:
+    data = json.loads(data_path.read_text())
 
     annotated = annotate(data)
     for value in [True, False, None]:
@@ -72,14 +64,11 @@ def main() -> None:
     rule_labelled = [entry for entry in annotated if entry["valid"] is not None]
     to_classify = [entry for entry in annotated if entry["valid"] is None]
 
-    config.output_path.mkdir(exist_ok=True, parents=True)
-    (config.output_path / "rule_labelled.json").write_text(
-        json.dumps(rule_labelled, indent=2)
-    )
-    (config.output_path / "to_classify.json").write_text(
-        json.dumps(to_classify, indent=2)
-    )
+    output_path.mkdir(exist_ok=True, parents=True)
+    (output_path / "rule_labelled.json").write_text(json.dumps(rule_labelled, indent=2))
+    if add_classify:
+        (output_path / "to_classify.json").write_text(json.dumps(to_classify, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    typer.run(main)
