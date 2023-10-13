@@ -2,9 +2,10 @@
 import json
 import re
 import string
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import TypedDict
+from typing import Annotated, TypedDict
 
 import typer
 from sklearn.metrics import precision_recall_fscore_support
@@ -169,7 +170,9 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     }, relation
 
 
-def main(infile: Path) -> None:
+def main(
+    infile: Annotated[Path | None, typer.Argument(allow_dash=True)] = None
+) -> None:
     """Expected format:
 
     - list of objects
@@ -178,7 +181,10 @@ def main(infile: Path) -> None:
         - gold: string. Annotated answer (tag form).
         - output: string. Model prediction (tag form).
     """
-    data = json.loads(infile.read_text())
+    if infile is None:
+        data = json.load(sys.stdin)
+    else:
+        data = json.loads(infile.read_text())
 
     predictions: list[MetricPrediction] = [
         {
