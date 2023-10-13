@@ -169,6 +169,14 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
 
 
 def main(infile: Path) -> None:
+    """Expected format:
+
+    - list of objects
+    - each object has keys: input, gold, output
+        - input: string. Text passage.
+        - gold: string. Annotated answer (tag form).
+        - output: string. Model prediction (tag form).
+    """
     data = json.loads(infile.read_text())
 
     predictions: list[MetricPrediction] = [
