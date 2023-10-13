@@ -60,18 +60,10 @@ def calculate_metrics(
 
 def normalize_answer(s: str) -> str:
     """Lower text and remove punctuation, articles and extra whitespace."""
-    s = s.lower()
-
-    # remove punctuation
-    exclude = set(string.punctuation)
-    s = "".join(ch for ch in s if ch not in exclude)
-
-    # remove articles
+    s = s.casefold()
+    s = "".join(ch for ch in s if ch not in string.punctuation)
     s = re.sub(r"\b(a|an|the)\b", " ", s)
-
-    # remove extra whitespace
     s = " ".join(s.split())
-
     return s
 
 
@@ -82,7 +74,7 @@ def get_tokens(s: str) -> list[str]:
 def compute_metrics(instances: list[Instance]) -> dict[str, float]:
     extraction = compute_extraction_metrics(instances)
     classification = compute_classification_metrics(instances)
-    return {**extraction, **classification}
+    return extraction | classification
 
 
 def compute_classification_metrics(instances: list[Instance]) -> dict[str, float]:
@@ -106,11 +98,11 @@ def compute_classification_metrics(instances: list[Instance]) -> dict[str, float
 
 
 def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
-    gold_lens = {"Cause": 0, "Effect": 0}
-    pred_lens = {"Cause": 0, "Effect": 0}
-    commons = {"Cause": 0, "Effect": 0}
-    equal = {"Cause": 0, "Effect": 0}
-    num_instances = {"Cause": 0, "Effect": 0}
+    gold_lens = {"cause": 0, "effect": 0}
+    pred_lens = {"cause": 0, "effect": 0}
+    commons = {"cause": 0, "effect": 0}
+    equal = {"cause": 0, "effect": 0}
+    num_instances = {"cause": 0, "effect": 0}
 
     for instance in instances:
         kind = instance["kind"]
@@ -151,7 +143,7 @@ def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
     return {metric: macro_avg(metric) for metric in ["precision", "recall", "f1", "em"]}
 
 
-def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
+def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     """Parse string answer to separate into class and spans
     Simple case:
     [Cause] This is a cause [Relation] cause [Effect] This is an effect
@@ -162,8 +154,8 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
     matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
     if not matches:
         return {
-            "Cause": [],
-            "Effect": [],
+            "cause": [],
+            "effect": [],
         }, "cause"
     causes, relation, effects = matches[0]
     causes = sorted(c.strip() for c in causes.split("|") if c.strip())
@@ -171,8 +163,8 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
     relation = relation.strip()
 
     return {
-        "Cause": causes,
-        "Effect": effects,
+        "cause": causes,
+        "effect": effects,
     }, relation
 
 
@@ -196,7 +188,8 @@ def main(infile: Path) -> None:
     ]
 
     metrics = calculate_metrics(predictions, references)
-    print(json.dumps(metrics, indent=2))
+    for key, val in metrics.items():
+        print(f"{key}: {val:.2%}")
 
 
 if __name__ == "__main__":
