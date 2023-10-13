@@ -150,11 +150,11 @@ def evaluate_ensemble(
     loader = DataLoader(dataset, batch_size=batch_size)
 
     outputs: list[tuple[str, str]] = []
-    mean_probs: list[tuple[float, float]] = []
+    mean_logprobs: list[tuple[float, float]] = []
     data: list[dict[str, str]] = []
 
     for batch in tqdm(loader, desc=desc):
-        output1, meanprob1 = generate(
+        output1, mean_logprob1 = generate(
             model1,
             tokenizer,
             batch,
@@ -162,7 +162,7 @@ def evaluate_ensemble(
             degeneration_penalty,
             contrastive_top_k,
         )
-        output2, meanprob2 = generate(
+        output2, mean_logprob2 = generate(
             model2,
             tokenizer,
             batch,
@@ -172,7 +172,7 @@ def evaluate_ensemble(
         )
 
         outputs.extend(zip(output1, output2))
-        mean_probs.extend(zip(meanprob1, meanprob2))
+        mean_logprobs.extend(zip(mean_logprob1, mean_logprob2))
         data.extend(
             {
                 key: batch[key][i]
@@ -185,14 +185,14 @@ def evaluate_ensemble(
         {
             "output1": output1,
             "output2": output2,
-            "mean_prob1": mean_prob1,
-            "mean_prob2": mean_prob2,
-            "text_chosen": output1 if mean_prob1 >= mean_prob2 else output2,
-            "model_chosen": 1 if mean_prob1 >= mean_prob2 else 2,
+            "mean_logprob1": mean_logprob1,
+            "mean_logprob2": mean_logprob2,
+            "text_chosen": output1 if mean_logprob1 >= mean_logprob2 else output2,
+            "model_chosen": 1 if mean_logprob1 >= mean_logprob2 else 2,
             **d,
         }
-        for (output1, output2), (mean_prob1, mean_prob2), d in zip(
-            outputs, mean_probs, data
+        for (output1, output2), (mean_logprob1, mean_logprob2), d in zip(
+            outputs, mean_logprobs, data
         )
     ]
 
