@@ -56,7 +56,7 @@ from trl import (
 )
 
 import self_critique.util
-from self_critique.minimal.util import set_seed, supress_transformers_warnings
+from self_critique.minimal.util import set_seed, suppress_transformers_warnings
 
 logger = logging.getLogger("extract_train")
 
@@ -723,7 +723,7 @@ def main() -> None:
     )
 
     set_seed(args.seed)
-    supress_transformers_warnings()
+    suppress_transformers_warnings()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     extract_og = load_seq2seq_model_og(args.extraction_model, device, train=True)

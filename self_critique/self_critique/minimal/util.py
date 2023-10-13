@@ -28,7 +28,7 @@ def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
         logging.info(f"    {k:>{padding}}: {v}")
 
 
-def supress_transformers_warnings() -> None:
+def suppress_transformers_warnings() -> None:
     "Remove annoying messages about tokenisers and unititialised weights."
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")

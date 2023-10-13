@@ -13,7 +13,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
-from self_critique.minimal.util import set_seed, supress_transformers_warnings
+from self_critique.minimal.util import set_seed, suppress_transformers_warnings
 from self_critique.rl.extract_train import (
     LABELLER,
     Module,
@@ -179,7 +179,7 @@ def main() -> None:
     )
 
     set_seed(args.seed)
-    supress_transformers_warnings()
+    suppress_transformers_warnings()
 
     reconstruction_model = load_seq2seq_model(args.reconstruction_model, train=False)
     entailment_model = load_entailment_model(args.entailment_model, LABELLER)

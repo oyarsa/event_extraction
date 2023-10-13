@@ -50,7 +50,7 @@ import self_critique.util
 from self_critique.minimal.util import (
     save_model,
     set_seed,
-    supress_transformers_warnings,
+    suppress_transformers_warnings,
 )
 
 logger = logging.getLogger("extract_train")
@@ -669,7 +669,7 @@ def main() -> None:
     )
 
     set_seed(args.seed)
-    supress_transformers_warnings()
+    suppress_transformers_warnings()
 
     if args.reward_type.casefold() == "entailment":
         label2id = {

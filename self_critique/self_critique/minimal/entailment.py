@@ -27,7 +27,7 @@ from self_critique.minimal.util import (
     save_model,
     set_seed,
     setup_logging,
-    supress_transformers_warnings,
+    suppress_transformers_warnings,
 )
 
 
@@ -422,7 +422,7 @@ def main() -> None:
     setup_logging(config.log_level)
     logging.info("%s", config)
 
-    supress_transformers_warnings()
+    suppress_transformers_warnings()
 
     # TODO: I think this is erasing the contents of the directory, if there are
     # any. That shouldn't happen. Needs investigation.

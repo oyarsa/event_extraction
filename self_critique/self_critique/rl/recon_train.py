@@ -42,7 +42,7 @@ from trl import (
 from self_critique.minimal.util import (
     save_model,
     set_seed,
-    supress_transformers_warnings,
+    suppress_transformers_warnings,
 )
 
 
@@ -487,7 +487,7 @@ def main() -> None:
     print(f"{args}\n")
 
     set_seed(args.seed)
-    supress_transformers_warnings()
+    suppress_transformers_warnings()
 
     if args.train_file is None:
         raise ValueError("Must provide a training file")
