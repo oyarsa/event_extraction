@@ -112,6 +112,10 @@ class Config:
     eval_batches: int = 10
     # Reward type: 'entailment' or 'valid'
     reward_type: str = "entailment"
+    # Whether to perform training
+    do_train: bool = True
+    # Whether to perform evaluation
+    do_eval: bool = True
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -415,10 +419,19 @@ class Seq2SeqEntry:
     context: str
     question: str
     answers: str
-    question_type: str
 
 
 def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEntry]:
+    """Load data with the expected format.
+
+    JSON list of objects with the following fields:
+    - id: str
+    - context: str
+    - question: str
+    - answers: str
+
+    The JSON list may be behind a "data" key.
+    """
     data = json.loads(file_path.read_text())
     if "data" in data:
         data = data["data"]
@@ -428,7 +441,6 @@ def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEn
             context=d["context"],
             question=d["question"],
             answers=d["answers"],
-            question_type=d["question_type"],
         )
         for d in data
     ][:max_samples]
@@ -474,7 +486,6 @@ class Seq2SeqDatasetEntry(TypedDict):
     labels: torch.Tensor
     id: str
     answers: str
-    question_type: str
     context: str
 
 
@@ -484,7 +495,6 @@ class Seq2SeqDatasetSeries(TypedDict):
     labels: torch.Tensor
     id: list[str]
     answers: list[str]
-    question_type: list[str]
     context: list[str]
 
 
@@ -505,7 +515,6 @@ class Seq2SeqDataset(Dataset):
             "labels": self.target_tokens["input_ids"][idx].to(self.device),
             "id": self.data[idx].id,
             "answers": self.data[idx].answers,
-            "question_type": self.data[idx].question_type,
             "context": self.data[idx].context,
         }
 
@@ -610,7 +619,6 @@ def evaluate(
             {
                 "id": batch["id"][i],
                 "answers": batch["answers"][i],
-                "question_type": batch["question_type"][i],
                 "context": batch["context"][i],
                 "rl_extract_txt": rl_output.extract_txt[i],
                 "ref_extract_txt": ref_output.extract_txt[i],
@@ -745,22 +753,25 @@ def main() -> None:
             desc="evaluation",
         )
 
-    extract, device = train_extract(
-        extract=extract,
-        extract_ref=extract_ref,
-        reward=reward,
-        train_dataset=train_dataset,
-        args=args,
-        eval_dataset=eval_dataset,
-        output_dir=output_dir,
-        eval_batches=args.eval_batches,
-        true_class=true_class,
-        label2id=label2id,
-        id2label=id2label,
-    )
-    save_model(extract.model, extract.tokenizer, output_dir)
+    device: torch.device | None = None
+    if args.do_train:
+        extract, device = train_extract(
+            extract=extract,
+            extract_ref=extract_ref,
+            reward=reward,
+            train_dataset=train_dataset,
+            args=args,
+            eval_dataset=eval_dataset,
+            output_dir=output_dir,
+            eval_batches=args.eval_batches,
+            true_class=true_class,
+            label2id=label2id,
+            id2label=id2label,
+        )
+        save_model(extract.model, extract.tokenizer, output_dir)
 
-    if eval_dataset is not None:
+    if eval_dataset is not None and args.do_eval:
+        device = device or self_critique.util.get_device()
         eval_result = evaluate(
             dataset=eval_dataset,
             extract=extract,
