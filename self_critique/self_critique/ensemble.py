@@ -16,7 +16,6 @@ from transformers.modeling_outputs import Seq2SeqLMOutput
 
 import self_critique.rl.extract_train as ex
 from self_critique.minimal.util import set_seed, suppress_transformers_warnings
-from self_critique.util import get_device
 
 logger = logging.getLogger("self.ensemble")
 
@@ -196,6 +195,17 @@ def evaluate_ensemble(
             outputs, mean_logprobs, data
         )
     ]
+
+
+def get_device() -> torch.device:
+    "Returns MPS if available, CUDA if available, otherwise CPU device."
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
+    return torch.device(device)
 
 
 def main() -> None:

@@ -112,10 +112,6 @@ class Config:
     eval_batches: int = 10
     # Reward type: 'entailment' or 'valid'
     reward_type: str = "entailment"
-    # Whether to perform training
-    do_train: bool = True
-    # Whether to perform evaluation
-    do_eval: bool = True
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -419,19 +415,10 @@ class Seq2SeqEntry:
     context: str
     question: str
     answers: str
+    question_type: str
 
 
 def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEntry]:
-    """Load data with the expected format.
-
-    JSON list of objects with the following fields:
-    - id: str
-    - context: str
-    - question: str
-    - answers: str
-
-    The JSON list may be behind a "data" key.
-    """
     data = json.loads(file_path.read_text())
     if "data" in data:
         data = data["data"]
@@ -441,6 +428,7 @@ def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEn
             context=d["context"],
             question=d["question"],
             answers=d["answers"],
+            question_type=d["question_type"],
         )
         for d in data
     ][:max_samples]
@@ -486,6 +474,7 @@ class Seq2SeqDatasetEntry(TypedDict):
     labels: torch.Tensor
     id: str
     answers: str
+    question_type: str
     context: str
 
 
@@ -495,6 +484,7 @@ class Seq2SeqDatasetSeries(TypedDict):
     labels: torch.Tensor
     id: list[str]
     answers: list[str]
+    question_type: list[str]
     context: list[str]
 
 
@@ -515,6 +505,7 @@ class Seq2SeqDataset(Dataset):
             "labels": self.target_tokens["input_ids"][idx].to(self.device),
             "id": self.data[idx].id,
             "answers": self.data[idx].answers,
+            "question_type": self.data[idx].question_type,
             "context": self.data[idx].context,
         }
 
@@ -524,49 +515,6 @@ def clean_response(s: str, eos_tag: str = "</s>") -> str:
         return s[: s.index(eos_tag)]
     except ValueError:
         return s
-
-
-@dataclass
-class BlockOutput:
-    extract_txt: list[str]
-    reward_labels: list[str]
-    scores: list[torch.FloatTensor]
-
-
-def generate_and_reward(
-    extract_model: PreTrainedModel,
-    inputs: torch.Tensor,
-    original_sentence: list[str],
-    args: Config,
-    tokenizer: PreTrainedTokenizer,
-    reward: Module,
-    device: torch.device,
-    true_class: str,
-    label2id: dict[str, int],
-    id2label: dict[int, str],
-) -> BlockOutput:
-    # Contrastive generation
-    extract_response_tensor = extract_model.generate(
-        inputs,
-        max_length=args.max_generation_length,
-        penalty_alpha=args.degeneration_penalty,
-        top_k=args.contrastive_top_k,
-    )
-    extract_response_txt = text_decode(tokenizer, extract_response_tensor)
-
-    scores, reward_labels = run_reward(
-        reward=reward,
-        max_seq_length=args.max_seq_length,
-        batch_size=args.batch_size,
-        sentence1=original_sentence,
-        sentence2=extract_response_txt,
-        device=device,
-        true_class=true_class,
-        label2id=label2id,
-        id2label=id2label,
-    )
-
-    return BlockOutput(extract_response_txt, reward_labels, scores)
 
 
 def evaluate(
@@ -581,6 +529,40 @@ def evaluate(
     id2label: dict[int, str],
     desc: str | None = None,
 ) -> list[dict[str, Any]]:
+    @dataclass
+    class BlockOutput:
+        extract_txt: list[str]
+        reward_labels: list[str]
+        scores: list[torch.FloatTensor]
+
+    def run_block(
+        extract_model: PreTrainedModel,
+        inputs: torch.Tensor,
+        original_sentence: list[str],
+    ) -> BlockOutput:
+        # Contrastive generation
+        extract_response_tensor = extract_model.generate(
+            inputs,
+            max_length=args.max_generation_length,
+            penalty_alpha=args.degeneration_penalty,
+            top_k=args.contrastive_top_k,
+        )
+        extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
+
+        scores, reward_labels = run_reward(
+            reward=reward,
+            max_seq_length=args.max_seq_length,
+            batch_size=args.batch_size,
+            sentence1=original_sentence,
+            sentence2=extract_response_txt,
+            device=device,
+            true_class=true_class,
+            label2id=label2id,
+            id2label=id2label,
+        )
+
+        return BlockOutput(extract_response_txt, reward_labels, scores)
+
     desc = desc or "Evaluate"
     loader = DataLoader(dataset, batch_size=args.batch_size)
 
@@ -589,45 +571,25 @@ def evaluate(
         inputs = batch["input_ids"].to(device)
         original_sentence = batch["context"]
 
-        rl_output = generate_and_reward(
-            extract.model,
-            inputs,
-            original_sentence,
-            args,
-            extract.tokenizer,
-            reward,
-            device,
-            true_class,
-            label2id,
-            id2label,
-        )
-        ref_output = generate_and_reward(
-            extract_ref,
-            inputs,
-            original_sentence,
-            args,
-            extract.tokenizer,
-            reward,
-            device,
-            true_class,
-            label2id,
-            id2label,
-        )
+        rl_output = run_block(extract.model, inputs, original_sentence)
+        ref_output = run_block(extract_ref, inputs, original_sentence)
 
         assert len(rl_output.reward_labels) == len(inputs)
-        output.extend(
-            {
-                "id": batch["id"][i],
-                "answers": batch["answers"][i],
-                "context": batch["context"][i],
-                "rl_extract_txt": rl_output.extract_txt[i],
-                "ref_extract_txt": ref_output.extract_txt[i],
-                "reward_label": rl_output.reward_labels[i],
-                "ref_reward_label": ref_output.reward_labels[i],
-                "scores": rl_output.scores[i].tolist(),
-            }
-            for i in range(len(inputs))
-        )
+        for i in range(len(inputs)):
+            output.append(
+                {
+                    "id": batch["id"][i],
+                    "answers": batch["answers"][i],
+                    "question_type": batch["question_type"][i],
+                    "context": batch["context"][i],
+                    "rl_extract_txt": rl_output.extract_txt[i],
+                    "ref_extract_txt": ref_output.extract_txt[i],
+                    "reward_label": rl_output.reward_labels[i],
+                    "ref_reward_label": ref_output.reward_labels[i],
+                    "scores": rl_output.scores[i].tolist(),
+                }
+            )
+
     log_label_distribution(
         [d["reward_label"] for d in output], desc=f"{desc}: RL model"
     )
@@ -753,25 +715,22 @@ def main() -> None:
             desc="evaluation",
         )
 
-    device: torch.device | None = None
-    if args.do_train:
-        extract, device = train_extract(
-            extract=extract,
-            extract_ref=extract_ref,
-            reward=reward,
-            train_dataset=train_dataset,
-            args=args,
-            eval_dataset=eval_dataset,
-            output_dir=output_dir,
-            eval_batches=args.eval_batches,
-            true_class=true_class,
-            label2id=label2id,
-            id2label=id2label,
-        )
-        save_model(extract.model, extract.tokenizer, output_dir)
+    extract, device = train_extract(
+        extract=extract,
+        extract_ref=extract_ref,
+        reward=reward,
+        train_dataset=train_dataset,
+        args=args,
+        eval_dataset=eval_dataset,
+        output_dir=output_dir,
+        eval_batches=args.eval_batches,
+        true_class=true_class,
+        label2id=label2id,
+        id2label=id2label,
+    )
+    save_model(extract.model, extract.tokenizer, output_dir)
 
-    if eval_dataset is not None and args.do_eval:
-        device = device or self_critique.util.get_device()
+    if eval_dataset is not None:
         eval_result = evaluate(
             dataset=eval_dataset,
             extract=extract,
