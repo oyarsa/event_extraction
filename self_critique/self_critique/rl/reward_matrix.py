@@ -17,10 +17,11 @@ def run(args: list[Any]) -> None:
         print()
         print(f"Command failed with return code {e.returncode}")
         print("=== stdout ===")
-        print(e.stdout)
+        print(e.stdout.decode())
         print("=== stderr ===")
-        print(e.stderr)
+        print(e.stderr.decode())
         print()
+        sys.exit(e.returncode)
 
 
 def main(
