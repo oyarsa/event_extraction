@@ -1,6 +1,9 @@
 from importlib import resources
 from pathlib import Path
 
+import torch
+import torch.backends.mps
+
 
 def get_root(module: str) -> str:
     files = resources.files(module)
@@ -13,3 +16,14 @@ PROJECT_ROOT = get_root("self_critique")
 
 def resolve_path(path: str | Path) -> str:
     return str(PROJECT_ROOT / path)
+
+
+def get_device() -> torch.device:
+    "Returns MPS if available, CUDA if available, otherwise CPU device."
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
+    return torch.device(device)
