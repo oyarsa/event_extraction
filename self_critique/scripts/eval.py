@@ -5,7 +5,7 @@ import string
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Annotated, TypedDict
+from typing import Annotated, Optional, TypedDict
 
 import typer
 from sklearn.metrics import precision_recall_fscore_support
@@ -170,16 +170,21 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     }, relation
 
 
-def main(
-    infile: Annotated[Path | None, typer.Argument(allow_dash=True)] = None
-) -> None:
-    """Expected format:
+def main(infile: Annotated[Optional[Path], typer.Argument()] = None) -> None:
+    """
+    Expected input data format is a JSON file with the following structure:
 
-    - list of objects
-    - each object has keys: input, gold, output
-        - input: string. Text passage.
-        - gold: string. Annotated answer (tag form).
-        - output: string. Model prediction (tag form).
+    \b
+    [
+        {
+            "input": "This is a text passage.",
+            "gold": "[Cause] ... [Relation] cause [Effect] ...",
+            "output": "[Cause] ... [Relation] cause [Effect] ...",
+        },
+        ...
+    ]
+
+    Where `gold` is the annotation and `output` is the model output.
     """
     if infile is None:
         data = json.load(sys.stdin)
