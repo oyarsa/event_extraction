@@ -18,9 +18,9 @@ from self_critique.minimal.util import set_seed, suppress_transformers_warnings
 from self_critique.rl.extract_mnli import rewrite_extraction
 from self_critique.rl.extract_train import (
     Module,
+    get_labelling,
     load_reward_model,
     log_label_distribution,
-    resolve,
     run_reward,
     save_results,
     setup_logger,
@@ -195,29 +195,10 @@ def main() -> None:
     set_seed(args.seed)
     suppress_transformers_warnings()
 
-    if args.reward_type.casefold() == "entailment":
-        label2id = {
-            "CONTRADICTION": 0,
-            "ENTAILMENT": 1,
-            "NEUTRAL": 2,
-        }
-        true_class = "ENTAILMENT"
-    elif args.reward_type.casefold() == "valid":
-        if args.rewrite:
-            logger.warning("Rewriting is not supported for valid reward. Ignoring.")
-
-        label2id = {
-            "INVALID": 0,
-            "VALID": 1,
-        }
-        true_class = "VALID"
-    else:
-        raise ValueError(f"Unknown reward type: {args.reward_type}")
-    id2label = {id: label for label, id in label2id.items()}
+    label2id, id2label, true_class = get_labelling(args.reward_type)
 
     device = get_device()
-    reward = load_reward_model(args.model_path, label2id, id2label)
-    reward.model = reward.model.to(device)
+    reward = load_reward_model(args.model_path, label2id, id2label).to(device)
 
     dataset = load_data(args.data_file, args.max_samples)
     results = evaluate(

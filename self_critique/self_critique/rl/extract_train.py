@@ -23,7 +23,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import Any, Self, TypedDict
 
 import simple_parsing
 import torch
@@ -90,6 +90,8 @@ class Config:
     max_generation_length: int = 128
     # Path to output directory where metrics, checkpoints and predictions will be saved
     output_dir: Path = Path("output")
+    # Name of the dir for this run inside `output_dir`
+    run_name: str | None = None
     # Path to evaluation data
     eval_file: Path | None = None
     # Contrastive top-k used for reranking
@@ -139,6 +141,9 @@ def data_collator(data: Sequence[Mapping[str, Any]]) -> dict[str, list[Any]]:
 class Module:
     model: PreTrainedModel
     tokenizer: PreTrainedTokenizer
+
+    def to(self, device: torch.device) -> Self:
+        return Module(self.model.to(device), self.tokenizer)
 
 
 def load_reward_model(
@@ -277,7 +282,7 @@ def train_extract(
     best_ratio = 0.0
 
     device = ppo_trainer.accelerator.device
-    reward.model = reward.model.to(device)
+    reward = reward.to(device)
     tb_writer = SummaryWriter(log_dir=output_dir / "tb")
 
     # Evaluate before training to facilitate comparison with batches
@@ -691,11 +696,34 @@ def setup_logger(output_dir: Path) -> None:
     )
 
 
+def get_labelling(reward_type: str) -> tuple[dict[str, int], dict[int, str], str]:
+    reward_type = reward_type.casefold()
+    if reward_type.casefold() == "entailment":
+        label2id = {
+            "CONTRADICTION": 0,
+            "ENTAILMENT": 1,
+            "NEUTRAL": 2,
+        }
+        true_class = "ENTAILMENT"
+    elif reward_type.casefold() == "valid":
+        label2id = {
+            "INVALID": 0,
+            "VALID": 1,
+        }
+        true_class = "VALID"
+    else:
+        raise ValueError(f"Unknown reward type: {reward_type}")
+    id2label = {id: label for label, id in label2id.items()}
+
+    return label2id, id2label, true_class
+
+
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
     args = resolve_arg_paths(args)
 
-    output_dir = args.output_dir / datetime.now().isoformat()
+    run_name = args.run_name or datetime.now().isoformat()
+    output_dir = args.output_dir / run_name
     output_dir.mkdir(exist_ok=True, parents=True)
     setup_logger(output_dir)
 
@@ -709,22 +737,7 @@ def main() -> None:
     set_seed(args.seed)
     suppress_transformers_warnings()
 
-    if args.reward_type.casefold() == "entailment":
-        label2id = {
-            "CONTRADICTION": 0,
-            "ENTAILMENT": 1,
-            "NEUTRAL": 2,
-        }
-        true_class = "ENTAILMENT"
-    elif args.reward_type.casefold() == "valid":
-        label2id = {
-            "INVALID": 0,
-            "VALID": 1,
-        }
-        true_class = "VALID"
-    else:
-        raise ValueError(f"Unknown reward type: {args.reward_type}")
-    id2label = {id: label for label, id in label2id.items()}
+    label2id, id2label, true_class = get_labelling(args.reward_type)
 
     if args.train_file is None:
         raise ValueError("Must provide a training file")
@@ -774,9 +787,9 @@ def main() -> None:
         device = device or self_critique.util.get_device()
         eval_result = evaluate(
             dataset=eval_dataset,
-            extract=extract,
-            reward=reward,
-            extract_ref=extract_ref,
+            extract=extract.to(device),
+            reward=reward.to(device),
+            extract_ref=extract_ref.to(device),
             args=args,
             label2id=label2id,
             id2label=id2label,
