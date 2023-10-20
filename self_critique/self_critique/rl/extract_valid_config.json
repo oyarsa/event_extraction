@@ -7,7 +7,7 @@
 	"eval_file": "../data/genqa_joint/dev.json",
 	"reward_model": "output/valid_classifier",
 	"extraction_model": "output/t5-base-extract",
-	"output_dir": "output/rl_cls",
+	"output_dir": "output/rl",
 	"max_generation_length": 128,
 	"max_seq_length": 128,
 	"batch_size": 32,
