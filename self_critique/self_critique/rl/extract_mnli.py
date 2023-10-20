@@ -312,6 +312,7 @@ def train_extract(
         for batch_idx, batch in enumerate(
             tqdm(ppo_trainer.dataloader, desc=f"Train ({epoch})")
         ):
+            ppo_trainer.model.train()
             query_tensors = batch["input_ids"]
 
             # Contrastive generation
@@ -592,51 +593,54 @@ def evaluate(
 ) -> list[dict[str, Any]]:
     desc = desc or "Evaluate"
     loader = DataLoader(dataset, batch_size=args.batch_size)
+    extract.model.eval()
 
     output: list[dict[str, Any]] = []
-    for batch in tqdm(loader, desc=desc):
-        inputs = batch["input_ids"].to(device)
-        original_sentence = batch["context"]
+    with torch.no_grad():
+        for batch in tqdm(loader, desc=desc):
+            inputs = batch["input_ids"].to(device)
+            original_sentence = batch["context"]
 
-        rl_output = generate_and_reward(
-            extract.model,
-            inputs,
-            original_sentence,
-            args,
-            extract.tokenizer,
-            reward,
-            device,
-            true_class,
-            label2id,
-            id2label,
-        )
-        ref_output = generate_and_reward(
-            extract_ref,
-            inputs,
-            original_sentence,
-            args,
-            extract.tokenizer,
-            reward,
-            device,
-            true_class,
-            label2id,
-            id2label,
-        )
+            rl_output = generate_and_reward(
+                extract.model,
+                inputs,
+                original_sentence,
+                args,
+                extract.tokenizer,
+                reward,
+                device,
+                true_class,
+                label2id,
+                id2label,
+            )
+            ref_output = generate_and_reward(
+                extract_ref,
+                inputs,
+                original_sentence,
+                args,
+                extract.tokenizer,
+                reward,
+                device,
+                true_class,
+                label2id,
+                id2label,
+            )
 
-        assert len(rl_output.reward_labels) == len(inputs)
-        output.extend(
-            {
-                "id": batch["id"][i],
-                "answers": batch["answers"][i],
-                "context": batch["context"][i],
-                "rl_extract_txt": rl_output.extract_txt[i],
-                "ref_extract_txt": ref_output.extract_txt[i],
-                "reward_label": rl_output.reward_labels[i],
-                "ref_reward_label": ref_output.reward_labels[i],
-                "scores": rl_output.scores[i].tolist(),
-            }
-            for i in range(len(inputs))
-        )
+            assert len(rl_output.reward_labels) == len(inputs)
+            output.extend(
+                {
+                    "id": batch["id"][i],
+                    "answers": batch["answers"][i],
+                    "context": batch["context"][i],
+                    "rl_extract_txt": rl_output.extract_txt[i],
+                    "ref_extract_txt": ref_output.extract_txt[i],
+                    "reward_label": rl_output.reward_labels[i],
+                    "ref_reward_label": ref_output.reward_labels[i],
+                    "scores": rl_output.scores[i].tolist(),
+                }
+                for i in range(len(inputs))
+            )
+
     log_label_distribution(
         [d["reward_label"] for d in output], desc=f"{desc}: RL model"
     )
