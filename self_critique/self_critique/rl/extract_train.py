@@ -85,8 +85,6 @@ class Config:
     max_train_samples: int | None = None
     # Maximum number of samples used for evaluation
     max_eval_samples: int | None = None
-    # Maximum number of samples used for prediction
-    max_predict_samples: int | None = None
     # Max length for generated sequences from the Seq2Seq model
     max_generation_length: int = 128
     # Path to output directory where metrics, checkpoints and predictions will be saved

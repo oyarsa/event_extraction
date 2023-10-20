@@ -1,7 +1,6 @@
 {
 	"max_train_samples": null,
 	"max_eval_samples": null,
-	"max_predict_samples": null,
 	"num_epochs": 2,
 	"train_file": "../data/genqa_joint/train.json",
 	"eval_file": "../data/genqa_joint/dev.json",
