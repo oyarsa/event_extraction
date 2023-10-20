@@ -15,12 +15,12 @@ import torch.backends.mps
 from tqdm import tqdm
 
 from self_critique.minimal.util import set_seed, suppress_transformers_warnings
-from self_critique.rl.extract_mnli import rewrite_extraction
 from self_critique.rl.extract_train import (
     Module,
     get_labelling,
     load_reward_model,
     log_label_distribution,
+    rewrite_extraction,
     run_reward,
     save_results,
     setup_logger,

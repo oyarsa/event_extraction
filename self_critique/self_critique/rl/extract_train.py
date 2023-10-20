@@ -47,6 +47,7 @@ from trl import (
 )
 
 import self_critique.util
+from self_critique.metric.fgcr_metric_cls import parse_instance
 from self_critique.minimal.util import (
     save_model,
     set_seed,
@@ -118,6 +119,8 @@ class Config:
     do_train: bool = True
     # Whether to perform evaluation
     do_eval: bool = True
+    # Whether to rewrite the extraction output to natural language using a template
+    rewrite: bool = False
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -257,6 +260,7 @@ def train_extract(
     true_class: str,
     label2id: dict[str, int],
     id2label: dict[int, str],
+    rewrite: bool,
 ) -> tuple[Module, torch.device]:
     ppo_config = PPOConfig(
         model_name=args.extraction_model,
@@ -297,6 +301,7 @@ def train_extract(
             true_class=true_class,
             label2id=label2id,
             id2label=id2label,
+            rewrite=rewrite,
             desc="Eval (-1)",
         )
         save_results(
@@ -321,6 +326,8 @@ def train_extract(
                 top_k=args.contrastive_top_k,
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
+            if rewrite:
+                extract_response = [rewrite_extraction(x) for x in extract_response]
 
             scores, labels = run_reward(
                 reward=reward,
@@ -356,6 +363,7 @@ def train_extract(
                     true_class=true_class,
                     label2id=label2id,
                     id2label=id2label,
+                    rewrite=rewrite,
                     desc=f"Eval  ({epoch}.{batch_idx+1})",
                 )
                 save_results(
@@ -404,6 +412,7 @@ def train_extract(
                 true_class=true_class,
                 label2id=label2id,
                 id2label=id2label,
+                rewrite=rewrite,
                 desc=f"Eval  ({epoch})",
             )
             save_results(
@@ -550,6 +559,7 @@ def generate_and_reward(
     true_class: str,
     label2id: dict[str, int],
     id2label: dict[int, str],
+    rewrite: bool,
 ) -> BlockOutput:
     # Contrastive generation
     extract_response_tensor = extract_model.generate(
@@ -559,13 +569,17 @@ def generate_and_reward(
         top_k=args.contrastive_top_k,
     )
     extract_response_txt = text_decode(tokenizer, extract_response_tensor)
+    if rewrite:
+        extract_response_txt_rw = [rewrite_extraction(s) for s in extract_response_txt]
+    else:
+        extract_response_txt_rw = extract_response_txt
 
     scores, reward_labels = run_reward(
         reward=reward,
         max_seq_length=args.max_seq_length,
         batch_size=args.batch_size,
         sentence1=original_sentence,
-        sentence2=extract_response_txt,
+        sentence2=extract_response_txt_rw,
         device=device,
         true_class=true_class,
         label2id=label2id,
@@ -585,6 +599,7 @@ def evaluate(
     true_class: str,
     label2id: dict[str, int],
     id2label: dict[int, str],
+    rewrite: bool,
     desc: str | None = None,
 ) -> list[dict[str, Any]]:
     desc = desc or "Evaluate"
@@ -608,6 +623,7 @@ def evaluate(
                 true_class,
                 label2id,
                 id2label,
+                rewrite,
             )
             ref_output = generate_and_reward(
                 extract_ref,
@@ -620,6 +636,7 @@ def evaluate(
                 true_class,
                 label2id,
                 id2label,
+                rewrite,
             )
 
             assert len(rl_output.reward_labels) == len(inputs)
@@ -698,6 +715,35 @@ def setup_logger(output_dir: Path) -> None:
             logging.StreamHandler(sys.stdout),
         ],
     )
+
+
+def decapitalise(s: str) -> str:
+    if not s:
+        return ""
+    return s[0].lower() + s[1:]
+
+
+def adjust_casing(ss: list[str]) -> list[str]:
+    if not ss:
+        return []
+    return [ss[0].capitalize()] + [decapitalise(s) for s in ss[1:]]
+
+
+def rewrite_extraction(extraction: str) -> str:
+    """Rewrite structured extraction into natural language using a template.
+
+    Simple case:
+    > [Cause] This is a cause [Effect] This is an effect
+    This is a cause, causes this is an effect
+
+    Complex case:
+    > [Cause] This cause 1 | This cause 2 [Effect] This effect 1 | This effect 2
+    This cause 1, and this cause 2 causes this effect 1 and this effect 2
+    """
+    entities, _ = parse_instance(extraction)
+    new_causes = ", and ".join(adjust_casing(entities["Cause"]))
+    new_effects = ", and ".join(adjust_casing(entities["Effect"]))
+    return f"{new_causes}, causes {new_effects}"
 
 
 def get_labelling(reward_type: str) -> tuple[dict[str, int], dict[int, str], str]:
@@ -784,6 +830,7 @@ def main() -> None:
             true_class=true_class,
             label2id=label2id,
             id2label=id2label,
+            rewrite=args.rewrite,
         )
         save_model(extract.model, extract.tokenizer, output_dir)
 
@@ -799,6 +846,7 @@ def main() -> None:
             id2label=id2label,
             true_class=true_class,
             device=device,
+            rewrite=args.rewrite,
         )
         save_results(result=eval_result, dir=output_dir, file_name="eval_result.json")
 
