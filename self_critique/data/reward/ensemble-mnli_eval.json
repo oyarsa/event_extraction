@@ -102,7 +102,7 @@
   {
     "input": "Foreign exchange exposure could prove unpredictable as the firm grows internationally, if the dollar and euro trend widely versus the Canadian dollar (BRP's home currency).",
     "gold": "[Cause]  the dollar and euro trend widely versus the Canadian dollar (BRP's home currency) [Relation] cause [Effect] Foreign exchange exposure could prove unpredictable",
-    "output": "[Cause] the dollar and euro trend widely versus the Canadian dollar (BRP's home currency) [Relation] cause [Effect] Foreign exchange exposure could prove unpredictable"
+    "output": "[Cause] the dollar and euro trend widely versus the Canadian dollar (BRP's home currency) [Relation] cause [Effect] Foreign exchange exposure could prove unpredictable as the firm grows internationally"
   },
   {
     "input": "Tesla's CEO owns about 21% of Tesla's stock and uses it as collateral for personal loans, which raises the risk of a large sale to repay debt.",
@@ -777,7 +777,7 @@
   {
     "input": "The bankruptcy of the firm's largest franchisee, NPC International, also points to deteriorating unit economics, as Pizza Hut represented 75% of the firm's restaurant portfolio.",
     "gold": "[Cause] Pizza Hut represented 75% of the firm's restaurant portfolio [Relation] cause [Effect] The bankruptcy of the firm's largest franchisee",
-    "output": "[Cause] Pizza Hut represented 75% of the firm's restaurant portfolio [Relation] cause [Effect] deteriorating unit economics"
+    "output": "[Cause] Pizza Hut represented 75% of the firm's restaurant portfolio [Relation] cause [Effect] The bankruptcy of the firm's largest franchisee, NPC International, also points to deteriorating unit economics"
   },
   {
     "input": "Total holds a high uncertainty rating based on the outcome of our scenario analysis and evaluation of its ESG risks.",
@@ -1117,7 +1117,7 @@
   {
     "input": "We contend that the chain's rapidly changing product assortment encourages repeat customer visits while reducing the risk of potential fashion trend- or weather-related missteps (as the assortment quickly turns over and Burlington buys inventory year-round).",
     "gold": "[Cause]  the chain's rapidly changing product assortment [Relation] enable [Effect]  encourages repeat customer visits while reducing the risk of potential fashion trend- or weather-related missteps",
-    "output": "[Cause] the chain's rapidly changing product assortment [Relation] enable [Effect] repeat customer visits"
+    "output": "[Cause] the chain's rapidly changing product assortment [Relation] cause [Effect] encourages repeat customer visits"
   },
   {
     "input": "We contend that the chain's rapidly changing product assortment encourages repeat customer visits while reducing the risk of potential fashion trend- or weather-related missteps (as the assortment quickly turns over and Burlington buys inventory year-round).",
@@ -1317,7 +1317,7 @@
   {
     "input": "In the second half of 2016, ON Semiconductor purchased Fairchild Semiconductors, which significantly increased the firm's discrete semiconductor sales, boosting its position in voltage regulators and IGBT power transistors, for example, and making it the number-two player in the discrete market behind Infineon.",
     "gold": "[Cause] ON Semiconductor purchased Fairchild Semiconductors [Relation] cause [Effect]  increased the firm's discrete semiconductor sales",
-    "output": "[Cause] In the second half of 2016, ON Semiconductor purchased Fairchild Semiconductors [Relation] cause [Effect] significantly increased the firm's discrete semiconductor sales"
+    "output": "[Cause] ON Semiconductor purchased Fairchild Semiconductors [Relation] cause [Effect] significantly increased the firm's discrete semiconductor sales"
   },
   {
     "input": "In the second half of 2016, ON Semiconductor purchased Fairchild Semiconductors, which significantly increased the firm's discrete semiconductor sales, boosting its position in voltage regulators and IGBT power transistors, for example, and making it the number-two player in the discrete market behind Infineon.",
@@ -1597,7 +1597,7 @@
   {
     "input": "China Unicom has also made a strong push in mobiles in 2017 and 2018 and has helped lift competitive intensity in the market.",
     "gold": "[Cause] China Unicom has also made a strong push in mobiles in 2017 and 2018 [Relation] enable [Effect] lift competitive intensity in the market",
-    "output": "[Cause] China Unicom has also made a strong push in mobiles in 2017 and 2018 [Relation] enable [Effect] lifted competitive intensity in the market"
+    "output": "[Cause] China Unicom has also made a strong push in mobiles in 2017 and 2018 [Relation] enable [Effect] helped lift competitive intensity in the market"
   },
   {
     "input": "With discretionary services set to bounce back as the pandemic recedes, Willis Towers Watson could see unusually strong growth in the near term.",
@@ -2062,7 +2062,7 @@
   {
     "input": "The company sells products through digital channels in more than 50 countries and, aided by the pandemic, its e-commerce increased 53% to about EUR 4.2 billion in 2020 from just EUR 200 million in 2012.",
     "gold": "[Cause]  the pandemic [Relation] cause [Effect] its e-commerce increased 53% to about EUR 4.2 billion in 2020 from just EUR 200 million in 2012",
-    "output": "[Cause] The company sells products through digital channels in more than 50 countries [Relation] cause [Effect] its e-commerce increased 53% to about EUR 4.2 billion in 2020 from just EUR 200 million in 2012"
+    "output": "[Cause] The company sells products through digital channels in more than 50 countries [Relation] enable [Effect] its e-commerce increased 53% to about EUR 4.2 billion in 2020 from just EUR 200 million in 2012"
   },
   {
     "input": "DuPont is also exposed to the electrification of vehicles as the company generates over 50% more revenue per vehicle for an electric vehicle versus an internal combustion engine vehicle.",
@@ -4062,7 +4062,7 @@
   {
     "input": "The firm is also introducing much lower priced mobile only plans in markets like India and Malaysia that will drive subscriber growth at the expense of average revenue.",
     "gold": "[Cause] The firm is also introducing much lower priced mobile only plans in markets like India and Malaysia [Relation] cause [Effect] the expense of average revenue",
-    "output": "[Cause] The firm is also introducing much lower priced mobile only plans in markets like India and Malaysia [Relation] enable [Effect] subscriber growth at the expense of average revenue"
+    "output": "[Cause] The firm is also introducing much lower priced mobile only plans in markets like India and Malaysia [Relation] enable [Effect] drive subscriber growth at the expense of average revenue"
   },
   {
     "input": "The firm is also introducing much lower priced mobile only plans in markets like India and Malaysia that will drive subscriber growth at the expense of average revenue.",
@@ -4367,7 +4367,7 @@
   {
     "input": "Pandemic-related acceleration of digital sales and the need to hold prices down should limit SG&A expense leverage, limiting the operating margins to just over 3% on average post-pandemic, versus 3.9% in fiscal 2019 (fiscal 2020's 6.2% mark reflected unprecedented cost leverage).",
     "gold": "[Cause] Pandemic-related acceleration of digital sales and the need to hold prices down [Relation] prevent [Effect] the operating margins",
-    "output": "[Cause] Pandemic-related acceleration of digital sales and the need to hold prices down [Relation] prevent [Effect] SG&A expense leverage"
+    "output": "[Cause] Pandemic-related acceleration of digital sales and the need to hold prices down [Relation] prevent [Effect] SG&A expense leverage, limiting the operating margins to just over 3% on average post-pandemic, versus 3.9% in fiscal 2019 (fiscal 2020's 6.2% mark reflected unprecedented cost leverage)"
   },
   {
     "input": "We expect that volume increases in the high-margin 737 MAX will bring Boeing commercial's operating margin to a midteens level.",
@@ -4737,7 +4737,7 @@
   {
     "input": "The constant wear and tear on the equipment results in steady demand for servicing and replacement parts, and aftermarket revenue tends to be relatively more stable and carry higher margins.",
     "gold": "[Cause] The constant wear and tear on the equipment [Relation] cause [Effect] steady demand for servicing and replacement parts",
-    "output": "[Cause] The constant wear and tear on the equipment [Relation] cause [Effect] steady demand for servicing and replacement parts"
+    "output": "[Cause] The constant wear and tear on the equipment [Relation] cause [Effect] steady demand for servicing and replacement parts, and aftermarket revenue tends to be relatively more stable and carry higher margins"
   },
   {
     "input": "With a lack of available financial data for fibre cement peers, however, it is difficult to ascertain the magnitude of any cost advantage that does exist and in turn identify whether it is material.",
@@ -5452,7 +5452,7 @@
   {
     "input": "In our explicit forecast period, we assume that Coloplast's ostomy and continence care segments outpace market growth at 8% and 7% annually, respectively, as the firm rolls out new products, reimbursement policies for supplies remain stable, and intensifies efforts to cross-sell and infiltrate emerging markets.",
     "gold": "[Cause] the firm rolls out new products, reimbursement policies for supplies remain stable, and intensifies efforts to cross-sell and infiltrate emerging markets [Relation] cause [Effect] Coloplast's ostomy and continence care segments outpace market growth",
-    "output": "[Cause] the firm rolls out new products, reimbursement policies for supplies remain stable, and intensifies efforts to cross-sell and infiltrate emerging markets [Relation] cause [Effect] Coloplast's ostomy and continence care segments outpace market growth at 8% and 7% annually"
+    "output": "[Cause] the firm rolls out new products, reimbursement policies for supplies remain stable, and intensifies efforts to cross-sell and infiltrate emerging markets [Relation] cause [Effect] Coloplast's ostomy and continence care segments outpace market growth at 8% and 7% annually, respectively"
   },
   {
     "input": "However, we don't think the brands offer a competitive edge by way of powerful brand equity, as we believe it is difficult to build long-term brand equity around celebrities, whose popularity tends to ebb and flow.",
@@ -6227,7 +6227,7 @@
   {
     "input": "By concentrating purchases, Five Below becomes more valuable to its vendors while ensuring the volume needed to hold per-item shipping and logistics costs down, creating further fuel to feed the chain's value-oriented message.",
     "gold": "[Cause] concentrating purchases [Relation] enable [Effect] creating further fuel to feed the chain's value-oriented message",
-    "output": "[Cause] Five Below becomes more valuable to its vendors [Relation] enable [Effect] ensuring the volume needed to hold per-item shipping and logistics costs down"
+    "output": "[Cause] Five Below becomes more valuable to its vendors [Relation] enable [Effect] the volume needed to hold per-item shipping and logistics costs down"
   },
   {
     "input": "As Church & Dwight continues to purchase leading brands to capture market share, we worry it will extend itself too far into categories with which it is not as familiar.",
@@ -6337,12 +6337,12 @@
   {
     "input": "With SolidWorks being considered the industry standard for many of its solutions, specifically within product manufacturing, universities are convinced to continue teaching the software in its programs, which drives firms to continue using this industry standard, causing universities to continue to teach the software in their technical curriculums.",
     "gold": "[Cause] SolidWorks being considered the industry standard for many of its solutions, specifically within product manufacturing, universities are convinced to continue teaching the software in its programs [Relation] cause [Effect] firms to continue using this industry standard",
-    "output": "[Cause] SolidWorks being considered the industry standard for many of its solutions, specifically within product manufacturing [Relation] cause [Effect] universities are convinced to continue teaching the software in its programs"
+    "output": "[Cause] SolidWorks being considered the industry standard for many of its solutions [Relation] cause [Effect] universities are convinced to continue teaching the software in its programs"
   },
   {
     "input": "With SolidWorks being considered the industry standard for many of its solutions, specifically within product manufacturing, universities are convinced to continue teaching the software in its programs, which drives firms to continue using this industry standard, causing universities to continue to teach the software in their technical curriculums.",
     "gold": "[Cause] SolidWorks being considered the industry standard for many of its solutions, specifically within product manufacturing, universities are convinced to continue teaching the software in its programs [Relation] cause [Effect] universities to continue to teach the software in their technical curriculums",
-    "output": "[Cause] universities are convinced to continue teaching the software in its programs [Relation] cause [Effect] firms to continue using this industry standard"
+    "output": "[Cause] universities are convinced to continue teaching the software in its programs [Relation] cause [Effect] firms to continue using this industry standard, causing universities to continue to teach the software in their technical curriculums"
   },
   {
     "input": "Led by 6% growth in China, 36% digital growth, and solid sales in Europe, the firm outperformed our sales and earnings estimates in the third quarter.",
@@ -7432,7 +7432,7 @@
   {
     "input": "We believe Hubbell can hit 16% adjusted operating margins by 2022 as it emerges through its latest rounds of productivity initiatives and despite challenges posed by the global pandemic, including supply chain automation and footprint and back-office consolidation.",
     "gold": "[Cause]  its latest rounds of productivity initiatives [Relation] enable [Effect] Hubbell can hit 16% adjusted operating margins by 2022",
-    "output": "[Cause] it emerges through its latest rounds of productivity initiatives and despite challenges posed by the global pandemic, including supply chain automation and footprint and back-office consolidation [Relation] cause [Effect] Hubbell can hit 16% adjusted operating margins by 2022"
+    "output": "[Cause] it emerges through its latest rounds of productivity initiatives and despite challenges posed by the global pandemic, including supply chain automation and footprint and back-office consolidation [Relation] enable [Effect] Hubbell can hit 16% adjusted operating margins by 2022"
   },
   {
     "input": "Finally, while we do see some differences in terms of cost structure across various iBuyers, we think these are largely attributable to differences in approach rather than differences in competitive advantage.",
@@ -7777,7 +7777,7 @@
   {
     "input": "To continue winning contracts, the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets.",
     "gold": "[Cause] To continue winning contracts [Relation] cause [Effect] the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets",
-    "output": "[Cause] the turbine-makers will instate steep cost-reduction goals to their supply chain [Relation] enable [Effect] continue winning contracts"
+    "output": "[Cause] the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets [Relation] enable [Effect] continue winning contracts"
   },
   {
     "input": "Further, a number of patents and trade secrets protect these innovations from intellectual property theft. These factors allow the company to charge a premium relative to competitors' products, which we believe contributes to its GAAP operating margins of just under 23% based on 2020 results.",
@@ -7817,7 +7817,7 @@
   {
     "input": "We have indication of smartwatches significantly hurting lower priced Swiss watch sales, although we see high-end brands to be more resilient.",
     "gold": "[Cause] smartwatches [Relation] enable [Effect] hurting lower priced Swiss watch sales",
-    "output": "[Cause] smartwatches [Relation] cause [Effect] hurting lower priced Swiss watch sales"
+    "output": "[Cause] smartwatches [Relation] prevent [Effect] lower priced Swiss watch sales"
   },
   {
     "input": "Using pulse oximeters that produce frequent false alarms can take up valuable clinician time, leading to poor health outcomes, and constant false alarms could result in true positive alerts being ignored.",
@@ -8377,7 +8377,7 @@
   {
     "input": "However, we remain optimistic about the sector's longer-term prospects given that the industry should eventually recover from the impact of the virus, supply will likely fall below the historical average in the coming years, and the demographic boon will create a massive spike in demand for senior housing.",
     "gold": "[Cause] the industry should eventually recover from the impact of the virus, supply will likely fall below the historical average in the coming years, and the demographic boon will create a massive spike in demand for senior housing. [Relation] enable [Effect] we remain optimistic about the sector's longer-term prospects given",
-    "output": "[Cause] the demographic boon will create a massive spike in demand for senior housing [Relation] cause [Effect] we remain optimistic about the sector's longer-term prospects given that the industry should eventually recover from the impact of the virus, supply will likely fall below the historical average in the coming years"
+    "output": "[Cause] the demographic boon [Relation] cause [Effect] create a massive spike in demand for senior housing"
   },
   {
     "input": "We consider occupancy rate at a historically high level and project that it will gradually approach 90% once the overall portfolio becomes more representative of the recent expansion.",
@@ -8427,7 +8427,7 @@
   {
     "input": "Also, once a drug's key patents expire, generic manufacturers often seek to utilize the same production methods that were used by the branded manufacturer to reduce product variability, and that adoption by generic manufacturers can create an even longer benefit period for Agilent on a specific molecule.",
     "gold": "[Cause] adoption by generic manufacturers [Relation] cause [Effect] create an even longer benefit period for Agilent on a specific molecule",
-    "output": "[Cause] a drug's key patents expire [Relation] cause [Effect] generic manufacturers often seek to utilize the same production methods that were used by the branded manufacturer to reduce product variability"
+    "output": "[Cause] adoption by generic manufacturers [Relation] enable [Effect] create an even longer benefit period for Agilent on a specific molecule"
   },
   {
     "input": "Additionally, the service business backed by a major national brand, as the commercial business coming from Interline and HD Supply could build brand loyalty and keep consumers returning to a trusted source, something that could be hard to duplicate for a new entrant.",
@@ -8507,7 +8507,7 @@
   {
     "input": "However, we anticipate a return to historical levels of 29% by 2022, followed by another 100-basis-point increase to 30%, as efficiencies generally offset pricing pressure from greater competition.",
     "gold": "[Cause] efficiencies generally offset pricing pressure from greater competition [Relation] cause [Effect] a return to historical levels of 29% by 2022, followed by another 100-basis-point increase to 30%",
-    "output": "[Cause] efficiencies generally offset pricing pressure from greater competition [Relation] cause [Effect] we anticipate a return to historical levels of 29% by 2022, followed by another 100-basis-point increase to 30%"
+    "output": "[Cause] efficiencies generally offset pricing pressure from greater competition [Relation] cause [Effect] a return to historical levels of 29% by 2022, followed by another 100-basis-point increase to 30%"
   },
   {
     "input": "Seagate's consumer HDD revenue has been declining in the high-teens over the past several years as consumer SSDs have come close enough to cost parity to establish mainstream crossover.",
@@ -8527,7 +8527,7 @@
   {
     "input": "Further, AbbVie's high concentration of Humira sales makes the company significantly exposed to any new competitive threats to Humira, both from biosimilars and new branded drug competition.",
     "gold": "[Cause]  AbbVie's high concentration of Humira sales [Relation] enable [Effect] the company significantly exposed to any new competitive threats to Humira, both from biosimilars and new branded drug competition",
-    "output": "[Cause] AbbVie's high concentration of Humira sales [Relation] cause [Effect] the company significantly exposed to any new competitive threats to Humira"
+    "output": "[Cause] AbbVie's high concentration of Humira sales [Relation] cause [Effect] the company significantly exposed to any new competitive threats to Humira, both from biosimilars and new branded drug competition"
   },
   {
     "input": "Moreover, with retail landlords looking for tenants to fill unoccupied real estate, we believe new fast-casual restaurant concepts will continue to come to market and pursue aggressive growth plans.",
@@ -8557,7 +8557,7 @@
   {
     "input": "We also think there is more room for margin expansion in the technology and analytics segment with automation helping to reduce costs.",
     "gold": "[Cause] automation [Relation] enable [Effect] reduce costs",
-    "output": "[Cause] automation helping to reduce costs [Relation] enable [Effect] there is more room for margin expansion in the technology and analytics segment"
+    "output": "[Cause] automation helping to reduce costs [Relation] cause [Effect] there is more room for margin expansion in the technology and analytics segment"
   },
   {
     "input": "Should Nvidia be successful in acquiring ARM and realizing its goal of developing a server CPU based on ARM architecture (something both Broadcom and Qualcomm failed at), there is a strong potential for Nvidia to realize substantial revenue synergies in its data center segment.",
@@ -8747,7 +8747,7 @@
   {
     "input": "Customer service is another mission-critical function that directly helps a company attract and retain customers and therefore also is associated with driving revenue.",
     "gold": "[Cause] Customer service [Relation] enable [Effect] driving revenue",
-    "output": "[Cause] Customer service [Relation] enable [Effect] directly helps a company attract and retain customers"
+    "output": "[Cause] Customer service [Relation] enable [Effect] helps a company attract and retain customers"
   },
   {
     "input": "Customer service is another mission-critical function that directly helps a company attract and retain customers and therefore also is associated with driving revenue.",
@@ -8812,7 +8812,7 @@
   {
     "input": "We're raising our fair value estimate for Regeneron to $500 from $473 after further increasing our Dupixent estimates and updating for recent U.S.",
     "gold": "[Cause] further increasing our Dupixent estimates and updating for recent U.S. [Relation] enable [Effect] raising our fair value estimate for Regeneron to $500 from $473",
-    "output": "[Cause] further increasing our Dupixent estimates and updating for recent U.S [Relation] cause [Effect] We're raising our fair value estimate for Regeneron to $500 from $473"
+    "output": "[Cause] further increasing our Dupixent estimates and updating for recent U.S [Relation] cause [Effect] raising our fair value estimate for Regeneron to $500 from $473"
   },
   {
     "input": "Tough German labor unions, in conjunction with political sympathy for domestic labor, could make it difficult for the company to rationalize capacity in its home market, if management should find it necessary.",
@@ -9087,7 +9087,7 @@
   {
     "input": "In addition, CME's position within S&P futures likely contributed to the exchange's ability to attract additional equity index futures license agreements for the Nasdaq and Russell 2000 indexes, which returned to CME Group in 2017.",
     "gold": "[Cause] CME's position within S&P futures [Relation] enable [Effect] contributed to the exchange's ability to attract additional equity index futures license agreements for the Nasdaq and Russell 2000 indexes",
-    "output": "[Cause] CME's position within S&P futures [Relation] enable [Effect] the exchange's ability to attract additional equity index futures license agreements for the Nasdaq and Russell 2000 indexes"
+    "output": "[Cause] CME's position within S&P futures [Relation] enable [Effect] the exchange's ability to attract additional equity index futures license agreements for the Nasdaq and Russell 2000 indexes, which returned to CME Group in 2017"
   },
   {
     "input": "But we expect the gross margin to improve as more consumers consume JD's goods and services and JD's bargaining power against suppliers increases.",
@@ -9932,7 +9932,7 @@
   {
     "input": "We believe the current ultra-accommodative monetary policy in the eurozone, has depressed net interest margins and obscured Santander's competitive advantages, resulting in lacklustre returns.",
     "gold": "[Cause]  the current ultra-accommodative monetary policy in the eurozone [Relation] cause [Effect] depressed net interest margins and obscured Santander's competitive advantages",
-    "output": "[Cause] the current ultra-accommodative monetary policy in the eurozone [Relation] cause [Effect] has depressed net interest margins and obscured Santander's competitive advantages"
+    "output": "[Cause] the current ultra-accommodative monetary policy in the eurozone [Relation] cause [Effect] depressed net interest margins and obscured Santander's competitive advantages"
   },
   {
     "input": "We believe the current ultra-accommodative monetary policy in the eurozone, has depressed net interest margins and obscured Santander's competitive advantages, resulting in lacklustre returns.",
@@ -10052,7 +10052,7 @@
   {
     "input": "Furthermore, the change in consumer preferences has created a demand dislocation that has allowed new players like Aerie and Third Love to take share in the intimates' market, creating permanent long-term competition in the category.",
     "gold": "[Cause]  a demand dislocation [Relation] enable [Effect] new players like Aerie and Third Love to take share in the intimates' market, creating permanent long-term competition in the category",
-    "output": "[Cause] the change in consumer preferences has created a demand dislocation [Relation] enable [Effect] new players like Aerie and Third Love to take share in the intimates' market"
+    "output": "[Cause] the change in consumer preferences [Relation] cause [Effect] permanent long-term competition in the category"
   },
   {
     "input": "To further enhance digital offerings and overall data technology, WPP plans to invest up to GBP 150 million during the next few years.",
@@ -10072,7 +10072,7 @@
   {
     "input": "We believe the right tech and service investments are being made, which together with various secular trends (like wellness and deteriorating trust in municipal water) facilitate a nice runway of growth.",
     "gold": "[Cause] We believe the right tech and service investments are being made, which together with various secular trends (like wellness and deteriorating trust in municipal water) [Relation] cause [Effect] a nice runway of growth",
-    "output": "[Cause] the right tech and service investments are being made [Relation] enable [Effect] a nice runway of growth"
+    "output": "[Cause] the right tech and service investments are being made [Relation] enable [Effect] facilitate a nice runway of growth"
   },
   {
     "input": "If management completes a deal that is dilutive, it could have a material impact to its returns over capital costs, which is an ongoing governance risk.",
@@ -10452,7 +10452,7 @@
   {
     "input": "The company regularly recycles capital by selling noncore assets or exiting markets and using the proceeds for its development pipeline or acquisitions with strong growth prospects, a strategy that has produced strong returns.",
     "gold": "[Cause] selling noncore assets or exiting markets and using the proceeds for its development pipeline or acquisitions with strong growth prospects [Relation] enable [Effect] The company regularly recycles capital",
-    "output": "[Cause] The company regularly recycles capital by selling noncore assets or exiting markets and using the proceeds for its development pipeline or acquisitions with strong growth prospects [Relation] enable [Effect] a strategy that has produced strong returns"
+    "output": "[Cause] The company regularly recycles capital by selling noncore assets or exiting markets and using the proceeds for its development pipeline or acquisitions with strong growth prospects [Relation] enable [Effect] produced strong returns"
   },
   {
     "input": "The success of ongoing initiatives should set the operating margin back on a improving trajectory in 2022, as investments wind down.",
@@ -10752,7 +10752,7 @@
   {
     "input": "While we see the possibility that enterprises will have less need for data centers if they use infrastructure as a service, or IaaS, to a greater extent, our bigger concern is that companies that don't make that move will be able to satisfy their needs with less space.",
     "gold": "[Cause] companies that don't make that move [Relation] enable [Effect]  to satisfy their needs with less space",
-    "output": "[Cause] we see the possibility that enterprises will have less need for data centers if they use infrastructure as a service, or IaaS [Relation] cause [Effect] companies that don't make that move will be able to satisfy their needs with less space"
+    "output": "[Cause] companies that don't make that move [Relation] cause [Effect] satisfy their needs with less space"
   },
   {
     "input": "The FVL contract is intended to be awarded in 2022, but the aircraft are not intended to be operational until the early 2030s, which gives us confidence that Bell's military segment will continue earning excess returns until then at least.",
@@ -11112,7 +11112,7 @@
   {
     "input": "In our view, top-line growth will be driven by continued new logo wins, and rapid upsell into those clients once landed, with upsell coming from new seats, new features within a given solution, and ultimately additional products.",
     "gold": "[Cause] continued new logo wins, and rapid upsell into those clients once landed [Relation] cause [Effect] top-line growth",
-    "output": "[Cause] continued new logo wins, and rapid upsell into those clients once landed [Relation] enable [Effect] top-line growth"
+    "output": "[Cause] continued new logo wins, and rapid upsell into those clients once landed, with upsell coming from new seats, new features within a given solution, and ultimately additional products [Relation] enable [Effect] top-line growth"
   },
   {
     "input": "We believe that the increase in recurring revenue per client is largely due to clients adopting additional applications rather than an increase in head count.",
@@ -11292,7 +11292,7 @@
   {
     "input": "We use a 6.9% weighted average cost of capital in our assumption, consistent with our view that the firm maintains low revenue sensitivity to systemic risk, due to the relative outperformance of value-oriented QSR concepts during periods of economic stress.",
     "gold": "[Cause]  the relative outperformance of value-oriented QSR concepts during periods of economic stress [Relation] enable [Effect]  the firm maintains low revenue sensitivity to systemic risk",
-    "output": "[Cause] the relative outperformance of value-oriented QSR concepts during periods of economic stress [Relation] cause [Effect] We use a 6.9% weighted average cost of capital in our assumption, consistent with our view that the firm maintains low revenue sensitivity to systemic risk"
+    "output": "[Cause] the relative outperformance of value-oriented QSR concepts during periods of economic stress [Relation] cause [Effect] the firm maintains low revenue sensitivity to systemic risk"
   },
   {
     "input": "We expect that COVID-19 will result in catastrophic 2020 results for Kohl's, as we forecast a sales decline of 20% and an adjusted EBITDA drop of more than 75%.",
@@ -12152,7 +12152,7 @@
   {
     "input": "Business ethics risk stems from Nissan's involvement in emissions cheating and a recall due to lacks final inspection protocol in Japan.",
     "gold": "[Cause]  lacks final inspection protocol in Japan [Relation] cause [Effect] Nissan's involvement in emissions cheating and a recall",
-    "output": "[Cause] lacks final inspection protocol in Japan [Relation] cause [Effect] a recall"
+    "output": "[Cause] lacks final inspection protocol in Japan [Relation] cause [Effect] Business ethics risk"
   },
   {
     "input": "The Grand Prix pipeline will reduce Targa's costs for NGLs, as it will no longer pay third-party tariffs to transport its NGLs to market.",
@@ -12217,7 +12217,7 @@
   {
     "input": "And while Rogers historically had the top network, the evolution of a network sharing agreement between BCE and Telus closed the gap and resulted in them leapfrogging Rogers in many ''''best network'''' surveys.",
     "gold": "[Cause] the evolution of a network sharing agreement between BCE and Telus closed the gap [Relation] cause [Effect] them leapfrogging Rogers in many ''''best network'''' surveys",
-    "output": "[Cause] the evolution of a network sharing agreement between BCE and Telus closed the gap [Relation] cause [Effect] them leapfrogging Rogers in many ''''best network''' surveys"
+    "output": "[Cause] the evolution of a network sharing agreement between BCE and Telus closed the gap [Relation] cause [Effect] them leapfrogging Rogers in many '''''best network''' surveys"
   },
   {
     "input": "The Charter acquisition led to depressed returns on invested capital including goodwill, which declined to the midsingle digits in recent years.",
