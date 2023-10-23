@@ -175,10 +175,7 @@ def evaluate_ensemble(
         outputs.extend(zip(output1, output2))
         mean_logprobs.extend(zip(mean_logprob1, mean_logprob2))
         data.extend(
-            {
-                key: batch[key][i]
-                for key in ["id", "answers", "question_type", "context"]
-            }
+            {key: batch[key][i] for key in ["id", "answers", "context"]}
             for i in range(len(batch["id"]))
         )
 
