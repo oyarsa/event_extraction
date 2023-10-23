@@ -4,7 +4,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 import simple_parsing
 import torch
@@ -45,6 +45,7 @@ class Config:
     contrastive_top_k: int = 5
     # Contrastive degeneration penalty (alphe)
     degeneration_penalty: float = 0.5
+    run_name: str | None = None
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -78,15 +79,28 @@ def resolve_arg_paths(config: Config) -> Config:
     )
 
 
-def load_model(config: ModelConfig, device: torch.device) -> ex.Module:
+@dataclasses.dataclass
+class Module:
+    model: PreTrainedModel
+    tokenizer: PreTrainedTokenizer
+    model_type: str
+
+    def to(self, device: torch.device) -> Self:
+        return Module(self.model.to(device), self.tokenizer, self.model_type)
+
+    @classmethod
+    def new(cls, mod: ex.Module, model_type: str) -> Self:
+        return cls(mod.model, mod.tokenizer, model_type)
+
+
+def load_model(config: ModelConfig, device: torch.device) -> Module:
     if config.model_type == "rl":
         module = ex.load_seq2seq_valuehead_model(config.path_or_name, train=False)
     elif config.model_type == "supervised":
         module = ex.load_seq2seq_model(config.path_or_name, train=False)
     else:
         raise ValueError(f"Unknown model type: {config.model_type}")
-    module.model = module.model.to(device)
-    return module
+    return Module.new(module.to(device), config.model_type)
 
 
 def get_logit(output: Any) -> torch.Tensor:
@@ -99,8 +113,7 @@ def get_logit(output: Any) -> torch.Tensor:
 
 
 def generate(
-    model: PreTrainedModel,
-    tokenizer: PreTrainedTokenizer,
+    model: Module,
     batch: Any,
     max_length: int,
     penalty_alpha: float,
@@ -110,19 +123,28 @@ def generate(
         inputs = batch["input_ids"]
         attention_mask = batch["attention_mask"]
 
-        responses = model.generate(
-            input_ids=inputs,
-            attention_mask=attention_mask,
-            max_length=max_length,
-            penalty_alpha=penalty_alpha,
-            top_k=top_k,
-        )
-        output = model(
+        # Supervised models need to use greedy generation to be compatible with the
+        # initial results. RL models use contrastive generation.
+        if model.model_type == "rl":
+            responses = model.model.generate(
+                input_ids=inputs,
+                attention_mask=attention_mask,
+                max_length=max_length,
+                penalty_alpha=penalty_alpha,
+                top_k=top_k,
+            )
+        else:
+            responses = model.model.generate(
+                input_ids=inputs,
+                attention_mask=attention_mask,
+                max_length=max_length,
+            )
+        output = model.model(
             input_ids=inputs, attention_mask=attention_mask, labels=batch["labels"]
         )
         logits = get_logit(output)
 
-    txt_responses = ex.text_decode(tokenizer, responses)
+    txt_responses = ex.text_decode(model.tokenizer, responses)
 
     log_probs = torch.nn.functional.log_softmax(logits, dim=-1)
     token_log_probs = torch.gather(
@@ -134,9 +156,8 @@ def generate(
 
 
 def evaluate_ensemble(
-    model1: PreTrainedModel,
-    model2: PreTrainedModel,
-    tokenizer: PreTrainedTokenizer,
+    model1: Module,
+    model2: Module,
     dataset: Dataset,
     batch_size: int,
     max_length: int,
@@ -144,8 +165,8 @@ def evaluate_ensemble(
     degeneration_penalty: float,
     desc: str | None = None,
 ) -> list[dict[str, Any]]:
-    model1.eval()
-    model2.eval()
+    model1.model.eval()
+    model2.model.eval()
 
     desc = desc or "Evaluating ensemble"
     loader = DataLoader(dataset, batch_size=batch_size)
@@ -157,7 +178,6 @@ def evaluate_ensemble(
     for batch in tqdm(loader, desc=desc):
         output1, mean_logprob1 = generate(
             model1,
-            tokenizer,
             batch,
             max_length,
             degeneration_penalty,
@@ -165,7 +185,6 @@ def evaluate_ensemble(
         )
         output2, mean_logprob2 = generate(
             model2,
-            tokenizer,
             batch,
             max_length,
             degeneration_penalty,
@@ -199,7 +218,8 @@ def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
     args = resolve_arg_paths(args)
 
-    output_dir = args.output_dir / datetime.now().isoformat()
+    run_name = args.run_name or datetime.now().isoformat()
+    output_dir = args.output_dir / run_name
     output_dir.mkdir(exist_ok=True, parents=True)
     ex.setup_logger(output_dir)
 
@@ -226,9 +246,8 @@ def main() -> None:
         model1.tokenizer, data, args.max_seq_length, device=device
     )
     result = evaluate_ensemble(
-        model1.model,
-        model2.model,
-        model1.tokenizer,
+        model1,
+        model2,
         dataset,
         args.batch_size,
         args.max_seq_length,
