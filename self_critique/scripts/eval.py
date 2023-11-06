@@ -130,19 +130,24 @@ def compute_bertscore(
 def calculate_bertscore(
     golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
 ) -> dict[str, float]:
+    metrics = ["precision", "recall", "f1"]
     results = compute_bertscore(golds, preds, clause_types)
-    results_agg: dict[str, dict[str, float]] = {
-        itype: {
-            metric: statistics.mean(results[itype][metric])
-            for metric in ["precision", "recall", "f1"]
-        }
+
+    results_agg_itype: dict[str, dict[str, float]] = {
+        itype: {metric: statistics.mean(results[itype][metric]) for metric in metrics}
         for itype in clause_types
     }
 
+    results_agg_macro_avg: dict[str, dict[str, float]] = {
+        metric: statistics.mean(
+            results_agg_itype[itype][metric] for itype in clause_types
+        )
+        for metric in metrics
+    }
+
     return {
-        f"bertscore_{metric}_{itype}": results_agg[itype][metric]
-        for itype in clause_types
-        for metric in results_agg["cause"]
+        f"bertscore_{metric}": results_agg_macro_avg[metric]
+        for metric in results_agg_macro_avg
     }
 
 
