@@ -53,15 +53,13 @@ def calculate_metrics(
     instances: list[Instance] = []
     golds: dict[str, list[str]] = defaultdict(list)
     preds: dict[str, list[str]] = defaultdict(list)
-
-    tagged_golds: list[str] = []
-    tagged_preds: list[str] = []
+    tagged: dict[str, list[str]] = defaultdict(list)
 
     for pred, refer in zip(predictions, references):
-        assert pred["id"] == refer["id"]
+        assert pred["id"] == refer["id"], "Prediction and reference IDs do not match"
 
-        tagged_preds.append(pred["prediction_text"])
-        tagged_golds.append(refer["answers"])
+        tagged["pred"].append(pred["prediction_text"])
+        tagged["gold"].append(refer["answers"])
 
         pred_entities, pred_relation = parse_instance(pred["prediction_text"])
         ref_entities, ref_relation = parse_instance(refer["answers"])
@@ -80,21 +78,21 @@ def calculate_metrics(
             golds[itype].append(rewrite_clause(ref_entities[itype]))
             preds[itype].append(rewrite_clause(pred_entities[itype]))
 
-    for itype in clause_types:
-        assert golds[itype]
-        assert preds[itype]
-
     standard = compute_metrics(instances)
     rougel_separate = calculate_rouge_separate(golds, preds, clause_types)
-    rougel_tagged = calculate_rouge_tagged(tagged_golds, tagged_preds)
     bertscore = calculate_bertscore(golds, preds, clause_types)
+    rougel_tagged = calculate_rouge_tagged(tagged)
 
     return standard | rougel_separate | rougel_tagged | bertscore
 
 
-def calculate_rouge_tagged(golds: list[str], preds: list[str]) -> dict[str, float]:
+def calculate_rouge_tagged(tagged: dict[str, list[str]]) -> dict[str, float]:
     rouge = evaluate.load("rouge")
-    return {"rougel_tag": rouge.compute(predictions=preds, references=golds)["rougeL"]}
+    return {
+        "rougel_tag": rouge.compute(
+            predictions=tagged["pred"], references=tagged["gold"]
+        )["rougeL"]
+    }
 
 
 def calculate_rouge_separate(
@@ -273,6 +271,9 @@ def main(infiles: list[Path]) -> None:
     ]
 
     Where `gold` is the annotation and `output` is the model output.
+
+    Prints metrics to stdout and saves to a file with the same name as the input file
+    but with the extension `.metrics.json`.
     """
     for file in infiles:
         print(">>>", file)
