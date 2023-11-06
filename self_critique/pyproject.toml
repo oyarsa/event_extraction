@@ -16,7 +16,10 @@ dependencies = [
     "trl==0.5.0",
     "typer>=0.9.0",
     "numpy>=1.24.3",
-	"accelerate>=0.20.3",
+    "accelerate>=0.20.3",
+    "bert-score>=0.3.13",
+    "rouge-score>=0.1.2",
+    "nltk>=3.8.1",
 ]
 requires-python = ">=3.10"
 license = {text = "GPL-3.0-only"}

@@ -1,14 +1,19 @@
 #!/usr/bin/env python
+import contextlib
+import io
 import json
 import re
+import statistics
 import string
-import sys
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Annotated, Optional, TypedDict
+from typing import TypedDict
 
+import evaluate
 import typer
 from sklearn.metrics import precision_recall_fscore_support
+
+from self_critique.minimal.util import suppress_transformers_warnings
 
 
 class Instance(TypedDict):
@@ -35,18 +40,33 @@ def get_id(d: dict[str, str]) -> str:
     return str(hash(d["input"] + d["gold"] + d["output"]))
 
 
+def rewrite_clause(parts: list[str]) -> str:
+    return ", and".join(parts)
+
+
 def calculate_metrics(
     predictions: list[MetricPrediction],
     references: list[MetricReference],
 ) -> dict[str, float]:
+    clause_types = ["cause", "effect"]
+
     instances: list[Instance] = []
+    golds: dict[str, list[str]] = defaultdict(list)
+    preds: dict[str, list[str]] = defaultdict(list)
+
+    tagged_golds: list[str] = []
+    tagged_preds: list[str] = []
+
     for pred, refer in zip(predictions, references):
         assert pred["id"] == refer["id"]
+
+        tagged_preds.append(pred["prediction_text"])
+        tagged_golds.append(refer["answers"])
 
         pred_entities, pred_relation = parse_instance(pred["prediction_text"])
         ref_entities, ref_relation = parse_instance(refer["answers"])
 
-        for itype in ref_entities:
+        for itype in clause_types:
             instance: Instance = {
                 "id": refer["id"],
                 "kind": itype,
@@ -57,7 +77,75 @@ def calculate_metrics(
             }
             instances.append(instance)
 
-    return compute_metrics(instances)
+            golds[itype].append(rewrite_clause(ref_entities[itype]))
+            preds[itype].append(rewrite_clause(pred_entities[itype]))
+
+    for itype in clause_types:
+        assert golds[itype]
+        assert preds[itype]
+
+    standard = compute_metrics(instances)
+    rougel_separate = calculate_rouge_separate(golds, preds, clause_types)
+    rougel_tagged = calculate_rouge_tagged(tagged_golds, tagged_preds)
+    bertscore = calculate_bertscore(golds, preds, clause_types)
+
+    return standard | rougel_separate | rougel_tagged | bertscore
+
+
+def calculate_rouge_tagged(golds: list[str], preds: list[str]) -> dict[str, float]:
+    rouge = evaluate.load("rouge")
+    return {"rougel_tag": rouge.compute(predictions=preds, references=golds)["rougeL"]}
+
+
+def calculate_rouge_separate(
+    golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
+) -> dict[str, float]:
+    rouge = evaluate.load("rouge")
+
+    results: dict[str, float] = {
+        itype: rouge.compute(predictions=preds[itype], references=golds[itype])[
+            "rougeL"
+        ]
+        for itype in clause_types
+    }
+    return {"rougel_sep": statistics.mean(results.values())}
+
+
+def compute_bertscore(
+    golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
+) -> dict[str, dict[str, list[float]]]:
+    """
+    bert_score (underlying evaluate) prints a warning to stderr, so we suppress it
+    the warning is when a sentence is empty, which is fine
+    """
+    suppress_transformers_warnings()
+    bertscore = evaluate.load("bertscore")
+    with contextlib.redirect_stderr(io.StringIO()):
+        return {
+            itype: bertscore.compute(
+                predictions=preds[itype], references=golds[itype], lang="en"
+            )
+            for itype in clause_types
+        }
+
+
+def calculate_bertscore(
+    golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
+) -> dict[str, float]:
+    results = compute_bertscore(golds, preds, clause_types)
+    results_agg: dict[str, dict[str, float]] = {
+        itype: {
+            metric: statistics.mean(results[itype][metric])
+            for metric in ["precision", "recall", "f1"]
+        }
+        for itype in clause_types
+    }
+
+    return {
+        f"bertscore_{metric}_{itype}": results_agg[itype][metric]
+        for itype in clause_types
+        for metric in results_agg["cause"]
+    }
 
 
 def normalize_answer(s: str) -> str:
@@ -170,9 +258,9 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     }, relation
 
 
-def main(infile: Annotated[Optional[Path], typer.Argument()] = None) -> None:
+def main(infiles: list[Path]) -> None:
     """
-    Expected input data format is a JSON file with the following structure:
+    Expected input data format for each file is a JSON with the following structure:
 
     \b
     [
@@ -186,10 +274,14 @@ def main(infile: Annotated[Optional[Path], typer.Argument()] = None) -> None:
 
     Where `gold` is the annotation and `output` is the model output.
     """
-    if infile is None:
-        data = json.load(sys.stdin)
-    else:
-        data = json.loads(infile.read_text())
+    for file in infiles:
+        print(">>>", file)
+        run_file_metrics(file)
+        print()
+
+
+def run_file_metrics(infile: Path) -> None:
+    data = json.loads(infile.read_text())
 
     predictions: list[MetricPrediction] = [
         {
@@ -210,6 +302,9 @@ def main(infile: Annotated[Optional[Path], typer.Argument()] = None) -> None:
     metrics = calculate_metrics(predictions, references)
     for key, val in metrics.items():
         print(f"{key}: {val:.2%}")
+
+    metrics_file = infile.with_suffix(".metrics.json")
+    metrics_file.write_text(json.dumps(metrics, indent=2))
 
 
 if __name__ == "__main__":
