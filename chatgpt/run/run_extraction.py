@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+# pyright: basic
+import os
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Optional
+
+import typer
+
+
+def main(
+    env: str = "dev",
+    mode: str = "lines",
+    key: str = "kcl",
+    ts: Optional[str] = None,
+    data: Optional[Path] = None,
+    user_prompt: int = 0,
+    system_prompt: int = 0,
+    model: str = "gpt-3.5-turbo",
+) -> None:
+    ts = ts or datetime.now().isoformat()
+    if mode not in ["lines", "tags"]:
+        raise ValueError(f"Invalid mode {mode}")
+
+    available_models = ["gpt-3.5-turbo", "gpt-4"]
+    if model not in available_models:
+        raise ValueError(
+            f"Invalid model {model}. Options: {', '.join(available_models)}"
+        )
+    is_gpt4 = model.startswith("gpt-4")
+
+    files = {
+        "test": ("extraction_test_full.json", "extraction_examples.json"),
+        "full": ("extraction_dev_full.json", "extraction_examples.json"),
+        "exp": ("extraction_dev_100.json", "extraction_examples.json"),
+        "dev": ("extraction_dev_10.json", "extraction_examples_3.json"),
+        "debug": ("extraction_dev_2.json", "extraction_examples_3.json"),
+    }
+    input_file, examples_file = map(Path, files[env])
+
+    if is_gpt4:
+        system_prompt = 1
+        if mode == "lines":
+            user_prompt = 1
+        elif mode == "tags":
+            user_prompt = 2
+
+    input_file = data or Path("data") / "extraction" / mode / input_file
+
+    # Go to level above script's directory
+    # This should be the chatgpt project root
+    os.chdir(Path(__file__).parent.parent)
+
+    output_dir = Path("output") / "extraction" / env / mode / model / ts
+    output_dir.mkdir(parents=True, exist_ok=True)
+    print(f"Output dir: {output_dir}")
+
+    args = [
+        sys.executable,
+        "extraction.py",
+        "keys.json",
+        key,
+        "--input",
+        input_file,
+        "--output",
+        output_dir / "output.json",
+        "--metrics-path",
+        output_dir / "metrics.json",
+        "--args-path",
+        output_dir / "args.json",
+        "--log-file",
+        output_dir / "log.jsonl",
+        "--mode",
+        mode,
+        "--prompt",
+        user_prompt,
+        "--sys-prompt",
+        system_prompt,
+    ]
+    if not is_gpt4:
+        examples = Path("data") / "extraction" / mode / examples_file
+        args += ["--examples", examples]
+
+    cmd = [str(x) for x in args]
+    subprocess.run(cmd, check=True)
+
+
+if __name__ == "__main__":
+    typer.run(main)
