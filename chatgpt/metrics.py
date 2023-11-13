@@ -166,6 +166,11 @@ def parse_instance(
         return parse_instance_lines(answer)
 
 
+def clean(s: str) -> str:
+    s = s.strip()
+    return re.sub(r'""+"', '"', s)
+
+
 def parse_instance_tags(answer: str) -> tuple[dict[str, list[str]], str | None]:
     """Parse string answer to separate into class and spans
     Simple case:
@@ -180,10 +185,11 @@ def parse_instance_tags(answer: str) -> tuple[dict[str, list[str]], str | None]:
             "Cause": [],
             "Effect": [],
         }, "cause"
+
     causes, relation, effects = matches[0]
-    causes = sorted(c.strip() for c in causes.split("|") if c.strip())
-    effects = sorted(e.strip() for e in effects.split("|") if e.strip())
-    relation = relation.strip()
+    causes = sorted(s for c in causes.split("|") if (s := clean(c)))
+    effects = sorted(s for e in effects.split("|") if (s := clean(e)))
+    relation = relation.strip().lower()
 
     return {
         "Cause": causes,
