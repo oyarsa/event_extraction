@@ -80,15 +80,22 @@ def get_result(response: dict[str, Any]) -> str:
     return cast(str, response["choices"][0]["message"]["content"])
 
 
+# Costs as of 2023-11-13 from https://openai.com/pricing
+# model: input cost, output cost
 MODEL_COSTS = {
-    "gpt-3.5-turbo": 0.000002,  # $0.002 / 1K tokens
-    "gpt-4-0613": 0.00003,  # $0.03 / 1K tokens
+    "gpt-3.5-turbo-1106": (  # in: $0.001 / 1K tokens, out: $0.002 / 1K tokens
+        0.000001,
+        0.000002,
+    ),
+    "gpt-4-0613": (0.00003, 0.00006),  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
 }
 
 
 def calculate_cost(model: str, response: dict[str, Any]) -> float:
-    num_tokens: int = response["usage"]["total_tokens"]
-    return MODEL_COSTS[model] * num_tokens
+    input_tokens = response["usage"]["prompt_tokens"]
+    output_tokens = response["usage"]["completion_tokens"]
+    cost_input, cost_output = MODEL_COSTS[model]
+    return input_tokens * cost_input + output_tokens * cost_output
 
 
 def log_args(args: argparse.Namespace, path: Path | None) -> None:
