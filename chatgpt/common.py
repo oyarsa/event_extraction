@@ -82,6 +82,7 @@ def get_result(response: dict[str, Any]) -> str:
 
 MODEL_COSTS = {
     "gpt-3.5-turbo": 0.000002,  # $0.002 / 1K tokens
+    "gpt-4-0613": 0.00003,  # $0.03 / 1K tokens
 }
 
 
@@ -128,7 +129,13 @@ def init_argparser(*, prompt: bool = True) -> argparse.ArgumentParser:
             "--prompt",
             type=int,
             default=0,
-            help="Prompt index to use for the chat session",
+            help="User prompt index to use for the chat session",
+        )
+        parser.add_argument(
+            "--sys-prompt",
+            type=int,
+            default=0,
+            help="System prompt index to use for the chat session",
         )
 
     return parser
