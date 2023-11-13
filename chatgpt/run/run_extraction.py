@@ -14,13 +14,13 @@ def main(
     env: str = "dev",
     mode: str = "lines",
     key: str = "kcl",
-    ts: Optional[str] = None,
+    run_name: Optional[str] = None,
     data: Optional[Path] = None,
     user_prompt: int = 0,
     system_prompt: int = 0,
     model: str = "gpt-3.5-turbo",
 ) -> None:
-    ts = ts or datetime.now().isoformat()
+    run_name = run_name or datetime.now().isoformat()
     if mode not in ["lines", "tags"]:
         raise ValueError(f"Invalid mode {mode}")
 
@@ -29,7 +29,6 @@ def main(
         raise ValueError(
             f"Invalid model {model}. Options: {', '.join(available_models)}"
         )
-    is_gpt4 = model.startswith("gpt-4")
 
     files = {
         "test": ("extraction_test_full.json", "extraction_examples.json"),
@@ -40,12 +39,18 @@ def main(
     }
     input_file, examples_file = map(Path, files[env])
 
+    is_gpt4 = model.startswith("gpt-4")
     if is_gpt4:
         system_prompt = 1
         if mode == "lines":
             user_prompt = 1
         elif mode == "tags":
             user_prompt = 2
+        model = "gpt-4-0613"
+    elif model.startswith("gpt-3.5"):
+        model = "gpt-3.5-turbo-1106"
+    else:
+        raise ValueError(f"Invalid model {model}")
 
     input_file = data or Path("data") / "extraction" / mode / input_file
 
@@ -53,7 +58,7 @@ def main(
     # This should be the chatgpt project root
     os.chdir(Path(__file__).parent.parent)
 
-    output_dir = Path("output") / "extraction" / env / mode / model / ts
+    output_dir = Path("output") / "extraction" / env / mode / model / run_name
     output_dir.mkdir(parents=True, exist_ok=True)
     print(f"Output dir: {output_dir}")
 
@@ -62,6 +67,8 @@ def main(
         "extraction.py",
         "keys.json",
         key,
+        "--model",
+        model,
         "--input",
         input_file,
         "--output",
@@ -80,8 +87,7 @@ def main(
         system_prompt,
     ]
     if not is_gpt4:
-        examples = Path("data") / "extraction" / mode / examples_file
-        args += ["--examples", examples]
+        args += ["--examples", Path("data") / "extraction" / mode / examples_file]
 
     cmd = [str(x) for x in args]
     subprocess.run(cmd, check=True)
