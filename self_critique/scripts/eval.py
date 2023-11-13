@@ -47,6 +47,7 @@ def rewrite_clause(parts: list[str]) -> str:
 def calculate_metrics(
     predictions: list[MetricPrediction],
     references: list[MetricReference],
+    use_bertscore: bool,
 ) -> dict[str, float]:
     clause_types = ["cause", "effect"]
 
@@ -80,10 +81,13 @@ def calculate_metrics(
 
     standard = compute_metrics(instances)
     rougel_separate = calculate_rouge_separate(golds, preds, clause_types)
-    bertscore = calculate_bertscore(golds, preds, clause_types)
     rougel_tagged = calculate_rouge_tagged(tagged)
 
-    return standard | rougel_separate | rougel_tagged | bertscore
+    metrics = standard | rougel_separate | rougel_tagged
+    if use_bertscore:
+        bertscore = calculate_bertscore(golds, preds, clause_types)
+        metrics = metrics | bertscore
+    return metrics
 
 
 def calculate_rouge_tagged(tagged: dict[str, list[str]]) -> dict[str, float]:
@@ -236,6 +240,11 @@ def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
     return {metric: macro_avg(metric) for metric in ["precision", "recall", "f1", "em"]}
 
 
+def clean(s: str) -> str:
+    s = s.strip()
+    return re.sub(r'""+"', '"', s)
+
+
 def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     """Parse string answer to separate into class and spans
     Simple case:
@@ -250,10 +259,11 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
             "cause": [],
             "effect": [],
         }, "cause"
+
     causes, relation, effects = matches[0]
-    causes = sorted(c.strip() for c in causes.split("|") if c.strip())
-    effects = sorted(e.strip() for e in effects.split("|") if e.strip())
-    relation = relation.strip()
+    causes = sorted(s for c in causes.split("|") if (s := clean(c)))
+    effects = sorted(s for e in effects.split("|") if (s := clean(e)))
+    relation = relation.strip().lower()
 
     return {
         "cause": causes,
@@ -261,7 +271,7 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     }, relation
 
 
-def main(infiles: list[Path]) -> None:
+def main(infiles: list[Path], bertscore: bool = True) -> None:
     """
     Expected input data format for each file is a JSON with the following structure:
 
@@ -282,11 +292,11 @@ def main(infiles: list[Path]) -> None:
     """
     for file in infiles:
         print(">>>", file)
-        run_file_metrics(file)
+        run_file_metrics(file, bertscore)
         print()
 
 
-def run_file_metrics(infile: Path) -> None:
+def run_file_metrics(infile: Path, use_bertscsore: bool) -> None:
     data = json.loads(infile.read_text())
 
     predictions: list[MetricPrediction] = [
@@ -305,7 +315,7 @@ def run_file_metrics(infile: Path) -> None:
         for d in data
     ]
 
-    metrics = calculate_metrics(predictions, references)
+    metrics = calculate_metrics(predictions, references, use_bertscore=use_bertscsore)
     for key, val in metrics.items():
         print(f"{key}: {val:.2%}")
 
