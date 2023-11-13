@@ -1,3 +1,4 @@
+# pyright: basic
 import re
 import string
 from collections import Counter, defaultdict
@@ -112,6 +113,7 @@ def compute_classification_metrics(instances: list[Instance]) -> dict[str, float
 
 
 def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
+    # sourcery skip: assign-if-exp
     gold_lens = {"Cause": 0, "Effect": 0}
     pred_lens = {"Cause": 0, "Effect": 0}
     commons = {"Cause": 0, "Effect": 0}
@@ -171,57 +173,25 @@ def clean(s: str) -> str:
     return re.sub(r'""+"', '"', s)
 
 
-def parse_instance_tags(answer: str) -> tuple[dict[str, list[str]], str | None]:
-    """Parse string answer to separate into class and spans
-    Simple case:
-    [Cause] This is a cause [Relation] cause [Effect] This is an effect
+def parse_spans(
+    answer: str, pattern: str, flags: int = 0
+) -> tuple[dict[str, list[str]], str]:
+    match = re.search(pattern, answer, flags)
+    if not match:
+        return {"Cause": [], "Effect": []}, "cause"
 
-    Complex case:
-    [Cause] This cause 1 | This cause 2 [Relation] enable [Effect] This effect 1 | This effect 2
-    """
-    matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
-    if not matches:
-        return {
-            "Cause": [],
-            "Effect": [],
-        }, "cause"
+    causes = sorted(s for c in match["cause"].split("|") if (s := clean(c)))
+    effects = sorted(s for e in match["effect"].split("|") if (s := clean(e)))
+    relation = match["relation"].strip().lower()
 
-    causes, relation, effects = matches[0]
-    causes = sorted(s for c in causes.split("|") if (s := clean(c)))
-    effects = sorted(s for e in effects.split("|") if (s := clean(e)))
-    relation = relation.strip().lower()
-
-    return {
-        "Cause": causes,
-        "Effect": effects,
-    }, relation
+    return {"Cause": causes, "Effect": effects}, relation
 
 
-def parse_instance_lines(answer: str) -> tuple[dict[str, list[str]], str | None]:
-    """Parse string answer to separate into class and spans
-    Simple case:
-    Cause: This is a cause
-    Effect: This is an effect
-    Relation: cause
+def parse_instance_lines(answer: str) -> tuple[dict[str, list[str]], str]:
+    pattern = r"Cause:(?P<cause>.*)Effect:(?P<effect>.*)Relation:(?P<relation>.*)"
+    return parse_spans(answer, pattern, re.DOTALL)
 
-    Complex case:
-    Cause: This cause 1 | This cause 2
-    Effect: This effect 1 | This effect 2
-    Relation: enable
-    """
-    matches = re.findall(r"Cause:(.*)Effect:(.*)Relation:(.*)", answer, re.DOTALL)
-    if not matches:
-        return {
-            "Cause": [],
-            "Effect": [],
-        }, "cause"
 
-    causes, effects, relation = matches[0]
-    causes = sorted(s for c in causes.split("|") if (s := clean(c)))
-    effects = sorted(s for e in effects.split("|") if (s := clean(e)))
-    relation = relation.strip().lower()
-
-    return {
-        "Cause": causes,
-        "Effect": effects,
-    }, relation
+def parse_instance_tags(answer: str) -> tuple[dict[str, list[str]], str]:
+    pattern = r"\[Cause\](?P<cause>.*?)\[Relation\](?P<relation>.*?)\[Effect\](?P<effect>.*?)$"
+    return parse_spans(answer, pattern)
