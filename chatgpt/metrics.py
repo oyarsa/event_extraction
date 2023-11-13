@@ -215,11 +215,11 @@ def parse_instance_lines(answer: str) -> tuple[dict[str, list[str]], str | None]
             "Cause": [],
             "Effect": [],
         }, "cause"
-    causes, effects, relation = matches[0]
 
-    causes = sorted(c.strip() for c in causes.split("|") if c.strip())
-    effects = sorted(e.strip() for e in effects.split("|") if e.strip())
-    relation = relation.strip()
+    causes, effects, relation = matches[0]
+    causes = sorted(s for c in causes.split("|") if (s := clean(c)))
+    effects = sorted(s for e in effects.split("|") if (s := clean(e)))
+    relation = relation.strip().lower()
 
     return {
         "Cause": causes,
