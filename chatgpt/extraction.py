@@ -74,6 +74,8 @@ def make_extraction_request(
         messages=generate_extraction_messages(
             text, examples, user_prompt, system_prompt
         ),
+        temperature=0,
+        seed=0,
     )
 
 
@@ -213,6 +215,7 @@ def main() -> None:
 
     if args.sys_prompt < 0 or args.sys_prompt >= len(USER_PROMPTS):
         raise IndexError(f"Invalid system prompt index: {args.prompt}")
+
     run_extraction(
         model=args.model,
         demonstration_examples_path=args.examples,
