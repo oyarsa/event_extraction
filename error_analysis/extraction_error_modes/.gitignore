@@ -7,3 +7,4 @@
 !training/*.json
 output/
 .virtual_documents
+key
