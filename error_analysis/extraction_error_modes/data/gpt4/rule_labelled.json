@@ -1,0 +1,368 @@
+[
+  {
+    "input": "Collins Aerospace has significant component placement on the MAX and faces coronavirus headwinds, but we still expect narrow-body sales will allow Collins to produce a revenue CAGR of 8.2%, higher than usual due to a post-pandemic commercial aerospace recovery.",
+    "output": "[Cause] Collins Aerospace has significant component placement on the MAX and faces coronavirus headwinds | post-pandemic commercial aerospace recovery [Relation] enable [Effect] we still expect narrow-body sales will allow Collins to produce a revenue CAGR of 8.2%, higher than usual",
+    "gold": "[Cause] higher than usual [Relation] cause [Effect] a post-pandemic commercial aerospace recovery",
+    "valid": false
+  },
+  {
+    "input": "We see myriad risks on the horizon as Keurig Dr Pepper seeks to maintain and enhance its positioning in the broader beverage industry.",
+    "output": "[Cause] We see myriad risks on the horizon [Relation] enable [Effect] Keurig Dr Pepper seeks to maintain and enhance its positioning in the broader beverage industry",
+    "gold": "[Cause] Keurig Dr Pepper seeks to maintain and enhance its positioning in the broader beverage industry [Relation] cause [Effect] myriad risks",
+    "valid": false
+  },
+  {
+    "input": "ADI and its chipmaking peers tend to profit from these high switching costs by having lower ongoing R&amp;D and capital expenditure investments than digital chipmakers, which helps to contribute to healthy returns on capital for shareholders.",
+    "output": "[Cause] ADI and its chipmaking peers tend to profit from these high switching costs by having lower ongoing R&amp;D and capital expenditure investments than digital chipmakers [Relation] enable [Effect] helps to contribute to healthy returns on capital for shareholders",
+    "gold": "[Cause] ADI and its chipmaking peers tend to profit from these high switching costs by having lower ongoing R&amp;D and capital expenditure investments than digital chipmakers [Relation] enable [Effect] helps to contribute to healthy returns on capital for shareholders",
+    "valid": true
+  },
+  {
+    "input": "In the near term, ConvaTec faces considerable operational risk as it transitions more of its manufacturing to lower-cost locations, re-engineers manufacturing processes, recovers from recalls, and navigates the process of management change.",
+    "output": "[Cause] ConvaTec transitions more of its manufacturing to lower-cost locations | re-engineers manufacturing processes | recovers from recalls | navigates the process of management change [Relation] cause [Effect] ConvaTec faces considerable operational risk",
+    "gold": "[Cause] it transitions more of its manufacturing to lower-cost locations, re-engineers manufacturing processes, recovers from recalls, and navigates the process of management change [Relation] enable [Effect] ConvaTec faces considerable operational risk",
+    "valid": false
+  },
+  {
+    "input": "This could result in more stable cash flows, a sustainable dividend, and Utilities - Independent Power Producersmore share buybacks if management does a good job executing its strategy.",
+    "output": "[Cause] This could result in more stable cash flows, a sustainable dividend, and Utilities - Independent Power Producersmore share buybacks [Relation] enable [Effect] if management does a good job executing its strategy",
+    "gold": "[Cause] management does a good job executing its strategy [Relation] enable [Effect] more stable cash flows, a sustainable dividend, and Utilities - Independent Power Producersmore share buybacks",
+    "valid": false
+  },
+  {
+    "input": "Thanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.",
+    "output": "[Cause] external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions) [Relation] enable [Effect] we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility",
+    "gold": "[Cause] accelerating digital commerce trends [Relation] cause [Effect] capitalize",
+    "valid": false
+  },
+  {
+    "input": "We believe Dunkin' can extend its brand reach beyond core markets, supported by solid franchise unit economics, national advertising efforts, and more technological-leveraged and drive-thru-focused restaurant formats.",
+    "output": "[Cause] Dunkin' can extend its brand reach beyond core markets | solid franchise unit economics | national advertising efforts | more technological-leveraged and drive-thru-focused restaurant formats [Relation] enable [Effect] Dunkin' can extend its brand reach beyond core markets",
+    "gold": "[Cause] solid franchise unit economics, national advertising efforts, and more technological-leveraged and drive-thru-focused restaurant formats [Relation] enable [Effect] Dunkin' can extend its brand reach beyond core markets",
+    "valid": false
+  },
+  {
+    "input": "After a very strong 2020, we expect some constraints on its margins going forward, as business operations normalize following the pandemic.",
+    "output": "[Cause] After a very strong 2020 | business operations normalize following the pandemic [Relation] cause [Effect] we expect some constraints on its margins going forward",
+    "gold": "[Cause] business operations normalize following the pandemic [Relation] cause [Effect] some constraints on its margins going forward",
+    "valid": false
+  },
+  {
+    "input": "Snap's revenue growth will be driven primarily by growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads.",
+    "output": "[Cause] growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads [Relation] enable [Effect] Snap's revenue growth",
+    "gold": "[Cause] growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads [Relation] cause [Effect] Snap's revenue growth",
+    "valid": true
+  },
+  {
+    "input": "Chevron's profits and cash flow are largely tied to oil and gas production and could suffer as a result of a significant fall in prices.",
+    "output": "[Cause] a significant fall in prices [Relation] cause [Effect] Chevron's profits and cash flow could suffer",
+    "gold": "[Cause] a significant fall in prices [Relation] cause [Effect] Chevron's profits and cash flow are largely tied to oil and gas production and could suffer",
+    "valid": false
+  },
+  {
+    "input": "We think the runaway cost of living in West Coast metros is an area of concern, given that this has the potential to push the tech industry's center of gravity away from these high-cost regions.",
+    "output": "[Cause] the runaway cost of living in West Coast metros [Relation] cause [Effect] this has the potential to push the tech industry's center of gravity away from these high-cost regions",
+    "gold": "[Cause] this has the potential to push the tech industry's center of gravity away from these high-cost regions [Relation] cause [Effect] the runaway cost of living in West Coast metros is an area of concern",
+    "valid": false
+  },
+  {
+    "input": "During our 2021-25 forecast period, we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes.",
+    "output": "[Cause] During our 2021-25 forecast period [Relation] enable [Effect] we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes",
+    "gold": "[Cause] revenue to grow at about a 9% CAGR [Relation] cause [Effect] strong growth in ESG and indexes",
+    "valid": false
+  },
+  {
+    "input": "We believe the global services business will also support future growth due to greater spares, tool refurbishments, and collaboration with customers to troubleshoot high-value problems that reduce cost, improve product yields, and accelerate new technology ramps.",
+    "output": "[Cause] greater spares, tool refurbishments, and collaboration with customers to troubleshoot high-value problems [Relation] enable [Effect] reduce cost, improve product yields, and accelerate new technology ramps",
+    "gold": "[Cause] greater spares, tool refurbishments, and collaboration with customers to troubleshoot high-value problems [Relation] cause [Effect] support future growth",
+    "valid": false
+  },
+  {
+    "input": "We think management has a good record when it comes to balancing expansion opportunities and maintaining the company's competitive position, which gives us confidence.",
+    "output": "[Cause] management has a good record when it comes to balancing expansion opportunities and maintaining the company's competitive position [Relation] enable [Effect] gives us confidence",
+    "gold": "[Cause] management has a good record when it comes to balancing expansion opportunities and maintaining the company's competitive position [Relation] enable [Effect] gives us confidence",
+    "valid": true
+  },
+  {
+    "input": "While acquisitions allow Sensata to enter new, high-growth markets, a consolidating marketplace could cause Sensata to be outbid for, or overpay for, targets, diluting firm value.",
+    "output": "[Cause] acquisitions allow Sensata to enter new, high-growth markets | a consolidating marketplace [Relation] enable [Effect] Sensata to be outbid for, or overpay for, targets, diluting firm value",
+    "gold": "[Cause] a consolidating marketplace [Relation] cause [Effect] cause Sensata to be outbid for, or overpay for, targets",
+    "valid": false
+  },
+  {
+    "input": "M&T derives about two thirds of its income from net interest income, and with the bank's cheaper deposit base, it is more sensitive to movements in interest rates.",
+    "output": "[Cause] M&T derives about two thirds of its income from net interest income | the bank's cheaper deposit base [Relation] cause [Effect] it is more sensitive to movements in interest rates",
+    "gold": "[Cause] with the bank's cheaper deposit base, it is more sensitive to movements in interest rates [Relation] enable [Effect] M&T derives about two thirds of its income from net interest income",
+    "valid": false
+  },
+  {
+    "input": "Capri has big plans for Versace and Jimmy Choo, primarily based on store growth and expansions of their accessory businesses.",
+    "output": "[Cause] Capri has big plans for Versace and Jimmy Choo [Relation] enable [Effect] store growth and expansions of their accessory businesses",
+    "gold": "[Cause] store growth and expansions of their accessory businesses [Relation] enable [Effect] Capri has big plans for Versace and Jimmy Choo",
+    "valid": false
+  },
+  {
+    "input": "This year, Expeditors is seeing air and ocean volume pressure from pandemic lockdowns, though airfreight rates (to shippers) are spiking on tight capacity, providing a strong offset, and demand is rebounding sequentially in the second half.",
+    "output": "[Cause] pandemic lockdowns [Relation] cause [Effect] Expeditors is seeing air and ocean volume pressure | airfreight rates (to shippers) are spiking on tight capacity | demand is rebounding sequentially in the second half",
+    "gold": "[Cause] pandemic lockdowns [Relation] cause [Effect] Expeditors is seeing air and ocean volume pressure",
+    "valid": true
+  },
+  {
+    "input": "We believe the rise in passive investing will weigh on FactSet's target market through asset manager fee compression, resulting in slower growth.",
+    "output": "[Cause] the rise in passive investing | asset manager fee compression [Relation] cause [Effect] weigh on FactSet's target market | resulting in slower growth",
+    "gold": "[Cause] FactSet's target market through asset manager fee compression [Relation] cause [Effect] the rise in passive investing",
+    "valid": false
+  },
+  {
+    "input": "Through a prior joint venture with Intel, Micron developed its own unique flavor of 3D NAND, though this JV is now defunct.",
+    "output": "[Cause] Through a prior joint venture with Intel [Relation] enable [Effect] Micron developed its own unique flavor of 3D NAND",
+    "gold": "[Cause] Through a prior joint venture with Intel [Relation] enable [Effect] Micron developed its own unique flavor of 3D NAND",
+    "valid": true
+  },
+  {
+    "input": "Similarly, engineers loathe to swap out an analog from an existing design (again, only to save a few pennies on cost) because of the onerous re-design and re-testing costs associated with the switch.",
+    "output": "[Cause] engineers loathe to swap out an analog from an existing design (again, only to save a few pennies on cost) [Relation] cause [Effect] the onerous re-design and re-testing costs associated with the switch",
+    "gold": "[Cause] the onerous re-design and re-testing costs associated with the switch [Relation] cause [Effect] engineers loathe to swap out an analog from an existing design (again, only to save a few pennies on cost)",
+    "valid": false
+  },
+  {
+    "input": "Because of lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates, adjusted 2020 EBIT margin fell 110 basis points to 3.4%.",
+    "output": "[Cause] lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates [Relation] cause [Effect] adjusted 2020 EBIT margin fell 110 basis points to 3.4%",
+    "gold": "[Cause] lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates [Relation] cause [Effect] adjusted 2020 EBIT margin fell 110 basis points to 3.4%",
+    "valid": true
+  },
+  {
+    "input": "It is much more efficient for customers to trade two different equity index futures on the same exchange as this allows futures traders to net their positions out when posting collateral.",
+    "output": "[Cause] It is much more efficient for customers to trade two different equity index futures on the same exchange [Relation] enable [Effect] this allows futures traders to net their positions out when posting collateral",
+    "gold": "[Cause] this allows futures traders to net their positions out when posting collateral [Relation] cause [Effect] It is much more efficient for customers to trade two different equity index futures on the same exchange",
+    "valid": false
+  },
+  {
+    "input": "Slack offers a freemium model and caters to companies of all sizes, which means revenue is concentrated among the largest customers.",
+    "output": "[Cause] Slack offers a freemium model and caters to companies of all sizes [Relation] cause [Effect] revenue is concentrated among the largest customers",
+    "gold": "[Cause] Slack offers a freemium model and caters to companies of all sizes [Relation] enable [Effect] revenue is concentrated among the largest customers",
+    "valid": true
+  },
+  {
+    "input": "While we see the possibility that enterprises will have less need for data centers if they use infrastructure as a service, or IaaS, to a greater extent, our bigger concern is that companies that don't make that move will be able to satisfy their needs with less space.",
+    "output": "[Cause] enterprises will have less need for data centers if they use infrastructure as a service, or IaaS, to a greater extent | companies that don't make that move [Relation] enable [Effect] companies that don't make that move will be able to satisfy their needs with less space",
+    "gold": "[Cause] they use infrastructure as a service, or IaaS [Relation] cause [Effect] that enterprises will have less need for data centers",
+    "valid": false
+  },
+  {
+    "input": "Due to decreasing reliance on its personnel base, we assume Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025.",
+    "output": "[Cause] decreasing reliance on its personnel base [Relation] enable [Effect] Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025",
+    "gold": "[Cause] Accenture will benefit from some operating leverage on the SG&A line [Relation] enable [Effect] operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025",
+    "valid": false
+  },
+  {
+    "input": "Seagate's consumer HDD revenue has been declining in the high-teens over the past several years as consumer SSDs have come close enough to cost parity to establish mainstream crossover.",
+    "output": "[Cause] consumer SSDs have come close enough to cost parity to establish mainstream crossover [Relation] cause [Effect] Seagate's consumer HDD revenue has been declining in the high-teens over the past several years",
+    "gold": "[Cause] consumer SSDs have come close enough to cost parity to establish mainstream crossover [Relation] cause [Effect] Seagate's consumer HDD revenue has been declining in the high-teens over the past several years",
+    "valid": true
+  },
+  {
+    "input": "We see upside in margins for the F-35, as more sustainment enters the business mix as well and the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program.",
+    "output": "[Cause] more sustainment enters the business mix | the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program [Relation] enable [Effect] We see upside in margins for the F-35",
+    "gold": "[Cause] the aircraft becomes a major defense acquisition program [Relation] cause [Effect] the potential to move to a more fixed-price contract",
+    "valid": false
+  },
+  {
+    "input": "If Grifols is unable to bring an IG product to market with higher pricing power (like Takeda's HyQvia or CSL's Hizentra), it could lose market share.",
+    "output": "[Cause] Grifols is unable to bring an IG product to market with higher pricing power [Relation] cause [Effect] it could lose market share",
+    "gold": "[Cause] Grifols is unable to bring an IG product to market with higher pricing power [Relation] cause [Effect] it could lose market share",
+    "valid": true
+  },
+  {
+    "input": "There's ample historical precedent, such as Venezuela, where rampant inflation combined with an unstable government and currency controls led to irreparable degradation in the company's operations.",
+    "output": "[Cause] rampant inflation combined with an unstable government and currency controls [Relation] cause [Effect] irreparable degradation in the company's operations",
+    "gold": "[Cause] rampant inflation combined with an unstable government and currency controls [Relation] cause [Effect] irreparable degradation in the company's operations",
+    "valid": true
+  },
+  {
+    "input": "Additionally, long-term price depreciation would expose the company to weakening returns on capital, as its large queue of new projects coming on line would be unlikely to generate their projected economic results.",
+    "output": "[Cause] long-term price depreciation [Relation] cause [Effect] expose the company to weakening returns on capital | its large queue of new projects coming on line would be unlikely to generate their projected economic results",
+    "gold": "[Cause] its large queue of new projects coming on line would be unlikely to generate their projected economic results [Relation] cause [Effect] long-term price depreciation would expose the company to weakening returns on capital",
+    "valid": false
+  },
+  {
+    "input": "Following significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic, we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025.",
+    "output": "[Cause] significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic [Relation] cause [Effect] we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+    "gold": "[Cause] Following significant core sales declines across all three segments in 2020 [Relation] cause [Effect] an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+    "valid": false
+  },
+  {
+    "input": "Contrary to other publications, digital journal products are often priced at a premium to their print counterparts, as searchability is an especially valued, critical upgrade from a physical copy.",
+    "output": "[Cause] digital journal products are often priced at a premium to their print counterparts [Relation] enable [Effect] searchability is an especially valued, critical upgrade from a physical copy",
+    "gold": "[Cause] searchability is an especially valued, critical upgrade from a physical copy [Relation] cause [Effect] digital journal products are often priced at a premium to their print counterparts",
+    "valid": false
+  },
+  {
+    "input": "This gives the bank scale and exposure to this higher-margin, fee-based business, which we don't think will change in the near term as the banks still have the most dominant branch and distribution networks.",
+    "output": "[Cause] The bank scale and exposure to this higher-margin, fee-based business [Relation] enable [Effect] The banks still have the most dominant branch and distribution networks",
+    "gold": "[Cause] the banks still have the most dominant branch and distribution networks [Relation] cause [Effect] we don't think will change in the near term",
+    "valid": false
+  },
+  {
+    "input": "Its previously strong brand intangible asset has been degraded by consumer trends that allowed for competition in the intimates space, as the Victoria's Secret, or VS, brand failed to adapt to trends.",
+    "output": "[Cause] Its previously strong brand intangible asset has been degraded by consumer trends | the Victoria's Secret, or VS, brand failed to adapt to trends [Relation] enable [Effect] allowed for competition in the intimates space",
+    "gold": "[Cause] the Victoria's Secret, or VS, brand failed to adapt to trends [Relation] cause [Effect] Its previously strong brand intangible asset has been degraded by consumer trends",
+    "valid": false
+  },
+  {
+    "input": "Attempts to fill unused capacity by competing for existing contracts tend to prove challenging because staggered multiyear supply contracts reduce the volume of production open to competition in any given year.",
+    "output": "[Cause] Attempts to fill unused capacity by competing for existing contracts | staggered multiyear supply contracts reduce the volume of production open to competition in any given year [Relation] cause [Effect] tend to prove challenging",
+    "gold": "[Cause] staggered multiyear supply contracts reduce the volume of production open to competition in any given year [Relation] enable [Effect] Attempts to fill unused capacity by competing for existing contracts tend to prove challenging",
+    "valid": false
+  },
+  {
+    "input": "History suggests this could Drug Manufacturers - Specialty & Genericbe possible, as Illinois's early plans for recreational legalization would hand an advantage to companies with medical cultivation and dispensary licenses.",
+    "output": "[Cause] Illinois's early plans for recreational legalization [Relation] enable [Effect] would hand an advantage to companies with medical cultivation and dispensary licenses",
+    "gold": "[Cause] Illinois's early plans for recreational legalization would hand an advantage to companies with medical cultivation and dispensary licenses [Relation] cause [Effect] this could Drug Manufacturers - Specialty & Genericbe possible",
+    "valid": false
+  },
+  {
+    "input": "Wireless penetration stood at nearly 140% in 2015 as consumers regularly carried multiple carrier accounts to take advantage of whichever one was offering the best rates at any point in time.",
+    "output": "[Cause] consumers regularly carried multiple carrier accounts to take advantage of whichever one was offering the best rates at any point in time [Relation] cause [Effect] Wireless penetration stood at nearly 140% in 2015",
+    "gold": "[Cause] consumers regularly carried multiple carrier accounts to take advantage of whichever one was offering the best rates at any point in time [Relation] cause [Effect] Wireless penetration stood at nearly 140% in 2015",
+    "valid": true
+  },
+  {
+    "input": "The good news is that, on average, e-commerce warehousing requires about three times more space as traditional warehousing, so the increased demand has allowed the company to construct speculative developments, which often carry higher margins, albeit with more risk.",
+    "output": "[Cause] e-commerce warehousing requires about three times more space as traditional warehousing | the increased demand [Relation] enable [Effect] the company to construct speculative developments, which often carry higher margins, albeit with more risk",
+    "gold": "[Cause] the increased demand has allowed the company to construct speculative developments [Relation] cause [Effect] higher margins, albeit with more risk",
+    "valid": false
+  },
+  {
+    "input": "Worldwide, there are hundreds of lodging management companies but only a few of those currently manage more than 100 properties with Hyatt one of them, making it a prime partner for third-party owners looking to outsource management responsibilities.  As a result of increasing third-party confidence in Hyatt's brands, the company's asset-light business became the majority of adjusted EBITDA (before corporate) in 2018 and reached 57% in 2019, and we estimate it will be around mid-70% in 2029.",
+    "output": "[Cause] increasing third-party confidence in Hyatt's brands [Relation] cause [Effect] the company's asset-light business became the majority of adjusted EBITDA (before corporate) in 2018 and reached 57% in 2019 | we estimate it will be around mid-70% in 2029",
+    "gold": "[Cause] Worldwide, there are hundreds of lodging management companies but only a few of those currently manage more than 100 properties with Hyatt one of them, making it a prime partner for third-party owners looking to outsource management responsibilities [Relation] cause [Effect] increasing third-party confidence in Hyatt's brands, the company's asset-light business became the majority of adjusted EBITDA (before corporate) in 2018 and reached 57% in 2019, and we estimate it will be around mid-70% in 2029",
+    "valid": false
+  },
+  {
+    "input": "Biosimilar competition is a looming threat, but we think the significant manufacturing and development costs that biosimilar makers are expected to incur would slow any erosion of sales of these products, limiting the number of contenders and their ability to compete on price.",
+    "output": "[Cause] Biosimilar competition is a looming threat | the significant manufacturing and development costs that biosimilar makers are expected to incur [Relation] cause [Effect] slow any erosion of sales of these products | limiting the number of contenders and their ability to compete on price",
+    "gold": "[Cause] the significant manufacturing and development costs that biosimilar makers are expected to incur [Relation] prevent [Effect] the number of contenders and their ability to compete on price",
+    "valid": false
+  },
+  {
+    "input": "Despite having a model that requires franchisees to shoulder significant risk, Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation.",
+    "output": "[Cause] Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation. [Relation] enable [Effect] Despite having a model that requires franchisees to shoulder significant risk",
+    "gold": "[Cause] exclusive routes and its premium brand reputation [Relation] cause [Effect] Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes",
+    "valid": false
+  },
+  {
+    "input": "In this regard, the company's success can be attributed to its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.",
+    "output": "[Cause] the company's aggressive approach at building a recognizable brand to attract consumers [Relation] enable [Effect] the company's success | the agents seeking their business",
+    "gold": "[Cause] aggressive approach at building a recognizable brand [Relation] cause [Effect] the company's success",
+    "valid": false
+  },
+  {
+    "input": "Years of government efforts have done little to stem illegal cannabis, but a change to the ease of accessing black market supplies could have a significant impact on the pricing power, and thus the profitability of legal cannabis companies.",
+    "output": "[Cause] Years of government efforts have done little to stem illegal cannabis | a change to the ease of accessing black market supplies [Relation] enable [Effect] could have a significant impact on the pricing power, and thus the profitability of legal cannabis companies",
+    "gold": "[Cause] a change to the ease of accessing black market supplies [Relation] prevent [Effect] the profitability of legal cannabis companies",
+    "valid": false
+  },
+  {
+    "input": "A period of low economic growth could coincide with fewer organic growth opportunities for companies, leading them to try growing via acquisition, but this type of M&A activity probably won't be enough to prevent lackluster earnings.",
+    "output": "[Cause] A period of low economic growth | fewer organic growth opportunities for companies [Relation] cause [Effect] leading them to try growing via acquisition | this type of M&A activity probably won't be enough to prevent lackluster earnings",
+    "gold": "[Cause] fewer organic growth opportunities for companies [Relation] cause [Effect] leading them to try growing via acquisition",
+    "valid": false
+  },
+  {
+    "input": "Also, although Knight's cost execution is quite strong, limited driver availability is placing upward pressure on driver wages and recruiting costs.",
+    "output": "[Cause] limited driver availability [Relation] cause [Effect] placing upward pressure on driver wages and recruiting costs",
+    "gold": "[Cause] limited driver availability [Relation] cause [Effect] placing upward pressure on driver wages and recruiting costs",
+    "valid": true
+  },
+  {
+    "input": "Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets, we rate Medtronic's uncertainty as medium.",
+    "output": "[Cause] The average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets [Relation] cause [Effect] We rate Medtronic's uncertainty as medium",
+    "gold": "[Cause] Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic market [Relation] enable [Effect] we rate Medtronic's uncertainty as medium",
+    "valid": false
+  },
+  {
+    "input": "We believe the biggest risk is a slowdown in the real estate market, which could be indicated by increased home inventories for sale, slower growth in prices, or higher mortgage interest rates.",
+    "output": "[Cause] a slowdown in the real estate market | increased home inventories for sale | slower growth in prices | higher mortgage interest rates [Relation] cause [Effect] the biggest risk",
+    "gold": "[Cause] We believe the biggest risk is a slowdown in the real estate market [Relation] enable [Effect] could be indicated by increased home inventories for sale, slower growth in prices, or higher mortgage interest rates.",
+    "valid": false
+  },
+  {
+    "input": "We think it would need to open cultivation internationally if it wants to compete in the global medical cannabis market--an unlikely event until federal laws are changed.",
+    "output": "[Cause] it wants to compete in the global medical cannabis market [Relation] enable [Effect] it would need to open cultivation internationally",
+    "gold": "[Cause] it wants to compete in the global medical cannabis market [Relation] cause [Effect] it would need to open cultivation internationally",
+    "valid": true
+  },
+  {
+    "input": "Also, once customers are comfortable with a product, they are unlikely to change lenses for a minor improvement or small reduction in price.",
+    "output": "[Cause] customers are comfortable with a product [Relation] cause [Effect] they are unlikely to change lenses for a minor improvement or small reduction in price",
+    "gold": "[Cause] customers are comfortable with a product [Relation] cause [Effect] they are unlikely to change lenses for a minor improvement or small reduction in price",
+    "valid": true
+  },
+  {
+    "input": "We contend that the chain's rapidly changing product assortment encourages repeat customer visits while reducing the risk of potential fashion trend- or weather-related missteps (as the assortment quickly turns over and Burlington buys inventory year-round).",
+    "output": "[Cause] the chain's rapidly changing product assortment | Burlington buys inventory year-round [Relation] enable [Effect] encourages repeat customer visits | reducing the risk of potential fashion trend- or weather-related missteps",
+    "gold": "[Cause] the assortment quickly turns over and Burlington buys inventory year-round [Relation] enable [Effect] reducing the risk of potential fashion trend- or weather-related missteps",
+    "valid": false
+  },
+  {
+    "input": "Beyond the legal power of patents, even slightly differentiated technical features can cause an end user to prefer one tool over a similar tool in the company's precise scientific end markets, so we think those other intangible assets contribute to Illumina's competitive advantages, too.",
+    "output": "[Cause] even slightly differentiated technical features [Relation] cause [Effect] an end user to prefer one tool over a similar tool in the company's precise scientific end markets | those other intangible assets contribute to Illumina's competitive advantages",
+    "gold": "[Cause] even slightly differentiated technical features can cause an end user to prefer one tool over a similar tool in the company's precise scientific end markets [Relation] cause [Effect] those other intangible assets contribute to Illumina's competitive advantages, too",
+    "valid": false
+  },
+  {
+    "input": "The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft because there are not material aftermarket servicing opportunities for aerostructures.",
+    "output": "[Cause] The firm is a large aerostructure provider for both Boeing and Airbus [Relation] enable [Effect] The firm makes nearly all of its revenue on the original production of aircraft",
+    "gold": "[Cause] there are not material aftermarket servicing opportunities for aerostructures [Relation] cause [Effect] The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft",
+    "valid": false
+  },
+  {
+    "input": "Our volume forecast is muted by the emergence of cheaper suppliers in lower-cost labor countries; however, Canopy's production expansion into Colombia and Lesotho helps protect its share.",
+    "output": "[Cause] emergence of cheaper suppliers in lower-cost labor countries | Canopy's production expansion into Colombia and Lesotho [Relation] cause [Effect] Our volume forecast is muted | helps protect its share",
+    "gold": "[Cause] Canopy's production expansion into Colombia and Lesotho [Relation] enable [Effect] helps protect its share",
+    "valid": false
+  },
+  {
+    "input": "We think there is a risk these partners will look elsewhere if Neogen does not successfully scale licensed products, and partners could also demand a greater share of profits if co-developed products are highly successful.",
+    "output": "[Cause] Neogen does not successfully scale licensed products | co-developed products are highly successful [Relation] cause [Effect] these partners will look elsewhere | partners could also demand a greater share of profits",
+    "gold": "[Cause] Neogen does not successfully scale licensed products [Relation] cause [Effect] these partners will look elsewhere",
+    "valid": false
+  },
+  {
+    "input": "We believe the combination of Azure, DBMS, Dynamics 365, and Office 365 will drive above-market growth as CIOs continue to consolidate vendors.",
+    "output": "[Cause] the combination of Azure, DBMS, Dynamics 365, and Office 365 [Relation] enable [Effect] will drive above-market growth",
+    "gold": "[Cause] CIOs continue to consolidate vendors [Relation] cause [Effect] the combination of Azure, DBMS, Dynamics 365, and Office 365 will drive above-market growth",
+    "valid": false
+  },
+  {
+    "input": "Targeting a wide consumer base with a core customer who is female, 35-65 years old with household income of $50,000-over $175,000 also means Wayfair is competing with mass-market retailers, specialty retail, and low-cost providers, making it harder to stay top of mind.",
+    "output": "[Cause] Targeting a wide consumer base with a core customer who is female, 35-65 years old with household income of $50,000-over $175,000 [Relation] cause [Effect] Wayfair is competing with mass-market retailers, specialty retail, and low-cost providers | making it harder to stay top of mind",
+    "gold": "[Cause] Wayfair is competing with mass-market retailers, specialty retail, and low-cost providers [Relation] cause [Effect] harder to stay top of mind",
+    "valid": false
+  },
+  {
+    "input": "We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021, with some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022.",
+    "output": "[Cause] The new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting | recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022 [Relation] cause [Effect] will have greater impact in 2020 and 2021, with some easing in 2022",
+    "gold": "[Cause] some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022 [Relation] cause [Effect] We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021",
+    "valid": false
+  },
+  {
+    "input": "Because of the size of NYSE's market share, this data is necessary for traders to have a complete view of the market, giving ICE pricing power.",
+    "output": "[Cause] the size of NYSE's market share | this data is necessary for traders to have a complete view of the market [Relation] enable [Effect] giving ICE pricing power",
+    "gold": "[Cause] the size of NYSE's market share [Relation] cause [Effect] data is necessary for traders to have a complete view of the market",
+    "valid": false
+  },
+  {
+    "input": "We anticipate elevated commercial HVAC sales for the foreseeable future driven by heightened demand for more energy-efficient systems that deliver better air quality, and we believe Trane, along with other leading HVAC companies, are well positioned to serve this growing market.",
+    "output": "[Cause] heightened demand for more energy-efficient systems that deliver better air quality [Relation] enable [Effect] elevated commercial HVAC sales for the foreseeable future | Trane, along with other leading HVAC companies, are well positioned to serve this growing market",
+    "gold": "[Cause] heightened demand for more energy-efficient systems [Relation] cause [Effect] elevated commercial HVAC sales for the foreseeable",
+    "valid": false
+  },
+  {
+    "input": "To continue winning contracts, the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets.",
+    "output": "[Cause] turbine-makers will instate steep cost-reduction goals to their supply chain | suppliers that cannot meet the targets [Relation] cause [Effect] will outsource suppliers that cannot meet the targets",
+    "gold": "[Cause] To continue winning contracts [Relation] cause [Effect] the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets",
+    "valid": false
+  }
+]
