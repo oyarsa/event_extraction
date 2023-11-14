@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Converts tags format to lines format for the extraction task.
 
 This:
