@@ -1,0 +1,4 @@
+openai~=1.0
+pandas~=1.0
+typer~=0.9
+tqdm~=4.0
