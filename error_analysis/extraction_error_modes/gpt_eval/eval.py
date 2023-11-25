@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # pyright: basic
 import json
+import math
 import random
 import re
 from collections import defaultdict
@@ -8,10 +9,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import openai
 import pandas as pd
 import typer
-from openai import OpenAI
+from openai.types.chat import ChatCompletionMessageParam
 from tqdm import tqdm
+
+# Controls whether to print debug information in some functions.
+DEBUG = False
 
 
 def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
@@ -48,15 +53,37 @@ def calculate_cost(model: str, response: Any) -> float:
     return input_tokens * cost_input + output_tokens * cost_output
 
 
+def dbg_gpt(messages: list[ChatCompletionMessageParam], result: str | None) -> None:
+    print("INPUT:")
+    for msg in messages:
+        print(f'>>> {msg["role"]}')
+        print(f"{msg['content']}")
+        print()
+    print("OUTPUT:")
+    print(result)
+    print("-" * 80)
+    print()
+
+
 def run_gpt(
-    client: OpenAI, model: str, system_prompt: str, message: str
-) -> tuple[str, float]:
+    client: openai.OpenAI,
+    model: str,
+    message: str,
+    system_prompt: str,
+    user_prompt: str,
+    ctx_prompt: str | None = None,
+) -> tuple[str, float]:  # sourcery skip: extract-method
+    messages: list[ChatCompletionMessageParam] = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt},
+    ]
+    if ctx_prompt:
+        messages.append({"role": "user", "content": ctx_prompt})
+    messages.append({"role": "user", "content": message})
+
     response = client.chat.completions.create(
         model=model,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": message},
-        ],
+        messages=messages,
         temperature=0,
         max_tokens=256,
         top_p=1,
@@ -66,12 +93,16 @@ def run_gpt(
     )
     result = response.choices[0].message.content
     cost = calculate_cost(model, response)
+
+    if DEBUG:
+        dbg_gpt(messages, result)
+
     return result or "<empty>", cost
 
 
 SYSTEM_PROMPTS = {
     "simple": """\
-You are a helpful assistant that can take a context and an extraction composed of a
+You are a helpful assistant that can take a context and an extraction composed of a \
 cause and effect, and determine whether that extraction is valid.\
 """
 }
@@ -101,6 +132,41 @@ Score: <score from 1 to 5>\
 }
 
 
+def split_data(
+    data: list[dict[str, Any]], n: int
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    "Split the data into n positive and n negative examples."
+    valids = [item for item in data if item["valid"]][:n]
+    invalids = [item for item in data if not item["valid"]][:n]
+
+    return valids, invalids
+
+
+def format_data(item: dict[str, Any]) -> str:
+    context = f"Context: {item['input']}"
+
+    entities, _ = parse_instance(item["output"])
+    extraction = (
+        "Extraction:\n"
+        f"Cause: {' | '.join(entities['Cause'])}\n"
+        f"Effect: {' | '.join(entities['Effect'])}"
+    )
+
+    answer = f"Score: {5 if item['valid'] else 1}"
+    return "\n".join([context, extraction, answer])
+
+
+def build_context(data: list[dict[str, str]], n: int = 2) -> str:
+    "Build a context prompt from data. Uses n positive and n negative examples."
+    valids, invalids = split_data(data, n)
+    valid_msg = ["Some examples of _valid_ extractions:", *map(format_data, valids)]
+    invalid_msg = [
+        "Some examples of _invalid_ extractions:",
+        *map(format_data, invalids),
+    ]
+    return "\n\n".join(valid_msg + invalid_msg)
+
+
 def main(
     file: Path,
     n: int = 10,
@@ -109,7 +175,10 @@ def main(
     model: str = "gpt-4",
     system_prompt: str = "simple",
     user_prompt: str = "instructions",
+    use_context: bool = False,
+    context_size: int = 2,
     print_messages: bool = True,
+    debug: bool = False,
 ) -> None:
     """
     Run a GPT model on the given data and evaluate the results.
@@ -117,16 +186,19 @@ def main(
     \b
     - file: Path to the json file containing the data (list of objects with keys
         'input', 'output', 'gold', 'valid')
-    - n: Number of examples to run
+    - n: Number of examples to run. Should be even. If not, the number is rounded up.
     - rand: Whether to shuffle the data before selecting n examples
     - key_file: Path to the file containing the OpenAI API key (simple text file
         containing only the key)
     - model: Which GPT model to use (gpt-3.5-turbo or gpt-4)
     - system_prompt: Which system prompt to use (only 'simple' for now)
     - user_prompt: Which user prompt to use ('simple' or 'instructions')
+    - use_context: Whether to use the context prompt
     - print_messages: Whether to print the prompt, context, gold and prediction. If
         false, only the progress bar and evaluation results are printed.
     """
+    global DEBUG  # noqa: PLW0603
+    DEBUG = debug
 
     if model not in MODEL_COSTS:
         raise ValueError(f"Invalid model. Options: {list(MODEL_COSTS.keys())}")
@@ -141,12 +213,14 @@ def main(
     if rand:
         random.shuffle(data)
 
-    n = n or len(data)
-    if n % 2 != 0:
-        n += 1
+    if use_context:
+        ctx_prompt = build_context(data, context_size)
+        data = data[context_size * 2 :]
+    else:
+        ctx_prompt = None
 
-    valids = [item for item in data if item["valid"]][: n // 2]
-    invalids = [item for item in data if not item["valid"]][: n // 2]
+    n = n or len(data)
+    valids, invalids = split_data(data, math.ceil(n / 2))
     sampled_data = valids + invalids
 
     messages: list[tuple[str, str, bool]] = []
@@ -162,33 +236,50 @@ def main(
 
         entities, _ = parse_instance(item["gold"])
         gold = (
-            "Gold:\n"
+            "GOLD:\n"
             f"Cause: {' | '.join(entities['Cause'])}\n"
             f"Effect: {' | '.join(entities['Effect'])}\n"
         )
 
         answer = f"Valid?: {item['valid']}"
 
-        display_msg = "\n\n".join([context, extraction, gold, answer]).strip()
-        gpt_msg = "\n\n".join([USER_PROMPTS[user_prompt], context, extraction]).strip()
-        messages.append((display_msg, gpt_msg, item["valid"]))
+        answer_msg = "\n".join([gold, answer]).strip()
+        gpt_msg = "\n".join([context, extraction]).strip()
+        messages.append((answer_msg, gpt_msg, item["valid"]))
 
-    client = OpenAI(api_key=api_key)
+    client = openai.OpenAI(api_key=api_key)
     results: defaultdict[tuple[bool, int], int] = defaultdict(int)
     total_cost = 0
 
-    for display_msg, gpt_msg, valid in tqdm(messages):
-        result_s, cost = run_gpt(client, model, SYSTEM_PROMPTS[system_prompt], gpt_msg)
+    for answer_msg, gpt_msg, valid in tqdm(messages):
+        result_s, cost = run_gpt(
+            client=client,
+            model=model,
+            message=gpt_msg,
+            system_prompt=SYSTEM_PROMPTS[system_prompt],
+            user_prompt=USER_PROMPTS[user_prompt],
+            ctx_prompt=ctx_prompt,
+        )
         total_cost += cost
 
         last_line = result_s.splitlines()[-1].replace("Score:", "").strip()
         result = int(last_line) if last_line.isdigit() else 0
-        results[(valid, result)] += 1
+        results[valid, result] += 1
 
         if print_messages:
-            print(display_msg)
-            print(f"\nGPT: '{result_s}'")
+            print(ctx_prompt)
             print("-" * 80)
+            print(SYSTEM_PROMPTS[system_prompt])
+            print("-" * 80)
+            print(USER_PROMPTS[user_prompt])
+            print("-" * 80)
+            print(gpt_msg)
+            print("-" * 80)
+            print(f"\nGPT: '{result_s}'")
+            print()
+            print("NOT SENT", "~" * 50)
+            print(answer_msg)
+            print("*" * 80)
             print()
 
     with Path("cost.csv").open("a") as f:
