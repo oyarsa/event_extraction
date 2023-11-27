@@ -49,6 +49,7 @@ def calculate_metrics(
     predictions: list[MetricPrediction],
     references: list[MetricReference],
     use_bertscore: bool,
+    use_bleurt: bool,
 ) -> dict[str, float]:
     clause_types = ["cause", "effect"]
 
@@ -86,9 +87,15 @@ def calculate_metrics(
     bleu = calculate_bleu(golds, preds, clause_types)
 
     metrics = standard | rougel_separate | rougel_tagged | bleu
+
     if use_bertscore:
         bertscore = calculate_bertscore(golds, preds, clause_types)
         metrics = metrics | bertscore
+
+    if use_bleurt:
+        bleurt = calculate_bleurt(golds, preds, clause_types)
+        metrics = metrics | bleurt
+
     return metrics
 
 
@@ -129,6 +136,29 @@ def calculate_bleu(
         for itype in clause_types
     }
     return {"bleu": statistics.mean(results.values())}
+
+
+def calculate_bleurt(
+    golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
+) -> dict[str, float]:
+    try:
+        bleurt = evaluate.load("bleurt")
+    except ImportError as e:
+        raise ImportError(
+            "BLEURT is not installed. Install from the repository: "
+            "https://github.com/google-research/bleurt/tree/master"
+        ) from e
+
+    # BLEURT returns a list of scores for every instance, so we take the mean.
+    results: dict[str, float] = {
+        itype: statistics.mean(
+            bleurt.compute(
+                predictions=preds[itype], references=golds[itype], lang="en"
+            )["scores"]
+        )
+        for itype in clause_types
+    }
+    return {"bleurt": statistics.mean(results.values())}
 
 
 def compute_bertscore(
@@ -289,7 +319,7 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     }, relation
 
 
-def main(infiles: list[Path], bertscore: bool = True) -> None:
+def main(infiles: list[Path], bertscore: bool = True, bleurt: bool = True) -> None:
     """
     Expected input data format for each file is a JSON with the following structure:
 
@@ -310,11 +340,11 @@ def main(infiles: list[Path], bertscore: bool = True) -> None:
     """
     for file in infiles:
         print(">>>", file)
-        run_file_metrics(file, bertscore)
+        run_file_metrics(file, bertscore, bleurt)
         print()
 
 
-def run_file_metrics(infile: Path, use_bertscsore: bool) -> None:
+def run_file_metrics(infile: Path, use_bertscore: bool, use_bleurt: bool) -> None:
     data = json.loads(infile.read_text())
 
     predictions: list[MetricPrediction] = [
@@ -333,7 +363,9 @@ def run_file_metrics(infile: Path, use_bertscsore: bool) -> None:
         for d in data
     ]
 
-    metrics = calculate_metrics(predictions, references, use_bertscore=use_bertscsore)
+    metrics = calculate_metrics(
+        predictions, references, use_bertscore=use_bertscore, use_bleurt=use_bleurt
+    )
     for key, val in metrics.items():
         print(f"{key}: {val:.2%}")
 
