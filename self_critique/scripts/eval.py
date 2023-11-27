@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# pyright: basic
 import contextlib
 import io
 import json
@@ -137,12 +138,12 @@ def calculate_bertscore(
     metrics = ["precision", "recall", "f1"]
     results = compute_bertscore(golds, preds, clause_types)
 
-    results_agg_itype: dict[str, dict[str, float]] = {
+    results_agg_itype = {
         itype: {metric: statistics.mean(results[itype][metric]) for metric in metrics}
         for itype in clause_types
     }
 
-    results_agg_macro_avg: dict[str, dict[str, float]] = {
+    results_agg_macro_avg = {
         metric: statistics.mean(
             results_agg_itype[itype][metric] for itype in clause_types
         )
