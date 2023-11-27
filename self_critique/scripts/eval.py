@@ -83,8 +83,9 @@ def calculate_metrics(
     standard = compute_metrics(instances)
     rougel_separate = calculate_rouge_separate(golds, preds, clause_types)
     rougel_tagged = calculate_rouge_tagged(tagged)
+    bleu = calculate_bleu(golds, preds, clause_types)
 
-    metrics = standard | rougel_separate | rougel_tagged
+    metrics = standard | rougel_separate | rougel_tagged | bleu
     if use_bertscore:
         bertscore = calculate_bertscore(golds, preds, clause_types)
         metrics = metrics | bertscore
@@ -112,6 +113,22 @@ def calculate_rouge_separate(
         for itype in clause_types
     }
     return {"rougel_sep": statistics.mean(results.values())}
+
+
+def calculate_bleu(
+    golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
+) -> dict[str, float]:
+    bleu = evaluate.load("bleu")
+
+    # BLEU takes a list of reference "translations" for every instance, so we wrap
+    # each gold in a list.
+    results: dict[str, float] = {
+        itype: bleu.compute(
+            predictions=preds[itype], references=[[g] for g in golds[itype]]
+        )["bleu"]
+        for itype in clause_types
+    }
+    return {"bleu": statistics.mean(results.values())}
 
 
 def compute_bertscore(
