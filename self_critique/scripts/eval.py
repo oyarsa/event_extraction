@@ -152,9 +152,7 @@ def calculate_bleurt(
     # BLEURT returns a list of scores for every instance, so we take the mean.
     results: dict[str, float] = {
         itype: statistics.mean(
-            bleurt.compute(
-                predictions=preds[itype], references=golds[itype], lang="en"
-            )["scores"]
+            bleurt.compute(predictions=preds[itype], references=golds[itype])["scores"]
         )
         for itype in clause_types
     }
