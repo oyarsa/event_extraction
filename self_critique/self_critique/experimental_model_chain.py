@@ -2,7 +2,7 @@ import inspect
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Self
+from typing import Optional
 
 import torch
 import typer
@@ -18,7 +18,7 @@ class Config:
     model_2_data_path: str | None = None
 
     @classmethod
-    def from_json(cls, json_data: str) -> Self:
+    def from_json(cls, json_data: str) -> "Config":
         "Create instance from dict, ignoring unknown fields."
         return cls(
             **{

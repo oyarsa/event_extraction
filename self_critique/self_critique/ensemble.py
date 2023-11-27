@@ -4,7 +4,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Self
+from typing import Any
 
 import simple_parsing
 import torch
@@ -85,11 +85,11 @@ class Module:
     tokenizer: PreTrainedTokenizer
     model_type: str
 
-    def to(self, device: torch.device) -> Self:
+    def to(self, device: torch.device) -> "Module":
         return Module(self.model.to(device), self.tokenizer, self.model_type)
 
     @classmethod
-    def new(cls, mod: ex.Module, model_type: str) -> Self:
+    def new(cls, mod: ex.Module, model_type: str) -> "Module":
         return cls(mod.model, mod.tokenizer, model_type)
 
 

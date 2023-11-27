@@ -23,7 +23,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Self, TypedDict
+from typing import Any, TypedDict
 
 import simple_parsing
 import torch
@@ -143,7 +143,7 @@ class Module:
     model: PreTrainedModel
     tokenizer: PreTrainedTokenizer
 
-    def to(self, device: torch.device) -> Self:
+    def to(self, device: torch.device) -> "Module":
         return Module(self.model.to(device), self.tokenizer)
 
 
