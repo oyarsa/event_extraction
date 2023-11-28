@@ -3,18 +3,27 @@
 import contextlib
 import io
 import json
+import os
 import re
 import statistics
 import string
+import warnings
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import TypedDict
 
-import evaluate
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+import evaluate  # ruff: noqa: E402
+import transformers
 import typer
 from sklearn.metrics import precision_recall_fscore_support
 
-from self_critique.minimal.util import suppress_transformers_warnings
+
+def suppress_transformers_warnings() -> None:
+    "Remove annoying messages about tokenisers and unititialised weights."
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
+    transformers.logging.set_verbosity_error()
 
 
 class Instance(TypedDict):
@@ -142,7 +151,7 @@ def calculate_bleurt(
     golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
 ) -> dict[str, float]:
     try:
-        bleurt = evaluate.load("bleurt")
+        bleurt = evaluate.load("bleurt", "bleurt-large-512")
     except ImportError as e:
         raise ImportError(
             "BLEURT is not installed. Install from the repository: "
@@ -317,7 +326,12 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     }, relation
 
 
-def main(infiles: list[Path], bertscore: bool = True, bleurt: bool = True) -> None:
+def main(
+    infiles: list[Path],
+    bertscore: bool = True,
+    bleurt: bool = True,
+    save: bool = True,
+) -> None:
     """
     Expected input data format for each file is a JSON with the following structure:
 
@@ -336,13 +350,42 @@ def main(infiles: list[Path], bertscore: bool = True, bleurt: bool = True) -> No
     Prints metrics to stdout and saves to a file with the same name as the input file
     but with the extension `.metrics.json`.
     """
-    for file in infiles:
-        print(">>>", file)
-        run_file_metrics(file, bertscore, bleurt)
-        print()
+    results = [
+        run_file_metrics(
+            infile,
+            use_bertscore=bertscore,
+            use_bleurt=bleurt,
+            save_results=save,
+        )
+        for infile in infiles
+    ]
+
+    print("\n\n".join(results))
 
 
-def run_file_metrics(infile: Path, use_bertscore: bool, use_bleurt: bool) -> None:
+def run_file_metrics(
+    infile: Path, use_bertscore: bool, use_bleurt: bool, save_results: bool
+) -> str:
+    """Run metrics on a single file.
+
+    Output is built in a list[str] so everything is printed at the same time to avoid
+    non-determinism issues with print and multiprocess.
+    """
+    metrics = get_file_metrics(infile, use_bertscore, use_bleurt)
+
+    if save_results:
+        metrics_file = infile.with_suffix(".metrics.json")
+        metrics_file.write_text(json.dumps(metrics, indent=2))
+
+    out = [f">>> {infile}"]
+    out.extend(f"{key}: {val:.2%}" for key, val in metrics.items())
+
+    return "\n".join(out)
+
+
+def get_file_metrics(
+    infile: Path, use_bertscore: bool, use_bleurt: bool
+) -> dict[str, float]:
     data = json.loads(infile.read_text())
 
     predictions: list[MetricPrediction] = [
@@ -361,14 +404,9 @@ def run_file_metrics(infile: Path, use_bertscore: bool, use_bleurt: bool) -> Non
         for d in data
     ]
 
-    metrics = calculate_metrics(
+    return calculate_metrics(
         predictions, references, use_bertscore=use_bertscore, use_bleurt=use_bleurt
     )
-    for key, val in metrics.items():
-        print(f"{key}: {val:.2%}")
-
-    metrics_file = infile.with_suffix(".metrics.json")
-    metrics_file.write_text(json.dumps(metrics, indent=2))
 
 
 if __name__ == "__main__":
