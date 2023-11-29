@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # pyright: basic
+import concurrent.futures
 import contextlib
+import functools
 import io
 import json
 import os
@@ -10,10 +12,11 @@ import string
 import warnings
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import TypedDict
+from typing import Optional, TypedDict
 
+# ruff: noqa: E402
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-import evaluate  # ruff: noqa: E402
+import evaluate
 import transformers
 import typer
 from sklearn.metrics import precision_recall_fscore_support
@@ -151,7 +154,9 @@ def calculate_bleurt(
     golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
 ) -> dict[str, float]:
     try:
-        bleurt = evaluate.load("bleurt", "bleurt-large-512")
+        version = os.getenv("BLEURT", "default")
+        print(f"Using BLEURT version {version}")
+        bleurt = evaluate.load("bleurt", version)
     except ImportError as e:
         raise ImportError(
             "BLEURT is not installed. Install from the repository: "
@@ -328,8 +333,9 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
 
 def main(
     infiles: list[Path],
-    bertscore: bool = True,
-    bleurt: bool = True,
+    bertscore: bool = False,
+    bleurt: bool = False,
+    jobs: Optional[int] = None,
     save: bool = True,
 ) -> None:
     """
@@ -350,15 +356,29 @@ def main(
     Prints metrics to stdout and saves to a file with the same name as the input file
     but with the extension `.metrics.json`.
     """
-    results = [
-        run_file_metrics(
-            infile,
-            use_bertscore=bertscore,
-            use_bleurt=bleurt,
-            save_results=save,
+
+    # Use normal sequential code if only 1 job
+    if jobs == 1:
+        results = (
+            run_file_metrics(
+                infile,
+                use_bertscore=bertscore,
+                use_bleurt=bleurt,
+                save_results=save,
+            )
+            for infile in infiles
         )
-        for infile in infiles
-    ]
+    else:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as executor:
+            results = executor.map(
+                functools.partial(
+                    run_file_metrics,
+                    use_bertscore=bertscore,
+                    use_bleurt=bleurt,
+                    save_results=save,
+                ),
+                infiles,
+            )
 
     print("\n\n".join(results))
 
@@ -368,7 +388,7 @@ def run_file_metrics(
 ) -> str:
     """Run metrics on a single file.
 
-    Output is built in a list[str] so everything is printed at the same time to avoid
+    Output is printed to a StringIO so everything is printed at the same time to avoid
     non-determinism issues with print and multiprocess.
     """
     metrics = get_file_metrics(infile, use_bertscore, use_bleurt)
