@@ -161,7 +161,6 @@ def calculate_bleurt(
 ) -> dict[str, float]:
     # BLEURT returns a list of scores for every instance, so we take the mean.
     try:
-        # bleurt = evaluate.load("bleurt", "bleurt-tiny-512")
         bleurt = evaluate.load("bleurt", "BLEURT-20-D12")
     except ImportError as e:
         raise ImportError(
@@ -376,7 +375,7 @@ def is_gpu_available() -> bool:
 
 def main(
     infiles: list[Path],
-    outfile: Path | None = None,
+    tag: Path | None = None,
     save: bool = True,
     bertscore: bool = False,
     bleurt: bool = False,
@@ -401,8 +400,10 @@ def main(
     name as the input file but with the extension `.metrics.json`.
     """
     for infile in infiles:
-        if outfile is None:
+        if tag is None:
             outfile = infile.with_suffix(".metrics.json")
+        else:
+            outfile = infile.with_suffix(f".{tag}.metrics.json")
 
         run_file_metrics(
             infile,
