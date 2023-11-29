@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # pyright: basic
-import concurrent.futures
 import contextlib
-import functools
 import io
+import itertools
 import json
 import os
 import re
@@ -11,12 +10,15 @@ import statistics
 import string
 import warnings
 from collections import Counter, defaultdict
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Optional, TypedDict
+from typing import TypedDict, TypeVar
 
 # ruff: noqa: E402
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-import evaluate
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # disable Tensorflow CPU/GPU warnings
+import evaluate  # implicit deps: bert-score, rouge-score, nltk, bleurt (github)
+import torch
+import torch.backends.mps
 import transformers
 import typer
 from sklearn.metrics import precision_recall_fscore_support
@@ -62,6 +64,7 @@ def calculate_metrics(
     references: list[MetricReference],
     use_bertscore: bool,
     use_bleurt: bool,
+    batch_size: int,
 ) -> dict[str, float]:
     clause_types = ["cause", "effect"]
 
@@ -101,11 +104,11 @@ def calculate_metrics(
     metrics = standard | rougel_separate | rougel_tagged | bleu
 
     if use_bertscore:
-        bertscore = calculate_bertscore(golds, preds, clause_types)
+        bertscore = calculate_bertscore(golds, preds, clause_types, batch_size)
         metrics = metrics | bertscore
 
     if use_bleurt:
-        bleurt = calculate_bleurt(golds, preds, clause_types)
+        bleurt = calculate_bleurt(golds, preds, clause_types, batch_size)
         metrics = metrics | bleurt
 
     return metrics
@@ -151,30 +154,55 @@ def calculate_bleu(
 
 
 def calculate_bleurt(
-    golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
+    golds: dict[str, list[str]],
+    preds: dict[str, list[str]],
+    clause_types: list[str],
+    batch_size: int,
 ) -> dict[str, float]:
+    # BLEURT returns a list of scores for every instance, so we take the mean.
     try:
-        version = os.getenv("BLEURT", "default")
-        print(f"Using BLEURT version {version}")
-        bleurt = evaluate.load("bleurt", version)
+        # bleurt = evaluate.load("bleurt", "bleurt-tiny-512")
+        bleurt = evaluate.load("bleurt", "BLEURT-20-D12")
     except ImportError as e:
         raise ImportError(
             "BLEURT is not installed. Install from the repository: "
             "https://github.com/google-research/bleurt/tree/master"
         ) from e
 
-    # BLEURT returns a list of scores for every instance, so we take the mean.
-    results: dict[str, float] = {
-        itype: statistics.mean(
-            bleurt.compute(predictions=preds[itype], references=golds[itype])["scores"]
-        )
-        for itype in clause_types
-    }
+    results: dict[str, float] = {}
+    for itype in clause_types:
+        batched_golds = batched(golds[itype], batch_size)
+        batched_preds = batched(preds[itype], batch_size)
+
+        scores: list[float] = []
+        for batched_gold, batched_pred in zip(batched_golds, batched_preds):
+            result = bleurt.compute(predictions=batched_pred, references=batched_gold)[
+                "scores"
+            ]
+            scores.extend(result)
+
+        results[itype] = statistics.mean(scores)
+
     return {"bleurt": statistics.mean(results.values())}
 
 
+T = TypeVar("T")
+
+
+def batched(iterable: Iterable[T], n: int) -> Iterable[list[T]]:
+    if n < 1:
+        raise ValueError("n must be at least one")
+
+    it = iter(iterable)
+    while batch := list(itertools.islice(it, n)):
+        yield batch
+
+
 def compute_bertscore(
-    golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
+    golds: dict[str, list[str]],
+    preds: dict[str, list[str]],
+    clause_types: list[str],
+    batch_size: int,
 ) -> dict[str, dict[str, list[float]]]:
     """
     bert_score (underlying evaluate) prints a warning to stderr, so we suppress it
@@ -182,20 +210,31 @@ def compute_bertscore(
     """
     suppress_transformers_warnings()
     bertscore = evaluate.load("bertscore")
+    results: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+
     with contextlib.redirect_stderr(io.StringIO()):
-        return {
-            itype: bertscore.compute(
-                predictions=preds[itype], references=golds[itype], lang="en"
-            )
-            for itype in clause_types
-        }
+        for itype in clause_types:
+            batched_preds = batched(preds[itype], batch_size)
+            batched_golds = batched(golds[itype], batch_size)
+
+            for batch_pred, batch_gold in zip(batched_preds, batched_golds):
+                result = bertscore.compute(
+                    predictions=batch_pred, references=batch_gold, lang="en"
+                )
+                for metric in result:
+                    results[itype][metric].extend(result[metric])
+
+    return results
 
 
 def calculate_bertscore(
-    golds: dict[str, list[str]], preds: dict[str, list[str]], clause_types: list[str]
+    golds: dict[str, list[str]],
+    preds: dict[str, list[str]],
+    clause_types: list[str],
+    batch_size: int,
 ) -> dict[str, float]:
     metrics = ["precision", "recall", "f1"]
-    results = compute_bertscore(golds, preds, clause_types)
+    results = compute_bertscore(golds, preds, clause_types, batch_size)
 
     results_agg_itype = {
         itype: {metric: statistics.mean(results[itype][metric]) for metric in metrics}
@@ -331,12 +370,17 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     }, relation
 
 
+def is_gpu_available() -> bool:
+    return torch.cuda.is_available() or torch.backends.mps.is_available()
+
+
 def main(
     infiles: list[Path],
+    outfile: Path | None = None,
+    save: bool = True,
     bertscore: bool = False,
     bleurt: bool = False,
-    jobs: Optional[int] = None,
-    save: bool = True,
+    batch_size: int = 64,
 ) -> None:
     """
     Expected input data format for each file is a JSON with the following structure:
@@ -353,58 +397,48 @@ def main(
 
     Where `gold` is the annotation and `output` is the model output.
 
-    Prints metrics to stdout and saves to a file with the same name as the input file
-    but with the extension `.metrics.json`.
+    Prints metrics to stdout and saves to `outfile`. By default, `outfile` is the same
+    name as the input file but with the extension `.metrics.json`.
     """
+    for infile in infiles:
+        if outfile is None:
+            outfile = infile.with_suffix(".metrics.json")
 
-    # Use normal sequential code if only 1 job
-    if jobs == 1:
-        results = (
-            run_file_metrics(
-                infile,
-                use_bertscore=bertscore,
-                use_bleurt=bleurt,
-                save_results=save,
-            )
-            for infile in infiles
+        run_file_metrics(
+            infile,
+            outfile,
+            use_bertscore=bertscore,
+            use_bleurt=bleurt,
+            save_results=save,
+            batch_size=batch_size,
         )
-    else:
-        with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as executor:
-            results = executor.map(
-                functools.partial(
-                    run_file_metrics,
-                    use_bertscore=bertscore,
-                    use_bleurt=bleurt,
-                    save_results=save,
-                ),
-                infiles,
-            )
-
-    print("\n\n".join(results))
 
 
 def run_file_metrics(
-    infile: Path, use_bertscore: bool, use_bleurt: bool, save_results: bool
-) -> str:
-    """Run metrics on a single file.
+    infile: Path,
+    outfile: Path,
+    use_bertscore: bool,
+    use_bleurt: bool,
+    save_results: bool,
+    batch_size: int,
+) -> None:
+    "Run metrics on a single file."
+    print(">>>", infile)
 
-    Output is printed to a StringIO so everything is printed at the same time to avoid
-    non-determinism issues with print and multiprocess.
-    """
-    metrics = get_file_metrics(infile, use_bertscore, use_bleurt)
+    metrics = get_file_metrics(infile, use_bertscore, use_bleurt, batch_size)
 
     if save_results:
-        metrics_file = infile.with_suffix(".metrics.json")
-        metrics_file.write_text(json.dumps(metrics, indent=2))
+        outfile.parent.mkdir(parents=True, exist_ok=True)
+        outfile.write_text(json.dumps(metrics, indent=2))
 
-    out = [f">>> {infile}"]
-    out.extend(f"{key}: {val:.2%}" for key, val in metrics.items())
+    for key, val in metrics.items():
+        print(f"{key}: {val:.2%}")
 
-    return "\n".join(out)
+    print()
 
 
 def get_file_metrics(
-    infile: Path, use_bertscore: bool, use_bleurt: bool
+    infile: Path, use_bertscore: bool, use_bleurt: bool, batch_size: int
 ) -> dict[str, float]:
     data = json.loads(infile.read_text())
 
@@ -425,7 +459,11 @@ def get_file_metrics(
     ]
 
     return calculate_metrics(
-        predictions, references, use_bertscore=use_bertscore, use_bleurt=use_bleurt
+        predictions,
+        references,
+        use_bertscore=use_bertscore,
+        use_bleurt=use_bleurt,
+        batch_size=batch_size,
     )
 
 
