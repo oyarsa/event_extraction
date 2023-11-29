@@ -102,7 +102,6 @@ def evaluate(
         )
         reconstruct_response_tensor = reconstruct.model.generate(
             extract_response_tokens["input_ids"].to(device),
-            # num_beams=reconstruct.model.config.num_beams,
             max_length=args.max_generation_length,
             penalty_alpha=args.degeneration_penalty,
             top_k=args.contrastive_top_k,

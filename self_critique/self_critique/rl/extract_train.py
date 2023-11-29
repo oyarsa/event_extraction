@@ -98,10 +98,10 @@ class Config:
     # Contrastive degeneration penalty (alphe)
     degeneration_penalty: float = 0.5
     # KL penalty options:
-    #    'kl': model_logp - ref_logp
-    #    'abs': abs(kl)
-    #    'mse': mean squared error mse(kl)
-    #    'full': the actual kl for all tokens in the distribution"
+    #    `kl`: model_logp - ref_logp
+    #    `abs`: abs(kl)
+    #    `mse`: mean squared error mse(kl)
+    #    `full`: the actual kl for all tokens in the distribution"
     kl_penalty: str = "kl"
     # Use adaptive KL control, otherwise linear
     adaptive_kl_ctrl: bool = True

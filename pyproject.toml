@@ -16,6 +16,7 @@ select = [
 	"TRY",
 	"UP",
 	"W",
+	"ERA"
 ]
 ignore = [
 	"PLR0911",  # Too many return statements
