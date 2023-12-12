@@ -7,7 +7,7 @@ import re
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import openai
 import pandas as pd
@@ -179,6 +179,8 @@ def main(
     context_size: int = 2,
     print_messages: bool = True,
     debug: bool = False,
+    output_dir: Path = Path("output"),
+    run_name: Optional[str] = None,
 ) -> None:
     """
     Run a GPT model on the given data and evaluate the results.
@@ -207,6 +209,16 @@ def main(
     if user_prompt not in USER_PROMPTS:
         raise ValueError(f"Invalid user prompt. Options: {USER_PROMPTS.keys()}")
 
+    if run_name is None:
+        run_name = f"{model}-sys_{system_prompt}-user_{user_prompt}-n{n}"
+        if use_context:
+            run_name += f"-context{context_size}"
+        if rand:
+            run_name += "-rand"
+
+    output_dir.mkdir(exist_ok=True, parents=True)
+    output_path = output_dir / f"{run_name}.json"
+
     api_key = key_file.read_text().strip()
 
     data = json.loads(file.read_text())
@@ -223,7 +235,30 @@ def main(
     valids, invalids = split_data(data, math.ceil(n / 2))
     sampled_data = valids + invalids
 
-    messages: list[tuple[str, str, bool]] = []
+    messages = make_messages(sampled_data)
+    output_data, total_cost, results = run_model(
+        messages,
+        model,
+        api_key,
+        system_prompt,
+        user_prompt,
+        ctx_prompt,
+        print_messages,
+    )
+
+    output_path.write_text(json.dumps(output_data, indent=4))
+    with Path("cost.csv").open("a") as f:
+        ts = datetime.now(timezone.utc).isoformat()
+        f.write(f"{ts},{total_cost}\n")
+
+    print(confusion_matrix(results))
+    print(f"\nTotal cost: ${total_cost}")
+
+
+def make_messages(
+    sampled_data: list[dict[str, Any]]
+) -> list[tuple[dict[str, Any], str, str, bool]]:
+    messages: list[tuple[dict[str, Any], str, str, bool]] = []
     for item in sampled_data:
         context = f"Context: {item['input']}"
 
@@ -245,13 +280,26 @@ def main(
 
         answer_msg = "\n".join([gold, answer]).strip()
         gpt_msg = "\n".join([context, extraction]).strip()
-        messages.append((answer_msg, gpt_msg, item["valid"]))
+        messages.append((item, answer_msg, gpt_msg, item["valid"]))
 
+    return messages
+
+
+def run_model(
+    messages: list[tuple[dict[str, Any], str, str, bool]],
+    model: str,
+    api_key: str,
+    system_prompt: str,
+    user_prompt: str,
+    ctx_prompt: str | None,
+    print_messages: bool,
+) -> tuple[list[dict[str, Any]], float, dict[tuple[bool, int], int]]:
     client = openai.OpenAI(api_key=api_key)
     results: defaultdict[tuple[bool, int], int] = defaultdict(int)
     total_cost = 0
+    output_data: list[dict[str, Any]] = []
 
-    for answer_msg, gpt_msg, valid in tqdm(messages):
+    for item, answer_msg, gpt_msg, valid in tqdm(messages):
         result_s, cost = run_gpt(
             client=client,
             model=model,
@@ -265,6 +313,8 @@ def main(
         last_line = result_s.splitlines()[-1].replace("Score:", "").strip()
         result = int(last_line) if last_line.isdigit() else 0
         results[valid, result] += 1
+
+        output_data.append(item | {"gpt_reward": result, "gpt_response": result_s})
 
         if print_messages:
             print(ctx_prompt)
@@ -282,19 +332,17 @@ def main(
             print("*" * 80)
             print()
 
-    with Path("cost.csv").open("a") as f:
-        ts = datetime.now(timezone.utc).isoformat()
-        f.write(f"{ts},{total_cost}\n")
+    return output_data, total_cost, results
 
-    # Format results as a confusion matrix
+
+def confusion_matrix(results: dict[tuple[bool, int], int]) -> pd.DataFrame:
     df = pd.DataFrame(list(results.items()), columns=["Combination", "Count"])
     df[["gold", "pred"]] = pd.DataFrame(df["Combination"].tolist(), index=df.index)
     df = df.drop("Combination", axis="columns")
     df["Count"] = df["Count"].astype(int)
     df = df.pivot_table(index="gold", columns="pred", values="Count", fill_value=0)
 
-    print(df)
-    print(f"\nTotal cost: ${total_cost}")
+    return df
 
 
 if __name__ == "__main__":
