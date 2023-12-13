@@ -37,6 +37,8 @@ def train_model(
 
     best_f1 = -1
 
+    # print the metrics
+    desc_fmt = "Train Loss: {:.4f}, Train Micro F1: {:.4f}, Train Macro F1: {:.4f}"
     # epoch loop
     for epoch in range(args.epochs):
         print()
@@ -70,10 +72,6 @@ def train_model(
                 loss.item(), logits, train_y
             )
 
-            # print the metrics
-            desc_fmt = (
-                "Train Loss: {:.4f}, Train Micro F1: {:.4f}, Train Macro F1: {:.4f}"
-            )
             train_tqdm.set_description(desc_fmt.format(loss, micro_f1, macro_f1))
             train_tqdm.refresh()
 
@@ -188,7 +186,7 @@ def main(args: argparse.Namespace) -> None:
     else:
         weights = torch.tensor(
             [
-                1 if label != args.pad_label and label != args.null_label else 0
+                1 if label not in [args.pad_label, args.null_label] else 0
                 for label in label_encoder.classes_
             ],
             dtype=torch.float32,
