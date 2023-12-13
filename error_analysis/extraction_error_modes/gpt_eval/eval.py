@@ -43,6 +43,10 @@ MODEL_COSTS = {
         0.000002,
     ),
     "gpt-4": (0.00003, 0.00006),  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
+    "gpt-4-1106-preview": (
+        0.00001,
+        0.00003,
+    ),  # in: $0.01 / 1K tokens, out: $0.03 / 1K tokens
 }
 
 
@@ -167,94 +171,6 @@ def build_context(data: list[dict[str, str]], n: int = 2) -> str:
     return "\n\n".join(valid_msg + invalid_msg)
 
 
-def main(
-    file: Path,
-    n: int = 10,
-    rand: bool = True,
-    key_file: Path = Path("key"),
-    model: str = "gpt-4",
-    system_prompt: str = "simple",
-    user_prompt: str = "instructions",
-    use_context: bool = False,
-    context_size: int = 2,
-    print_messages: bool = True,
-    debug: bool = False,
-    output_dir: Path = Path("output"),
-    run_name: Optional[str] = None,
-) -> None:
-    """
-    Run a GPT model on the given data and evaluate the results.
-
-    \b
-    - file: Path to the json file containing the data (list of objects with keys
-        'input', 'output', 'gold', 'valid')
-    - n: Number of examples to run. Should be even. If not, the number is rounded up.
-    - rand: Whether to shuffle the data before selecting n examples
-    - key_file: Path to the file containing the OpenAI API key (simple text file
-        containing only the key)
-    - model: Which GPT model to use (gpt-3.5-turbo or gpt-4)
-    - system_prompt: Which system prompt to use (only 'simple' for now)
-    - user_prompt: Which user prompt to use ('simple' or 'instructions')
-    - use_context: Whether to use the context prompt
-    - print_messages: Whether to print the prompt, context, gold and prediction. If
-        false, only the progress bar and evaluation results are printed.
-    """
-    global DEBUG  # noqa: PLW0603
-    DEBUG = debug
-
-    if model not in MODEL_COSTS:
-        raise ValueError(f"Invalid model. Options: {list(MODEL_COSTS.keys())}")
-    if system_prompt not in SYSTEM_PROMPTS:
-        raise ValueError(f"Invalid system prompt. Options: {SYSTEM_PROMPTS.keys()}")
-    if user_prompt not in USER_PROMPTS:
-        raise ValueError(f"Invalid user prompt. Options: {USER_PROMPTS.keys()}")
-
-    if run_name is None:
-        run_name = f"{model}-sys_{system_prompt}-user_{user_prompt}-n{n}"
-        if use_context:
-            run_name += f"-context{context_size}"
-        if rand:
-            run_name += "-rand"
-
-    output_dir.mkdir(exist_ok=True, parents=True)
-    output_path = output_dir / f"{run_name}.json"
-
-    api_key = key_file.read_text().strip()
-
-    data = json.loads(file.read_text())
-    if rand:
-        random.shuffle(data)
-
-    if use_context:
-        ctx_prompt = build_context(data, context_size)
-        data = data[context_size * 2 :]
-    else:
-        ctx_prompt = None
-
-    n = n or len(data)
-    valids, invalids = split_data(data, math.ceil(n / 2))
-    sampled_data = valids + invalids
-
-    messages = make_messages(sampled_data)
-    output_data, total_cost, results = run_model(
-        messages,
-        model,
-        api_key,
-        system_prompt,
-        user_prompt,
-        ctx_prompt,
-        print_messages,
-    )
-
-    output_path.write_text(json.dumps(output_data, indent=4))
-    with Path("cost.csv").open("a") as f:
-        ts = datetime.now(timezone.utc).isoformat()
-        f.write(f"{ts},{total_cost}\n")
-
-    print(confusion_matrix(results))
-    print(f"\nTotal cost: ${total_cost}")
-
-
 def make_messages(
     sampled_data: list[dict[str, Any]]
 ) -> list[tuple[dict[str, Any], str, str, bool]]:
@@ -288,13 +204,12 @@ def make_messages(
 def run_model(
     messages: list[tuple[dict[str, Any], str, str, bool]],
     model: str,
-    api_key: str,
+    client: openai.OpenAI,
     system_prompt: str,
     user_prompt: str,
     ctx_prompt: str | None,
     print_messages: bool,
 ) -> tuple[list[dict[str, Any]], float, dict[tuple[bool, int], int]]:
-    client = openai.OpenAI(api_key=api_key)
     results: defaultdict[tuple[bool, int], int] = defaultdict(int)
     total_cost = 0
     output_data: list[dict[str, Any]] = []
@@ -343,6 +258,122 @@ def confusion_matrix(results: dict[tuple[bool, int], int]) -> pd.DataFrame:
     df = df.pivot_table(index="gold", columns="pred", values="Count", fill_value=0)
 
     return df
+
+
+def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
+    config = config[api_type]
+
+    if api_type == "azure":
+        print("Using Azure OpenAI API")
+        return openai.AzureOpenAI(
+            api_key=config["key"],
+            api_version=config["api_version"],
+            azure_endpoint=config["endpoint"],
+            azure_deployment=config["deployment"],
+        )
+    elif api_type == "openai":
+        print("Using OpenAI API")
+        return openai.OpenAI(api_key=config["key"])
+    else:
+        raise ValueError(f"Unknown API type: {config['api_type']}")
+
+
+def main(
+    file: Path,
+    n: int = 10,
+    rand: bool = True,
+    openai_config_path: Path = Path("config.json"),
+    api_type: str = "openai",
+    model: str = "gpt-4",
+    system_prompt: str = "simple",
+    user_prompt: str = "instructions",
+    use_context: bool = False,
+    context_size: int = 2,
+    print_messages: bool = True,
+    debug: bool = False,
+    output_dir: Path = Path("output"),
+    run_name: Optional[str] = None,
+    all_data: bool = False,
+) -> None:
+    """
+    Run a GPT model on the given data and evaluate the results.
+
+    \b
+    - file: Path to the json file containing the data (list of objects with keys
+        'input', 'output', 'gold', 'valid')
+    - n: Number of examples to run. Should be even. If not, the number is rounded up.
+    - rand: Whether to shuffle the data before selecting n examples
+    - key_file: Path to the file containing the OpenAI API keys
+    - model: Which GPT model to use (gpt-3.5-turbo or gpt-4)
+    - system_prompt: Which system prompt to use (only 'simple' for now)
+    - user_prompt: Which user prompt to use ('simple' or 'instructions')
+    - use_context: Whether to use the context prompt
+    - print_messages: Whether to print the prompt, context, gold and prediction. If
+        false, only the progress bar and evaluation results are printed.
+    - debug: Whether to print debug messages
+    - output_dir: Directory to save the output file
+    - run_name: Name of the run. If not provided, it is generated from the model and
+        prompts.
+    - all_data: Whether to run the entire dataset. If true, n is ignored.
+    """
+    global DEBUG  # noqa: PLW0603
+    DEBUG = debug
+
+    if model not in MODEL_COSTS:
+        raise ValueError(f"Invalid model. Options: {list(MODEL_COSTS.keys())}")
+    if system_prompt not in SYSTEM_PROMPTS:
+        raise ValueError(f"Invalid system prompt. Options: {SYSTEM_PROMPTS.keys()}")
+    if user_prompt not in USER_PROMPTS:
+        raise ValueError(f"Invalid user prompt. Options: {USER_PROMPTS.keys()}")
+
+    if run_name is None:
+        run_name = f"{model}-sys_{system_prompt}-user_{user_prompt}-n{n}"
+        if use_context:
+            run_name += f"-context{context_size}"
+        if rand:
+            run_name += "-rand"
+
+    output_dir.mkdir(exist_ok=True, parents=True)
+    output_path = output_dir / f"{run_name}.json"
+
+    openai_config = json.loads(openai_config_path.read_text())
+    client = init_client(api_type, openai_config)
+
+    data = json.loads(file.read_text())
+    if rand:
+        random.shuffle(data)
+
+    if use_context:
+        ctx_prompt = build_context(data, context_size)
+        data = data[context_size * 2 :]
+    else:
+        ctx_prompt = None
+
+    if all_data:
+        sampled_data = data
+    else:
+        # Get same number of valid and invalid examples
+        valids, invalids = split_data(data, math.ceil(n / 2))
+        sampled_data = valids + invalids
+
+    messages = make_messages(sampled_data)
+    output_data, total_cost, results = run_model(
+        messages,
+        model,
+        client,
+        system_prompt,
+        user_prompt,
+        ctx_prompt,
+        print_messages,
+    )
+
+    output_path.write_text(json.dumps(output_data, indent=4))
+    with Path("cost.csv").open("a") as f:
+        ts = datetime.now(timezone.utc).isoformat()
+        f.write(f"{ts},{total_cost}\n")
+
+    print(confusion_matrix(results))
+    print(f"\nTotal cost: ${total_cost}")
 
 
 if __name__ == "__main__":
