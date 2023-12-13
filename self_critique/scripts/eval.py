@@ -272,9 +272,15 @@ def compute_metrics(instances: list[Instance]) -> dict[str, float]:
     return extraction | classification
 
 
+def fix_relation(relation: str | None) -> str:
+    if relation in {"cause", "enable", "prevent"}:
+        return relation
+    return "cause"
+
+
 def compute_classification_metrics(instances: list[Instance]) -> dict[str, float]:
-    pred = [instance["pred_relation"] for instance in instances]
-    gold = [instance["gold_relation"] for instance in instances]
+    pred = [fix_relation(instance["pred_relation"]) for instance in instances]
+    gold = [fix_relation(instance["gold_relation"]) for instance in instances]
 
     accuracy = sum(int(p == g) for p, g in zip(pred, gold)) / len(instances)
     precision, recall, f1, _ = precision_recall_fscore_support(
