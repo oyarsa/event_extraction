@@ -1,0 +1,27 @@
+#!/usr/bin/env fish
+source config/bert_nocrf.fish
+
+set models bert-base-cased roberta-base
+set batch_sizes 32 128
+set learning_rates 5e-5 3e-5
+set crf (test $CRF -eq 1; and echo "crf" or echo "no-crf")
+
+for model in $models
+    set -x LM_NAME $model
+
+    for bs in $batch_sizes
+        for lr in $learning_rates
+            set model_type (echo $model | awk -F- '{print $1}')
+            set run_name {$model_type}_{$crf}_{$EPOCHS}epoch_bs-{$bs}_lr-{$lr}
+            echo " >>>> MODEL: $model BATCH SIZE: $bs LEARNING RATE: $lr NAME $run_name"
+
+            echo fish train.fish \
+                --epochs 4 \
+                --batch_size "$bs" \
+                --lr "$lr" \
+                --run-name "$run_name"
+
+            printf "\n\n"
+        end
+    end
+end
