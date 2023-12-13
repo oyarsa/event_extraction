@@ -61,26 +61,25 @@ def main(args: argparse.Namespace) -> None:
         label_idx = 0
 
         for line in in_file:
-            if not line.startswith("#"):
-                if line not in [" ", "\n"]:
-                    tokens = line.strip().split(args.separator)
-
-                    token = tokens[args.token_column]
-                    gold = tokens[args.predict_column]
-                    pred = list_labels[sentence_idx][label_idx]
-
-                    out_file.write(args.separator.join([token, gold, pred]) + "\n")
-
-                    subtokens = tokenizer.encode(token, add_special_tokens=False)
-                    label_idx += len(subtokens)
-                else:
-                    assert label_idx == len(list_labels[sentence_idx])
-
-                    out_file.write("\n")
-                    sentence_idx += 1
-                    label_idx = 0
-            else:
+            if line.startswith("#"):
                 out_file.write(line)
+            elif line not in [" ", "\n"]:
+                tokens = line.strip().split(args.separator)
+
+                token = tokens[args.token_column]
+                gold = tokens[args.predict_column]
+                pred = list_labels[sentence_idx][label_idx]
+
+                out_file.write(args.separator.join([token, gold, pred]) + "\n")
+
+                subtokens = tokenizer.encode(token, add_special_tokens=False)
+                label_idx += len(subtokens)
+            else:
+                assert label_idx == len(list_labels[sentence_idx])
+
+                out_file.write("\n")
+                sentence_idx += 1
+                label_idx = 0
 
 
 if __name__ == "__main__":
