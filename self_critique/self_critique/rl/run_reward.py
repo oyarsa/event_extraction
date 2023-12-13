@@ -76,11 +76,14 @@ class Config:
 class EvalEntry:
     input: str
     output: str
+    gold: str
 
 
 def load_data(file_path: Path, max_samples: int | None = None) -> list[EvalEntry]:
     data = json.loads(file_path.read_text())
-    return [EvalEntry(input=d["input"], output=d["output"]) for d in data][:max_samples]
+    return [
+        EvalEntry(input=d["input"], output=d["output"], gold=d["gold"]) for d in data
+    ][:max_samples]
 
 
 T = TypeVar("T")
@@ -116,6 +119,7 @@ def evaluate(
     for batch in tqdm(batched(dataset, batch_size), desc=desc):
         inputs = [x.input for x in batch]
         extractions = [x.output for x in batch]
+        golds = [x.gold for x in batch]
 
         if rewrite:
             extractions_in = [rewrite_extraction(s) for s in extractions]
@@ -138,6 +142,7 @@ def evaluate(
         output.extend(
             {
                 "input": inputs[i],
+                "gold": golds[i],
                 "rl_extract_txt": extractions[i],
                 "reward_label": reward_labels[i],
                 "scores": scores[i].tolist(),
