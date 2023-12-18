@@ -10,7 +10,6 @@ select = [
 	"ISC",
 	"N",
 	"PL",
-	"PTH",
 	"RUF",
 	"SIM",
 	"TRY",
