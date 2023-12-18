@@ -4,44 +4,57 @@
 import json
 import re
 import string
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, TypedDict
 
 import typer
 
 
-class Instance(TypedDict):
+@dataclass
+class Instance:
     cause_predictions: list[str]
     cause_golds: list[str]
     effect_predictions: list[str]
     effect_golds: list[str]
 
 
-def rewrite_clause(parts: list[str]) -> str:
-    return ", and".join(parts)
+@dataclass
+class InputData:
+    input: str
+    gold: str
+    output: str
 
 
-def evaluate(instances: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    result: list[dict[str, Any]] = []
+@dataclass
+class OutputData:
+    input: str
+    gold: str
+    output: str
+    reward_label: str
+
+
+def evaluate(instances: list[InputData]) -> list[OutputData]:
+    result: list[OutputData] = []
 
     for inst in instances:
-        pred_entities, _ = parse_instance(inst["output"])
-        ref_entities, _ = parse_instance(inst["gold"])
+        pred_entities, _ = parse_instance(inst.gold)
+        ref_entities, _ = parse_instance(inst.output)
 
-        instance: Instance = {
-            "cause_predictions": pred_entities["cause"],
-            "cause_golds": ref_entities["cause"],
-            "effect_predictions": pred_entities["effect"],
-            "effect_golds": ref_entities["effect"],
-        }
+        instance: Instance = Instance(
+            cause_predictions=pred_entities["cause"],
+            cause_golds=ref_entities["cause"],
+            effect_predictions=pred_entities["effect"],
+            effect_golds=ref_entities["effect"],
+        )
+
         label = "VALID" if is_valid(instance) else "INVALID"
         result.append(
-            {
-                "input": inst["input"],
-                "gold": inst["gold"],
-                "output": inst["output"],
-                "reward_label": label,
-            }
+            OutputData(
+                input=inst.input,
+                gold=inst.gold,
+                output=inst.output,
+                reward_label=label,
+            )
         )
 
     return result
@@ -61,10 +74,10 @@ def get_tokens(s: str) -> list[str]:
 
 
 def is_valid(instance: Instance) -> bool:
-    cause_pred_toks = get_tokens(" ".join(instance["cause_predictions"]))
-    cause_gold_toks = get_tokens(" ".join(instance["cause_golds"]))
-    effect_pred_toks = get_tokens(" ".join(instance["effect_predictions"]))
-    effect_gold_toks = get_tokens(" ".join(instance["effect_golds"]))
+    cause_pred_toks = get_tokens(" ".join(instance.cause_predictions))
+    cause_gold_toks = get_tokens(" ".join(instance.cause_golds))
+    effect_pred_toks = get_tokens(" ".join(instance.effect_predictions))
+    effect_gold_toks = get_tokens(" ".join(instance.effect_golds))
 
     return cause_gold_toks == cause_pred_toks and effect_gold_toks == effect_pred_toks
 
@@ -119,9 +132,16 @@ def main(infile: Path, outfile: Path) -> None:
     The output JSON has the same structure as the input JSON, but with an additional
     "reward_label" field, with value "VALID" or "INVALID".
     """
-    data = json.loads(infile.read_text())
-    results = evaluate(data)
-    outfile.write_text(json.dumps(results, indent=2))
+    input_data = [
+        InputData(
+            input=item["input"],
+            gold=item["gold"],
+            output=item["output"],
+        )
+        for item in json.loads(infile.read_text())
+    ]
+    results = evaluate(input_data)
+    outfile.write_text(json.dumps([asdict(result) for result in results], indent=2))
 
 
 if __name__ == "__main__":
