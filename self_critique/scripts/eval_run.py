@@ -11,14 +11,6 @@ import typer
 
 
 @dataclass
-class Instance:
-    cause_predictions: list[str]
-    cause_golds: list[str]
-    effect_predictions: list[str]
-    effect_golds: list[str]
-
-
-@dataclass
 class InputData:
     input: str
     gold: str
@@ -33,21 +25,21 @@ class OutputData:
     reward_label: str
 
 
+@dataclass
+class ParsedInstance:
+    cause: list[str]
+    effect: list[str]
+    relation: str
+
+
 def evaluate(instances: list[InputData]) -> list[OutputData]:
     result: list[OutputData] = []
 
     for inst in instances:
-        pred_entities, _ = parse_instance(inst.gold)
-        ref_entities, _ = parse_instance(inst.output)
+        gold = parse_instance(inst.gold)
+        pred = parse_instance(inst.output)
 
-        instance: Instance = Instance(
-            cause_predictions=pred_entities["cause"],
-            cause_golds=ref_entities["cause"],
-            effect_predictions=pred_entities["effect"],
-            effect_golds=ref_entities["effect"],
-        )
-
-        label = "VALID" if is_valid(instance) else "INVALID"
+        label = "VALID" if is_valid(pred, gold) else "INVALID"
         result.append(
             OutputData(
                 input=inst.input,
@@ -73,13 +65,17 @@ def get_tokens(s: str) -> list[str]:
     return normalize_answer(s).split()
 
 
-def is_valid(instance: Instance) -> bool:
-    cause_pred_toks = get_tokens(" ".join(instance.cause_predictions))
-    cause_gold_toks = get_tokens(" ".join(instance.cause_golds))
-    effect_pred_toks = get_tokens(" ".join(instance.effect_predictions))
-    effect_gold_toks = get_tokens(" ".join(instance.effect_golds))
+def is_valid(pred: ParsedInstance, gold: ParsedInstance) -> bool:
+    cause_pred_toks = get_tokens(" ".join(pred.cause))
+    cause_gold_toks = get_tokens(" ".join(gold.cause))
+    effect_pred_toks = get_tokens(" ".join(pred.effect))
+    effect_gold_toks = get_tokens(" ".join(gold.effect))
 
-    return cause_gold_toks == cause_pred_toks and effect_gold_toks == effect_pred_toks
+    return (
+        cause_gold_toks == cause_pred_toks
+        and effect_gold_toks == effect_pred_toks
+        and pred.relation == gold.relation
+    )
 
 
 def clean(s: str) -> str:
@@ -87,7 +83,7 @@ def clean(s: str) -> str:
     return re.sub(r'""+"', '"', s)
 
 
-def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
+def parse_instance(answer: str) -> ParsedInstance:
     """Parse string answer to separate into class and spans
     Simple case:
     [Cause] This is a cause [Relation] cause [Effect] This is an effect
@@ -97,20 +93,14 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str]:
     """
     matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
     if not matches:
-        return {
-            "cause": [],
-            "effect": [],
-        }, "cause"
+        return ParsedInstance(cause=[], effect=[], relation="cause")
 
     causes, relation, effects = matches[0]
     causes = sorted(s for c in causes.split("|") if (s := clean(c)))
     effects = sorted(s for e in effects.split("|") if (s := clean(e)))
     relation = relation.strip().lower()
 
-    return {
-        "cause": causes,
-        "effect": effects,
-    }, relation
+    return ParsedInstance(cause=causes, effect=effects, relation=relation)
 
 
 def main(infile: Path, outfile: Path) -> None:
