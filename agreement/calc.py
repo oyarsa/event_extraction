@@ -48,7 +48,7 @@ def load_json(file_path: str) -> list[dict]:
 def main():
     if len(sys.argv) < 3:
         print(
-            "Usage: python calc.py <base_path> <model_path,true_class> [<model_path,true_class> ...]"  # noqa
+            "Usage: python calc.py <base_path> <model_path,true_class> [<model_path,true_class> ...]"
         )
         sys.exit(1)
 
