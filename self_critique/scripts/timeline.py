@@ -42,6 +42,29 @@ def keep_non_entailment(instances: list[dict[str, Any]]) -> list[dict[str, Any]]
 
 
 def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
+    """For each instance in the dataset, build a sequence of label predictions.
+
+    This is meant to show how the predictions change over time for each instance.
+
+    \b
+    The files must be in the format `eval_result_{batch}.json` and contain a list of
+    objects with the following fields:
+    - id: the instance id
+    - original: the original text
+    - context: the gold text
+    - rl_extract_txt: the predicted text
+    - entailment_label: the predicted label
+
+    \b
+    The output is a list of instances, each with the following fields:
+    - id: the instance id
+    - original: the original text
+    - gold: the gold text
+    - extracts: a list of predictions, each with the following fields:
+        - batch: the batch number
+        - pred: the predicted text
+        - label: the predicted label
+    """
     data = load_data(path)
 
     instances = [
