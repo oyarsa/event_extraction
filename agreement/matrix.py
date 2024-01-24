@@ -1,7 +1,7 @@
 import json
 import sys
-from dataclasses import dataclass
 from collections import defaultdict
+from dataclasses import dataclass
 
 
 @dataclass
@@ -21,9 +21,9 @@ human_path = sys.argv[1]
 model_path = sys.argv[2]
 true_class = sys.argv[3].casefold().strip()
 
-with open(human_path, "r") as f:
+with open(human_path) as f:
     human = json.load(f)
-with open(model_path, "r") as f:
+with open(model_path) as f:
     model = json.load(f)
 
 matches = []
