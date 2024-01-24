@@ -13,10 +13,13 @@ class Result:
 
 
 def convert_model(data: dict[str, Any]) -> dict[str, str]:
+    # sourcery skip: default-get
     "Convert model output to match base data format."
     return {
-        "input": data.get("context", data["input"]),
-        "gold": data.get("answers", data["gold"]),
+        # The explicit check is necessary because 'input' and 'gold' might not exist,
+        # which would break the 'get' version
+        "input": data["context"] if "context" in data else data["input"],
+        "gold": data["answers"] if "answers" in data else data["gold"],
         "reward_label": data["reward_label"].casefold().strip(),
     }
 
