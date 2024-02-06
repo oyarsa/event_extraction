@@ -398,8 +398,7 @@ def load_json(path: Path, n: int | None) -> list[DataEntry]:
             output=d["output"],
             gold=d["gold"],
             valid=d["valid"],
-            tag=d["tag"],
-            # tag=d.get("tag"),
+            tag=d.get("tag"),
         )
         for d in data[:n]
     ]
