@@ -1,5 +1,6 @@
 import argparse
 import json
+import os.path
 import sys
 from dataclasses import dataclass
 from typing import Any
@@ -19,7 +20,15 @@ class Result:
 
 def convert_model(data: dict[str, Any]) -> dict[str, str]:
     # sourcery skip: default-get
-    "Convert model output to match base data format."
+    """Convert model output to match base data format.
+
+    The data is expected to be in the following format:
+    - 'context' or 'input': the context or input.
+    - 'answers' or 'gold': the gold answer.
+    - 'reward_label': the model's output.
+
+    All values are strings.
+    """
     return {
         # The explicit check is necessary because 'input' and 'gold' might not exist,
         # which would break the 'get' version
@@ -108,8 +117,7 @@ def main():
             args.metric, base_data, model_data, true_class.casefold().strip()
         )
 
-        # Print each row of the table
-        print(f"{model_path:<30} {valid:<10.4f} {metric:.4f}")
+        print(f"{os.path.basename(model_path):<30} {valid:<10.4f} {metric:.4f}")
 
 
 if __name__ == "__main__":
