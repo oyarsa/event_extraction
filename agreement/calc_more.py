@@ -5,9 +5,7 @@ import sys
 from dataclasses import dataclass
 from typing import Any
 
-import krippendorff
-from scipy.stats import spearmanr
-from sklearn.metrics import cohen_kappa_score
+from metrics import calculate_metric
 
 
 @dataclass
@@ -36,23 +34,6 @@ def convert_model(data: dict[str, Any]) -> dict[str, str]:
         "gold": data["answers"] if "answers" in data else data["gold"],
         "reward_label": data["reward_label"].casefold().strip(),
     }
-
-
-def calculate_metric(metric: str, x: list[Any], y: list[Any]) -> float:
-    x = [int(value) for value in x]
-    y = [int(value) for value in y]
-
-    match metric:
-        case "agreement":
-            return sum(a == b for a, b in zip(x, y)) / len(x)
-        case "krippendorff" | "kdf":
-            return krippendorff.alpha([x, y], level_of_measurement="nominal")
-        case "spearman":
-            return spearmanr(x, y)[0]
-        case "cohen":
-            return cohen_kappa_score(x, y)
-        case _:
-            raise ValueError(f"Unknown metric: {metric}")
 
 
 def calculate_metrics(
