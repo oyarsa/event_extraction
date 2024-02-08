@@ -53,10 +53,13 @@ def main(file: Path) -> None:
     """
     data = json.loads(file.read_text())
 
-    y_true = [d["gold"] for d in data]
-    y_pred = [d["prediction"] for d in data]
-    labels = list(set(y_true + y_pred))
+    y_true = [str(d["gold"]) for d in data]
+    y_pred = [str(d["prediction"] if "prediction" in d else d["pred"]) for d in data]
 
+    accuracy = sum(true == pred for true, pred in zip(y_true, y_pred)) / len(y_true)
+    print(f"Overall accuracy: {accuracy:.2%}\n")
+
+    labels = list(set(y_true + y_pred))
     confusion = confusion_matrix(y_true, y_pred, labels=labels)
     print_confusion(confusion, labels)
 
