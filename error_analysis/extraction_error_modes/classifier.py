@@ -291,6 +291,7 @@ def train(
     early_stopping_patience: int,
     scheduler_type: str,
     metrics_file: Path,
+    metric_for_best: str = "f1",
 ) -> PreTrainedModel:
     model = model.to(device)  # type: ignore
     optimizer = AdamW(model.parameters(), lr=learning_rate)
@@ -301,8 +302,8 @@ def train(
         num_training_steps=(len(train_loader) * num_epochs),
     )
 
-    best_f1 = 0
     best_model = copy.deepcopy(model)
+    best_metric = 0
     epochs_without_improvement = 0
 
     for epoch in range(num_epochs):
@@ -324,10 +325,10 @@ def train(
         report_metrics(metrics, "Train evaluation")
         save_metrics(metrics_file, **metrics, train_loss=avg_train_loss)
 
-        if metrics["f1"] > best_f1:
-            best_f1 = metrics["f1"]
             best_model = copy.deepcopy(model)
-            logger.info(f"New best: {best_f1:.4f} F1")
+        if metrics[metric_for_best] > best_metric:
+            best_metric = metrics[metric_for_best]
+            logger.info(f"New best: {best_metric:.4f} {metric_for_best}")
         else:
             epochs_without_improvement += 1
             logger.info(f"{epochs_without_improvement} epochs without improvement")
