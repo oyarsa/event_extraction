@@ -1,10 +1,10 @@
 import collections
-import copy
 import dataclasses
 import json
 import logging
 import os
 import random
+import shutil
 import sys
 import warnings
 from collections.abc import Mapping
@@ -302,7 +302,12 @@ def train(
         num_training_steps=(len(train_loader) * num_epochs),
     )
 
-    best_model = copy.deepcopy(model)
+    # Saving the temporary best model in same place as the metrics file in case
+    # training is interrupted and the final model is not saved. This will be deleted
+    # after training is done and properly saved afterwards.
+    best_model_path = metrics_file.parent / "best_model"
+    model.save_pretrained(best_model_path)
+
     best_metric = 0
     epochs_without_improvement = 0
 
@@ -325,9 +330,9 @@ def train(
         report_metrics(metrics, "Train evaluation")
         save_metrics(metrics_file, **metrics, train_loss=avg_train_loss)
 
-            best_model = copy.deepcopy(model)
         if metrics[metric_for_best] > best_metric:
             best_metric = metrics[metric_for_best]
+            model.save_pretrained(best_model_path)
             logger.info(f"New best: {best_metric:.4f} {metric_for_best}")
         else:
             epochs_without_improvement += 1
@@ -336,6 +341,10 @@ def train(
                 logger.info("Early stopping")
                 break
 
+    best_model = AutoModelForSequenceClassification.from_pretrained(
+        best_model_path, config=model.config
+    ).to(device)
+    shutil.rmtree(best_model_path, ignore_errors=True)
     return best_model
 
 
@@ -537,6 +546,7 @@ def run_training(
     metrics_file = output_dir / "training_metrics.jsonl"
     metrics_file.unlink(missing_ok=True)
     metrics_file.touch()
+
     trained_model = train(
         model,
         train_loader,
