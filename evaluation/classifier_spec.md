@@ -8,11 +8,10 @@ Defines how the classifier scripts should be behave to be used with the
 CLI usage:
 
 ```bash
-python script.py \
+python classifier.py \
     --config $config \
     --output_path $output_path \
     --output_name $output_name \
-    --output_file $output_file
 ```
 
 Where:
@@ -20,8 +19,6 @@ Where:
 - `$output_path`: Path to the output directory.
 - `$output_name`: Name of the directory for the run, to be created inside
   `$output_path`.
-- `output_file`: Name of the file with the results. Optional, defaults to
-  `test_results.json`.
 
 The configuration file format doesn't actually matter, as long as the classifier
 script can read it.
