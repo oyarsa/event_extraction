@@ -8,6 +8,9 @@ AVAILABLE_METRICS = ["agreement", "krippendorff", "kdf", "spearman", "cohen"]
 
 
 def calculate_metric(metric: str, x: list[Any], y: list[Any]) -> float:
+    if metric not in AVAILABLE_METRICS:
+        raise ValueError(f"Unknown metric: {metric}")
+
     x = [int(value) for value in x]
     y = [int(value) for value in y]
 
@@ -21,4 +24,4 @@ def calculate_metric(metric: str, x: list[Any], y: list[Any]) -> float:
         case "cohen":
             return cohen_kappa_score(x, y)
         case _:
-            raise ValueError(f"Unknown metric: {metric}")
+            raise ValueError(f"Metric not implmeneted: {metric}")
