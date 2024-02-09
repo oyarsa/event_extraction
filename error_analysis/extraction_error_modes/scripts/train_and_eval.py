@@ -22,14 +22,12 @@ def git_root() -> Path:
     )
 
 
-CLASSIFIER_SCRIPT = Path("classifier.py")
-EVALUATOR_SCRIPT = git_root() / "agreement" / "calc_know.py"
-
-
-def run_classifier(config_path: Path, output_path: Path, output_name: str) -> None:
+def run_classifier(
+    classifier_script: Path, config_path: Path, output_path: Path, output_name: str
+) -> None:
     args = [
         sys.executable,
-        str(CLASSIFIER_SCRIPT),
+        str(classifier_script),
         "--config",
         str(config_path),
         "--output_path",
@@ -102,31 +100,35 @@ def track_memory(sleep_s: int = 1) -> Generator[dict[str, int], None, None]:
 
 
 def classify(
-    config: Path, output_path: Path, output_name: str, sleep_s: int = 1
+    classifier_script: Path,
+    config: Path,
+    output_path: Path,
+    output_name: str,
+    sleep_s: int = 1,
 ) -> None:
     with track_memory(sleep_s) as stats:
-        run_classifier(config, output_path, output_name)
+        run_classifier(classifier_script, config, output_path, output_name)
     print(
         f"Max GPU memory usage: {stats['used']}/{stats['total']}"
         f" ({stats['free']} free) MiB"
     )
 
 
-def run_evaluator(metric: str, data_file: Path) -> None:
+def run_evaluator(evaluator_script: Path, metric: str, data_file: Path) -> None:
     args = [
         sys.executable,
-        str(EVALUATOR_SCRIPT),
+        str(evaluator_script),
         metric,
         str(data_file),
     ]
     subprocess.run(args, check=True)
 
 
-def evaluate(output_file: Path) -> None:
+def evaluate(evaluator_script: Path, output_file: Path) -> None:
     print()
     print(">>>> EVALUATING")
     for metric in ["agreement", "krippendorff", "spearman", "cohen"]:
-        run_evaluator(metric, output_file)
+        run_evaluator(evaluator_script, metric, output_file)
         print()
 
 
@@ -134,13 +136,17 @@ def main(
     dir_name: Path = typer.Argument(help="Path to output directory"),
     run_name: str = typer.Argument(help="Name of the run"),
     config: Path = typer.Argument(help="Path to the config file"),
+    classifier: Path = typer.Option(
+        "classifier.py", help="Path to the classifier script"
+    ),
+    evaluator: Path = git_root() / "agreement" / "calc_know.py",
 ) -> None:
-    "Train classifier and evaluate output for agreement."
+    "Train classifier and evaluate output for agreement and correlation statistics."
     run_path = dir_name / run_name
     output_file = run_path / "test_results.json"
 
-    classify(config, dir_name, run_name)
-    evaluate(output_file)
+    classify(classifier, config, dir_name, run_name)
+    evaluate(evaluator, output_file)
 
 
 if __name__ == "__main__":
