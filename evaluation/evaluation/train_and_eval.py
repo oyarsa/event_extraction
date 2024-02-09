@@ -142,7 +142,7 @@ def main(
     classifier: Path = typer.Option(
         "classifier.py", help="Path to the classifier script"
     ),
-    evaluator: Path = git_root() / "agreement" / "calc_know.py",
+    evaluator: Path = git_root() / "agreement" / "calc.py",
 ) -> None:
     "Train classifier and evaluate output for agreement and correlation statistics."
     run_path = dir_name / run_name
