@@ -1,5 +1,9 @@
+krippendorff~=0.6
 numpy~=1.25
+protobuf~=4.25
 scikit-learn~=1.2
+scipy~=1.12
+sentencepiece~=0.1.99
 simple_parsing~=0.1.2
 torch~=2.0
 tqdm~=4.65
