@@ -1,4 +1,2 @@
-*.json
-*.txt
+**/*data*
 *.ipynb
-*.jsonl
