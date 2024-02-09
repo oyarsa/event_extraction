@@ -136,6 +136,9 @@ def main(
     dir_name: Path = typer.Argument(help="Path to output directory"),
     run_name: str = typer.Argument(help="Name of the run"),
     config: Path = typer.Argument(help="Path to the config file"),
+    output_file_name: str = typer.Option(
+        "test_results.json", help="Name of the the output file"
+    ),
     classifier: Path = typer.Option(
         "classifier.py", help="Path to the classifier script"
     ),
@@ -143,7 +146,7 @@ def main(
 ) -> None:
     "Train classifier and evaluate output for agreement and correlation statistics."
     run_path = dir_name / run_name
-    output_file = run_path / "test_results.json"
+    output_file = run_path / output_file_name
 
     classify(classifier, config, dir_name, run_name)
     evaluate(evaluator, output_file)
