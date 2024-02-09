@@ -5,7 +5,7 @@ import sys
 from dataclasses import dataclass
 from typing import Any
 
-from metrics import calculate_metric
+import metrics
 
 
 @dataclass
@@ -61,7 +61,7 @@ def calculate_metrics(
         return 0.0, 0.0
 
     model_valid = sum(r.model_valid for r in matches) / len(matches)
-    metric_val = calculate_metric(
+    metric_val = metrics.calculate_metric(
         metric, [r.base_valid for r in matches], [r.model_valid for r in matches]
     )
 
@@ -74,14 +74,10 @@ def load_json(file_path: str) -> list[dict[str, Any]]:
 
 
 def main():
-    if len(sys.argv) < 4:
-        print(
-            "Usage: python calc.py <metric> <base_path> <model_path,true_class> [<model_path,true_class> ...]"
-        )
-        sys.exit(1)
-
     parser = argparse.ArgumentParser()
-    parser.add_argument("metric", help="metric to calculate")
+    parser.add_argument(
+        "metric", help=f"metric to calculate: {', '.join(metrics.AVAILABLE_METRICS)}"
+    )
     parser.add_argument("base_path", help="path to base data")
     parser.add_argument("models", nargs="+", help="path to model data")
     args = parser.parse_args()

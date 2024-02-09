@@ -3,7 +3,7 @@ import json
 import os.path
 from dataclasses import dataclass
 
-from metrics import calculate_metric
+import metrics
 
 
 @dataclass
@@ -14,7 +14,7 @@ class DataEntry:
 
 def calculate_metrics(metric: str, data: list[DataEntry]) -> tuple[float, float]:
     model_valid = sum(r.pred for r in data) / len(data)
-    metric_val = calculate_metric(
+    metric_val = metrics.calculate_metric(
         metric, [r.gold for r in data], [r.pred for r in data]
     )
 
@@ -29,7 +29,9 @@ def load_json(file_path: str) -> list[DataEntry]:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("metric", help="metric to calculate")
+    parser.add_argument(
+        "metric", help=f"metric to calculate: {', '.join(metrics.AVAILABLE_METRICS)}"
+    )
     parser.add_argument("data_paths", nargs="+", help="path to model data")
     args = parser.parse_args()
 

@@ -4,6 +4,8 @@ import krippendorff
 from scipy.stats import spearmanr
 from sklearn.metrics import cohen_kappa_score
 
+AVAILABLE_METRICS = ["agreement", "krippendorff", "kdf", "spearman", "cohen"]
+
 
 def calculate_metric(metric: str, x: list[Any], y: list[Any]) -> float:
     x = [int(value) for value in x]
