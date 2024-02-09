@@ -1,0 +1,19 @@
+{
+    "model_name": "microsoft/deberta-base",
+	"train_data_path": "./training/hand_labelled.json",
+	"eval_data_path": "./evaluation_substr.labelled.json",
+	"test_data_path": "./prediction_substr.labelled.json",
+	"infer_data_path": "./training/unlabelled.json",
+    "learning_rate": 1e-5,
+    "num_epochs": 100,
+	"early_stopping_patience": 10,
+    "max_seq_length": 256,
+    "batch_size": 32,
+    "output_path": "output",
+	"output_name": "supervised",
+	"use_passage": false,
+	"do_train": true,
+	"do_evaluation": true,
+	"do_test": true,
+	"do_inference": true
+}

@@ -1,0 +1,21 @@
+{
+  "model_name": "microsoft/deberta-v3-base",
+  "train_data_path": "../../../knowwhy/data/converted/train.json",
+  "eval_data_path": "../../../knowwhy/data/converted/dev.json",
+  "test_data_path": "../../../knowwhy/data/converted/test.json",
+  "infer_data_path": null,
+  "learning_rate": 1e-5,
+  "num_epochs": 100,
+  "max_seq_length": 192,
+  "batch_size": 32,
+  "early_stopping_patience": 10,
+  "max_samples": null,
+  "output_path": "output/knowwhy",
+  "seed": 0,
+  "output_name": "knowwhy-deberta-v3-base",
+  "use_passage": true,
+  "do_train": true,
+  "do_test": true,
+  "do_inference": false,
+  "do_evaluation": true
+}

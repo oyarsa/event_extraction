@@ -1,4 +1,5 @@
 *.json
+!**/*config*/*.json
 !prediction_output.json
 !evaluation_output.json
 !prediction_substr.json

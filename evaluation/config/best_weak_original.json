@@ -1,0 +1,21 @@
+{
+  "model_name": "microsoft/deberta-v3-base",
+  "train_data_path": "training/weakly.tagged.json",
+  "eval_data_path": "evaluation/all_labelled.tagged.json",
+  "test_data_path": "prediction/all_labelled.tagged.json",
+  "infer_data_path": "training/all_labelled.tagged.json",
+  "learning_rate": 1e-5,
+  "num_epochs": 100,
+  "max_seq_length": 256,
+  "batch_size": 32,
+  "early_stopping_patience": 10,
+  "max_samples": null,
+  "output_path": "output/weak-test",
+  "seed": 0,
+  "output_name": "best-weak-original",
+  "use_passage": true,
+  "do_train": true,
+  "do_test": true,
+  "do_inference": true,
+  "do_evaluation": true
+}
