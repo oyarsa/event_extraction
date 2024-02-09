@@ -30,7 +30,7 @@ def load_json(file_path: str) -> list[DataEntry]:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "metric", help=f"metric to calculate: {', '.join(metrics.AVAILABLE_METRICS)}"
+        "metric", help="metric to calculate", choices=metrics.AVAILABLE_METRICS
     )
     parser.add_argument("data_paths", nargs="+", help="path to model data")
     args = parser.parse_args()
