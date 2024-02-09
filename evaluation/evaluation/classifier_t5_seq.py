@@ -1,10 +1,10 @@
 import collections
-import copy
 import dataclasses
 import json
 import logging
 import os
 import random
+import shutil
 import sys
 import warnings
 from collections.abc import Mapping
@@ -276,12 +276,18 @@ def train(
     learning_rate: float,
     early_stopping_patience: int,
     metrics_file: Path,
+    metric_for_best: str = "f1",
 ) -> PreTrainedModel:
     model = model.to(device)  # type: ignore
     optimizer = AdamW(model.parameters(), lr=learning_rate)
 
-    best_f1 = 0
-    best_model = copy.deepcopy(model)
+    # Saving the temporary best model in same place as the metrics file in case
+    # training is interrupted and the final model is not saved. This will be deleted
+    # after training is done and properly saved afterwards.
+    best_model_path = metrics_file.parent / "best_model"
+    model.save_pretrained(best_model_path)
+
+    best_metric = 0
     epochs_without_improvement = 0
 
     for epoch in range(num_epochs):
@@ -306,10 +312,10 @@ def train(
         report_metrics(metrics, "Train evaluation")
         save_metrics(metrics_file, **metrics, train_loss=avg_train_loss)
 
-        if metrics["f1"] > best_f1:
-            best_f1 = metrics["f1"]
-            best_model = copy.deepcopy(model)
-            logger.info(f"New best: {best_f1:.4f} F1")
+        if metrics[metric_for_best] > best_metric:
+            best_metric = metrics[metric_for_best]
+            model.save_pretrained(best_model_path)
+            logger.info(f"New best: {best_metric:.4f} F1")
         else:
             epochs_without_improvement += 1
             logger.info(f"{epochs_without_improvement} epochs without improvement")
@@ -317,6 +323,10 @@ def train(
                 logger.info("Early stopping")
                 break
 
+    best_model = AutoModelForSeq2SeqLM.from_pretrained(
+        best_model_path, config=model.config
+    ).to(device)
+    shutil.rmtree(best_model_path, ignore_errors=True)
     return best_model
 
 
