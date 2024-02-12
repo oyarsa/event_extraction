@@ -8,9 +8,9 @@
   "batch_size": 24,
   "early_stopping_patience": 10,
   "max_samples": null,
-  "output_path": "output/weak-test",
+  "output_path": "output/scripttest",
   "seed": 0,
-  "output_name": "best-weak-original-large",
+  "output_name": "fcr-deberta-v3-large",
   "use_passage": true,
   "do_train": true,
   "do_test": true,
@@ -18,5 +18,6 @@
   "do_evaluation": true,
   "test_data_path": "data/prediction/all_labelled.tagged.json",
   "infer_data_path": "data/training/all_labelled.tagged.json",
-  "dropout": null
+  "dropout": null,
+  "lr_scheduler": "constant"
 }
