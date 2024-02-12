@@ -1,11 +1,16 @@
 *.json
 !**/*config*/*.json
+
 !prediction_output.json
 !evaluation_output.json
 !prediction_substr.json
+
 !**/*labelled*.json
+!**/*weakly*.json
+
 !classifier_config.json
 !training/*.json
+
 output/
 .virtual_documents
 key
