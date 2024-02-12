@@ -17,7 +17,6 @@ import simple_parsing
 import torch
 import torch.backends.mps
 import transformers
-from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import LRScheduler
 from torch.utils.data import DataLoader, Dataset
@@ -30,6 +29,8 @@ from transformers import (
     PreTrainedTokenizer,
     get_scheduler,
 )
+
+from metrics import EvaluationResult, calc_metrics, report_metrics
 
 logger = logging.getLogger("classifier")
 
@@ -143,17 +144,6 @@ def train_epoch(
     return total_loss / len(train_loader)
 
 
-@dataclasses.dataclass
-class EvaluationResult:
-    golds: list[int]
-    preds: list[int]
-    passages: list[str]
-    outputs: list[str]
-    annotations: list[str]
-    loss: float
-    tags: list[str] | None = None
-
-
 def evaluate(
     model: PreTrainedModel,
     val_loader: DataLoader,
@@ -255,32 +245,6 @@ def infer(
     )
 
 
-def calc_metrics(results: EvaluationResult) -> dict[str, float]:
-    acc = accuracy_score(results.golds, results.preds)
-    prec, rec, f1, _ = precision_recall_fscore_support(
-        results.golds, results.preds, average="binary", zero_division=0  # type: ignore
-    )
-
-    return {
-        "accuracy": float(acc),
-        "precision": float(prec),
-        "recall": float(rec),
-        "f1": float(f1),
-        "eval_loss": results.loss,
-    }
-
-
-def report_metrics(metrics: dict[str, float], desc: str) -> None:
-    logger.info(
-        f"{desc} results\n"
-        f"    Accuracy      : {metrics['accuracy']:.4f}\n"
-        f"    Precision     : {metrics['precision']:.4f}\n"
-        f"    Recall        : {metrics['recall']:.4f}\n"
-        f"    F1            : {metrics['f1']:.4f}\n"
-        f"    Eval Loss     : {metrics['eval_loss']:.4f}\n"
-    )
-
-
 def train(
     model: PreTrainedModel,
     train_loader: DataLoader,
@@ -327,7 +291,7 @@ def train(
         )
 
         metrics = calc_metrics(results)
-        report_metrics(metrics, "Train evaluation")
+        report_metrics(logger, metrics, "Train evaluation")
         save_metrics(metrics_file, **metrics, train_loss=avg_train_loss)
 
         if metrics[metric_for_best] > best_metric:
@@ -562,7 +526,7 @@ def run_training(
 
     results = evaluate(trained_model, eval_loader, device, desc="Final evaluation")
     metrics = calc_metrics(results)
-    report_metrics(metrics, "Final train evaluation")
+    report_metrics(logger, metrics, "Final train evaluation")
     save_eval_results(results, metrics, output_dir, desc="eval")
 
     return trained_model
@@ -600,7 +564,7 @@ def run_evaluation(
 
     results = evaluate(model, loader, device, desc=f"{desc.capitalize()} evaluation")
     metrics = calc_metrics(results)
-    report_metrics(metrics, desc)
+    report_metrics(logger, metrics, desc)
     save_eval_results(results, metrics, output_dir, desc=desc)
 
 
