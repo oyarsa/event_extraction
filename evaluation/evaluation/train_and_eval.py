@@ -23,7 +23,11 @@ def git_root() -> Path:
 
 
 def run_classifier(
-    classifier_script: Path, config_path: Path, output_path: Path, output_name: str
+    classifier_script: Path,
+    config_path: Path,
+    output_path: Path,
+    output_name: str,
+    debug: bool,
 ) -> None:
     args = [
         sys.executable,
@@ -34,7 +38,11 @@ def run_classifier(
         str(output_path),
         "--output_name",
         output_name,
+        "--do_inference",
+        "false",
     ]
+    if debug:
+        args.extend(["--num_epochs", "2", "--max_samples", "100"])
     subprocess.run(args, check=True)
 
 
@@ -105,9 +113,10 @@ def classify(
     output_path: Path,
     output_name: str,
     sleep_s: int = 1,
+    debug: bool = False,
 ) -> None:
     with track_memory(sleep_s) as stats:
-        run_classifier(classifier_script, config, output_path, output_name)
+        run_classifier(classifier_script, config, output_path, output_name, debug=debug)
     print(
         f"Max GPU memory usage: {stats['used']}/{stats['total']}"
         f" ({stats['free']} free) MiB"
@@ -133,22 +142,29 @@ def evaluate(evaluator_script: Path, output_file: Path) -> None:
 
 
 def main(
-    dir_name: Path = typer.Argument(help="Path to output directory"),
-    run_name: str = typer.Argument(help="Name of the run"),
-    config: Path = typer.Argument(help="Path to the config file"),
+    dir_name: Path = typer.Argument(help="Path to output directory."),
+    run_name: str = typer.Argument(help="Name of the run."),
+    config: Path = typer.Argument(help="Path to the config file."),
     output_file_name: str = typer.Option(
-        "test_results.json", help="Name of the the output file"
+        "test_results.json", help="Name of the the output file."
     ),
     classifier: Path = typer.Option(
-        "classifier.py", help="Path to the classifier script"
+        "evaluation/classifier.py", help="Path to the classifier script."
     ),
-    evaluator: Path = git_root() / "agreement" / "calc.py",
+    evaluator: Path = typer.Option(
+        git_root() / "agreement" / "calc.py", help="Path to the evaluator script."
+    ),
+    debug: bool = typer.Option(
+        False,
+        help="Use only a subset of the data (100 samples) and 2 epcohs for a faster"
+        " debug cycle.",
+    ),
 ) -> None:
     "Train classifier and evaluate output for agreement and correlation statistics."
     run_path = dir_name / run_name
     output_file = run_path / output_file_name
 
-    classify(classifier, config, dir_name, run_name)
+    classify(classifier, config, dir_name, run_name, debug=debug)
     evaluate(evaluator, output_file)
 
 
