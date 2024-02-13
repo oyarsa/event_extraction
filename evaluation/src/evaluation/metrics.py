@@ -1,9 +1,19 @@
+import contextlib
 import dataclasses
 import logging
+import multiprocessing
+import multiprocessing.sharedctypes
+import platform
+import queue
+import re
+import subprocess
+import time
 import warnings
+from collections.abc import Callable, Generator
+from typing import Any, cast
 
 import krippendorff
-from scipy.stats import spearmanr, ConstantInputWarning
+from scipy.stats import ConstantInputWarning, spearmanr
 from sklearn.metrics import (
     accuracy_score,
     cohen_kappa_score,
@@ -64,3 +74,123 @@ def report_metrics(
         f"    Cohen         : {metrics['cohen']:.4f}\n"
         f"    Eval Loss     : {metrics['eval_loss']:.4f}\n"
     )
+
+
+@dataclasses.dataclass
+class UsageResult:
+    used: int
+    free: int
+    total: int
+
+
+def get_nvidia_memory_usage() -> UsageResult:
+    nvidia_smi_output = subprocess.check_output(
+        [
+            "nvidia-smi",
+            "--query-gpu=memory.used,memory.free,memory.total",
+            "--format=csv,noheader,nounits",
+        ],
+        text=True,
+    )
+    match = re.findall(r"(\d+),(\s+\d+),(\s+\d+)", nvidia_smi_output)
+    if len(match) != 1:
+        raise ValueError(f"Could not parse nvidia-smi output:\n{nvidia_smi_output}")
+    used, free, total = map(int, match[0])
+
+    return UsageResult(used, free, total)
+
+
+def get_mac_memory_usage() -> UsageResult:
+    vm_stat_output = subprocess.check_output(["vm_stat"], text=True)
+
+    # Parse page size
+    page_size_match = re.search(r"page size of (\d+) bytes", vm_stat_output)
+    if page_size_match is None:
+        raise ValueError(
+            f"Could not parse page size from vm_stat output:\n{vm_stat_output}"
+        )
+    page_size = int(page_size_match[1]) / 1024 / 1024  # Convert bytes to MiB
+
+    memory_stats = {"free": 0, "active": 0, "inactive": 0, "speculative": 0}
+
+    # Parse memory statistics
+    for line in vm_stat_output.splitlines():
+        for key in memory_stats:
+            if key in line and (m := re.search(r"(\d+)\.", line)):
+                value = int(m[1])
+                memory_stats[key] = int(value * page_size)
+
+    used_memory = (
+        memory_stats["active"] + memory_stats["inactive"] + memory_stats["speculative"]
+    )
+    free_memory = memory_stats["free"]
+    total_memory = used_memory + free_memory
+
+    return UsageResult(used_memory, free_memory, total_memory)
+
+
+def get_memory_usage() -> UsageResult:
+    try:
+        subprocess.check_output(["nvidia-smi"])
+        return get_nvidia_memory_usage()
+    except FileNotFoundError as e:
+        if platform.system() == "Darwin":
+            return get_mac_memory_usage()
+        raise ValueError("Unsupported platform: need nvidia-smi or macOS") from e
+
+
+def memory_usage_process(
+    stop_signal: multiprocessing.sharedctypes.Synchronized,
+    result_queue: multiprocessing.Queue,
+    sleep_s: int = 1,
+) -> None:
+    memory_usage = get_memory_usage()
+
+    while not stop_signal.value:
+        new_memory_usage = get_memory_usage()
+        memory_usage.used = max(memory_usage.used, new_memory_usage.used)
+        memory_usage.free = min(memory_usage.free, new_memory_usage.free)
+
+        time.sleep(sleep_s)
+
+    result_queue.put(memory_usage)
+
+
+@contextlib.contextmanager
+def track_memory(sleep_s: int = 1) -> Generator[UsageResult, None, None]:
+    stop_signal = cast(
+        multiprocessing.sharedctypes.Synchronized, multiprocessing.Value("i", 0)
+    )
+    result_queue = multiprocessing.Queue()
+
+    process = multiprocessing.Process(
+        target=memory_usage_process, args=(stop_signal, result_queue, sleep_s)
+    )
+    process.start()
+
+    stats = UsageResult(-1, -1, -1)
+    try:
+        yield stats
+    finally:
+        stop_signal.value = 1
+        process.join()
+
+        with contextlib.suppress(queue.Empty):
+            new_stats = result_queue.get(timeout=sleep_s + 1)
+            stats.used = new_stats.used
+            stats.free = new_stats.free
+            stats.total = new_stats.total
+
+
+def report_gpu_memory(
+    main: Callable[..., Any],
+    sleep_s: int = 1,
+) -> None:
+    with track_memory(sleep_s) as stats:
+        main()
+
+    print()
+    print("----------------")
+    print("GPU MEMORY USAGE")
+    print("----------------")
+    print(f"Max usage: {stats.used}/{stats.total} ({stats.free} free) MiB")
