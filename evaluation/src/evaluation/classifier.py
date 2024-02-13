@@ -30,7 +30,7 @@ from transformers import (
     get_scheduler,
 )
 
-from metrics import EvaluationResult, calc_metrics, report_metrics
+from metrics import EvaluationResult, calc_metrics, report_gpu_memory, report_metrics
 
 logger = logging.getLogger("classifier")
 
@@ -656,4 +656,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    report_gpu_memory(main)
