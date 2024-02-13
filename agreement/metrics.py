@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from typing import SupportsInt
 
 import krippendorff
@@ -8,7 +9,7 @@ AVAILABLE_METRICS = ["agreement", "krippendorff", "spearman", "cohen"]
 
 
 def calculate_metric(
-    metric: str, xs: list[SupportsInt], ys: list[SupportsInt]
+    metric: str, xs: Iterable[SupportsInt], ys: Iterable[SupportsInt]
 ) -> float:
     if metric not in AVAILABLE_METRICS:
         raise ValueError(f"Unknown metric: {metric}")
