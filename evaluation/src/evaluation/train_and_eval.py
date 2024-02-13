@@ -34,7 +34,7 @@ Where:
 -  ``$output_name``: Name of the directory for the run, to be created
    inside ``$output_path``.
 
-The configuration file format doesn’t actually matter, as long as the classifier script
+The configuration file format doesn't actually matter, as long as the classifier script
 can read it.
 
 Output
@@ -56,10 +56,10 @@ Result
 
 The ``train_and_eval.py`` script will print the following metrics: - Agreement:
 Percentage of items where the human and model results agree.
-- Krippendorff’s alpha: A measure of agreement between multiple raters.
-- Cohen’s kappa: A measure of agreement between two raters. - Spearmann’s correlation: A
-  measure of the strength and direction of the relationship between the human and model
-  results.
+- Krippendorff's alpha: A measure of agreement between multiple raters.
+- Cohen's kappa: A measure of agreement between two raters.
+- Spearman's correlation: A measure of the strength and direction of the relationship
+  between the human and model results.
 
 Observations
 ------------
