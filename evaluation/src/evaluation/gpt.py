@@ -389,6 +389,10 @@ def main(
         True,
         help="Whether to shuffle the data before selecting n examples.",
     ),
+    seed: int = typer.Option(
+        0,
+        help="Random seed for shuffling the data.",
+    ),
     openai_config_path: Path = typer.Option(
         Path("config.json"),
         help="Path to the file containing the OpenAI API keys.",
@@ -461,7 +465,7 @@ def main(
         if use_context:
             run_name += f"-context{context_size}"
         if rand:
-            run_name += "-rand"
+            run_name += f"-rand{seed}"
 
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
@@ -472,6 +476,7 @@ def main(
 
     data = json.loads(file.read_text())
     if rand:
+        random.seed(seed)
         random.shuffle(data)
 
     if use_context:
