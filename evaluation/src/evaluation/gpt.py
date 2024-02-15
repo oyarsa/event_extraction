@@ -5,7 +5,6 @@ import logging
 import math
 import random
 import re
-import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,7 +16,7 @@ import typer
 from openai.types.chat import ChatCompletionMessageParam
 from tqdm import tqdm
 
-from evaluation import metrics
+from evaluation import log, metrics
 
 logger = logging.getLogger("classifier")
 
@@ -346,22 +345,6 @@ def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
         raise ValueError(f"Unknown API type: {config['api_type']}")
 
 
-def setup_logger(output_dir: Path) -> None:
-    logger.setLevel(logging.INFO)
-
-    formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(name)s | %(message)s", "%Y-%m-%d %H:%M:%S"
-    )
-
-    file_handler = logging.FileHandler(output_dir / "train.log")
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
-
-
 def main(
     file: Path = typer.Argument(
         ...,
@@ -453,7 +436,7 @@ def main(
 
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
-    setup_logger(output_path)
+    log.setup_logger(logger, output_path)
 
     openai_config = json.loads(openai_config_path.read_text())
     client = init_client(api_type, openai_config)
