@@ -345,43 +345,71 @@ def setup_logger(output_dir: Path) -> None:
 
 
 def main(
-    file: Path,
-    n: int = 10,
-    rand: bool = True,
-    openai_config_path: Path = Path("config.json"),
-    api_type: str = "openai",
-    model: str = "gpt-4",
-    system_prompt: str = "simple",
-    user_prompt: str = "instructions",
-    use_context: bool = False,
-    context_size: int = 2,
-    print_messages: bool = True,
-    debug: bool = False,
-    output_dir: Path = Path("output") / "gpt",
-    run_name: Optional[str] = None,
-    all_data: bool = False,
-) -> None:  # sourcery skip: low-code-quality
-    """
-    Run a GPT model on the given data and evaluate the results.
-
-    \b
-    - file: Path to the json file containing the data (list of objects with keys
-        'input', 'output', 'gold', 'valid')
-    - n: Number of examples to run. Should be even. If not, the number is rounded up.
-    - rand: Whether to shuffle the data before selecting n examples
-    - key_file: Path to the file containing the OpenAI API keys
-    - model: Which GPT model to use (gpt-3.5-turbo or gpt-4)
-    - system_prompt: Which system prompt to use (only 'simple' for now)
-    - user_prompt: Which user prompt to use ('simple' or 'instructions')
-    - use_context: Whether to use the context prompt
-    - print_messages: Whether to print the prompt, context, gold and prediction. If
-        false, only the progress bar and evaluation results are printed.
-    - debug: Whether to print debug messages
-    - output_dir: Directory to save the output file
-    - run_name: Name of the run. If not provided, it is generated from the model and
-        prompts.
-    - all_data: Whether to run the entire dataset. If true, n is ignored.
-    """
+    file: Path = typer.Argument(
+        ...,
+        help="Path to the json file containing the data (list of objects with keys"
+        " 'input', 'output', 'gold', 'valid').",
+    ),
+    n: int = typer.Option(
+        10,
+        help="Number of examples to run. Should be even. If not, the number is rounded"
+        " up.",
+    ),
+    rand: bool = typer.Option(
+        True,
+        help="Whether to shuffle the data before selecting n examples.",
+    ),
+    openai_config_path: Path = typer.Option(
+        Path("config.json"),
+        help="Path to the file containing the OpenAI API keys.",
+    ),
+    api_type: str = typer.Option(
+        "openai",
+        help="API type, defaults to 'openai'.",
+    ),
+    model: str = typer.Option(
+        "gpt-4",
+        help="Which GPT model to use (e.g., 'gpt-3.5-turbo', 'gpt-4').",
+    ),
+    system_prompt: str = typer.Option(
+        "simple",
+        help="Which system prompt to use (only 'simple' for now).",
+    ),
+    user_prompt: str = typer.Option(
+        "instructions",
+        help="Which user prompt to use ('simple' or 'instructions').",
+    ),
+    use_context: bool = typer.Option(
+        False,
+        help="Whether to use the context prompt.",
+    ),
+    context_size: int = typer.Option(
+        2,
+        help="Context size if context is used.",
+    ),
+    print_messages: bool = typer.Option(
+        True,
+        help="Whether to print messages including the prompt, context, gold, and"
+        " prediction.",
+    ),
+    debug: bool = typer.Option(
+        False,
+        help="Whether to print debug messages.",
+    ),
+    output_dir: Path = typer.Option(
+        Path("output") / "gpt",
+        help="Directory to save the output files.",
+    ),
+    run_name: Optional[str] = typer.Option(
+        None,
+        help="Name of the run. Generated from the model and prompts if not provided.",
+    ),
+    all_data: bool = typer.Option(
+        False,
+        help="Whether to run the entire dataset. If true, n is ignored.",
+    ),
+) -> None:
+    "Run a GPT model on the given data and evaluate the results."
     global DEBUG  # noqa: PLW0603
     DEBUG = debug
 
