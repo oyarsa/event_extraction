@@ -172,12 +172,29 @@ Evaluate the answer based on the following criteria:
 correctly explains the context and answers the question.
 2. Ensure that the facts mentioned in the answer are in the context.
 3. Penalize answers that complain that more information than necessary.
-5. Assign a score for validity on a scale from 1 to 5, where 1 is the lowest and \
+4. Assign a score for validity on a scale from 1 to 5, where 1 is the lowest and \
 5 is the highest based on the Evaluation Criteria.
 
 Respond with the following format:
 Explanation: <text explanating the score>
 Score: <score from 1 to 5>\
+""",
+    "instructions_qa_valid": """\
+Given the context and question, is the answer correct? Note that the answer does not \
+need to be a direct quote from the context, but it should be a logical conclusion \
+based on the context.
+
+Evaluate the answer based on the following criteria:
+
+1. Read the answer and compare it to the context and the question. Check if the answer
+correctly explains the context and answers the question.
+2. Ensure that the facts mentioned in the answer are in the context.
+3. Penalize answers that complain that more information than necessary.
+4. Responde "true" if the answer is correct and "false" if it is not.
+
+Respond with the following format:
+Explanation: <text explanating the score>
+Valid: <'true' or 'false'>\
 """,
 }
 
