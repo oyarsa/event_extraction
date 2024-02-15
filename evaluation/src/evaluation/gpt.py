@@ -55,6 +55,8 @@ MODEL_COSTS = {
     ),  # in: $0.01 / 1K tokens, out: $0.03 / 1K tokens
 }
 
+SUPPORTED_MODES = ("qa", "extraction")
+
 
 def calculate_cost(model: str, response: Any) -> float:
     input_tokens = response.usage.prompt_tokens
@@ -161,56 +163,71 @@ def split_data(
     return valids, invalids
 
 
-def format_data(item: dict[str, Any]) -> str:
-    context = f"Context: {item['input']}"
+def format_data(item: dict[str, Any], mode: str) -> str:
+    context = f"Context:\n{item['input']}"
 
-    entities, _ = parse_instance(item["output"])
-    extraction = (
-        "Extraction:\n"
-        f"Cause: {' | '.join(entities['Cause'])}\n"
-        f"Effect: {' | '.join(entities['Effect'])}"
-    )
+    if mode == "extraction":
+        entities, _ = parse_instance(item["output"])
+        answer = (
+            "Extraction:\n"
+            f"Cause: {' | '.join(entities['Cause'])}\n"
+            f"Effect: {' | '.join(entities['Effect'])}"
+        )
+    else:
+        answer = f"Answer: {item['output']}"
 
-    answer = f"Score: {5 if item['valid'] else 1}"
-    return "\n".join([context, extraction, answer])
+    score = f"Score: {5 if item['valid'] else 1}"
+    return "\n".join([context, answer, score])
 
 
-def build_context(data: list[dict[str, str]], n: int = 2) -> str:
+def build_context(data: list[dict[str, str]], n: int, mode: str) -> str:
     "Build a context prompt from data. Uses n positive and n negative examples."
     valids, invalids = split_data(data, n)
-    valid_msg = ["Some examples of _valid_ extractions:", *map(format_data, valids)]
+    valid_msg = [
+        "Some examples of _valid_ extractions:",
+        *(format_data(item, mode) for item in valids),
+    ]
     invalid_msg = [
         "Some examples of _invalid_ extractions:",
-        *map(format_data, invalids),
+        *(format_data(item, mode) for item in invalids),
     ]
     return "\n\n".join(valid_msg + invalid_msg)
 
 
+def make_message_extraction(item: dict[str, Any]) -> tuple[str, str]:
+    extraction_entities, _ = parse_instance(item["output"])
+    extraction = (
+        "Extraction:\n"
+        f"Cause: {' | '.join(extraction_entities['Cause'])}\n"
+        f"Effect: {' | '.join(extraction_entities['Effect'])}\n"
+    )
+
+    gold_entities, _ = parse_instance(item["gold"])
+    gold = (
+        "GOLD:\n"
+        f"Cause: {' | '.join(gold_entities['Cause'])}\n"
+        f"Effect: {' | '.join(gold_entities['Effect'])}\n"
+    )
+
+    return gold, extraction
+
+
 def make_messages(
-    sampled_data: list[dict[str, Any]]
+    sampled_data: list[dict[str, Any]], mode: str
 ) -> list[tuple[dict[str, Any], str, str, bool]]:
     messages: list[tuple[dict[str, Any], str, str, bool]] = []
     for item in sampled_data:
         context = f"Context: {item['input']}"
-
-        extraction_entities, _ = parse_instance(item["output"])
-        extraction = (
-            "Extraction:\n"
-            f"Cause: {' | '.join(extraction_entities['Cause'])}\n"
-            f"Effect: {' | '.join(extraction_entities['Effect'])}\n"
-        )
-
-        gold_entities, _ = parse_instance(item["gold"])
-        gold = (
-            "GOLD:\n"
-            f"Cause: {' | '.join(gold_entities['Cause'])}\n"
-            f"Effect: {' | '.join(gold_entities['Effect'])}\n"
-        )
-
         answer = f"Valid?: {item['valid']}"
 
+        if mode == "extraction":
+            gold, answer = make_message_extraction(item)
+        else:
+            answer = f"Answer: {item['output']}"
+            gold = f"Gold: {item['gold']}"
+
         answer_msg = "\n".join([gold, answer]).strip()
-        gpt_msg = "\n".join([context, extraction]).strip()
+        gpt_msg = "\n".join([context, answer]).strip()
         messages.append((item, answer_msg, gpt_msg, item["valid"]))
 
     return messages
@@ -269,9 +286,7 @@ def run_model(
 
 
 def reformat_output(output_data: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """
-    Reformat the output data to be used with the evaluation metrics.
-    """
+    "Reformat the output data to match the format of other models."
     return [
         {
             "gold": int(item["valid"]),
@@ -286,6 +301,7 @@ def reformat_output(output_data: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def calculate_metrics(data: list[dict[str, Any]]) -> dict[str, float]:
+    "Calculate main metrics for the GPT result."
     return metrics.calc_metrics(
         metrics.EvaluationResult(
             golds=[d["gold"] for d in data],
@@ -299,6 +315,7 @@ def calculate_metrics(data: list[dict[str, Any]]) -> dict[str, float]:
 
 
 def confusion_matrix(results: dict[tuple[bool, int], int]) -> pd.DataFrame:
+    "Generate confusion matrix from the predictions and annotation counts."
     df = pd.DataFrame(
         list(results.items()), columns=pd.Series(["Combination", "Count"])
     )
@@ -311,6 +328,7 @@ def confusion_matrix(results: dict[tuple[bool, int], int]) -> pd.DataFrame:
 
 
 def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
+    "Create client for OpenAI or Azure API, depending on the configuration."
     config = config[api_type]
 
     if api_type == "azure":
@@ -408,7 +426,11 @@ def main(
         False,
         help="Whether to run the entire dataset. If true, n is ignored.",
     ),
-) -> None:
+    mode: str = typer.Option(
+        "extraction",
+        help=f"Mode of the data. One of {SUPPORTED_MODES}.",
+    ),
+) -> None:  # sourcery skip: low-code-quality
     "Run a GPT model on the given data and evaluate the results."
     global DEBUG  # noqa: PLW0603
     DEBUG = debug
@@ -419,6 +441,8 @@ def main(
         raise ValueError(f"Invalid system prompt. Options: {SYSTEM_PROMPTS.keys()}")
     if user_prompt not in USER_PROMPTS:
         raise ValueError(f"Invalid user prompt. Options: {USER_PROMPTS.keys()}")
+    if mode not in SUPPORTED_MODES:
+        raise ValueError(f"Invalid mode. Options: {SUPPORTED_MODES}")
 
     if run_name is None:
         run_name = f"{model}-sys_{system_prompt}-user_{user_prompt}-n{n}"
@@ -439,7 +463,7 @@ def main(
         random.shuffle(data)
 
     if use_context:
-        ctx_prompt = build_context(data, context_size)
+        ctx_prompt = build_context(data, context_size, mode)
         data = data[context_size * 2 :]
     else:
         ctx_prompt = None
@@ -451,7 +475,7 @@ def main(
         valids, invalids = split_data(data, math.ceil(n / 2))
         sampled_data = valids + invalids
 
-    messages = make_messages(sampled_data)
+    messages = make_messages(sampled_data, mode)
     output_data, total_cost, results = run_model(
         messages,
         model,
