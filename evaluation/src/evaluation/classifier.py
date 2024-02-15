@@ -661,4 +661,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    report_gpu_memory(main)
+    report_gpu_memory(main, logger)

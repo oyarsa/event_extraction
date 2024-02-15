@@ -183,14 +183,15 @@ def track_memory(sleep_s: int = 1) -> Generator[UsageResult, None, None]:
 
 
 def report_gpu_memory(
-    main: Callable[..., Any],
-    sleep_s: int = 1,
+    main: Callable[..., Any], logger: logging.Logger, sleep_s: int = 1
 ) -> None:
     with track_memory(sleep_s) as stats:
         main()
 
-    print()
-    print("----------------")
-    print("GPU MEMORY USAGE")
-    print("----------------")
-    print(f"Max usage: {stats.used}/{stats.total} ({stats.free} free) MiB")
+    output = [
+        "----------------",
+        "GPU MEMORY USAGE",
+        "----------------",
+        f"Max usage: {stats.used}/{stats.total} ({stats.free} free) MiB",
+    ]
+    logger.info("\n".join(output))
