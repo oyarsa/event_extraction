@@ -7,6 +7,7 @@ import random
 import re
 from collections import defaultdict
 from datetime import datetime, timezone
+from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
 
@@ -261,6 +262,28 @@ def make_messages(
     return messages
 
 
+class ResultMode(str, Enum):
+    "Result mode for the GPT model."
+    valid = "valid"
+    score = "score"
+
+
+def extract_result(result_s: str, mode: ResultMode) -> int:
+    last_line = result_s.splitlines()[-1]
+
+    match mode:
+        case ResultMode.valid:
+            last_line = last_line.lower().replace("valid:", "").strip()
+            if "true" in last_line:
+                return 1
+            elif "false" in last_line:
+                return 0
+            return -1
+        case ResultMode.score:
+            last_line = last_line.replace("Score:", "").strip()
+            return int(last_line) if last_line.isdigit() else 0
+
+
 def run_model(
     messages: list[tuple[dict[str, Any], str, str, bool]],
     model: str,
@@ -269,6 +292,7 @@ def run_model(
     user_prompt: str,
     ctx_prompt: str | None,
     print_messages: bool,
+    result_mode: ResultMode,
 ) -> tuple[list[dict[str, Any]], float, dict[tuple[bool, int], int]]:
     results: defaultdict[tuple[bool, int], int] = defaultdict(int)
     total_cost = 0
@@ -285,8 +309,7 @@ def run_model(
         )
         total_cost += cost
 
-        last_line = result_s.splitlines()[-1].replace("Score:", "").strip()
-        result = int(last_line) if last_line.isdigit() else 0
+        result = extract_result(result_s, result_mode)
         results[valid, result] += 1
 
         output_data.append(item | {"gpt_reward": result, "gpt_response": result_s})
@@ -442,10 +465,11 @@ def main(
         False,
         help="Whether to run the entire dataset. If true, n is ignored.",
     ),
-    mode: str = typer.Option(
+    data_mode: str = typer.Option(
         "extraction",
         help=f"Mode of the data. Options: {tuple(SUPPORTED_MODES)}.",
     ),
+    result_mode: ResultMode = typer.Option(ResultMode.score, help="Result mode."),
 ) -> None:  # sourcery skip: low-code-quality
     "Run a GPT model on the given data and evaluate the results."
     global DEBUG  # noqa: PLW0603
@@ -457,7 +481,7 @@ def main(
         raise ValueError(f"Invalid system prompt. Options: {tuple(SYSTEM_PROMPTS)}")
     if user_prompt not in USER_PROMPTS:
         raise ValueError(f"Invalid user prompt. Options: {tuple(USER_PROMPTS)}")
-    if mode not in SUPPORTED_MODES:
+    if data_mode not in SUPPORTED_MODES:
         raise ValueError(f"Invalid mode. Options: {tuple(SUPPORTED_MODES)}")
 
     if run_name is None:
@@ -480,7 +504,7 @@ def main(
         random.shuffle(data)
 
     if use_context:
-        ctx_prompt = build_context(data, context_size, mode)
+        ctx_prompt = build_context(data, context_size, data_mode)
         data = data[context_size * 2 :]
     else:
         ctx_prompt = None
@@ -492,7 +516,7 @@ def main(
         valids, invalids = split_data(data, math.ceil(n / 2))
         sampled_data = valids + invalids
 
-    messages = make_messages(sampled_data, mode)
+    messages = make_messages(sampled_data, data_mode)
     output_data, total_cost, results = run_model(
         messages,
         model,
@@ -501,6 +525,7 @@ def main(
         user_prompt,
         ctx_prompt,
         print_messages,
+        result_mode,
     )
     formatted_output = reformat_output(output_data)
     metrics_ = calculate_metrics(formatted_output)
