@@ -85,6 +85,8 @@ class Config:
     dropout: float | None = None
     # LR scheduler: 'constant', 'linear', 'cosine', etc. See transformers.get_scheduler.
     lr_scheduler: str = "constant"
+    # Type of model: entailment or valid
+    model_type: str = "valid"
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -100,10 +102,45 @@ class Config:
         return "\n".join(config_lines)
 
 
+@dataclasses.dataclass
+class LabelConfig:
+    label2id: dict[str, int]
+    id2label: dict[int, str]
+    true_class: str
+
+
+def get_labelling(reward_type: str) -> LabelConfig:
+    "Get configuration necessary for labelling entailment or valid models."
+    reward_type = reward_type.casefold()
+    if reward_type.casefold() == "entailment":
+        label2id = {
+            "CONTRADICTION": 0,
+            "ENTAILMENT": 1,
+            "NEUTRAL": 2,
+        }
+        true_class = "ENTAILMENT"
+    elif reward_type.casefold() == "valid":
+        label2id = {
+            "INVALID": 0,
+            "VALID": 1,
+        }
+        true_class = "VALID"
+    else:
+        raise ValueError(f"Unknown reward type: {reward_type}")
+    id2label = {id: label for label, id in label2id.items()}
+
+    return LabelConfig(label2id, id2label, true_class)
+
+
 def init_model(
-    model_name: str, dropout: float | None
+    model_name: str, dropout: float | None, label_config: LabelConfig
 ) -> tuple[PreTrainedTokenizer, PreTrainedModel]:
-    config = AutoConfig.from_pretrained(model_name)
+    config = AutoConfig.from_pretrained(
+        model_name, num_labels=len(label_config.label2id)
+    )
+    config.label2id = label_config.label2id
+    config.id2label = label_config.id2label
+
     if dropout is not None:
         config.hidden_dropout_prob = dropout
         config.attention_probs_dropout_prob = dropout
@@ -617,7 +654,8 @@ def main() -> None:
         json.dumps(dataclasses.asdict(config), default=str, indent=2)
     )
 
-    tokenizer, model = init_model(config.model_name, config.dropout)
+    label_config = get_labelling(config.model_type)
+    tokenizer, model = init_model(config.model_name, config.dropout, label_config)
     device = get_device()
 
     if config.do_train:
