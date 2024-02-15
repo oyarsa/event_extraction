@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # pyright: basic
 import json
+import logging
 import math
 import random
 import re
+import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -14,6 +16,9 @@ import pandas as pd
 import typer
 from openai.types.chat import ChatCompletionMessageParam
 from tqdm import tqdm
+
+
+logger = logging.getLogger("classifier")
 
 # Controls whether to print debug information in some functions.
 DEBUG = False
@@ -58,15 +63,24 @@ def calculate_cost(model: str, response: Any) -> float:
 
 
 def dbg_gpt(messages: list[ChatCompletionMessageParam], result: str | None) -> None:
-    print("INPUT:")
+    output = ["\nINPUT:"]
     for msg in messages:
-        print(f'>>> {msg["role"]}')
-        print(f"{msg['content']}")
-        print()
-    print("OUTPUT:")
-    print(result)
-    print("-" * 80)
-    print()
+        output.extend(
+            (
+                f'>>> {msg["role"]}',
+                f"{msg.get('content')}",
+                "",
+            )
+        )
+    output.extend(
+        (
+            "OUTPUT:",
+            (result or "<empty>"),
+            "-" * 80,
+            "",
+        )
+    )
+    logger.info("\n".join(output))
 
 
 def run_gpt(
@@ -178,18 +192,18 @@ def make_messages(
     for item in sampled_data:
         context = f"Context: {item['input']}"
 
-        entities, _ = parse_instance(item["output"])
+        extraction_entities, _ = parse_instance(item["output"])
         extraction = (
             "Extraction:\n"
-            f"Cause: {' | '.join(entities['Cause'])}\n"
-            f"Effect: {' | '.join(entities['Effect'])}\n"
+            f"Cause: {' | '.join(extraction_entities['Cause'])}\n"
+            f"Effect: {' | '.join(extraction_entities['Effect'])}\n"
         )
 
-        entities, _ = parse_instance(item["gold"])
+        gold_entities, _ = parse_instance(item["gold"])
         gold = (
             "GOLD:\n"
-            f"Cause: {' | '.join(entities['Cause'])}\n"
-            f"Effect: {' | '.join(entities['Effect'])}\n"
+            f"Cause: {' | '.join(gold_entities['Cause'])}\n"
+            f"Effect: {' | '.join(gold_entities['Effect'])}\n"
         )
 
         answer = f"Valid?: {item['valid']}"
@@ -232,20 +246,23 @@ def run_model(
         output_data.append(item | {"gpt_reward": result, "gpt_response": result_s})
 
         if print_messages:
-            print(ctx_prompt)
-            print("-" * 80)
-            print(SYSTEM_PROMPTS[system_prompt])
-            print("-" * 80)
-            print(USER_PROMPTS[user_prompt])
-            print("-" * 80)
-            print(gpt_msg)
-            print("-" * 80)
-            print(f"\nGPT: '{result_s}'")
-            print()
-            print("NOT SENT", "~" * 50)
-            print(answer_msg)
-            print("*" * 80)
-            print()
+            output = [
+                ctx_prompt or "",
+                "-" * 80,
+                SYSTEM_PROMPTS[system_prompt],
+                "-" * 80,
+                USER_PROMPTS[user_prompt],
+                "-" * 80,
+                gpt_msg,
+                "-" * 80,
+                f"\nGPT: '{result_s}'",
+                "",
+                f"NOT SENT {'~' * 50}",
+                answer_msg,
+                "*" * 80,
+                "",
+            ]
+            logger.info("\n".join(output))
 
     return output_data, total_cost, results
 
@@ -264,7 +281,7 @@ def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
     config = config[api_type]
 
     if api_type == "azure":
-        print("Using Azure OpenAI API")
+        logger.info("Using Azure OpenAI API")
         return openai.AzureOpenAI(
             api_key=config["key"],
             api_version=config["api_version"],
@@ -272,10 +289,26 @@ def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
             azure_deployment=config["deployment"],
         )
     elif api_type == "openai":
-        print("Using OpenAI API")
+        logger.info("Using OpenAI API")
         return openai.OpenAI(api_key=config["key"])
     else:
         raise ValueError(f"Unknown API type: {config['api_type']}")
+
+
+def setup_logger(output_dir: Path) -> None:
+    logger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)s | %(name)s | %(message)s", "%Y-%m-%d %H:%M:%S"
+    )
+
+    file_handler = logging.FileHandler(output_dir / "train.log")
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
 
 
 def main(
@@ -291,10 +324,10 @@ def main(
     context_size: int = 2,
     print_messages: bool = True,
     debug: bool = False,
-    output_dir: Path = Path("output"),
+    output_dir: Path = Path("output") / "gpt",
     run_name: Optional[str] = None,
     all_data: bool = False,
-) -> None:
+) -> None:  # sourcery skip: low-code-quality
     """
     Run a GPT model on the given data and evaluate the results.
 
@@ -333,8 +366,9 @@ def main(
         if rand:
             run_name += "-rand"
 
-    output_dir.mkdir(exist_ok=True, parents=True)
-    output_path = output_dir / f"{run_name}.json"
+    output_path = output_dir / run_name
+    output_path.mkdir(exist_ok=True, parents=True)
+    setup_logger(output_path)
 
     openai_config = json.loads(openai_config_path.read_text())
     client = init_client(api_type, openai_config)
@@ -366,14 +400,14 @@ def main(
         ctx_prompt,
         print_messages,
     )
+    (output_path / "full_output.json").write_text(json.dumps(output_data, indent=2))
 
-    output_path.write_text(json.dumps(output_data, indent=4))
     with Path("cost.csv").open("a") as f:
         ts = datetime.now(timezone.utc).isoformat()
         f.write(f"{ts},{total_cost}\n")
 
-    print(confusion_matrix(results))
-    print(f"\nTotal cost: ${total_cost}")
+    logger.info(f"\n{confusion_matrix(results)}\n")
+    logger.info(f"Total cost: ${total_cost}")
 
 
 if __name__ == "__main__":
