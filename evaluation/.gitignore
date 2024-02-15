@@ -15,3 +15,6 @@ output/
 .virtual_documents
 key
 cost.csv
+
+pdm.lock
+.pdm-python

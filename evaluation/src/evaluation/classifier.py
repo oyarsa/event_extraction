@@ -30,7 +30,12 @@ from transformers import (
     get_scheduler,
 )
 
-from metrics import EvaluationResult, calc_metrics, report_gpu_memory, report_metrics
+from evaluation.metrics import (
+    EvaluationResult,
+    calc_metrics,
+    report_gpu_memory,
+    report_metrics,
+)
 
 logger = logging.getLogger("classifier")
 

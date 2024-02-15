@@ -28,7 +28,7 @@ from transformers import (
     PreTrainedTokenizer,
 )
 
-from metrics import EvaluationResult, calc_metrics, report_metrics
+from evaluation.metrics import EvaluationResult, calc_metrics, report_metrics
 
 logger = logging.getLogger("classifier_t5")
 

@@ -1,7 +1,31 @@
-[tool.ruff.isort]
-known-first-party = ["metrics"]
+[project]
+name = "evaluation"
+version = "0.1.0"
+description = "Evaluate generative QA results"
+authors = [
+    {name = "Italo Silva", email = "italo@maleldil.com"},
+]
+dependencies = [
+    "krippendorff<1.0,>=0.6",
+    "numpy<2.0,>=1.25",
+    "protobuf<5.0,>=4.25",
+    "scikit-learn<2.0,>=1.2",
+    "scipy<2.0,>=1.12",
+    "sentencepiece<1.0.0,>=0.1.99",
+    "simple-parsing<1.0.0,>=0.1.2",
+    "torch<3.0,>=2.0",
+    "tqdm<5.0,>=4.65",
+    "transformers<5.0,>=4.33",
+    "typer<1.0.0,>=0.9.0",
+    "pandas<3.0,>=2.0",
+    "openai<2.0,>=1.0",
+]
+requires-python = ">=3.10,<3.13"
+readme = "README.md"
+license = {text = "GPT-3.0-only"}
 
 [tool.ruff]
+src = ["src"]
 select = [
 	"E",
 	"F",
@@ -28,3 +52,18 @@ ignore = [
 	"UP007"     # HFArgumentParser and Typer don't like T | None
 ]
 
+
+[tool.pdm]
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "ruff<1.0.0,>=0.2.1",
+    "black<25.0.0,>=24.2.0",
+]
+
+[tool.pdm.build]
+includes = []
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
