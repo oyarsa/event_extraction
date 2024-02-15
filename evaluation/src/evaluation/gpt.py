@@ -124,17 +124,21 @@ def run_gpt(
 
 
 SYSTEM_PROMPTS = {
-    "simple": """\
+    "extraction": """\
 You are a helpful assistant that can take a context and an extraction composed of a \
 cause and effect, and determine whether that extraction is valid.\
-"""
+""",
+    "qa": """\
+You are a helpful assistant that can take a context, question and answer and decide
+whether the answer is correct.\
+""",
 }
 USER_PROMPTS = {
-    "simple": """\
+    "simple_extraction": """\
 Given the context, is the extraction (cause and effect) valid? \
 Respond with either 'true' or 'false'.\
     """,
-    "instructions": """\
+    "instructions_extraction": """\
 Given the context, how valid is the extraction? The extraction is composed of a cause \
 and effect. The cause and effect are spans of the context.
 
@@ -145,6 +149,28 @@ the cause and effect mentioned in the context.
 2. Make sure that the extraction clauses only contain the necessary information.
 3. Penalize extractions that are too long or too short.
 4. Penalize extractions that include more information than necessary for the clause.
+5. Assign a score for validity on a scale from 1 to 5, where 1 is the lowest and \
+5 is the highest based on the Evaluation Criteria.
+
+Respond with the following format:
+Explanation: <text explanating the score>
+Score: <score from 1 to 5>\
+""",
+    "simple_qa": """\
+Given the context and question, is the answer correct? \
+Respond with either 'true' or 'false'.\
+    """,
+    "instructions_qa": """\
+Given the context and question, is the answer correct? Note that the answer does not \
+need to be a direct quote from the context, but it should be a logical conclusion \
+based on the context.
+
+Evaluate the answer based on the following criteria:
+
+1. Read the answer and compare it to the context and the question. Check if the answer
+correctly explains the context and answers the question.
+2. Ensure that the facts mentioned in the answer are in the context.
+3. Penalize answers that complain that more information than necessary.
 5. Assign a score for validity on a scale from 1 to 5, where 1 is the lowest and \
 5 is the highest based on the Evaluation Criteria.
 
