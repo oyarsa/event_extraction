@@ -44,14 +44,17 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
 
 MODEL_COSTS = {
     "gpt-3.5-turbo": (  # in: $0.001 / 1K tokens, out: $0.002 / 1K tokens
-        0.000001,
-        0.000002,
+        0.0000005,
+        0.0000015,
     ),
-    "gpt-4": (0.00003, 0.00006),  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
-    "gpt-4-1106-preview": (
+    "gpt-4": (  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
+        0.00003,
+        0.00006,
+    ),
+    "gpt-4-1106-preview": (  # in: $0.01 / 1K tokens, out: $0.03 / 1K tokens
         0.00001,
         0.00003,
-    ),  # in: $0.01 / 1K tokens, out: $0.03 / 1K tokens
+    ),
 }
 
 SUPPORTED_MODES = ("qa", "extraction")
