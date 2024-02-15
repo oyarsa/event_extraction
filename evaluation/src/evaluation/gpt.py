@@ -17,6 +17,7 @@ import typer
 from openai.types.chat import ChatCompletionMessageParam
 from tqdm import tqdm
 
+from evaluation import metrics
 
 logger = logging.getLogger("classifier")
 
@@ -267,8 +268,40 @@ def run_model(
     return output_data, total_cost, results
 
 
+def reformat_output(output_data: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """
+    Reformat the output data to be used with the evaluation metrics.
+    """
+    return [
+        {
+            "gold": int(item["valid"]),
+            "pred": int(item["gpt_reward"] >= 4),
+            "passage": item["input"],
+            "output": item["output"],
+            "annotation": item["gold"],
+            "tag": None,
+        }
+        for item in output_data
+    ]
+
+
+def calculate_metrics(data: list[dict[str, Any]]) -> dict[str, float]:
+    return metrics.calc_metrics(
+        metrics.EvaluationResult(
+            golds=[d["gold"] for d in data],
+            preds=[d["pred"] for d in data],
+            passages=[d["passage"] for d in data],
+            outputs=[d["output"] for d in data],
+            annotations=[d["annotation"] for d in data],
+            loss=math.nan,  # no loss available from GPT
+        )
+    )
+
+
 def confusion_matrix(results: dict[tuple[bool, int], int]) -> pd.DataFrame:
-    df = pd.DataFrame(list(results.items()), columns=["Combination", "Count"])
+    df = pd.DataFrame(
+        list(results.items()), columns=pd.Series(["Combination", "Count"])
+    )
     df[["gold", "pred"]] = pd.DataFrame(df["Combination"].tolist(), index=df.index)
     df = df.drop("Combination", axis="columns")
     df["Count"] = df["Count"].astype(int)
@@ -400,7 +433,13 @@ def main(
         ctx_prompt,
         print_messages,
     )
+    formatted_output = reformat_output(output_data)
+    metrics_ = calculate_metrics(formatted_output)
+
     (output_path / "full_output.json").write_text(json.dumps(output_data, indent=2))
+    (output_path / "results.json").write_text(json.dumps(formatted_output, indent=2))
+    (output_path / "metrics.json").write_text(json.dumps(metrics_, indent=2))
+    metrics.report_metrics(logger, metrics_, "GPT")
 
     with Path("cost.csv").open("a") as f:
         ts = datetime.now(timezone.utc).isoformat()
