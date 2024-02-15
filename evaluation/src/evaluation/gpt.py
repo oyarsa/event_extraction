@@ -403,15 +403,15 @@ def main(
     ),
     model: str = typer.Option(
         "gpt-4",
-        help="Which GPT model to use (e.g., 'gpt-3.5-turbo', 'gpt-4').",
+        help=f"Which GPT model to use. Options: {tuple(MODEL_COSTS)}.",
     ),
     system_prompt: str = typer.Option(
-        "simple",
-        help="Which system prompt to use (only 'simple' for now).",
+        "extraction",
+        help=f"Which system prompt to use. Options: {tuple(SYSTEM_PROMPTS)}.",
     ),
     user_prompt: str = typer.Option(
-        "instructions",
-        help="Which user prompt to use ('simple' or 'instructions').",
+        "instructions_extraction",
+        help=f"Which user prompt to use. Options: {tuple(USER_PROMPTS)}.",
     ),
     use_context: bool = typer.Option(
         False,
@@ -444,7 +444,7 @@ def main(
     ),
     mode: str = typer.Option(
         "extraction",
-        help=f"Mode of the data. One of {SUPPORTED_MODES}.",
+        help=f"Mode of the data. Options: {tuple(SUPPORTED_MODES)}.",
     ),
 ) -> None:  # sourcery skip: low-code-quality
     "Run a GPT model on the given data and evaluate the results."
@@ -452,13 +452,13 @@ def main(
     DEBUG = debug
 
     if model not in MODEL_COSTS:
-        raise ValueError(f"Invalid model. Options: {list(MODEL_COSTS.keys())}")
+        raise ValueError(f"Invalid model. Options: {tuple(MODEL_COSTS)}")
     if system_prompt not in SYSTEM_PROMPTS:
-        raise ValueError(f"Invalid system prompt. Options: {SYSTEM_PROMPTS.keys()}")
+        raise ValueError(f"Invalid system prompt. Options: {tuple(SYSTEM_PROMPTS)}")
     if user_prompt not in USER_PROMPTS:
-        raise ValueError(f"Invalid user prompt. Options: {USER_PROMPTS.keys()}")
+        raise ValueError(f"Invalid user prompt. Options: {tuple(USER_PROMPTS)}")
     if mode not in SUPPORTED_MODES:
-        raise ValueError(f"Invalid mode. Options: {SUPPORTED_MODES}")
+        raise ValueError(f"Invalid mode. Options: {tuple(SUPPORTED_MODES)}")
 
     if run_name is None:
         run_name = f"{model}-sys_{system_prompt}-user_{user_prompt}-n{n}"
