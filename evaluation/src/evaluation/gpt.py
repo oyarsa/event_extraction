@@ -21,9 +21,6 @@ from evaluation import log, metrics
 
 logger = logging.getLogger("classifier")
 
-# Controls whether to print debug information in some functions.
-DEBUG = False
-
 
 def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
     matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
@@ -96,6 +93,7 @@ def run_gpt(
     system_prompt: str,
     user_prompt: str,
     ctx_prompt: str | None = None,
+    debug: bool = False,
 ) -> tuple[str, float]:  # sourcery skip: extract-method
     messages: list[ChatCompletionMessageParam] = [
         {"role": "system", "content": system_prompt},
@@ -118,7 +116,7 @@ def run_gpt(
     result = response.choices[0].message.content
     cost = calculate_cost(model, response)
 
-    if DEBUG:
+    if debug:
         dbg_gpt(messages, result)
 
     return result or "<empty>", cost
@@ -310,6 +308,7 @@ def run_model(
     ctx_prompt: str | None,
     print_messages: bool,
     result_mode: ResultMode,
+    debug: bool = False,
 ) -> tuple[list[dict[str, Any]], float, dict[tuple[bool, int], int]]:
     results: defaultdict[tuple[bool, int], int] = defaultdict(int)
     total_cost = 0
@@ -323,6 +322,7 @@ def run_model(
             system_prompt=SYSTEM_PROMPTS[system_prompt],
             user_prompt=USER_PROMPTS[user_prompt],
             ctx_prompt=ctx_prompt,
+            debug=debug,
         )
         total_cost += cost
 
@@ -489,9 +489,6 @@ def main(
     result_mode: ResultMode = typer.Option(ResultMode.score, help="Result mode."),
 ) -> None:  # sourcery skip: low-code-quality
     "Run a GPT model on the given data and evaluate the results."
-    global DEBUG  # noqa: PLW0603
-    DEBUG = debug
-
     if model not in MODEL_COSTS:
         raise ValueError(f"Invalid model. Options: {tuple(MODEL_COSTS)}")
     if system_prompt not in SYSTEM_PROMPTS:
@@ -543,6 +540,7 @@ def main(
         ctx_prompt,
         print_messages,
         result_mode,
+        debug=debug,
     )
     formatted_output = reformat_output(output_data)
     metrics_ = calculate_metrics(formatted_output)
