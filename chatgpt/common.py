@@ -1,6 +1,7 @@
 import argparse
 import json
 import time
+import warnings
 from datetime import datetime
 from pathlib import Path
 from typing import Any, cast
@@ -49,11 +50,11 @@ def make_msg(role: str, content: str) -> dict[str, str]:
 CALLS_PER_MINUTE = 3500  # full plan
 
 
-def make_chat_request(client: openai.OpenAI, **kwargs: Any) -> dict[str, Any]:
+def make_chat_request(client: openai.OpenAI, **kwargs: Any) -> ChatCompletion:
     # Ignores (mypy): untyped decorator makes function untyped
     @sleep_and_retry  # type: ignore[misc]
     @limits(calls=CALLS_PER_MINUTE, period=60)  # type: ignore[misc]
-    def _make_chat_request(**kwargs: Any) -> dict[str, Any]:
+    def _make_chat_request(**kwargs: Any) -> ChatCompletion:
         attempts = 0
         while True:
             try:
@@ -70,7 +71,9 @@ def make_chat_request(client: openai.OpenAI, **kwargs: Any) -> dict[str, Any]:
                 logger.log_exchange(kwargs, response.model_dump())
                 return response
 
-    return cast(dict[str, Any], _make_chat_request(**kwargs))
+    # This cast is necessary because of the sleep_and_retry and limits decorators,
+    # which make the function untyped.
+    return cast(ChatCompletion, _make_chat_request(**kwargs))
 
 
 def get_result(response: ChatCompletion) -> str:

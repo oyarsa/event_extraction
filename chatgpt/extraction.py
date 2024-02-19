@@ -7,6 +7,7 @@ import openai
 from tqdm import tqdm
 
 from common import (
+    ChatCompletion,
     calculate_cost,
     get_result,
     init_argparser,
@@ -73,7 +74,7 @@ def make_extraction_request(
     examples: list[dict[str, str]],
     user_prompt: str,
     system_prompt: str,
-) -> dict[str, Any]:
+) -> ChatCompletion:
     return make_chat_request(
         client=client,
         model=model,
@@ -113,7 +114,7 @@ def generate_extraction_messages(
 
 
 class ExtractionResult(NamedTuple):
-    responses: list[dict[str, Any]]
+    responses: list[ChatCompletion]
     predictions: list[MetricPrediction]
     metrics: dict[str, float]
 
@@ -127,7 +128,7 @@ def extract_clauses(
     user_prompt: str,
     system_prompt: str,
 ) -> ExtractionResult:
-    responses: list[dict[str, Any]] = []
+    responses: list[ChatCompletion] = []
     predictions: list[MetricPrediction] = []
 
     for example in tqdm(inputs):
