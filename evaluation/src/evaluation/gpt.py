@@ -49,7 +49,7 @@ MODEL_COSTS = {
         0.00003,
         0.00006,
     ),
-    "gpt-4-1106-preview": (  # in: $0.01 / 1K tokens, out: $0.03 / 1K tokens
+    "gpt-4-0125-preview": (  # in: $0.01 / 1K tokens, out: $0.03 / 1K tokens
         0.00001,
         0.00003,
     ),
@@ -442,7 +442,7 @@ def main(
         help="API type, defaults to 'openai'.",
     ),
     model: str = typer.Option(
-        "gpt-4",
+        "gpt-4-0125-preview",
         help=f"Which GPT model to use. Options: {tuple(MODEL_COSTS)}.",
     ),
     system_prompt: str = typer.Option(
