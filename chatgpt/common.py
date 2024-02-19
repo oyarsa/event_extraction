@@ -95,7 +95,23 @@ MODEL_COSTS = {
 
 
 def calculate_cost(model: str, response: ChatCompletion) -> float:
-    assert response.usage is not None, "Usage not available in response"
+    """Calculate the cost of a GPT response based on the tokens used.
+
+    If model is not not valid, a warning is issued and 0 cost is returned. Same if the
+    usage information is not available in the response.
+
+    0 cost is returned instead of raising an exception, because the cost is not that
+    important, and it's better not to have it than crash the program.
+    """
+    if response.usage is None:
+        warnings.warn(
+            "Usage information not available in GPT response. Returning 0 cost."
+        )
+        return 0
+
+    if model not in MODEL_COSTS:
+        warnings.warn(f"Model {model} not found in costs table. Returning 0 cost.")
+        return 0
 
     input_tokens = response.usage.prompt_tokens
     output_tokens = response.usage.completion_tokens
