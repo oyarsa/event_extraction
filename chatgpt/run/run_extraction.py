@@ -19,7 +19,24 @@ def main(
     user_prompt: int = 0,
     system_prompt: int = 0,
     model: str = "gpt-3.5-turbo",
+    envs: bool = False,
 ) -> None:
+    files = {
+        "test": ("extraction_test_full.json", "extraction_examples.json"),
+        "full": ("extraction_dev_full.json", "extraction_examples.json"),
+        "exp": ("extraction_dev_100.json", "extraction_examples.json"),
+        "dev": ("extraction_dev_10.json", "extraction_examples_3.json"),
+        "debug": ("extraction_dev_2.json", "extraction_examples_3.json"),
+    }
+
+    if envs:
+        fmt = "{:<7} {:<27} {:<20}"
+        print(fmt.format("env", "input_file", "examples_file"))
+        print(fmt.format("-" * 7, "-" * 27, "-" * 20))
+        for name, (input_file, examples_file) in files.items():
+            print(fmt.format(name, input_file, examples_file))
+        return
+
     run_name = run_name or datetime.now().isoformat()
     if mode not in ["lines", "tags"]:
         raise ValueError(f"Invalid mode {mode}")
@@ -30,13 +47,6 @@ def main(
             f"Invalid model {model}. Options: {', '.join(available_models)}"
         )
 
-    files = {
-        "test": ("extraction_test_full.json", "extraction_examples.json"),
-        "full": ("extraction_dev_full.json", "extraction_examples.json"),
-        "exp": ("extraction_dev_100.json", "extraction_examples.json"),
-        "dev": ("extraction_dev_10.json", "extraction_examples_3.json"),
-        "debug": ("extraction_dev_2.json", "extraction_examples_3.json"),
-    }
     input_file, examples_file = map(Path, files[env])
 
     is_gpt4 = model.startswith("gpt-4")
