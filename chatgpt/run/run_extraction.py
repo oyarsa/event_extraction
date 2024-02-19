@@ -46,9 +46,9 @@ def main(
             user_prompt = 1
         elif mode == "tags":
             user_prompt = 2
-        model = "gpt-4-0613"
+        model = "gpt-4-0125-preview"
     elif model.startswith("gpt-3.5"):
-        model = "gpt-3.5-turbo-1106"
+        model = "gpt-3.5-turbo-0125"
     else:
         raise ValueError(f"Invalid model {model}")
 
@@ -91,6 +91,16 @@ def main(
 
     cmd = [str(x) for x in args]
     subprocess.run(cmd, check=True)
+
+    args_classes = [
+        sys.executable,
+        "get_classes.py",
+        output_dir / "output.json",
+        "--mode",
+        mode,
+    ]
+    cmd_classes = [str(x) for x in args_classes]
+    subprocess.run(cmd_classes, check=True)
 
 
 if __name__ == "__main__":
