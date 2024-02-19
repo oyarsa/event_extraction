@@ -8,7 +8,6 @@ from tqdm import tqdm
 
 from common import (
     calculate_cost,
-    get_key,
     get_result,
     init_argparser,
     log_args,
@@ -29,7 +28,7 @@ USER_PROMPTS = [
     # 1
     """\
 What are the causes, effects and relation in the following text?
-The relation must be one of "cause", "enable", or "prevent".
+The relation MUST BE one of "cause", "enable", or "prevent".
 The causes and effects must be spans of the text. There is only one relation.
 
 The response should be formatted as this:
@@ -37,7 +36,11 @@ Cause: <text>
 Effect: <text>
 Relation: <text>
 
-When there are multiple causes or effects, separate them by " | ". Don't add quotes around the extractions.
+The relation MUST BE one of "cause", "enable", or "prevent". If it is anything else \
+besides those three words, you will be penalized.
+
+When there are multiple causes or effects, separate them by " | ". Don't add quotes \
+around the extractions.
 """,
     # 2
     """\
@@ -48,7 +51,8 @@ The causes and effects must be spans of the text. There is only one relation.
 The response should be formatted as this:
 `[Cause] <cause text> [Relation] <relation> [Effect] <effect text>`
 
-When there are multiple causes or effects, separate them by " | ". Don't add quotes around the extractions.
+When there are multiple causes or effects, separate them by " | ". Don't add quotes \
+around the extractions.
 """,
 ]
 SYSTEM_PROMPTS = [
@@ -63,6 +67,7 @@ SYSTEM_PROMPTS = [
 
 
 def make_extraction_request(
+    client: openai.OpenAI,
     model: str,
     text: str,
     examples: list[dict[str, str]],
@@ -70,6 +75,7 @@ def make_extraction_request(
     system_prompt: str,
 ) -> dict[str, Any]:
     return make_chat_request(
+        client=client,
         model=model,
         messages=generate_extraction_messages(
             text, examples, user_prompt, system_prompt
@@ -113,6 +119,7 @@ class ExtractionResult(NamedTuple):
 
 
 def extract_clauses(
+    client: openai.OpenAI,
     model: str,
     demonstration_examples: list[dict[str, str]],
     inputs: list[MetricReference],
@@ -125,6 +132,7 @@ def extract_clauses(
 
     for example in tqdm(inputs):
         response = make_extraction_request(
+            client,
             model,
             example["context"],
             demonstration_examples,
@@ -144,6 +152,7 @@ def extract_clauses(
 
 
 def run_extraction(
+    client: openai.OpenAI,
     model: str,
     demonstration_examples_path: Path | None,
     input_path: Path,
@@ -161,6 +170,7 @@ def run_extraction(
     examples: list[MetricReference] = json.loads(input_path.read_text())["data"]
 
     responses, predictions, metrics = extract_clauses(
+        client,
         model=model,
         demonstration_examples=demonstration_examples,
         inputs=examples,
@@ -190,6 +200,25 @@ def run_extraction(
         metric_path.write_text(json.dumps(metrics, indent=2))
 
 
+def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
+    "Create client for OpenAI or Azure API, depending on the configuration."
+    config = config[api_type]
+
+    if api_type == "azure":
+        print("Using Azure OpenAI API")
+        return openai.AzureOpenAI(
+            api_key=config["key"],
+            api_version=config["api_version"],
+            azure_endpoint=config["endpoint"],
+            azure_deployment=config["deployment"],
+        )
+    elif api_type == "openai":
+        print("Using OpenAI API")
+        return openai.OpenAI(api_key=config["key"])
+    else:
+        raise ValueError(f"Unknown API type: {config['api_type']}")
+
+
 def main() -> None:
     parser = init_argparser()
     parser.add_argument(
@@ -208,7 +237,9 @@ def main() -> None:
     log_args(args, path=args.args_path)
 
     logger.config(args.log_file, args.print_logs)
-    openai.api_key = get_key(args.key_file, args.key_name)
+
+    api_config = json.loads(args.key_file.read_text())
+    client = init_client(args.key_name, api_config)
 
     if args.prompt < 0 or args.prompt >= len(USER_PROMPTS):
         raise IndexError(f"Invalid user prompt index: {args.prompt}")
@@ -217,6 +248,7 @@ def main() -> None:
         raise IndexError(f"Invalid system prompt index: {args.prompt}")
 
     run_extraction(
+        client,
         model=args.model,
         demonstration_examples_path=args.examples,
         input_path=args.input,

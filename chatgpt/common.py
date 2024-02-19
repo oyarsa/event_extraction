@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, cast
 
 import openai
-from openai.error import OpenAIError
+from openai.types.chat import ChatCompletion
 from ratelimit import limits, sleep_and_retry
 
 
@@ -49,7 +49,7 @@ def make_msg(role: str, content: str) -> dict[str, str]:
 CALLS_PER_MINUTE = 3500  # full plan
 
 
-def make_chat_request(**kwargs: Any) -> dict[str, Any]:
+def make_chat_request(client: openai.OpenAI, **kwargs: Any) -> dict[str, Any]:
     # Ignores (mypy): untyped decorator makes function untyped
     @sleep_and_retry  # type: ignore[misc]
     @limits(calls=CALLS_PER_MINUTE, period=60)  # type: ignore[misc]
@@ -57,44 +57,47 @@ def make_chat_request(**kwargs: Any) -> dict[str, Any]:
         attempts = 0
         while True:
             try:
-                response = cast(dict[str, Any], openai.ChatCompletion.create(**kwargs))
+                response = client.chat.completions.create(**kwargs)
             except Exception as e:
                 ts = datetime.now().isoformat()
-                print(
-                    f'{ts} | Connection error - "{e}" | Kwargs | "{kwargs}"'
-                    f" | Attempt {attempts + 1}"
-                )
+                print(f'{ts} | Connection error - "{e}" | Attempt {attempts + 1}')
                 attempts += 1
 
-                if isinstance(e, OpenAIError) and e.http_status == 429:
+                if isinstance(e, openai.APIStatusError) and e.status_code == 429:
                     print("Rate limit exceeded. Waiting 10 seconds.")
                     time.sleep(10)
             else:
-                logger.log_exchange(kwargs, response)
+                logger.log_exchange(kwargs, response.model_dump())
                 return response
 
     return cast(dict[str, Any], _make_chat_request(**kwargs))
 
 
-def get_result(response: dict[str, Any]) -> str:
-    return cast(str, response["choices"][0]["message"]["content"])
+def get_result(response: ChatCompletion) -> str:
+    return response.choices[0].message.content or "<empty>"
 
 
 # Costs as of 2023-11-13 from https://openai.com/pricing
 # model: input cost, output cost
 MODEL_COSTS = {
-    "gpt-3.5-turbo-1106": (  # in: $0.001 / 1K tokens, out: $0.002 / 1K tokens
+    "gpt-3.5-turbo-0125": (  # in: $0.001 / 1K tokens, out: $0.002 / 1K tokens
         0.000001,
         0.000002,
     ),
-    "gpt-4-0613": (0.00003, 0.00006),  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
+    "gpt-4-0125-preview": (  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
+        0.00003,
+        0.00006,
+    ),
 }
 
 
-def calculate_cost(model: str, response: dict[str, Any]) -> float:
-    input_tokens = response["usage"]["prompt_tokens"]
-    output_tokens = response["usage"]["completion_tokens"]
+def calculate_cost(model: str, response: ChatCompletion) -> float:
+    assert response.usage is not None, "Usage not available in response"
+
+    input_tokens = response.usage.prompt_tokens
+    output_tokens = response.usage.completion_tokens
     cost_input, cost_output = MODEL_COSTS[model]
+
     return input_tokens * cost_input + output_tokens * cost_output
 
 
@@ -118,7 +121,7 @@ def init_argparser(*, prompt: bool = True) -> argparse.ArgumentParser:
     parser.add_argument("key_file", type=Path, help="Path to JSON file with API keys")
     parser.add_argument("key_name", type=str, help="Name of key to use")
     parser.add_argument(
-        "--model", type=str, default="gpt-3.5-turbo", help="Model to use"
+        "--model", type=str, default=next(iter(MODEL_COSTS)), help="Model to use"
     )
     parser.add_argument(
         "--print-logs", action="store_true", help="Print logs to stdout"
