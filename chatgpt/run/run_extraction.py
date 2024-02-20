@@ -56,9 +56,9 @@ def main(
             user_prompt = 1
         elif mode == "tags":
             user_prompt = 2
-        model = "gpt-4-0125-preview"
+        model = "gpt-4-1106-preview"
     elif model.startswith("gpt-3.5"):
-        model = "gpt-3.5-turbo-0125"
+        model = "gpt-3.5-turbo-0613"
     else:
         raise ValueError(f"Invalid model {model}")
 

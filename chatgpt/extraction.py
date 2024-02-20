@@ -1,5 +1,5 @@
 import json
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import Any, NamedTuple
 
@@ -21,6 +21,7 @@ from metrics import (
     MetricReference,
     StructureFormat,
     calculate_metrics,
+    parse_instance,
 )
 
 USER_PROMPTS = [
@@ -55,6 +56,25 @@ The response should be formatted as this:
 When there are multiple causes or effects, separate them by " | ". Don't add quotes \
 around the extractions.
 """,
+    # 3
+    """\
+What are the causes, effects and relation in the following text? The relation must be \
+one of "cause", "enable", or "prevent". The causes and effects must be spans of the \
+text. There is only one relation.
+
+The response should be formatted as this:
+Cause: <text>
+Effect: <text>
+Relation: <text>
+
+When there are multiple causes or effects, separate them by " | ". Don't add quotes
+around the extractions.
+""",
+    # 4
+    """\
+What are the causes, effects and relations in the following text? \
+The relation must be one of "cause", "enable", or "prevent".
+""",
 ]
 SYSTEM_PROMPTS = [
     # 0
@@ -64,6 +84,9 @@ SYSTEM_PROMPTS = [
     # 1
     "You are a helpful assistant that extract causes, effects, and a relation from"
     " text.",
+    # 2
+    "You are a helpful assistant that extract causes, effects, and a relation from"
+    " text. The relation must be one of 'cause', 'enable', or 'prevent'.",
 ]
 
 
@@ -74,12 +97,13 @@ def make_extraction_request(
     examples: list[dict[str, str]],
     user_prompt: str,
     system_prompt: str,
+    appendix: Sequence[str] = (),
 ) -> ChatCompletion:
     return make_chat_request(
         client=client,
         model=model,
         messages=generate_extraction_messages(
-            text, examples, user_prompt, system_prompt
+            text, examples, user_prompt, system_prompt, appendix=appendix
         ),
         temperature=0,
         seed=0,
@@ -101,6 +125,7 @@ def generate_extraction_messages(
     examples: list[dict[str, str]],
     user_prompt: str,
     system_prompt: str,
+    appendix: Sequence[str] = (),
 ) -> list[dict[str, str]]:
     return [
         make_msg(
@@ -110,6 +135,7 @@ def generate_extraction_messages(
         *gen_extraction_example_exchange(examples, user_prompt),
         make_msg("user", user_prompt),
         make_msg("user", text),
+        *(make_msg("user", s) for s in appendix),
     ]
 
 
@@ -117,6 +143,77 @@ class ExtractionResult(NamedTuple):
     responses: list[ChatCompletion]
     predictions: list[MetricPrediction]
     metrics: dict[str, float]
+
+
+def retry_relation(
+    client: openai.OpenAI,
+    model: str,
+    example: MetricReference,
+    demonstration_examples: list[dict[str, str]],
+    user_prompt: str,
+    system_prompt: str,
+    relation: str,
+    max_retries: int = 5,
+) -> str:
+    """
+    Retry getting a relation from the user until we get 'cause', 'enable' or 'prevent'
+    or we reach the maximum number of retries.
+    """
+    num_tries = 0
+    appendix: list[str] = []
+
+    while relation not in ["cause", "enable", "prevent"] and num_tries < max_retries:
+        num_tries += 1
+        appendix.append(
+            f'Invalid relation: "{relation}". Provide a valid relation (one of "cause",'
+            ' "enable", "prevent"). The output should be only the relation.'
+        )
+
+        response = make_extraction_request(
+            client,
+            model,
+            example["context"],
+            demonstration_examples,
+            user_prompt,
+            system_prompt,
+            appendix=appendix,
+        )
+        relation = get_result(response).lower().strip()
+
+    if num_tries >= max_retries:
+        print(f"Failed to get a valid relation after {max_retries} retries")
+        print("\n".join(appendix))
+        print()
+
+    return relation
+
+
+def construct_instance_tags(entities: dict[str, list[str]], relation: str) -> str:
+    tags = [
+        f'[Cause] {" | ".join(entities["Cause"])}',
+        f"[Relation] {relation}",
+        f'[Effect] {" | ".join(entities["Effect"])}',
+    ]
+    return " ".join(tags)
+
+
+def construct_instance_lines(entities: dict[str, list[str]], relation: str) -> str:
+    rows = [
+        f'Cause: {" | ".join(entities["Cause"])}',
+        f'Effect: {" | ".join(entities["Effect"])}',
+        f"Relation: {relation}",
+    ]
+    return "\n".join(rows)
+
+
+def replace_relation(result: str, relation: str, mode: StructureFormat) -> str:
+    entities, _ = parse_instance(result, mode)
+
+    match mode:
+        case StructureFormat.TAGS:
+            return construct_instance_tags(entities, relation)
+        case StructureFormat.LINES:
+            return construct_instance_lines(entities, relation)
 
 
 def extract_clauses(
@@ -140,9 +237,24 @@ def extract_clauses(
             user_prompt,
             system_prompt,
         )
+        result = get_result(response)
+        relation = parse_instance(result, extraction_mode)[1].lower()
+
+        if relation not in ["cause", "enable", "prevent"]:
+            relation = retry_relation(
+                client,
+                model,
+                example,
+                demonstration_examples,
+                user_prompt,
+                system_prompt,
+                relation,
+            )
+            result = replace_relation(result, relation, extraction_mode)
+
         pred: MetricPrediction = {
             "id": example["id"],
-            "prediction_text": get_result(response),
+            "prediction_text": result,
         }
         responses.append(response)
         predictions.append(pred)
@@ -205,7 +317,7 @@ def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
     "Create client for OpenAI or Azure API, depending on the configuration."
     config = config[api_type]
 
-    if api_type == "azure":
+    if api_type.startswith("azure"):
         print("Using Azure OpenAI API")
         return openai.AzureOpenAI(
             api_key=config["key"],
@@ -213,11 +325,29 @@ def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
             azure_endpoint=config["endpoint"],
             azure_deployment=config["deployment"],
         )
-    elif api_type == "openai":
+    elif api_type.startswith("openai"):
         print("Using OpenAI API")
         return openai.OpenAI(api_key=config["key"])
     else:
         raise ValueError(f"Unknown API type: {config['api_type']}")
+
+
+def list_prompts() -> None:
+    print("User prompts:")
+    for i, prompt in enumerate(USER_PROMPTS):
+        print(i)
+        print("----")
+        print(prompt)
+        print()
+    print()
+    print("=" * 80)
+    print()
+    print("System prompts:")
+    for i, prompt in enumerate(SYSTEM_PROMPTS):
+        print(i)
+        print("----")
+        print(prompt)
+        print()
 
 
 def main() -> None:
@@ -234,9 +364,14 @@ def main() -> None:
         type=StructureFormat,
         help="The format of the structured output.",
     )
+    parser.add_argument("--list-prompts", action="store_true", help="List prompts")
     args = parser.parse_args()
-    log_args(args, path=args.args_path)
 
+    if args.list_prompts:
+        list_prompts()
+        return
+
+    log_args(args, path=args.args_path)
     logger.config(args.log_file, args.print_logs)
 
     api_config = json.loads(args.key_file.read_text())

@@ -161,7 +161,7 @@ def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
 
 def parse_instance(
     answer: str, mode: StructureFormat
-) -> tuple[dict[str, list[str]], str | None]:
+) -> tuple[dict[str, list[str]], str]:
     if mode == StructureFormat.TAGS:
         return parse_instance_tags(answer)
     else:

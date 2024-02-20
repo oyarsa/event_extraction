@@ -83,11 +83,11 @@ def get_result(response: ChatCompletion) -> str:
 # Costs as of 2023-11-13 from https://openai.com/pricing
 # model: input cost, output cost
 MODEL_COSTS = {
-    "gpt-3.5-turbo-0125": (  # in: $0.001 / 1K tokens, out: $0.002 / 1K tokens
+    "gpt-3.5-turbo-0613": (  # in: $0.001 / 1K tokens, out: $0.002 / 1K tokens
         0.000001,
         0.000002,
     ),
-    "gpt-4-0125-preview": (  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
+    "gpt-4-1106-preview": (  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
         0.00003,
         0.00006,
     ),
