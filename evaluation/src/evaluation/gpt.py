@@ -45,9 +45,17 @@ MODEL_COSTS = {
         0.0000005,
         0.0000015,
     ),
+    "gpt-3.5-turbo-1106": (  # in: $0.001 / 1K tokens, out: $0.002 / 1K tokens
+        0.0000005,
+        0.0000015,
+    ),
     "gpt-4": (  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
         0.00003,
         0.00006,
+    ),
+    "gpt-4-1106-preview": (  # in: $0.01 / 1K tokens, out: $0.03 / 1K tokens
+        0.00001,
+        0.00003,
     ),
     "gpt-4-0125-preview": (  # in: $0.01 / 1K tokens, out: $0.03 / 1K tokens
         0.00001,
@@ -399,7 +407,7 @@ def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
     "Create client for OpenAI or Azure API, depending on the configuration."
     config = config[api_type]
 
-    if api_type == "azure":
+    if api_type.startswith("azure"):
         logger.info("Using Azure OpenAI API")
         return openai.AzureOpenAI(
             api_key=config["key"],
@@ -407,11 +415,11 @@ def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
             azure_endpoint=config["endpoint"],
             azure_deployment=config["deployment"],
         )
-    elif api_type == "openai":
+    elif api_type.startswith("openai"):
         logger.info("Using OpenAI API")
         return openai.OpenAI(api_key=config["key"])
     else:
-        raise ValueError(f"Unknown API type: {config['api_type']}")
+        raise ValueError(f"Unknown API type: {api_type}")
 
 
 def main(
