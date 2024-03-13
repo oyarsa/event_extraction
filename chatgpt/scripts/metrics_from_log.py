@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
-from metrics import (  # noqa: E402
+from metrics import (
     MetricPrediction,
     MetricReference,
     StructureFormat,

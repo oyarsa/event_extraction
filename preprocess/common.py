@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Iterable
 from pathlib import Path
 from typing import Any
 
@@ -90,7 +90,7 @@ def deduplicate(list: Iterable[dict[str, str]]) -> list[dict[str, str]]:
 
 
 def extract_relation_span(causes: list[str], effects: list[str], text: str) -> str:
-    start_index = int(float(1e9))
+    start_index = int(1e9)
     end_index = -1
 
     for clause in causes + effects:
@@ -100,5 +100,5 @@ def extract_relation_span(causes: list[str], effects: list[str], text: str) -> s
         start_index = min(start_index, start)
         end_index = max(end_index, end)
 
-    assert start_index != int(float(1e9)) and end_index != -1
+    assert start_index != int(1e9) and end_index != -1
     return text[start_index:end_index].strip()

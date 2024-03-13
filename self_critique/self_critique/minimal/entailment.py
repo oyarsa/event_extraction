@@ -46,7 +46,7 @@ class Labeller:
     label2id: dict[str, int]
 
     def __init__(self, *datasets: Iterable[EntailmentEntry] | None) -> None:
-        data = [d for d in datasets if d][0]
+        data = next(d for d in datasets if d)
         labels = sorted({d.label for d in data})
         self.num_labels = len(labels)
         self.id2label = dict(enumerate(labels))

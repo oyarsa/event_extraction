@@ -28,7 +28,7 @@ import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
-from metrics import parse_instance_tags  # noqa: E402
+from metrics import parse_instance_tags
 
 
 def convert_answer(item: str) -> str:

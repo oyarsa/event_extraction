@@ -54,7 +54,6 @@ from typing import Any
 
 from common import (
     deduplicate,
-    generate_answer_combined_tags,
     hash_instance,
 )
 

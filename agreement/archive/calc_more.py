@@ -1,7 +1,6 @@
 import argparse
 import json
 import os.path
-import sys
 from dataclasses import dataclass
 from typing import Any
 

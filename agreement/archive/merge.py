@@ -1,9 +1,9 @@
 import argparse
-from collections import defaultdict
 import json
+from collections import defaultdict
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Counter
+from typing import Any
 
 
 @dataclass
