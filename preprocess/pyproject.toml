@@ -1,4 +1,5 @@
 [tool.ruff]
 extend = "../pyproject.toml"
-extend-select = ["ANN"]
 
+[tool.ruff.lint]
+extend-select = ["ANN"]

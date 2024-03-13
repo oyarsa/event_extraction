@@ -27,6 +27,8 @@ license = {text = "GPT-3.0-only"}
 
 [tool.ruff]
 src = ["src"]
+
+[tool.ruff.lint]
 select = [
 	"E",
 	"F",

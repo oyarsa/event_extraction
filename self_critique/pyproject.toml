@@ -38,10 +38,13 @@ dev = [
     "ipykernel>=6.23.1",
     "tensorboard>=2.12.2",
 ]
+
 [tool.ruff]
 extend = "../pyproject.toml"
-isort = { known-first-party = ["trainer-seq2seq", "metric"] }
 target-version = "py311"
+
+[tool.ruff.lint]
+isort = { known-first-party = ["trainer-seq2seq", "metric"] }
 extend-ignore = ["UP007"]  # HF doesn't like T | None
 
 [tool.pyright]
