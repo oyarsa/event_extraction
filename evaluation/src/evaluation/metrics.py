@@ -38,14 +38,12 @@ def spearman(x: list[int], y: list[int]) -> float:
         return spearmanr(x, y)[0]
 
 
-def calc_metrics(
-    results: EvaluationResult, average: str = "binary"
-) -> dict[str, float]:
+def calc_metrics(results: EvaluationResult) -> dict[str, float]:
     x, y = results.golds, results.preds
 
     acc = accuracy_score(x, y)
     prec, rec, f1, _ = precision_recall_fscore_support(
-        x, y, average=average, zero_division=0  # type: ignore
+        x, y, average="binary", zero_division=0  # type: ignore
     )
 
     return {

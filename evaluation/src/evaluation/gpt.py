@@ -406,9 +406,7 @@ def reformat_output(
     ]
 
 
-def calculate_metrics(
-    data: list[dict[str, Any]], result_mode: ResultMode
-) -> dict[str, float]:
+def calculate_metrics(data: list[dict[str, Any]]) -> dict[str, float]:
     "Calculate main metrics for the GPT result."
     return metrics.calc_metrics(
         metrics.EvaluationResult(
@@ -419,7 +417,6 @@ def calculate_metrics(
             annotations=[d["annotation"] for d in data],
             loss=math.nan,  # no loss available from GPT
         ),
-        average="binary" if result_mode == ResultMode.valid else "macro",
     )
 
 
@@ -584,7 +581,7 @@ def main(
         debug=debug,
     )
     formatted_output = reformat_output(model_result.output_data, result_mode)
-    metrics_ = calculate_metrics(formatted_output, result_mode)
+    metrics_ = calculate_metrics(formatted_output)
 
     (output_path / "full_output.json").write_text(
         json.dumps(model_result.output_data, indent=2)
