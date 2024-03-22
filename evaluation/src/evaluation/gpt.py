@@ -546,6 +546,7 @@ def main(
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
     log.setup_logger(logger, output_path)
+    logger.info(f"Run name: {run_name}")
 
     openai_config = json.loads(openai_config_path.read_text())
     client = init_client(api_type, openai_config)
