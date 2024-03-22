@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 # pyright: basic
+import hashlib
 import json
 import logging
 import math
 import random
 import re
+import sys
+import time
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, cast
 
 import openai
 import pandas as pd
 import typer
-from openai.types.chat import ChatCompletionMessageParam
+from openai.types.chat import ChatCompletion, ChatCompletionMessageParam
+from ratelimit import limits, sleep_and_retry
 from tqdm import tqdm
 
 from evaluation import log, metrics
@@ -102,6 +106,33 @@ class GptResult:
     model_used: str
 
 
+def make_chat_request(client: openai.OpenAI, **kwargs: Any) -> ChatCompletion:
+    calls_per_minute = 3500  # full plan
+
+    # Ignores (mypy): untyped decorator makes function untyped
+    @sleep_and_retry  # type: ignore[misc]
+    @limits(calls=calls_per_minute, period=60)  # type: ignore[misc]
+    def _make_chat_request(**kwargs: Any) -> ChatCompletion:
+        attempts = 0
+        while True:
+            try:
+                response = client.chat.completions.create(**kwargs)
+            except Exception as e:
+                ts = datetime.now().isoformat()
+                print(f'{ts} | Connection error - "{e}" | Attempt {attempts + 1}')
+                attempts += 1
+
+                if isinstance(e, openai.APIStatusError) and e.status_code == 429:
+                    print("Rate limit exceeded. Waiting 10 seconds.")
+                    time.sleep(10)
+            else:
+                return response
+
+    # This cast is necessary because of the sleep_and_retry and limits decorators,
+    # which make the function untyped.
+    return cast(ChatCompletion, _make_chat_request(**kwargs))
+
+
 def run_gpt(
     client: openai.OpenAI,
     model: str,
@@ -119,7 +150,8 @@ def run_gpt(
         messages.append({"role": "user", "content": ctx_prompt})
     messages.append({"role": "user", "content": message})
 
-    response = client.chat.completions.create(
+    response = make_chat_request(
+        client,
         model=model,
         messages=messages,
         temperature=0,
@@ -452,6 +484,11 @@ def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
         raise ValueError(f"Unknown API type: {api_type}")
 
 
+def hash_file(file: Path) -> str:
+    with file.open("rb") as f:
+        return hashlib.md5(f.read()).hexdigest()
+
+
 def main(
     file: Path = typer.Argument(
         ...,
@@ -536,6 +573,11 @@ def main(
     if data_mode not in SUPPORTED_MODES:
         raise ValueError(f"Invalid mode. Options: {tuple(SUPPORTED_MODES)}")
 
+    reproduction_info = {
+        "command": sys.argv,
+        "data_hash": hash_file(file),
+    }
+
     if run_name is None:
         run_name = f"{model}-sys_{system_prompt}-user_{user_prompt}-n{n}"
         if use_context:
@@ -589,6 +631,9 @@ def main(
     )
     (output_path / "results.json").write_text(json.dumps(formatted_output, indent=2))
     (output_path / "metrics.json").write_text(json.dumps(metrics_, indent=2))
+    (output_path / "reproduction.json").write_text(
+        json.dumps(reproduction_info, indent=2)
+    )
     metrics.report_metrics(logger, metrics_, "GPT")
 
     with Path("cost.csv").open("a") as f:
