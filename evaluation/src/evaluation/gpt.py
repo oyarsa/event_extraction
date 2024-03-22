@@ -6,6 +6,7 @@ import math
 import random
 import re
 from collections import defaultdict
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
@@ -94,6 +95,13 @@ def dbg_gpt(messages: list[ChatCompletionMessageParam], result: str | None) -> N
     logger.info("\n".join(output))
 
 
+@dataclass
+class GptResult:
+    result: str
+    cost: float
+    model_used: str
+
+
 def run_gpt(
     client: openai.OpenAI,
     model: str,
@@ -102,7 +110,7 @@ def run_gpt(
     user_prompt: str,
     ctx_prompt: str | None = None,
     debug: bool = False,
-) -> tuple[str, float]:  # sourcery skip: extract-method
+) -> GptResult:
     messages: list[ChatCompletionMessageParam] = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
@@ -127,7 +135,11 @@ def run_gpt(
     if debug:
         dbg_gpt(messages, result)
 
-    return result or "<empty>", cost
+    return GptResult(
+        result=result or "<empty>",
+        cost=cost,
+        model_used=response.model,
+    )
 
 
 SYSTEM_PROMPTS = {
@@ -307,6 +319,14 @@ def extract_result(result_s: str, mode: ResultMode) -> int:
             return int(last_line) if last_line.isdigit() else 0
 
 
+@dataclass
+class ModelResult:
+    output_data: list[dict[str, Any]]
+    total_cost: float
+    results: dict[tuple[int, int], int]
+    model_used: str
+
+
 def run_model(
     messages: list[tuple[dict[str, Any], str, str, bool]],
     model: str,
@@ -317,13 +337,14 @@ def run_model(
     print_messages: bool,
     result_mode: ResultMode,
     debug: bool = False,
-) -> tuple[list[dict[str, Any]], float, dict[tuple[bool, int], int]]:
-    results: defaultdict[tuple[bool, int], int] = defaultdict(int)
+) -> ModelResult:
+    results: defaultdict[tuple[int, int], int] = defaultdict(int)
     total_cost = 0
+    model_used = ""
     output_data: list[dict[str, Any]] = []
 
     for item, answer_msg, gpt_msg, valid in tqdm(messages):
-        result_s, cost = run_gpt(
+        gpt_result = run_gpt(
             client=client,
             model=model,
             message=gpt_msg,
@@ -332,12 +353,15 @@ def run_model(
             ctx_prompt=ctx_prompt,
             debug=debug,
         )
-        total_cost += cost
+        total_cost += gpt_result.cost
+        model_used = gpt_result.model_used
 
-        result = extract_result(result_s, result_mode)
-        results[valid, result] += 1
+        result = extract_result(gpt_result.result, result_mode)
+        results[int(valid), result] += 1
 
-        output_data.append(item | {"gpt_reward": result, "gpt_response": result_s})
+        output_data.append(
+            item | {"gpt_reward": result, "gpt_response": gpt_result.result}
+        )
 
         if print_messages:
             output = [
@@ -349,8 +373,8 @@ def run_model(
                 "-" * 80,
                 gpt_msg,
                 "-" * 80,
-                f"\nGPT: '{result_s}'",
-                "",
+                f"\nGPT: '{gpt_result.result}'",
+                f"Parsed: {result}",
                 f"NOT SENT {'~' * 50}",
                 answer_msg,
                 "*" * 80,
@@ -358,15 +382,21 @@ def run_model(
             ]
             logger.info("\n".join(output))
 
-    return output_data, total_cost, results
+    return ModelResult(output_data, total_cost, results, model_used)
 
 
-def reformat_output(output_data: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def reformat_output(
+    output_data: list[dict[str, Any]], result_mode: ResultMode
+) -> list[dict[str, Any]]:
     "Reformat the output data to match the format of other models."
     return [
         {
             "gold": int(item["valid"]),
-            "pred": int(item["gpt_reward"] >= 4),
+            "pred": (
+                int(item["gpt_reward"] >= 4)
+                if result_mode == ResultMode.score
+                else int(item["gpt_reward"])
+            ),
             "passage": item["input"],
             "output": item["output"],
             "annotation": item["gold"],
@@ -376,7 +406,9 @@ def reformat_output(output_data: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ]
 
 
-def calculate_metrics(data: list[dict[str, Any]]) -> dict[str, float]:
+def calculate_metrics(
+    data: list[dict[str, Any]], result_mode: ResultMode
+) -> dict[str, float]:
     "Calculate main metrics for the GPT result."
     return metrics.calc_metrics(
         metrics.EvaluationResult(
@@ -386,11 +418,12 @@ def calculate_metrics(data: list[dict[str, Any]]) -> dict[str, float]:
             outputs=[d["output"] for d in data],
             annotations=[d["annotation"] for d in data],
             loss=math.nan,  # no loss available from GPT
-        )
+        ),
+        average="binary" if result_mode == ResultMode.valid else "macro",
     )
 
 
-def confusion_matrix(results: dict[tuple[bool, int], int]) -> pd.DataFrame:
+def confusion_matrix(results: dict[tuple[int, int], int]) -> pd.DataFrame:
     "Generate confusion matrix from the predictions and annotation counts."
     df = pd.DataFrame(
         list(results.items()), columns=pd.Series(["Combination", "Count"])
@@ -539,7 +572,7 @@ def main(
         sampled_data = valids + invalids
 
     messages = make_messages(sampled_data, data_mode)
-    output_data, total_cost, results = run_model(
+    model_result = run_model(
         messages,
         model,
         client,
@@ -550,20 +583,23 @@ def main(
         result_mode,
         debug=debug,
     )
-    formatted_output = reformat_output(output_data)
-    metrics_ = calculate_metrics(formatted_output)
+    formatted_output = reformat_output(model_result.output_data, result_mode)
+    metrics_ = calculate_metrics(formatted_output, result_mode)
 
-    (output_path / "full_output.json").write_text(json.dumps(output_data, indent=2))
+    (output_path / "full_output.json").write_text(
+        json.dumps(model_result.output_data, indent=2)
+    )
     (output_path / "results.json").write_text(json.dumps(formatted_output, indent=2))
     (output_path / "metrics.json").write_text(json.dumps(metrics_, indent=2))
     metrics.report_metrics(logger, metrics_, "GPT")
 
     with Path("cost.csv").open("a") as f:
         ts = datetime.now(timezone.utc).isoformat()
-        f.write(f"{ts},{total_cost}\n")
+        f.write(f"{ts},{model_result.total_cost}\n")
 
-    logger.info(f"\n{confusion_matrix(results)}\n")
-    logger.info(f"Total cost: ${total_cost}")
+    logger.info(f"\n{confusion_matrix(model_result.results)}\n")
+    logger.info(f"Total cost: ${model_result.total_cost}")
+    logger.info(f"Model used: {model_result.model_used}")
 
 
 if __name__ == "__main__":
