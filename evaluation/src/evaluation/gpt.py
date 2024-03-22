@@ -7,6 +7,7 @@ import math
 import random
 import re
 import sys
+import textwrap
 import time
 from collections import defaultdict
 from dataclasses import dataclass
@@ -18,7 +19,13 @@ from typing import Any, Optional, cast
 import openai
 import pandas as pd
 import typer
-from openai.types.chat import ChatCompletion, ChatCompletionMessageParam
+from openai.types import CompletionUsage
+from openai.types.chat import (
+    ChatCompletion,
+    ChatCompletionMessage,
+    ChatCompletionMessageParam,
+)
+from openai.types.chat.chat_completion import Choice
 from ratelimit import limits, sleep_and_retry
 from tqdm import tqdm
 
@@ -99,38 +106,71 @@ def dbg_gpt(messages: list[ChatCompletionMessageParam], result: str | None) -> N
     logger.info("\n".join(output))
 
 
+AZURE_FILTER_MESSAGE = "The response was filtered due to the prompt triggering Azure OpenAI's content management policy"
+
+
+def make_filter_response(messages: list[dict[str, str]]) -> ChatCompletion:
+    return ChatCompletion(
+        object="chat.completion",
+        id="",
+        model="",
+        choices=[
+            Choice(
+                finish_reason="content_filter",
+                index=0,
+                message=ChatCompletionMessage(
+                    content=json.dumps(messages), role="assistant"
+                ),
+            )
+        ],
+        created=int(time.time()),
+        usage=CompletionUsage(
+            prompt_tokens=0,
+            completion_tokens=0,
+            total_tokens=0,
+        ),
+    )
+
+
 @dataclass
 class GptResult:
     result: str
     cost: float
     model_used: str
+    filtered: bool
 
 
-def make_chat_request(client: openai.OpenAI, **kwargs: Any) -> ChatCompletion:
+def make_chat_request(
+    client: openai.OpenAI, **kwargs: Any
+) -> tuple[ChatCompletion, bool]:
     calls_per_minute = 3500  # full plan
 
     # Ignores (mypy): untyped decorator makes function untyped
     @sleep_and_retry  # type: ignore[misc]
     @limits(calls=calls_per_minute, period=60)  # type: ignore[misc]
-    def _make_chat_request(**kwargs: Any) -> ChatCompletion:
+    def _make_chat_request(**kwargs: Any) -> tuple[ChatCompletion, bool]:
         attempts = 0
         while True:
             try:
                 response = client.chat.completions.create(**kwargs)
             except Exception as e:
-                ts = datetime.now().isoformat()
-                print(f'{ts} | Connection error - "{e}" | Attempt {attempts + 1}')
+                if isinstance(e, openai.BadRequestError):
+                    message = cast(dict[str, str], e.body).get("message", "")
+                    if AZURE_FILTER_MESSAGE in message:
+                        return make_filter_response(kwargs["messages"]), True
+
+                logger.info(f'Error - {type(e)} - "{e}" / Attempt {attempts + 1}')
                 attempts += 1
 
                 if isinstance(e, openai.APIStatusError) and e.status_code == 429:
-                    print("Rate limit exceeded. Waiting 10 seconds.")
+                    logger.info("Rate limit exceeded. Waiting 10 seconds.")
                     time.sleep(10)
             else:
-                return response
+                return response, False
 
     # This cast is necessary because of the sleep_and_retry and limits decorators,
     # which make the function untyped.
-    return cast(ChatCompletion, _make_chat_request(**kwargs))
+    return cast(tuple[ChatCompletion, bool], _make_chat_request(**kwargs))
 
 
 def run_gpt(
@@ -150,7 +190,7 @@ def run_gpt(
         messages.append({"role": "user", "content": ctx_prompt})
     messages.append({"role": "user", "content": message})
 
-    response = make_chat_request(
+    response, filtered = make_chat_request(
         client,
         model=model,
         messages=messages,
@@ -171,6 +211,7 @@ def run_gpt(
         result=result or "<empty>",
         cost=cost,
         model_used=response.model,
+        filtered=filtered,
     )
 
 
@@ -240,7 +281,7 @@ Evaluate the answer based on the following criteria:
 correctly explains the context and answers the question.
 2. Ensure that the facts mentioned in the answer are in the context.
 3. Penalize answers that complain that more information than necessary.
-4. Responde "true" if the answer is correct and "false" if it is not.
+4. Respond "true" if the answer is correct and "false" if it is not.
 
 Respond with the following format:
 Explanation: <text explanating the score>
@@ -260,16 +301,16 @@ def split_data(
 
 
 def format_data(item: dict[str, Any], mode: str) -> str:
-    context = f"Context:\n{item['input']}"
-
     if mode == "extraction":
         entities, _ = parse_instance(item["output"])
+        context = f"Context:\n{item['input']}"
         answer = (
             "Extraction:\n"
             f"Cause: {' | '.join(entities['Cause'])}\n"
             f"Effect: {' | '.join(entities['Effect'])}"
         )
     else:
+        context = item["input"]
         answer = f"Answer: {item['output']}"
 
     score = f"Score: {5 if item['valid'] else 1}"
@@ -313,13 +354,12 @@ def make_messages(
 ) -> list[tuple[dict[str, Any], str, str, bool]]:
     messages: list[tuple[dict[str, Any], str, str, bool]] = []
     for item in sampled_data:
-        context = f"Context: {item['input']}"
-        answer = f"Valid?: {item['valid']}"
-
         if mode == "extraction":
+            context = f"Context: {item['input']}"
             gold, answer = make_message_extraction(item)
         else:
-            answer = f"Answer: {item['output']}"
+            context = item["input"]
+            answer = f"answer: {item['output']}"
             gold = f"Gold: {item['gold']}"
 
         answer_msg = "\n".join([gold, answer]).strip()
@@ -351,6 +391,13 @@ def extract_result(result_s: str, mode: ResultMode) -> int:
             return int(last_line) if last_line.isdigit() else 0
 
 
+def render_messages(messages: list[dict[str, Any]]) -> str:
+    return "\n".join(
+        f">> {msg['role'].upper()}\n{textwrap.indent(msg['content'], ' ' * 4)}"
+        for msg in messages
+    )
+
+
 @dataclass
 class ModelResult:
     output_data: list[dict[str, Any]]
@@ -372,6 +419,7 @@ def run_model(
 ) -> ModelResult:
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
     total_cost = 0
+    filtered = 0
     model_used = ""
     output_data: list[dict[str, Any]] = []
 
@@ -387,6 +435,13 @@ def run_model(
         )
         total_cost += gpt_result.cost
         model_used = gpt_result.model_used
+
+        if gpt_result.filtered:
+            filtered += 1
+            logger.info(
+                f"Content filtered. Occurrences: {filtered}."
+                f" Prompt:\n{render_messages(json.loads(gpt_result.result))}"
+            )
 
         result = extract_result(gpt_result.result, result_mode)
         results[int(valid), result] += 1
@@ -414,6 +469,7 @@ def run_model(
             ]
             logger.info("\n".join(output))
 
+    logger.info(f"Total filtered: {filtered}")
     return ModelResult(output_data, total_cost, results, model_used)
 
 
