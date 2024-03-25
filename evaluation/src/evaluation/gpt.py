@@ -31,7 +31,7 @@ from tqdm import tqdm
 
 from evaluation import log, metrics
 
-logger = logging.getLogger("classifier")
+logger = logging.getLogger("evaluation.gpt")
 
 
 def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
@@ -373,6 +373,7 @@ class ResultMode(str, Enum):
     "Result mode for the GPT model."
     valid = "valid"
     score = "score"
+    likert = "likert"
 
 
 def extract_result(result_s: str, mode: ResultMode) -> int:
@@ -387,7 +388,7 @@ def extract_result(result_s: str, mode: ResultMode) -> int:
                 return 0
             logger.warning(f"Invalid result: {last_line}")
             return 0
-        case ResultMode.score:
+        case ResultMode.score | ResultMode.likert:
             last_line = last_line.replace("Score:", "").strip()
             return int(last_line) if last_line.isdigit() else 0
 
@@ -482,7 +483,9 @@ def reformat_output(
     "Reformat the output data to match the format of other models."
     return [
         {
-            "gold": int(item["valid"]),
+            "gold": (
+                int(item["valid"]) if result_mode == ResultMode.valid else item["score"]
+            ),
             "pred": (
                 int(item["gpt_reward"] >= 4)
                 if result_mode == ResultMode.score
@@ -497,7 +500,9 @@ def reformat_output(
     ]
 
 
-def calculate_metrics(data: list[dict[str, Any]]) -> dict[str, float]:
+def calculate_metrics(
+    data: list[dict[str, Any]], result_mode: ResultMode
+) -> dict[str, float]:
     "Calculate main metrics for the GPT result."
     return metrics.calc_metrics(
         metrics.EvaluationResult(
@@ -508,6 +513,7 @@ def calculate_metrics(data: list[dict[str, Any]]) -> dict[str, float]:
             annotations=[d["annotation"] for d in data],
             loss=math.nan,  # no loss available from GPT
         ),
+        average="macro" if result_mode is ResultMode.likert else "binary",
     )
 
 
@@ -683,7 +689,7 @@ def main(
         debug=debug,
     )
     formatted_output = reformat_output(model_result.output_data, result_mode)
-    metrics_ = calculate_metrics(formatted_output)
+    metrics_ = calculate_metrics(formatted_output, result_mode)
 
     (output_path / "full_output.json").write_text(
         json.dumps(model_result.output_data, indent=2)
