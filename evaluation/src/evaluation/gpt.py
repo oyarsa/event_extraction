@@ -143,7 +143,7 @@ class GptResult:
 def make_chat_request(
     client: openai.OpenAI, **kwargs: Any
 ) -> tuple[ChatCompletion, bool]:
-    calls_per_minute = 3500  # full plan
+    calls_per_minute = 3500  # OpenAI full plan
 
     # Ignores (mypy): untyped decorator makes function untyped
     @sleep_and_retry  # type: ignore[misc]
@@ -385,7 +385,8 @@ def extract_result(result_s: str, mode: ResultMode) -> int:
                 return 1
             elif "false" in last_line:
                 return 0
-            return -1
+            logger.warning(f"Invalid result: {last_line}")
+            return 0
         case ResultMode.score:
             last_line = last_line.replace("Score:", "").strip()
             return int(last_line) if last_line.isdigit() else 0
@@ -438,10 +439,12 @@ def run_model(
 
         if gpt_result.filtered:
             filtered += 1
-            logger.info(
-                f"Content filtered. Occurrences: {filtered}."
-                f" Prompt:\n{render_messages(json.loads(gpt_result.result))}"
-            )
+            logger.info(f"Content filtered. Occurrences: {filtered}.")
+
+            if print_messages:
+                logger.info(
+                    f" Prompt:\n{render_messages(json.loads(gpt_result.result))}"
+                )
 
         result = extract_result(gpt_result.result, result_mode)
         results[int(valid), result] += 1
