@@ -30,16 +30,18 @@ def main() -> None:
     parser.add_argument("--api", type=str, default="openai")
     parser.add_argument("--model", type=str, default="gpt-4-1106-preview")
     parser.add_argument("--name", type=str)
+    parser.add_argument("--all-data", action=argparse.BooleanOptionalAction)
     args, unknown_args = parser.parse_known_args()
 
     print("Configuration:")
-    print(f" n: {args.n}")
+    print(f" n: {'all' if args.all_data else args.n}")
     print(f" api: {args.api}")
     print(f" model: {args.model}")
     print(f" name: {args.name}")
 
     for name, prompt, mode in configurations:
         print(f">>> {name}")
+
         # fmt: off
         command = [
             sys.executable, "src/evaluation/gpt.py",
@@ -55,7 +57,7 @@ def main() -> None:
         ]
         # fmt: on
 
-        if args.n == -1:
+        if args.all_data:
             command.append("--all-data")
         else:
             command.extend(["--n", str(args.n)])
@@ -64,7 +66,6 @@ def main() -> None:
             command.extend(["--run-name", f"{args.name}-{prompt}"])
 
         command.extend(unknown_args)
-
         subprocess.run(command, check=True)
         print()
 
