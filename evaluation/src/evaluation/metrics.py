@@ -39,7 +39,7 @@ def spearman(x: list[int], y: list[int]) -> float:
 
 
 def calc_metrics(
-    results: EvaluationResult, average: str = "binary"
+    results: EvaluationResult, average: str = "binary", add_mse: bool = False
 ) -> dict[str, float]:
     x, y = results.golds, results.preds
 
@@ -47,22 +47,28 @@ def calc_metrics(
     prec, rec, f1, _ = precision_recall_fscore_support(
         x, y, average=average, zero_division=0  # type: ignore
     )
+    krippendorff_ = krippendorff.alpha(
+        [x, y], level_of_measurement="ordinal" if add_mse else "nominal"
+    )
 
-    return {
+    metrics = {
         "accuracy": float(acc),
         "precision": float(prec),
         "recall": float(rec),
         "f1": float(f1),
         "agreement": sum(a == b for a, b in zip(x, y)) / len(x),
-        "krippendorff": krippendorff.alpha([x, y], level_of_measurement="nominal"),
+        "krippendorff": krippendorff_,
         "spearman": spearman(x, y),
         "cohen": cohen_kappa_score(x, y),
         "eval_loss": results.loss,
     }
+    if add_mse:
+        metrics["mse"] = sum((x_i - y_i) ** 2 for x_i, y_i in zip(x, y)) / len(x)
+    return metrics
 
 
 def report_metrics(
-    logger: logging.Logger, metrics: dict[str, float], desc: str
+    logger: logging.Logger, metrics: dict[str, float], desc: str, add_mse: bool = False
 ) -> None:
     logger.info(
         f"{desc} results\n"
@@ -75,6 +81,7 @@ def report_metrics(
         f"    Spearman      : {metrics['spearman']:.4f}\n"
         f"    Cohen         : {metrics['cohen']:.4f}\n"
         f"    Eval Loss     : {metrics['eval_loss']:.4f}\n"
+        + (f"    MSE           : {metrics['mse']:.4f}\n" if add_mse else "")
     )
 
 

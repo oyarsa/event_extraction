@@ -119,7 +119,7 @@ def make_filter_response(messages: list[dict[str, str]]) -> ChatCompletion:
                 finish_reason="content_filter",
                 index=0,
                 message=ChatCompletionMessage(
-                    content=json.dumps(messages), role="assistant"
+                    content=json.dumps(messages, indent=2), role="assistant"
                 ),
             )
         ],
@@ -267,7 +267,7 @@ correctly explains the context and answers the question.
 5 is the highest based on the Evaluation Criteria.
 
 Respond with the following format:
-Explanation: <text explanating the score>
+Explanation: <text explaining the score>
 Score: <score from 1 to 5>\
 """,
     "instructions_qa_valid": """\
@@ -284,7 +284,7 @@ correctly explains the context and answers the question.
 4. Respond "true" if the answer is correct and "false" if it is not.
 
 Respond with the following format:
-Explanation: <text explanating the score>
+Explanation: <text explaining the score>
 Valid: <'true' or 'false'>\
 """,
 }
@@ -349,10 +349,26 @@ def make_message_extraction(item: dict[str, Any]) -> tuple[str, str]:
     return gold, extraction
 
 
+class ResultMode(str, Enum):
+    "Result mode for the GPT model."
+    valid = "valid"
+    score = "score"
+    likert = "likert"
+
+
+@dataclass
+class Message:
+    item: dict[str, Any]
+    answer_msg: str
+    gpt_msg: str
+    gold_label: int
+
+
 def make_messages(
-    sampled_data: list[dict[str, Any]], mode: str
-) -> list[tuple[dict[str, Any], str, str, bool]]:
-    messages: list[tuple[dict[str, Any], str, str, bool]] = []
+    sampled_data: list[dict[str, Any]], mode: str, result_mode: ResultMode
+) -> list[Message]:
+    messages: list[Message] = []
+
     for item in sampled_data:
         if mode == "extraction":
             context = f"Context: {item['input']}"
@@ -364,16 +380,13 @@ def make_messages(
 
         answer_msg = "\n".join([gold, answer]).strip()
         gpt_msg = "\n".join([context, answer]).strip()
-        messages.append((item, answer_msg, gpt_msg, item["valid"]))
+
+        gold_label = (
+            int(item["valid"]) if result_mode == ResultMode.valid else item["score"]
+        )
+        messages.append(Message(item, answer_msg, gpt_msg, gold_label))
 
     return messages
-
-
-class ResultMode(str, Enum):
-    "Result mode for the GPT model."
-    valid = "valid"
-    score = "score"
-    likert = "likert"
 
 
 def extract_result(result_s: str, mode: ResultMode) -> int:
@@ -386,11 +399,13 @@ def extract_result(result_s: str, mode: ResultMode) -> int:
                 return 1
             elif "false" in last_line:
                 return 0
-            logger.warning(f"Invalid result: {last_line}")
-            return 0
         case ResultMode.score | ResultMode.likert:
             last_line = last_line.replace("Score:", "").strip()
-            return int(last_line) if last_line.isdigit() else 0
+            if last_line.isdigit():
+                return int(last_line)
+
+    logger.warning(f"Invalid result: {last_line}")
+    return 0
 
 
 def render_messages(messages: list[dict[str, Any]]) -> str:
@@ -409,7 +424,7 @@ class ModelResult:
 
 
 def run_model(
-    messages: list[tuple[dict[str, Any], str, str, bool]],
+    messages: list[Message],
     model: str,
     client: openai.OpenAI,
     system_prompt: str,
@@ -425,11 +440,11 @@ def run_model(
     model_used = ""
     output_data: list[dict[str, Any]] = []
 
-    for item, answer_msg, gpt_msg, valid in tqdm(messages):
+    for msg in tqdm(messages):
         gpt_result = run_gpt(
             client=client,
             model=model,
-            message=gpt_msg,
+            message=msg.gpt_msg,
             system_prompt=SYSTEM_PROMPTS[system_prompt],
             user_prompt=USER_PROMPTS[user_prompt],
             ctx_prompt=ctx_prompt,
@@ -448,10 +463,10 @@ def run_model(
                 )
 
         result = extract_result(gpt_result.result, result_mode)
-        results[int(valid), result] += 1
+        results[msg.gold_label, result] += 1
 
         output_data.append(
-            item | {"gpt_reward": result, "gpt_response": gpt_result.result}
+            msg.item | {"gpt_reward": result, "gpt_response": gpt_result.result}
         )
 
         if print_messages:
@@ -462,12 +477,12 @@ def run_model(
                 "-" * 80,
                 USER_PROMPTS[user_prompt],
                 "-" * 80,
-                gpt_msg,
+                msg.gpt_msg,
                 "-" * 80,
                 f"\nGPT: '{gpt_result.result}'",
                 f"Parsed: {result}",
                 f"NOT SENT {'~' * 50}",
-                answer_msg,
+                msg.answer_msg,
                 "*" * 80,
                 "",
             ]
@@ -514,6 +529,7 @@ def calculate_metrics(
             loss=math.nan,  # no loss available from GPT
         ),
         average="macro" if result_mode is ResultMode.likert else "binary",
+        add_mse=result_mode is ResultMode.likert,
     )
 
 
@@ -676,7 +692,7 @@ def main(
         valids, invalids = split_data(data, math.ceil(n / 2))
         sampled_data = valids + invalids
 
-    messages = make_messages(sampled_data, data_mode)
+    messages = make_messages(sampled_data, data_mode, result_mode)
     model_result = run_model(
         messages,
         model,
