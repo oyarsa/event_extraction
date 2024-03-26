@@ -445,9 +445,8 @@ def render_messages(messages: list[dict[str, Any]]) -> str:
 @dataclass
 class ModelResult:
     output_data: list[dict[str, Any]]
-    total_cost: float
     results: dict[tuple[int, int], int]
-    model_used: str
+    total_cost: float
 
 
 def run_model(
@@ -464,7 +463,6 @@ def run_model(
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
     total_cost = 0
     filtered = 0
-    model_used = ""
     output_data: list[dict[str, Any]] = []
 
     for msg in tqdm(messages):
@@ -478,7 +476,6 @@ def run_model(
             debug=debug,
         )
         total_cost += gpt_result.cost
-        model_used = gpt_result.model_used
 
         if gpt_result.filtered:
             filtered += 1
@@ -516,7 +513,7 @@ def run_model(
             logger.info("\n".join(output))
 
     logger.info(f"Total filtered: {filtered}")
-    return ModelResult(output_data, total_cost, results, model_used)
+    return ModelResult(output_data, results, total_cost)
 
 
 def reformat_output(
@@ -572,21 +569,26 @@ def confusion_matrix(results: dict[tuple[int, int], int]) -> pd.DataFrame:
     return df
 
 
-def init_client(api_type: str, config: dict[str, Any]) -> openai.OpenAI:
+def init_client(
+    api_type: str, config: dict[str, dict[str, Any]]
+) -> tuple[openai.OpenAI, str | None]:
     "Create client for OpenAI or Azure API, depending on the configuration."
-    config = config[api_type]
+    api_config = config[api_type]
 
     if api_type.startswith("azure"):
         logger.info("Using Azure OpenAI API")
-        return openai.AzureOpenAI(
-            api_key=config["key"],
-            api_version=config["api_version"],
-            azure_endpoint=config["endpoint"],
-            azure_deployment=config["deployment"],
+        return (
+            openai.AzureOpenAI(
+                api_key=api_config["key"],
+                api_version=api_config["api_version"],
+                azure_endpoint=api_config["endpoint"],
+                azure_deployment=api_config["deployment"],
+            ),
+            api_config["model"],
         )
     elif api_type.startswith("openai"):
         logger.info("Using OpenAI API")
-        return openai.OpenAI(api_key=config["key"])
+        return openai.OpenAI(api_key=api_config["key"]), None
     else:
         raise ValueError(f"Unknown API type: {api_type}")
 
@@ -697,8 +699,12 @@ def main(
     log.setup_logger(logger, output_path)
     logger.info(f"Run name: {run_name}")
 
-    openai_config = json.loads(openai_config_path.read_text())
-    client = init_client(api_type, openai_config)
+    openai_config: dict[str, dict[str, str]] = json.loads(
+        openai_config_path.read_text()
+    )
+    client, config_model = init_client(api_type, openai_config)
+    model = config_model or model
+    logger.info(f"Model: {model}")
 
     data = json.loads(file.read_text())
     if rand:
@@ -751,7 +757,6 @@ def main(
 
     logger.info(f"\n{confusion_matrix(model_result.results)}\n")
     logger.info(f"Total cost: ${model_result.total_cost}")
-    logger.info(f"Model used: {model_result.model_used}")
 
 
 if __name__ == "__main__":
