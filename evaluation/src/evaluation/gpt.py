@@ -381,8 +381,8 @@ def make_messages(
         answer_msg = "\n".join([gold, answer]).strip()
         gpt_msg = "\n".join([context, answer]).strip()
 
-        gold_label = (
-            int(item["valid"]) if result_mode is ResultMode.valid else item["score"]
+        gold_label = int(
+            item["score"] if result_mode is ResultMode.likert else item["valid"]
         )
         messages.append(Message(item, answer_msg, gpt_msg, gold_label))
 
@@ -499,7 +499,7 @@ def reformat_output(
     return [
         {
             "gold": (
-                int(item["valid"]) if result_mode is ResultMode.valid else item["score"]
+                item["score"] if result_mode is ResultMode.likert else item["valid"]
             ),
             "pred": (
                 int(item["gpt_reward"] >= 4)
@@ -518,7 +518,12 @@ def reformat_output(
 def calculate_metrics(
     data: list[dict[str, Any]], result_mode: ResultMode
 ) -> dict[str, float]:
-    "Calculate main metrics for the GPT result."
+    """Calculate main metrics for the GPT result.
+
+    If `result_mode` is `ResultMode.likert`, the metrics are calculated using the
+    mean squared error and macro averaging. Otherwise, the metrics are calculated using
+    binary averaging.
+    """
     return metrics.calc_metrics(
         metrics.EvaluationResult(
             golds=[d["gold"] for d in data],
