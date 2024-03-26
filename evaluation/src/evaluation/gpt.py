@@ -529,7 +529,7 @@ def calculate_metrics(
             loss=math.nan,  # no loss available from GPT
         ),
         average="macro" if result_mode is ResultMode.likert else "binary",
-        add_mse=result_mode is ResultMode.likert,
+        mse=result_mode is ResultMode.likert,
     )
 
 
@@ -715,7 +715,9 @@ def main(
     (output_path / "reproduction.json").write_text(
         json.dumps(reproduction_info, indent=2)
     )
-    metrics.report_metrics(logger, metrics_, "GPT")
+    metrics.report_metrics(
+        logger, metrics_, "GPT", mse=result_mode is ResultMode.likert
+    )
 
     with Path("cost.csv").open("a") as f:
         ts = datetime.now(timezone.utc).isoformat()
