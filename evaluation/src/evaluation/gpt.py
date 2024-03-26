@@ -355,6 +355,54 @@ class ResultMode(str, Enum):
     score = "score"
     likert = "likert"
 
+    def extract_result(self, result_s: str) -> int:
+        last_line = result_s.splitlines()[-1]
+
+        match self:
+            case ResultMode.valid:
+                last_line = last_line.lower().replace("valid:", "").strip()
+                if "true" in last_line:
+                    return 1
+                elif "false" in last_line:
+                    return 0
+            case ResultMode.score | ResultMode.likert:
+                last_line = last_line.replace("Score:", "").strip()
+                if last_line.isdigit():
+                    return int(last_line)
+
+        logger.warning("Invalid result")
+        return 0
+
+    def get_gold(self, item: dict[str, Any]) -> int:
+        match self:
+            case ResultMode.likert:
+                return item["score"]
+            case ResultMode.valid | ResultMode.score:
+                return int(item["valid"])
+
+    def get_pred(self, gpt_reward: int) -> int:
+        match self:
+            case ResultMode.score:
+                return int(gpt_reward >= 4)
+            case ResultMode.valid | ResultMode.likert:
+                return gpt_reward
+
+    @property
+    def mse(self) -> bool:
+        match self:
+            case ResultMode.likert:
+                return True
+            case ResultMode.valid | ResultMode.score:
+                return False
+
+    @property
+    def average_method(self) -> str:
+        match self:
+            case ResultMode.likert:
+                return "macro"
+            case ResultMode.valid | ResultMode.score:
+                return "binary"
+
 
 @dataclass
 class Message:
@@ -381,31 +429,10 @@ def make_messages(
         answer_msg = "\n".join([gold, answer]).strip()
         gpt_msg = "\n".join([context, answer]).strip()
 
-        gold_label = int(
-            item["score"] if result_mode is ResultMode.likert else item["valid"]
-        )
+        gold_label = result_mode.get_gold(item)
         messages.append(Message(item, answer_msg, gpt_msg, gold_label))
 
     return messages
-
-
-def extract_result(result_s: str, mode: ResultMode) -> int:
-    last_line = result_s.splitlines()[-1]
-
-    match mode:
-        case ResultMode.valid:
-            last_line = last_line.lower().replace("valid:", "").strip()
-            if "true" in last_line:
-                return 1
-            elif "false" in last_line:
-                return 0
-        case ResultMode.score | ResultMode.likert:
-            last_line = last_line.replace("Score:", "").strip()
-            if last_line.isdigit():
-                return int(last_line)
-
-    logger.warning("Invalid result")
-    return 0
 
 
 def render_messages(messages: list[dict[str, Any]]) -> str:
@@ -462,7 +489,7 @@ def run_model(
                     f" Prompt:\n{render_messages(json.loads(gpt_result.result))}"
                 )
 
-        result = extract_result(gpt_result.result, result_mode)
+        result = result_mode.extract_result(gpt_result.result)
         results[msg.gold_label, result] += 1
 
         output_data.append(
@@ -498,14 +525,8 @@ def reformat_output(
     "Reformat the output data to match the format of other models."
     return [
         {
-            "gold": (
-                item["score"] if result_mode is ResultMode.likert else item["valid"]
-            ),
-            "pred": (
-                int(item["gpt_reward"] >= 4)
-                if result_mode is ResultMode.score
-                else int(item["gpt_reward"])
-            ),
+            "gold": result_mode.get_gold(item),
+            "pred": result_mode.get_pred(item["gpt_reward"]),
             "passage": item["input"],
             "output": item["output"],
             "annotation": item["gold"],
@@ -533,8 +554,8 @@ def calculate_metrics(
             annotations=[d["annotation"] for d in data],
             loss=math.nan,  # no loss available from GPT
         ),
-        average="macro" if result_mode is ResultMode.likert else "binary",
-        mse=result_mode is ResultMode.likert,
+        average=result_mode.average_method,
+        mse=result_mode.mse,
     )
 
 
