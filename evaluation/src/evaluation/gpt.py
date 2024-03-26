@@ -382,7 +382,7 @@ def make_messages(
         gpt_msg = "\n".join([context, answer]).strip()
 
         gold_label = (
-            int(item["valid"]) if result_mode == ResultMode.valid else item["score"]
+            int(item["valid"]) if result_mode is ResultMode.valid else item["score"]
         )
         messages.append(Message(item, answer_msg, gpt_msg, gold_label))
 
@@ -404,7 +404,7 @@ def extract_result(result_s: str, mode: ResultMode) -> int:
             if last_line.isdigit():
                 return int(last_line)
 
-    logger.warning(f"Invalid result: {last_line}")
+    logger.warning("Invalid result")
     return 0
 
 
@@ -499,11 +499,11 @@ def reformat_output(
     return [
         {
             "gold": (
-                int(item["valid"]) if result_mode == ResultMode.valid else item["score"]
+                int(item["valid"]) if result_mode is ResultMode.valid else item["score"]
             ),
             "pred": (
                 int(item["gpt_reward"] >= 4)
-                if result_mode == ResultMode.score
+                if result_mode is ResultMode.score
                 else int(item["gpt_reward"])
             ),
             "passage": item["input"],
