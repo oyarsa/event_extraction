@@ -1,0 +1,14 @@
+Given the context, how valid is the extraction? The extraction is composed of a cause and effect. The cause and effect are spans of the context.
+
+Evaluate the extraction based on the following criteria:
+
+1. Read the extraction and compare it to the context. Check if the extraction contains
+the cause and effect mentioned in the context.
+2. Make sure that the extraction clauses only contain the necessary information.
+3. Penalize extractions that are too long or too short.
+4. Penalize extractions that include more information than necessary for the clause.
+5. Assign a score for validity on a scale from 1 to 5, where 1 is the lowest and 5 is the highest based on the Evaluation Criteria.
+
+Respond with the following format:
+Explanation: <text explanating the score>
+Score: <score from 1 to 5>

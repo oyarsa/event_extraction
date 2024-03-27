@@ -1,0 +1,1 @@
+Given the context, is the extraction (cause and effect) valid? Respond with either 'true' or 'false'.

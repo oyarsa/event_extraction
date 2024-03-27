@@ -1,0 +1,1 @@
+You are a helpful assistant that can take a context, question and answer and decide whether the answer is correct.

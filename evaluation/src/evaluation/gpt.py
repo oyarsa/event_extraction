@@ -215,81 +215,6 @@ def run_gpt(
     )
 
 
-SYSTEM_PROMPTS = {
-    "extraction": """\
-You are a helpful assistant that can take a context and an extraction composed of a \
-cause and effect, and determine whether that extraction is valid.\
-""",
-    "qa": """\
-You are a helpful assistant that can take a context, question and answer and decide
-whether the answer is correct.\
-""",
-}
-USER_PROMPTS = {
-    "simple_extraction": """\
-Given the context, is the extraction (cause and effect) valid? \
-Respond with either 'true' or 'false'.\
-    """,
-    "instructions_extraction": """\
-Given the context, how valid is the extraction? The extraction is composed of a cause \
-and effect. The cause and effect are spans of the context.
-
-Evaluate the extraction based on the following criteria:
-
-1. Read the extraction and compare it to the context. Check if the extraction contains
-the cause and effect mentioned in the context.
-2. Make sure that the extraction clauses only contain the necessary information.
-3. Penalize extractions that are too long or too short.
-4. Penalize extractions that include more information than necessary for the clause.
-5. Assign a score for validity on a scale from 1 to 5, where 1 is the lowest and \
-5 is the highest based on the Evaluation Criteria.
-
-Respond with the following format:
-Explanation: <text explanating the score>
-Score: <score from 1 to 5>\
-""",
-    "simple_qa": """\
-Given the context and question, is the answer correct? \
-Respond with either 'true' or 'false'.\
-    """,
-    "instructions_qa": """\
-Given the context and question, is the answer correct? Note that the answer does not \
-need to be a direct quote from the context, but it should be a logical conclusion \
-based on the context.
-
-Evaluate the answer based on the following criteria:
-
-1. Read the answer and compare it to the context and the question. Check if the answer
-correctly explains the context and answers the question.
-2. Ensure that the facts mentioned in the answer are in the context.
-3. Penalize answers that complain that more information than necessary.
-4. Assign a score for validity on a scale from 1 to 5, where 1 is the lowest and \
-5 is the highest based on the Evaluation Criteria.
-
-Respond with the following format:
-Explanation: <text explaining the score>
-Score: <score from 1 to 5>\
-""",
-    "instructions_qa_valid": """\
-Given the context and question, is the answer correct? Note that the answer does not \
-need to be a direct quote from the context, but it should be a logical conclusion \
-based on the context.
-
-Evaluate the answer based on the following criteria:
-
-1. Read the answer and compare it to the context and the question. Check if the answer
-correctly explains the context and answers the question.
-2. Ensure that the facts mentioned in the answer are in the context.
-3. Penalize answers that complain that more information than necessary.
-4. Respond "true" if the answer is correct and "false" if it is not.
-
-Respond with the following format:
-Explanation: <text explaining the score>
-Valid: <'true' or 'false'>\
-""",
-}
-
-
 def split_data(
     data: list[dict[str, Any]], n: int
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -300,24 +225,30 @@ def split_data(
     return valids, invalids
 
 
-def format_data(item: dict[str, Any], mode: str) -> str:
-    if mode == "extraction":
-        entities, _ = parse_instance(item["output"])
-        context = f"Context:\n{item['input']}"
-        answer = (
-            "Extraction:\n"
-            f"Cause: {' | '.join(entities['Cause'])}\n"
-            f"Effect: {' | '.join(entities['Effect'])}"
-        )
-    else:
-        context = item["input"]
-        answer = f"Answer: {item['output']}"
+class DataMode(str, Enum):
+    qa = "qa"
+    extraction = "extraction"
+
+
+def format_data(item: dict[str, Any], mode: DataMode) -> str:
+    match mode:
+        case DataMode.extraction:
+            entities, _ = parse_instance(item["output"])
+            context = f"Context:\n{item['input']}"
+            answer = (
+                "Extraction:\n"
+                f"Cause: {' | '.join(entities['Cause'])}\n"
+                f"Effect: {' | '.join(entities['Effect'])}"
+            )
+        case DataMode.qa:
+            context = item["input"]
+            answer = f"Answer: {item['output']}"
 
     score = f"Score: {5 if item['valid'] else 1}"
     return "\n".join([context, answer, score])
 
 
-def build_context(data: list[dict[str, str]], n: int, mode: str) -> str:
+def build_context(data: list[dict[str, str]], n: int, mode: DataMode) -> str:
     "Build a context prompt from data. Uses n positive and n negative examples."
     valids, invalids = split_data(data, n)
     valid_msg = [
@@ -413,18 +344,19 @@ class Message:
 
 
 def make_messages(
-    sampled_data: list[dict[str, Any]], mode: str, result_mode: ResultMode
+    sampled_data: list[dict[str, Any]], mode: DataMode, result_mode: ResultMode
 ) -> list[Message]:
     messages: list[Message] = []
 
     for item in sampled_data:
-        if mode == "extraction":
-            context = f"Context: {item['input']}"
-            gold, answer = make_message_extraction(item)
-        else:
-            context = item["input"]
-            answer = f"answer: {item['output']}"
-            gold = f"Gold: {item['gold']}"
+        match mode:
+            case DataMode.extraction:
+                context = f"Context: {item['input']}"
+                gold, answer = make_message_extraction(item)
+            case DataMode.qa:
+                context = item["input"]
+                answer = f"answer: {item['output']}"
+                gold = f"Gold: {item['gold']}"
 
         answer_msg = "\n".join([gold, answer]).strip()
         gpt_msg = "\n".join([context, answer]).strip()
@@ -470,8 +402,8 @@ def run_model(
             client=client,
             model=model,
             message=msg.gpt_msg,
-            system_prompt=SYSTEM_PROMPTS[system_prompt],
-            user_prompt=USER_PROMPTS[user_prompt],
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
             ctx_prompt=ctx_prompt,
             debug=debug,
         )
@@ -497,9 +429,9 @@ def run_model(
             output = [
                 ctx_prompt or "",
                 "-" * 80,
-                SYSTEM_PROMPTS[system_prompt],
+                system_prompt,
                 "-" * 80,
-                USER_PROMPTS[user_prompt],
+                user_prompt,
                 "-" * 80,
                 msg.gpt_msg,
                 "-" * 80,
@@ -594,8 +526,7 @@ def init_client(
 
 
 def hash_file(file: Path) -> str:
-    with file.open("rb") as f:
-        return hashlib.md5(f.read()).hexdigest()
+    return hashlib.md5(file.read_bytes()).hexdigest()
 
 
 def main(
@@ -603,6 +534,19 @@ def main(
         ...,
         help="Path to the json file containing the data (list of objects with keys"
         " 'input', 'output', 'gold', 'valid').",
+        exists=True,
+    ),
+    system_prompt_path: Path = typer.Option(
+        ...,
+        "--system-prompt",
+        help="Path to the system prompt file.",
+        exists=True,
+    ),
+    user_prompt_path: Path = typer.Option(
+        ...,
+        "--user-prompt",
+        help="Path to the user prompt file.",
+        exists=True,
     ),
     n: int = typer.Option(
         10,
@@ -620,6 +564,7 @@ def main(
     openai_config_path: Path = typer.Option(
         Path("config.json"),
         help="Path to the file containing the OpenAI API keys.",
+        exists=True,
     ),
     api_type: str = typer.Option(
         "openai",
@@ -628,14 +573,6 @@ def main(
     model: str = typer.Option(
         "gpt-4-0125-preview",
         help=f"Which GPT model to use. Options: {tuple(MODEL_COSTS)}.",
-    ),
-    system_prompt: str = typer.Option(
-        "extraction",
-        help=f"Which system prompt to use. Options: {tuple(SYSTEM_PROMPTS)}.",
-    ),
-    user_prompt: str = typer.Option(
-        "instructions_extraction",
-        help=f"Which user prompt to use. Options: {tuple(USER_PROMPTS)}.",
     ),
     use_context: bool = typer.Option(
         False,
@@ -657,6 +594,8 @@ def main(
     output_dir: Path = typer.Option(
         Path("output") / "gpt",
         help="Directory to save the output files.",
+        writable=True,
+        file_okay=False,
     ),
     run_name: Optional[str] = typer.Option(
         None,
@@ -666,21 +605,13 @@ def main(
         False,
         help="Whether to run the entire dataset. If true, n is ignored.",
     ),
-    data_mode: str = typer.Option(
-        "extraction",
-        help=f"Mode of the data. Options: {tuple(SUPPORTED_MODES)}.",
-    ),
+    data_mode: DataMode = typer.Option(DataMode.extraction, help="Data mode."),
     result_mode: ResultMode = typer.Option(ResultMode.score, help="Result mode."),
 ) -> None:  # sourcery skip: low-code-quality
     "Run a GPT model on the given data and evaluate the results."
+
     if model not in MODEL_COSTS:
         raise ValueError(f"Invalid model. Options: {tuple(MODEL_COSTS)}")
-    if system_prompt not in SYSTEM_PROMPTS:
-        raise ValueError(f"Invalid system prompt. Options: {tuple(SYSTEM_PROMPTS)}")
-    if user_prompt not in USER_PROMPTS:
-        raise ValueError(f"Invalid user prompt. Options: {tuple(USER_PROMPTS)}")
-    if data_mode not in SUPPORTED_MODES:
-        raise ValueError(f"Invalid mode. Options: {tuple(SUPPORTED_MODES)}")
 
     reproduction_info = {
         "command": sys.argv,
@@ -688,7 +619,9 @@ def main(
     }
 
     if run_name is None:
-        run_name = f"{model}-sys_{system_prompt}-user_{user_prompt}-n{n}"
+        run_name = (
+            f"{model}-sys_{system_prompt_path.name}-user_{user_prompt_path.name}-n{n}"
+        )
         if use_context:
             run_name += f"-context{context_size}"
         if rand:
@@ -725,6 +658,8 @@ def main(
         sampled_data = valids + invalids
 
     messages = make_messages(sampled_data, data_mode, result_mode)
+    system_prompt = system_prompt_path.read_text()
+    user_prompt = user_prompt_path.read_text()
     model_result = run_model(
         messages,
         model,
