@@ -619,9 +619,12 @@ def main(
     }
 
     if run_name is None:
-        run_name = (
-            f"{model}-sys_{system_prompt_path.name}-user_{user_prompt_path.name}-n{n}"
-        )
+        run_name = f"{model}-sys_{system_prompt_path.name}-user_{user_prompt_path.name}"
+        if all_data:
+            run_name += "-all"
+        else:
+            run_name += f"-n{n}"
+
         if use_context:
             run_name += f"-context{context_size}"
         if rand:
