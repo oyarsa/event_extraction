@@ -2,8 +2,7 @@ Given the context and question, is the answer correct? Note that the answer does
 
 Evaluate the answer based on the following criteria:
 
-1. Read the answer and compare it to the context and the question. Check if the answer
-correctly explains the context and answers the question.
+1. Read the answer and compare it to the context and the question. Check if the answer correctly explains the context and answers the question.
 2. Ensure that the facts mentioned in the answer are in the context.
 3. Penalize answers that complain that more information than necessary.
 4. Respond "true" if the answer is correct and "false" if it is not.
