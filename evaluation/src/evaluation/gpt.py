@@ -286,22 +286,22 @@ class ResultMode(str, Enum):
     score = "score"
     likert = "likert"
 
-    def extract_result(self, result_s: str) -> int:
-        last_line = result_s.splitlines()[-1]
+    def extract_result(self, result: str) -> int:
+        regex = "(validity|valid|score):"
+        last_line = result.splitlines()[-1].lower()
+        last_line = re.sub(regex, "", last_line).strip()
 
         match self:
             case ResultMode.valid:
-                last_line = last_line.lower().replace("valid:", "").strip()
                 if "true" in last_line:
                     return 1
                 elif "false" in last_line:
                     return 0
             case ResultMode.score | ResultMode.likert:
-                last_line = last_line.replace("Score:", "").strip()
                 if last_line.isdigit():
                     return int(last_line)
 
-        logger.warning("Invalid result")
+        logger.warning(f"Invalid result: {last_line}")
         return 0
 
     def get_gold(self, item: dict[str, Any]) -> int:

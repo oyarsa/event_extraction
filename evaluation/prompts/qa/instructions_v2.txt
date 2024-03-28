@@ -10,4 +10,4 @@ Evaluation Steps:
 
 Evaluation Form:
 Answer by starting with "Analysis:" to analyze the example regarding the evaluation criteria. Your analysis should be as concise as possible. Then answer with the validity in the next line.
-Valid: <score from 1 to 5>
+Validity: <score from 1 to 5>
