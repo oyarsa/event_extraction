@@ -1,0 +1,9 @@
+Given the input, write the step by the step process to arrive at the answer:
+
+Input:
+{INPUT}
+
+Answer:
+{ANSWER}
+
+Let's think step by step:
