@@ -49,7 +49,7 @@ def run_gpt(
     cost = calculate_cost(model, response)
 
     return GptResult(
-        result=result or "<empty>",
+        results=[result or "<empty>"],
         cost=cost,
         model_used=response.model,
         filtered=filtered,
@@ -78,7 +78,7 @@ def generate_chain(
 ) -> str:
     user_prompt = user_template.format(INPUT=data.input, ANSWER=data.output)
     result = run_gpt(client, model, system_prompt, user_prompt)
-    return result.result
+    return result.results[0]
 
 
 def indent(text: str) -> str:

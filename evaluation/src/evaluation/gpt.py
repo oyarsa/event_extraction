@@ -173,6 +173,38 @@ def make_chat_request(
     return cast(tuple[ChatCompletion, bool], _make_chat_request(**kwargs))
 
 
+@dataclass
+class Chain:
+    input: str
+    output: str
+    chain: str
+
+
+def clean_chain(chain: str) -> str:
+    return "\n".join(line for line in chain.splitlines() if line.strip())
+
+
+def load_chains(chains_path: Path) -> list[Chain]:
+    chains = json.loads(chains_path.read_text())
+    return [
+        Chain(input=c["input"], output=c["output"], chain=clean_chain(c["chain"]))
+        for c in chains
+    ]
+
+
+def make_chain_prompt(chains: list[Chain]) -> str:
+    return "\n".join(
+        f"""\
+Example {i}:
+Input: {c.input}
+Steps:
+{c.chain}
+Answer: {c.output}
+"""
+        for i, c in enumerate(chains, 1)
+    )
+
+
 def run_gpt(
     client: openai.OpenAI,
     model: str,
@@ -181,13 +213,17 @@ def run_gpt(
     user_prompt: str,
     temperature: float,
     num_samples: int | None,
+    chain_prompt: str | None,
     debug: bool,
 ) -> GptResult:
     messages: list[ChatCompletionMessageParam] = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
-        {"role": "user", "content": message},
     ]
+    if chain_prompt:
+        messages.append({"role": "user", "content": chain_prompt})
+    messages.append({"role": "user", "content": message})
+
     response, filtered = make_chat_request(
         client,
         model=model,
@@ -382,12 +418,14 @@ def run_model(
     result_mode: ResultMode,
     temperature: float,
     num_samples: int | None,
+    chains: list[Chain],
     debug: bool,
 ) -> ModelResult:
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
     total_cost = 0
     filtered = 0
     output_data: list[dict[str, Any]] = []
+    chain_prompt = make_chain_prompt(chains) if chains else None
 
     for msg in tqdm(messages):
         gpt_result = run_gpt(
@@ -398,6 +436,7 @@ def run_model(
             user_prompt=user_prompt,
             temperature=temperature,
             num_samples=num_samples,
+            chain_prompt=chain_prompt,
             debug=debug,
         )
         total_cost += gpt_result.cost
@@ -423,17 +462,23 @@ def run_model(
                 system_prompt,
                 "-" * 80,
                 user_prompt,
-                "-" * 80,
-                msg.gpt_msg,
-                "-" * 80,
-                "\nGPT: ",
-                *(f"{i+1} - {r}" for i, r in enumerate(gpt_result.results)),
-                f"\nParsed: {result}",
-                f"NOT SENT {'~' * 50}",
-                msg.answer_msg,
-                "*" * 80,
-                "",
             ]
+            if chain_prompt:
+                output.extend(["-" * 80, chain_prompt])
+            output.extend(
+                [
+                    "-" * 80,
+                    msg.gpt_msg,
+                    "-" * 80,
+                    "\nGPT: ",
+                    *(f"{i+1} - {r}" for i, r in enumerate(gpt_result.results)),
+                    f"\nParsed: {result}",
+                    f"NOT SENT {'~' * 50}",
+                    msg.answer_msg,
+                    "*" * 80,
+                    "",
+                ]
+            )
             logger.info("\n".join(output))
 
     logger.info(f"Total filtered: {filtered}")
@@ -597,6 +642,10 @@ def main(
     num_samples: Optional[int] = typer.Option(
         None, help="Number of samples to generate."
     ),
+    chains_path: Optional[Path] = typer.Option(
+        None,
+        help="Path to the file containing the chains.",
+    ),
 ) -> None:  # sourcery skip: low-code-quality
     "Run a GPT model on the given data and evaluate the results."
 
@@ -653,6 +702,8 @@ def main(
     messages = make_messages(sampled_data, data_mode, result_mode)
     system_prompt = system_prompt_path.read_text()
     user_prompt = user_prompt_path.read_text()
+    chains = load_chains(chains_path) if chains_path else []
+
     model_result = run_model(
         messages,
         model,
@@ -663,6 +714,7 @@ def main(
         result_mode,
         temperature,
         num_samples,
+        chains,
         debug=debug,
     )
     formatted_output = reformat_output(model_result.output_data, result_mode)
