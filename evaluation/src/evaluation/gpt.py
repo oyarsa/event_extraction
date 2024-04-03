@@ -179,9 +179,9 @@ def run_gpt(
     message: str,
     system_prompt: str,
     user_prompt: str,
-    temperature: float = 0,
-    num_samples: int | None = None,
-    debug: bool = False,
+    temperature: float,
+    num_samples: int | None,
+    debug: bool,
 ) -> GptResult:
     messages: list[ChatCompletionMessageParam] = [
         {"role": "system", "content": system_prompt},
@@ -381,8 +381,8 @@ def run_model(
     print_messages: bool,
     result_mode: ResultMode,
     temperature: float,
-    num_samples: int | None = None,
-    debug: bool = False,
+    num_samples: int | None,
+    debug: bool,
 ) -> ModelResult:
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
     total_cost = 0
