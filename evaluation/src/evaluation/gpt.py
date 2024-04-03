@@ -134,7 +134,7 @@ def make_filter_response(messages: list[dict[str, str]]) -> ChatCompletion:
 
 @dataclass
 class GptResult:
-    result: str
+    results: list[str]
     cost: float
     model_used: str
     filtered: bool
@@ -180,6 +180,8 @@ def run_gpt(
     system_prompt: str,
     user_prompt: str,
     ctx_prompt: str | None = None,
+    temperature: float = 0,
+    num_samples: int | None = None,
     debug: bool = False,
 ) -> GptResult:
     messages: list[ChatCompletionMessageParam] = [
@@ -194,21 +196,23 @@ def run_gpt(
         client,
         model=model,
         messages=messages,
-        temperature=0,
+        temperature=temperature,
         max_tokens=256,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
         seed=0,
+        n=num_samples,
     )
-    result = response.choices[0].message.content
+    results = [c.message.content or "<empty>" for c in response.choices]
     cost = calculate_cost(model, response)
 
     if debug:
-        dbg_gpt(messages, result)
+        for result in results:
+            dbg_gpt(messages, result)
 
     return GptResult(
-        result=result or "<empty>",
+        results=results,
         cost=cost,
         model_used=response.model,
         filtered=filtered,
@@ -381,6 +385,11 @@ class ModelResult:
     total_cost: float
 
 
+def most_common(lst: list[int]) -> int:
+    "Return the most common element in the list."
+    return max(set(lst), key=lst.count)
+
+
 def run_model(
     messages: list[Message],
     model: str,
@@ -390,6 +399,8 @@ def run_model(
     ctx_prompt: str | None,
     print_messages: bool,
     result_mode: ResultMode,
+    temperature: float,
+    num_samples: int | None = None,
     debug: bool = False,
 ) -> ModelResult:
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
@@ -405,6 +416,8 @@ def run_model(
             system_prompt=system_prompt,
             user_prompt=user_prompt,
             ctx_prompt=ctx_prompt,
+            temperature=temperature,
+            num_samples=num_samples,
             debug=debug,
         )
         total_cost += gpt_result.cost
@@ -415,15 +428,14 @@ def run_model(
 
             if print_messages:
                 logger.info(
-                    f" Prompt:\n{render_messages(json.loads(gpt_result.result))}"
+                    f"  Prompt:\n{render_messages(json.loads(gpt_result.results[0]))}"
                 )
 
-        result = result_mode.extract_result(gpt_result.result)
+        parsed_results = [result_mode.extract_result(r) for r in gpt_result.results]
+        result = most_common(parsed_results)
         results[msg.gold_label, result] += 1
 
-        output_data.append(
-            msg.item | {"gpt_reward": result, "gpt_response": gpt_result.result}
-        )
+        output_data.append(msg.item | {"gpt_reward": result})
 
         if print_messages:
             output = [
@@ -435,8 +447,9 @@ def run_model(
                 "-" * 80,
                 msg.gpt_msg,
                 "-" * 80,
-                f"\nGPT: '{gpt_result.result}'",
-                f"Parsed: {result}",
+                "\nGPT: ",
+                *(f"{i+1} - {r}" for i, r in enumerate(gpt_result.results)),
+                f"\nParsed: {result}",
                 f"NOT SENT {'~' * 50}",
                 msg.answer_msg,
                 "*" * 80,
@@ -607,11 +620,21 @@ def main(
     ),
     data_mode: DataMode = typer.Option(DataMode.extraction, help="Data mode."),
     result_mode: ResultMode = typer.Option(ResultMode.score, help="Result mode."),
+    temperature: float = typer.Option(
+        0.0, help="Temperature for the GPT model.", min=0.0, max=1.0
+    ),
+    num_samples: Optional[int] = typer.Option(
+        None, help="Number of samples to generate."
+    ),
 ) -> None:  # sourcery skip: low-code-quality
     "Run a GPT model on the given data and evaluate the results."
 
     if model not in MODEL_COSTS:
         raise ValueError(f"Invalid model. Options: {tuple(MODEL_COSTS)}")
+    if num_samples is not None and temperature == 0:
+        raise ValueError("Number of samples is set but temperature is 0.")
+    if (num_samples is None or num_samples == 1) and temperature != 0:
+        raise ValueError("Temperature is set but number of samples is not.")
 
     reproduction_info = {
         "command": sys.argv,
@@ -629,6 +652,10 @@ def main(
             run_name += f"-context{context_size}"
         if rand:
             run_name += f"-rand{seed}"
+        if num_samples is not None:
+            run_name += f"-k{num_samples}"
+        if temperature != 0:
+            run_name += f"-t{temperature}"
 
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
@@ -672,6 +699,8 @@ def main(
         ctx_prompt,
         print_messages,
         result_mode,
+        temperature,
+        num_samples,
         debug=debug,
     )
     formatted_output = reformat_output(model_result.output_data, result_mode)
