@@ -179,7 +179,6 @@ def run_gpt(
     message: str,
     system_prompt: str,
     user_prompt: str,
-    ctx_prompt: str | None = None,
     temperature: float = 0,
     num_samples: int | None = None,
     debug: bool = False,
@@ -187,11 +186,8 @@ def run_gpt(
     messages: list[ChatCompletionMessageParam] = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
+        {"role": "user", "content": message},
     ]
-    if ctx_prompt:
-        messages.append({"role": "user", "content": ctx_prompt})
-    messages.append({"role": "user", "content": message})
-
     response, filtered = make_chat_request(
         client,
         model=model,
@@ -252,25 +248,11 @@ def format_data(item: dict[str, Any], mode: DataMode) -> str:
     return "\n".join([context, answer, score])
 
 
-def build_context(data: list[dict[str, str]], n: int, mode: DataMode) -> str:
-    "Build a context prompt from data. Uses n positive and n negative examples."
-    valids, invalids = split_data(data, n)
-    valid_msg = [
-        "Some examples of _valid_ extractions:",
-        *(format_data(item, mode) for item in valids),
-    ]
-    invalid_msg = [
-        "Some examples of _invalid_ extractions:",
-        *(format_data(item, mode) for item in invalids),
-    ]
-    return "\n\n".join(valid_msg + invalid_msg)
-
-
 def make_message_extraction(item: dict[str, Any]) -> tuple[str, str]:
     extraction_entities, _ = parse_instance(item["output"])
     extraction = (
         "Extraction:\n"
-        f"Cause: {' | '.join(extraction_entities['Cause'])}\n"
+        f"Cause: \n"
         f"Effect: {' | '.join(extraction_entities['Effect'])}\n"
     )
 
@@ -396,7 +378,6 @@ def run_model(
     client: openai.OpenAI,
     system_prompt: str,
     user_prompt: str,
-    ctx_prompt: str | None,
     print_messages: bool,
     result_mode: ResultMode,
     temperature: float,
@@ -415,7 +396,6 @@ def run_model(
             message=msg.gpt_msg,
             system_prompt=system_prompt,
             user_prompt=user_prompt,
-            ctx_prompt=ctx_prompt,
             temperature=temperature,
             num_samples=num_samples,
             debug=debug,
@@ -439,7 +419,6 @@ def run_model(
 
         if print_messages:
             output = [
-                ctx_prompt or "",
                 "-" * 80,
                 system_prompt,
                 "-" * 80,
@@ -587,14 +566,6 @@ def main(
         "gpt-4-0125-preview",
         help=f"Which GPT model to use. Options: {tuple(MODEL_COSTS)}.",
     ),
-    use_context: bool = typer.Option(
-        False,
-        help="Whether to use the context prompt.",
-    ),
-    context_size: int = typer.Option(
-        2,
-        help="Context size if context is used.",
-    ),
     print_messages: bool = typer.Option(
         True,
         help="Whether to print messages including the prompt, context, gold, and"
@@ -648,8 +619,6 @@ def main(
         else:
             run_name += f"-n{n}"
 
-        if use_context:
-            run_name += f"-context{context_size}"
         if rand:
             run_name += f"-rand{seed}"
         if num_samples is not None:
@@ -674,12 +643,6 @@ def main(
         random.seed(seed)
         random.shuffle(data)
 
-    if use_context:
-        ctx_prompt = build_context(data, context_size, data_mode)
-        data = data[context_size * 2 :]
-    else:
-        ctx_prompt = None
-
     if all_data:
         sampled_data = data
     else:
@@ -696,7 +659,6 @@ def main(
         client,
         system_prompt,
         user_prompt,
-        ctx_prompt,
         print_messages,
         result_mode,
         temperature,
