@@ -1,6 +1,7 @@
 # pyright: basic
 import json
 import logging
+import re
 import sys
 import textwrap
 from dataclasses import asdict, dataclass
@@ -15,6 +16,7 @@ from evaluation import log
 from evaluation.gpt import (
     MODEL_COSTS,
     GptResult,
+    ResultMode,
     calculate_cost,
     hash_file,
     init_client,
@@ -29,11 +31,20 @@ def run_gpt(
     model: str,
     system_prompt: str,
     user_prompt: str,
+    print_messages: bool,
 ) -> GptResult:
     messages: list[ChatCompletionMessageParam] = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
     ]
+
+    if print_messages:
+        logger.info(
+            "\n".join(
+                f"{msg['role'].capitalize()}: {msg.get('content')}" for msg in messages
+            )
+        )
+
     response, filtered = make_chat_request(
         client,
         model=model,
@@ -46,6 +57,10 @@ def run_gpt(
         seed=0,
     )
     result = response.choices[0].message.content
+
+    if print_messages:
+        logger.info(f"Response:\n{result}\n{'*' * 80}\n")
+
     cost = calculate_cost(model, response)
 
     return GptResult(
@@ -59,14 +74,25 @@ def run_gpt(
 @dataclass
 class ChainData:
     input: str
-    output: str
+    answer: str
+    score: int
 
 
 @dataclass
 class ChainResult:
     input: str
-    output: str
+    answer: str
+    score: int
     chain: str
+
+
+def clean_line(line: str) -> str:
+    line = line.strip()
+    return re.sub(r"Step (\d+):", r"\1.", line)
+
+
+def clean_chain(chain: str) -> str:
+    return "\n".join(clean_line(line) for line in chain.splitlines() if line.strip())
 
 
 def generate_chain(
@@ -75,10 +101,20 @@ def generate_chain(
     data: ChainData,
     system_prompt: str,
     user_template: str,
-) -> str:
-    user_prompt = user_template.format(INPUT=data.input, ANSWER=data.output)
-    result = run_gpt(client, model, system_prompt, user_prompt)
-    return result.results[0]
+    result_mode: ResultMode,
+    print_messages: bool,
+) -> tuple[str, float]:
+    user_prompt = user_template.format(
+        INPUT=data.input,
+        ANSWER=data.answer,
+        RESULT_MODE=result_mode.answer_type,
+        RESULT=data.score,
+    )
+    result = run_gpt(client, model, system_prompt, user_prompt, print_messages)
+    if result.filtered:
+        logger.warning("Filtered content detected.")
+        return "<filtered>", result.cost
+    return clean_chain(result.results[0]), result.cost
 
 
 def indent(text: str) -> str:
@@ -89,11 +125,12 @@ def indent(text: str) -> str:
     )
 
 
-def print_result(data: ChainData, result: str) -> str:
+def print_result(data: ChainData, result_mode: ResultMode, result: str) -> str:
     out: list[str] = [
         "",
         f"Input:\n{indent(data.input)}",
-        f"Output:\n{indent(data.output)}",
+        f"Answer:\n{indent(data.answer)}",
+        f"{result_mode.answer_type}:\n{data.score}",
         f"Chain:\n{indent(result)}",
         "\n",
     ]
@@ -107,17 +144,21 @@ def generate_chains(
     system_prompt: str,
     user_template: str,
     print_results: bool,
-) -> list[ChainResult]:
+    result_mode: ResultMode,
+) -> tuple[list[ChainResult], float]:
     results: list[ChainResult] = []
+    total_cost = 0
 
     for d in data:
-        chain = generate_chain(client, model, d, system_prompt, user_template)
-        results.append(ChainResult(input=d.input, output=d.output, chain=chain))
+        chain, cost = generate_chain(
+            client, model, d, system_prompt, user_template, result_mode, print_results
+        )
+        results.append(
+            ChainResult(input=d.input, answer=d.answer, score=d.score, chain=chain)
+        )
+        total_cost += cost
 
-        if print_results:
-            logger.info(print_result(d, chain))
-
-    return results
+    return results, total_cost
 
 
 def main(
@@ -157,11 +198,12 @@ def main(
         help="Path to the user template file.",
         exists=True,
     ),
-    print_results: bool = typer.Option(
+    print_messages: bool = typer.Option(
         False,
-        "--print-results",
+        "--print-messages",
         help="Print the generated chains.",
     ),
+    result_mode: ResultMode = typer.Option(ResultMode.valid, help="Result mode."),
 ) -> None:
     if model not in MODEL_COSTS:
         raise ValueError(f"Invalid model. Options: {tuple(MODEL_COSTS)}")
@@ -189,16 +231,17 @@ def main(
     logger.info(f"Model: {model}")
 
     data = [
-        ChainData(input=d["input"], output=d["output"])
+        ChainData(input=d["input"], answer=d["output"], score=result_mode.get_gold(d))
         for d in json.loads(file.read_text())
     ]
 
     system_prompt = system_prompt_path.read_text()
     user_template = user_template_path.read_text()
 
-    chains = generate_chains(
-        client, model, data, system_prompt, user_template, print_results
+    chains, cost = generate_chains(
+        client, model, data, system_prompt, user_template, print_messages, result_mode
     )
+    logger.info(f"Total cost: {cost}")
 
     (output_path / "reproduction.json").write_text(
         json.dumps(reproduction_info, indent=2)

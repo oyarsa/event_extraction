@@ -1,9 +1,11 @@
-Given the input, write the step by the step process to arrive at the answer:
+Given the input, answer and evaluaton result, generate the steps to evaluate the answer.
 
 Input:
 {INPUT}
 
 Answer:
 {ANSWER}
+
+{RESULT_MODE}: {RESULT}
 
 Let's think step by step:
