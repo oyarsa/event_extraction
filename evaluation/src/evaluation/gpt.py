@@ -176,33 +176,17 @@ def make_chat_request(
 @dataclass
 class Chain:
     input: str
-    output: str
+    answer: str
     chain: str
-
-
-def clean_chain(chain: str) -> str:
-    return "\n".join(line for line in chain.splitlines() if line.strip())
+    score: int
 
 
 def load_chains(chains_path: Path) -> list[Chain]:
     chains = json.loads(chains_path.read_text())
     return [
-        Chain(input=c["input"], output=c["output"], chain=clean_chain(c["chain"]))
+        Chain(input=c["input"], answer=c["answer"], chain=c["chain"], score=c["score"])
         for c in chains
     ]
-
-
-def make_chain_prompt(chains: list[Chain]) -> str:
-    return "\n".join(
-        f"""\
-Example {i}:
-Input: {c.input}
-Steps:
-{c.chain}
-Answer: {c.output}
-"""
-        for i, c in enumerate(chains, 1)
-    )
 
 
 def run_gpt(
@@ -229,7 +213,6 @@ def run_gpt(
         model=model,
         messages=messages,
         temperature=temperature,
-        max_tokens=256,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
@@ -327,6 +310,7 @@ class ResultMode(str, Enum):
         return 0
 
     def get_gold(self, item: dict[str, Any]) -> int:
+        "Gold label that we use to evaluate the GPT output."
         match self:
             case ResultMode.likert:
                 return item["score"]
@@ -334,11 +318,25 @@ class ResultMode(str, Enum):
                 return int(item["valid"])
 
     def get_pred(self, gpt_reward: int) -> int:
+        "Prediction label from the GPT output."
         match self:
             case ResultMode.score:
                 return int(gpt_reward >= 4)
             case ResultMode.valid | ResultMode.likert:
                 return gpt_reward
+
+    def get_input_score(self, item: dict[str, Any]) -> int:
+        """Score that we will send to the GPT model as the gold.
+
+        This is different from the gold label that we use to evaluate the GPT output
+        (see `ResultMode.get_gold`). For the "score" model, we want the model to output
+        an integer, and we convert that integer to a boolean value for evaluation.
+        """
+        match self:
+            case ResultMode.valid:
+                return int(item["valid"])
+            case ResultMode.score | ResultMode.likert:
+                return item["score"]
 
     @property
     def mse(self) -> bool:
@@ -356,6 +354,21 @@ class ResultMode(str, Enum):
             case ResultMode.valid | ResultMode.score:
                 return "binary"
 
+    @property
+    def display(self) -> str:
+        match self:
+            case ResultMode.valid:
+                return "Valid"
+            case ResultMode.score | ResultMode.likert:
+                return "Score"
+
+    def convert_score(self, score: int) -> str:
+        match self:
+            case ResultMode.valid:
+                return "true" if score == 1 else "false"
+            case ResultMode.score | ResultMode.likert:
+                return str(score)
+
 
 @dataclass
 class Message:
@@ -363,6 +376,23 @@ class Message:
     answer_msg: str
     gpt_msg: str
     gold_label: int
+
+
+def make_chain_prompt(chains: list[Chain], result_mode: ResultMode) -> str:
+    return "\n\n".join(
+        f"""\
+Example {i}:
+{c.input}
+
+Answer: {c.answer}
+
+Explanation:
+{c.chain}
+
+{result_mode.display}: {result_mode.convert_score(c.score)}
+"""
+        for i, c in enumerate(chains, 1)
+    )
 
 
 def make_messages(
@@ -425,7 +455,7 @@ def run_model(
     total_cost = 0
     filtered = 0
     output_data: list[dict[str, Any]] = []
-    chain_prompt = make_chain_prompt(chains) if chains else None
+    chain_prompt = make_chain_prompt(chains, result_mode) if chains else None
 
     for msg in tqdm(messages):
         gpt_result = run_gpt(
@@ -463,7 +493,7 @@ def run_model(
                 "-" * 80,
                 user_prompt,
             ]
-            if chain_prompt:
+            if chain_prompt and not gpt_result.filtered:
                 output.extend(["-" * 80, chain_prompt])
             output.extend(
                 [
@@ -662,7 +692,10 @@ def main(
     }
 
     if run_name is None:
-        run_name = f"{model}-sys_{system_prompt_path.name}-user_{user_prompt_path.name}"
+        model_name = model if api_type == "openai" else api_type
+        run_name = (
+            f"{model_name}-sys_{system_prompt_path.name}-user_{user_prompt_path.name}"
+        )
         if all_data:
             run_name += "-all"
         else:
