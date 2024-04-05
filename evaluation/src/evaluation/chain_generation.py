@@ -15,6 +15,7 @@ from openai.types.chat import ChatCompletionMessageParam
 from evaluation import log
 from evaluation.gpt import (
     MODEL_COSTS,
+    FilterStatus,
     GptResult,
     ResultMode,
     calculate_cost,
@@ -114,7 +115,7 @@ def generate_chain(
         RESULT=data.score,
     )
     result = run_gpt(client, model, system_prompt, user_prompt, print_messages)
-    if result.filtered:
+    if result.filtered is FilterStatus.filtered:
         logger.warning("Filtered content detected.")
         return "<filtered>", result.cost
     return clean_chain(result.results[0]), result.cost
