@@ -7,8 +7,18 @@ from typing import Any, cast
 
 import numpy as np
 import numpy.typing as npt
+import torch
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
+
+
+def get_device() -> str:
+    "Get the device to use for SentenceTransformer, including MPS for Apple Silicon."
+    if torch.backends.mps.is_available():
+        return "mps"
+    if torch.cuda.is_available():
+        return "cuda"
+    return "cpu"
 
 
 def suppress_warnings() -> None:
@@ -23,8 +33,10 @@ def load_data(file_path: Path) -> tuple[list[dict[str, Any]], list[str]]:
     return data, sentences
 
 
-def encode_sentences(sentences: list[str], model_name: str) -> list[list[float]]:
-    model = SentenceTransformer(model_name)
+def encode_sentences(
+    sentences: list[str], model_name: str, device: str
+) -> list[list[float]]:
+    model = SentenceTransformer(model_name, device=device)
     vectors = model.encode(sentences)
     return cast(npt.NDArray, vectors).tolist()
 
@@ -67,13 +79,18 @@ def get_cluster_centers(
 
 
 def main(
-    input_file: Path, k: int, output_file: Path | None, model: str, seed: int
+    input_file: Path,
+    k: int,
+    output_file: Path | None,
+    model: str,
+    seed: int,
+    device: str,
 ) -> None:
     suppress_warnings()
 
     data, sentences = load_data(input_file)
 
-    vectors = encode_sentences(sentences, model)
+    vectors = encode_sentences(sentences, model, device)
     cluster_labels, cluster_centers_vectors = cluster_vectors(vectors, k, seed)
     cluster_center_items = get_cluster_centers(
         data, vectors, cluster_labels, cluster_centers_vectors
@@ -108,6 +125,12 @@ if __name__ == "__main__":
         default=0,
         help="Seed for KMeans clustering",
     )
+    parser.add_argument(
+        "--device",
+        type=str,
+        default=get_device(),
+        help="Device to use for SentenceTransformer",
+    )
     args = parser.parse_args()
 
-    main(args.input, args.k, args.output, args.model, args.seed)
+    main(args.input, args.k, args.output, args.model, args.seed, args.device)
