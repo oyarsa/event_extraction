@@ -13,12 +13,19 @@ def indent(text: str, cols: int) -> str:
     )
 
 
-def display(i: int, d: dict[str, Any], cols: int) -> str:
-    lines = [f"# {i}"]
+def display(i: int, d: dict[str, Any], cols: int, sort_keys: bool, raw: bool) -> str:
+    if sort_keys:
+        keys = sorted(d.keys())
+    else:
+        keys = d.keys()
 
-    for k in sorted(d.keys()):
+    lines = [f"# {i}"]
+    for k in keys:
         lines.append(f"{k.upper()}:")
-        lines.extend(indent(str(d[k]), cols).splitlines())
+        if raw:
+            lines.append(str(d[k]).strip())
+        else:
+            lines.extend(indent(str(d[k]), cols).splitlines())
         lines.append("")
 
     lines.append("-" * 80)
@@ -32,9 +39,20 @@ def main() -> None:
     )
     parser.add_argument(
         "--columns",
+        "-c",
         type=int,
         default=80,
         help="The number of columns to wrap the text to.",
+    )
+    parser.add_argument(
+        "--sort-keys",
+        action="store_true",
+        help="Sort the keys of each object alphabetically.",
+    )
+    parser.add_argument(
+        "--raw",
+        action="store_true",
+        help="Display the raw value of each key, without wrapping or indentation.",
     )
     args = parser.parse_args()
 
@@ -43,7 +61,7 @@ def main() -> None:
         raise ValueError("File must be an array of objects.")
 
     for i, d in enumerate(data):
-        print(display(i, d, args.columns))
+        print(display(i, d, args.columns, args.sort_keys, args.raw))
 
 
 if __name__ == "__main__":
