@@ -116,7 +116,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model",
         type=str,
-        default="all-MiniLM-L6-v2",
+        default="all-mpnet-base-v2",
         help="Model name for SentenceTransformer",
     )
     parser.add_argument(
