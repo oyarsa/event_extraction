@@ -33,67 +33,43 @@ def load_data(file_path: Path) -> tuple[list[dict[str, Any]], list[str]]:
     return data, sentences
 
 
-def encode_sentences(
-    sentences: list[str], model_name: str, device: str
-) -> list[list[float]]:
+def encode_sentences(sentences: list[str], model_name: str, device: str) -> npt.NDArray:
     model = SentenceTransformer(model_name, device=device)
-    vectors = model.encode(sentences)
-    return cast(npt.NDArray, vectors).tolist()
+    return cast(npt.NDArray, model.encode(sentences))
 
 
 def cluster_vectors(
-    vectors: list[list[float]], k: int, seed: int
-) -> tuple[list[int], list[list[float]]]:
-    """Cluster vectors using KMeans.
-
-    Returns a tuple of cluster labels (each int is a label) and cluster centers
-    (each item in the list is a vector in list form).
-    """
-    kmeans = KMeans(n_clusters=k, random_state=seed)
-    cluster_labels = kmeans.fit_predict(vectors)
-    cluster_centers = kmeans.cluster_centers_
-    return cluster_labels.tolist(), cluster_centers.tolist()
-
-
-def calculate_distance(vector: list[float], center: list[float]) -> float:
-    dist = np.linalg.norm(np.array(vector) - np.array(center))
-    return float(dist)
+    vectors: npt.NDArray, k: int, seed: int
+) -> tuple[npt.NDArray, npt.NDArray]:
+    """Cluster vectors using KMeans."""
+    kmeans = KMeans(n_clusters=k, random_state=seed).fit(vectors)
+    return cast(npt.NDArray, kmeans.labels_), kmeans.cluster_centers_
 
 
 def get_cluster_centers(
     data: list[dict[str, Any]],
-    vectors: list[list[float]],
-    cluster_labels: list[int],
-    cluster_centers: list[list[float]],
+    vectors: npt.NDArray,
+    labels: npt.NDArray,
+    centers: npt.NDArray,
 ) -> list[dict[str, Any]]:
-    num_clusters = max(cluster_labels) + 1
-    clusters: list[list[tuple[float, dict[str, Any]]]] = [
-        [] for _ in range(num_clusters)
-    ]
+    clusters = [[] for _ in range(max(labels) + 1)]
 
-    for item, vector, label in zip(data, vectors, cluster_labels):
-        distance = calculate_distance(vector, cluster_centers[label])
+    for item, vector, label in zip(data, vectors, labels):
+        distance = np.linalg.norm(vector - centers[label])
         clusters[label].append((distance, item))
 
     return [max(cluster, key=lambda x: x[0])[1] for cluster in clusters]
 
 
 def main(
-    input_file: Path,
-    k: int,
-    output_file: Path | None,
-    model: str,
-    seed: int,
-    device: str,
+    input_file: Path, k: int, output_file: Path, model: str, seed: int, device: str
 ) -> None:
     suppress_warnings()
-
     data, sentences = load_data(input_file)
-
     vectors = encode_sentences(sentences, model, device)
-    cluster_labels, cluster_centers_vectors = cluster_vectors(vectors, k, seed)
+    cluster_labels, cluster_center_vectors = cluster_vectors(vectors, k, seed)
     cluster_center_items = get_cluster_centers(
-        data, vectors, cluster_labels, cluster_centers_vectors
+        data, vectors, cluster_labels, cluster_center_vectors
     )
 
     output_file = output_file or Path(f"{input_file.stem}_{k}_clustered.json")
@@ -108,28 +84,21 @@ if __name__ == "__main__":
     )
     parser.add_argument("input", type=Path, help="Path to the input JSON file")
     parser.add_argument("--k", type=int, default=8, help="Number of clusters")
-    parser.add_argument(
-        "--output",
-        type=Path,
-        help="Path to the output JSON file",
-    )
+    parser.add_argument("--output", type=Path, help="Path to the output JSON file")
     parser.add_argument(
         "--model",
         type=str,
         default="all-mpnet-base-v2",
-        help="Model name for SentenceTransformer",
+        help="SentenceTransformer model name",
     )
     parser.add_argument(
-        "--seed",
-        type=int,
-        default=0,
-        help="Seed for KMeans clustering",
+        "--seed", type=int, default=0, help="Seed for KMeans clustering"
     )
     parser.add_argument(
         "--device",
         type=str,
         default=get_device(),
-        help="Device to use for SentenceTransformer",
+        help="Device for SentenceTransformer",
     )
     args = parser.parse_args()
 
