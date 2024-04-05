@@ -132,23 +132,29 @@ def make_filter_response(messages: list[dict[str, str]]) -> ChatCompletion:
     )
 
 
+class FilterStatus(Enum):
+    "Filter status for the GPT model output."
+    unfiltered = 0
+    filtered = 1
+
+
 @dataclass
 class GptResult:
     results: list[str]
     cost: float
     model_used: str
-    filtered: bool
+    filtered: FilterStatus
 
 
 def make_chat_request(
     client: openai.OpenAI, **kwargs: Any
-) -> tuple[ChatCompletion, bool]:
+) -> tuple[ChatCompletion, FilterStatus]:
     calls_per_minute = 3500  # OpenAI full plan
 
     # Ignores (mypy): untyped decorator makes function untyped
     @sleep_and_retry  # type: ignore[misc]
     @limits(calls=calls_per_minute, period=60)  # type: ignore[misc]
-    def _make_chat_request(**kwargs: Any) -> tuple[ChatCompletion, bool]:
+    def _make_chat_request(**kwargs: Any) -> tuple[ChatCompletion, FilterStatus]:
         attempts = 0
         while True:
             try:
@@ -157,7 +163,10 @@ def make_chat_request(
                 if isinstance(e, openai.BadRequestError):
                     message = cast(dict[str, str], e.body).get("message", "")
                     if AZURE_FILTER_MESSAGE in message:
-                        return make_filter_response(kwargs["messages"]), True
+                        return (
+                            make_filter_response(kwargs["messages"]),
+                            FilterStatus.filtered,
+                        )
 
                 logger.info(f'Error - {type(e)} - "{e}" / Attempt {attempts + 1}')
                 attempts += 1
@@ -166,11 +175,11 @@ def make_chat_request(
                     logger.info("Rate limit exceeded. Waiting 10 seconds.")
                     time.sleep(10)
             else:
-                return response, False
+                return response, FilterStatus.unfiltered
 
     # This cast is necessary because of the sleep_and_retry and limits decorators,
     # which make the function untyped.
-    return cast(tuple[ChatCompletion, bool], _make_chat_request(**kwargs))
+    return cast(tuple[ChatCompletion, FilterStatus], _make_chat_request(**kwargs))
 
 
 @dataclass
@@ -471,7 +480,7 @@ def run_model(
         )
         total_cost += gpt_result.cost
 
-        if gpt_result.filtered:
+        if gpt_result.filtered is FilterStatus.filtered:
             filtered += 1
             logger.info(f"Content filtered. Occurrences: {filtered}.")
 
@@ -493,7 +502,7 @@ def run_model(
                 "-" * 80,
                 user_prompt,
             ]
-            if chain_prompt and not gpt_result.filtered:
+            if chain_prompt and gpt_result.filtered is FilterStatus.unfiltered:
                 output.extend(["-" * 80, chain_prompt])
             output.extend(
                 [
