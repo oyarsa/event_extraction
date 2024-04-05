@@ -168,12 +168,17 @@ def make_chat_request(
                             FilterStatus.filtered,
                         )
 
-                logger.info(f'Error - {type(e)} - "{e}" / Attempt {attempts + 1}')
                 attempts += 1
 
                 if isinstance(e, openai.APIStatusError) and e.status_code == 429:
-                    logger.info("Rate limit exceeded. Waiting 10 seconds.")
+                    logger.info(
+                        f"Rate limit exceeded. Waiting 10 seconds."
+                        f" Attempts: {attempts + 1}"
+                    )
                     time.sleep(10)
+                else:
+                    message = e.message if isinstance(e, openai.APIError) else str(e)
+                    logger.info(f'Error: "{message}" / Attempt {attempts + 1}')
             else:
                 return response, FilterStatus.unfiltered
 
