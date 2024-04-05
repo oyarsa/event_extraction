@@ -2,15 +2,19 @@ import argparse
 import json
 import os
 import warnings
-from collections.abc import Callable
 from pathlib import Path
 from typing import Any, cast
 
 import numpy as np
 import numpy.typing as npt
-import tiktoken
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
+
+
+def suppress_warnings() -> None:
+    "Remove annoying messages about tokenisers."
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
 
 
 def load_data(file_path: Path) -> tuple[list[dict[str, Any]], list[str]]:
@@ -44,12 +48,12 @@ def calculate_distance(vector: list[float], center: list[float]) -> float:
     return float(dist)
 
 
-def get_item_clusters(
+def get_cluster_centers(
     data: list[dict[str, Any]],
     vectors: list[list[float]],
     cluster_labels: list[int],
     cluster_centers: list[list[float]],
-) -> list[list[dict[str, Any]]]:
+) -> list[dict[str, Any]]:
     num_clusters = max(cluster_labels) + 1
     clusters: list[list[tuple[float, dict[str, Any]]]] = [
         [] for _ in range(num_clusters)
@@ -59,50 +63,7 @@ def get_item_clusters(
         distance = calculate_distance(vector, cluster_centers[label])
         clusters[label].append((distance, item))
 
-    for cluster in clusters:
-        cluster.sort(key=lambda x: x[0])
-
-    return [[item for _, item in cluster] for cluster in clusters]
-
-
-def num_tokens(text: str) -> int:
-    "Use tiktoken to count the number of tokens in the text with the GPT-3.5 tokeniser."
-    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
-    tokens = encoding.encode(text)
-    return len(tokens)
-
-
-def auto_cot_filter(input: str) -> bool:
-    """
-    Based on Zhang et al. (2022), "Automatic Chain of Thought Prompting in Large
-    Language Models."
-
-    We ignore the number of steps and only consider the number of tokens.
-    """
-    return num_tokens(input) <= 60
-
-
-def get_cluster_representatives(
-    clusters: list[list[dict[str, Any]]], filter_func: Callable[[str], bool]
-) -> list[dict[str, Any]]:
-    """Select the representative item for each cluster.
-
-    The representative item is the first item in the cluster that satisfies the filter
-    function.
-
-    """
-    representatives: list[dict[str, Any]] = []
-    for cluster in clusters:
-        items = [item for item in cluster if filter_func(item["input"])]
-        selected = items[0] if items else cluster[0]
-        representatives.append(selected)
-    return representatives
-
-
-def suppress_warnings() -> None:
-    "Remove annoying messages about tokenisers."
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
-    warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
+    return [max(cluster, key=lambda x: x[0])[1] for cluster in clusters]
 
 
 def main(
@@ -113,15 +74,14 @@ def main(
     data, sentences = load_data(input_file)
 
     vectors = encode_sentences(sentences, model)
-    cluster_labels, cluster_centers = cluster_vectors(vectors, k, seed)
-    item_clusters = get_item_clusters(data, vectors, cluster_labels, cluster_centers)
-    cluster_representatives = get_cluster_representatives(
-        item_clusters, lambda x: len(x) > 50
+    cluster_labels, cluster_centers_vectors = cluster_vectors(vectors, k, seed)
+    cluster_center_items = get_cluster_centers(
+        data, vectors, cluster_labels, cluster_centers_vectors
     )
 
-    output_file = output_file or Path(f"{input_file.stem}_{k}_reps.json")
+    output_file = output_file or Path(f"{input_file.stem}_{k}_clustered.json")
     print(f"Saving output to {output_file}")
-    output_file.write_text(json.dumps(cluster_representatives, indent=2))
+    output_file.write_text(json.dumps(cluster_center_items, indent=2))
 
 
 if __name__ == "__main__":

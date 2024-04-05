@@ -22,7 +22,6 @@ dependencies = [
     "pyarrow>=15.0.0",
     "ratelimit>=2.2.1",
     "sentence-transformers>=2.6.1",
-    "tiktoken>=0.6.0",
 ]
 requires-python = ">=3.10,<3.13"
 readme = "README.md"
