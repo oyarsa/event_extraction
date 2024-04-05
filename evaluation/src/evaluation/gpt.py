@@ -134,8 +134,8 @@ def make_filter_response(messages: list[dict[str, str]]) -> ChatCompletion:
 
 class FilterStatus(Enum):
     "Filter status for the GPT model output."
-    unfiltered = 0
-    filtered = 1
+    UNFILTERED = 0
+    FILTERED = 1
 
 
 @dataclass
@@ -165,7 +165,7 @@ def make_chat_request(
                     if AZURE_FILTER_MESSAGE in message:
                         return (
                             make_filter_response(kwargs["messages"]),
-                            FilterStatus.filtered,
+                            FilterStatus.FILTERED,
                         )
 
                 attempts += 1
@@ -180,7 +180,7 @@ def make_chat_request(
                     message = e.message if isinstance(e, openai.APIError) else str(e)
                     logger.info(f'Error: "{message}" / Attempt {attempts + 1}')
             else:
-                return response, FilterStatus.unfiltered
+                return response, FilterStatus.UNFILTERED
 
     # This cast is necessary because of the sleep_and_retry and limits decorators,
     # which make the function untyped.
@@ -259,13 +259,13 @@ def split_data(
 
 
 class DataMode(str, Enum):
-    qa = "qa"
-    extraction = "extraction"
+    QA = "qa"
+    EXTRACTION = "extraction"
 
 
 def format_data(item: dict[str, Any], mode: DataMode) -> str:
     match mode:
-        case DataMode.extraction:
+        case DataMode.EXTRACTION:
             entities, _ = parse_instance(item["output"])
             context = f"Context:\n{item['input']}"
             answer = (
@@ -273,7 +273,7 @@ def format_data(item: dict[str, Any], mode: DataMode) -> str:
                 f"Cause: {' | '.join(entities['Cause'])}\n"
                 f"Effect: {' | '.join(entities['Effect'])}"
             )
-        case DataMode.qa:
+        case DataMode.QA:
             context = item["input"]
             answer = f"Answer: {item['output']}"
 
@@ -301,9 +301,9 @@ def make_message_extraction(item: dict[str, Any]) -> tuple[str, str]:
 
 class ResultMode(str, Enum):
     "Result mode for the GPT model."
-    valid = "valid"
-    score = "score"
-    likert = "likert"
+    VALID = "valid"
+    SCORE = "score"
+    LIKERT = "likert"
 
     def extract_result(self, result: str) -> int:
         regex = "(validity|valid|score):"
@@ -311,12 +311,12 @@ class ResultMode(str, Enum):
         last_line = re.sub(regex, "", last_line).strip()
 
         match self:
-            case ResultMode.valid:
+            case ResultMode.VALID:
                 if "true" in last_line:
                     return 1
                 elif "false" in last_line:
                     return 0
-            case ResultMode.score | ResultMode.likert:
+            case ResultMode.SCORE | ResultMode.LIKERT:
                 if last_line.isdigit():
                     return int(last_line)
 
@@ -326,17 +326,17 @@ class ResultMode(str, Enum):
     def get_gold(self, item: dict[str, Any]) -> int:
         "Gold label that we use to evaluate the GPT output."
         match self:
-            case ResultMode.likert:
+            case ResultMode.LIKERT:
                 return item["score"]
-            case ResultMode.valid | ResultMode.score:
+            case ResultMode.VALID | ResultMode.SCORE:
                 return int(item["valid"])
 
     def get_pred(self, gpt_reward: int) -> int:
         "Prediction label from the GPT output."
         match self:
-            case ResultMode.score:
+            case ResultMode.SCORE:
                 return int(gpt_reward >= 4)
-            case ResultMode.valid | ResultMode.likert:
+            case ResultMode.VALID | ResultMode.LIKERT:
                 return gpt_reward
 
     def get_input_score(self, item: dict[str, Any]) -> int:
@@ -347,40 +347,40 @@ class ResultMode(str, Enum):
         an integer, and we convert that integer to a boolean value for evaluation.
         """
         match self:
-            case ResultMode.valid:
+            case ResultMode.VALID:
                 return int(item["valid"])
-            case ResultMode.score | ResultMode.likert:
+            case ResultMode.SCORE | ResultMode.LIKERT:
                 return item["score"]
 
     @property
     def mse(self) -> bool:
         match self:
-            case ResultMode.likert:
+            case ResultMode.LIKERT:
                 return True
-            case ResultMode.valid | ResultMode.score:
+            case ResultMode.VALID | ResultMode.SCORE:
                 return False
 
     @property
     def average_method(self) -> str:
         match self:
-            case ResultMode.likert:
+            case ResultMode.LIKERT:
                 return "macro"
-            case ResultMode.valid | ResultMode.score:
+            case ResultMode.VALID | ResultMode.SCORE:
                 return "binary"
 
     @property
     def display(self) -> str:
         match self:
-            case ResultMode.valid:
+            case ResultMode.VALID:
                 return "Valid"
-            case ResultMode.score | ResultMode.likert:
+            case ResultMode.SCORE | ResultMode.LIKERT:
                 return "Score"
 
     def convert_score(self, score: int) -> str:
         match self:
-            case ResultMode.valid:
+            case ResultMode.VALID:
                 return "true" if score == 1 else "false"
-            case ResultMode.score | ResultMode.likert:
+            case ResultMode.SCORE | ResultMode.LIKERT:
                 return str(score)
 
 
@@ -416,10 +416,10 @@ def make_messages(
 
     for item in sampled_data:
         match mode:
-            case DataMode.extraction:
+            case DataMode.EXTRACTION:
                 context = f"Context: {item['input']}"
                 gold, answer = make_message_extraction(item)
-            case DataMode.qa:
+            case DataMode.QA:
                 context = item["input"]
                 answer = f"answer: {item['output']}"
                 gold = f"Gold: {item['gold']}"
@@ -485,7 +485,7 @@ def run_model(
         )
         total_cost += gpt_result.cost
 
-        if gpt_result.filtered is FilterStatus.filtered:
+        if gpt_result.filtered is FilterStatus.FILTERED:
             filtered += 1
             logger.info(f"Content filtered. Occurrences: {filtered}.")
 
@@ -507,7 +507,7 @@ def run_model(
                 "-" * 80,
                 user_prompt,
             ]
-            if chain_prompt and gpt_result.filtered is FilterStatus.unfiltered:
+            if chain_prompt and gpt_result.filtered is FilterStatus.UNFILTERED:
                 output.extend(["-" * 80, chain_prompt])
             output.extend(
                 [
@@ -678,8 +678,8 @@ def main(
         False,
         help="Whether to run the entire dataset. If true, n is ignored.",
     ),
-    data_mode: DataMode = typer.Option(DataMode.extraction, help="Data mode."),
-    result_mode: ResultMode = typer.Option(ResultMode.score, help="Result mode."),
+    data_mode: DataMode = typer.Option(DataMode.EXTRACTION, help="Data mode."),
+    result_mode: ResultMode = typer.Option(ResultMode.SCORE, help="Result mode."),
     temperature: float = typer.Option(
         0.0, help="Temperature for the GPT model.", min=0.0, max=1.0
     ),
@@ -776,7 +776,7 @@ def main(
         json.dumps(reproduction_info, indent=2)
     )
     metrics.report_metrics(
-        logger, metrics_, "GPT", mse=result_mode is ResultMode.likert
+        logger, metrics_, "GPT", mse=result_mode is ResultMode.LIKERT
     )
 
     with Path("cost.csv").open("a") as f:

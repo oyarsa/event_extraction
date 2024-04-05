@@ -115,7 +115,7 @@ def generate_chain(
         RESULT=data.score,
     )
     result = run_gpt(client, model, system_prompt, user_prompt, print_messages)
-    if result.filtered is FilterStatus.filtered:
+    if result.filtered is FilterStatus.FILTERED:
         logger.warning("Filtered content detected.")
         return "<filtered>", result.cost
     return clean_chain(result.results[0]), result.cost
@@ -207,7 +207,7 @@ def main(
         "--print-messages",
         help="Print the generated chains.",
     ),
-    result_mode: ResultMode = typer.Option(ResultMode.valid, help="Result mode."),
+    result_mode: ResultMode = typer.Option(ResultMode.VALID, help="Result mode."),
 ) -> None:
     if model not in MODEL_COSTS:
         raise ValueError(f"Invalid model. Options: {tuple(MODEL_COSTS)}")
