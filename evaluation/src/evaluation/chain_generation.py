@@ -38,19 +38,11 @@ def run_gpt(
         {"role": "user", "content": user_prompt},
     ]
 
-    if print_messages:
-        logger.info(
-            "\n".join(
-                f"{msg['role'].capitalize()}: {msg.get('content')}" for msg in messages
-            )
-        )
-
     response, filtered = make_chat_request(
         client,
         model=model,
         messages=messages,
         temperature=0,
-        max_tokens=256,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
@@ -59,7 +51,18 @@ def run_gpt(
     result = response.choices[0].message.content
 
     if print_messages:
-        logger.info(f"Response:\n{result}\n{'*' * 80}\n")
+        heading = "=" * 15
+        out = [
+            "",
+            *(
+                f"{msg['role'].upper()}\n{heading}\n{msg.get('content')}"
+                for msg in messages
+            ),
+            f"GPT RESPONSE\n{heading}\n{result}",
+            "*" * 80,
+            "",
+        ]
+        logger.info("\n".join(out))
 
     cost = calculate_cost(model, response)
 
@@ -107,7 +110,7 @@ def generate_chain(
     user_prompt = user_template.format(
         INPUT=data.input,
         ANSWER=data.answer,
-        RESULT_MODE=result_mode.answer_type,
+        RESULT_MODE=result_mode.display,
         RESULT=data.score,
     )
     result = run_gpt(client, model, system_prompt, user_prompt, print_messages)
@@ -130,7 +133,7 @@ def print_result(data: ChainData, result_mode: ResultMode, result: str) -> str:
         "",
         f"Input:\n{indent(data.input)}",
         f"Answer:\n{indent(data.answer)}",
-        f"{result_mode.answer_type}:\n{data.score}",
+        f"{result_mode.display}:\n{data.score}",
         f"Chain:\n{indent(result)}",
         "\n",
     ]
@@ -231,7 +234,9 @@ def main(
     logger.info(f"Model: {model}")
 
     data = [
-        ChainData(input=d["input"], answer=d["output"], score=result_mode.get_gold(d))
+        ChainData(
+            input=d["input"], answer=d["output"], score=result_mode.get_input_score(d)
+        )
         for d in json.loads(file.read_text())
     ]
 
