@@ -463,6 +463,7 @@ def run_model(
     temperature: float,
     num_samples: int | None,
     chains: list[Chain],
+    print_chains: bool,
     debug: bool,
 ) -> ModelResult:
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
@@ -507,26 +508,53 @@ def run_model(
                 "-" * 80,
                 user_prompt,
             ]
-            if chain_prompt and gpt_result.filtered is FilterStatus.UNFILTERED:
+            if (
+                chain_prompt
+                and print_chains
+                and gpt_result.filtered is FilterStatus.UNFILTERED
+            ):
                 output.extend(["-" * 80, chain_prompt])
-            output.extend(
-                [
-                    "-" * 80,
-                    msg.gpt_msg,
-                    "-" * 80,
-                    "\nGPT: ",
-                    *(f"{i+1} - {r}" for i, r in enumerate(gpt_result.results)),
-                    f"\nParsed: {result}",
-                    f"NOT SENT {'~' * 50}",
-                    msg.answer_msg,
-                    "*" * 80,
-                    "",
-                ]
-            )
+            if gpt_result.filtered is FilterStatus.UNFILTERED:
+                output.extend(
+                    [
+                        "-" * 80,
+                        msg.gpt_msg,
+                        "-" * 80,
+                        "\nGPT: ",
+                        *(
+                            format_result(i, r)
+                            for i, r in enumerate(gpt_result.results)
+                        ),
+                        f"\nParsed: {result}",
+                        f"NOT SENT {'~' * 50}",
+                        msg.answer_msg,
+                        "*" * 80,
+                        "",
+                    ]
+                )
+            else:
+                output.append("Filtered output.")
             logger.info("\n".join(output))
 
     logger.info(f"Total filtered: {filtered}")
     return ModelResult(output_data, results, total_cost)
+
+
+def extract_lines(text: str) -> str:
+    pattern = r"(?i)(?:explanation|analysis):\s*(.*?)\s*(?:validity|valid|score):"
+    if match := re.search(pattern, text, re.DOTALL):
+        return match[1].strip()
+    return ""
+
+
+def count_steps(result: str) -> int:
+    steps = extract_lines(result)
+    return sum(bool(line.strip()) for line in steps.splitlines())
+
+
+def format_result(i: int, result: str) -> str:
+    num_steps = count_steps(result)
+    return f"#{i+1} Num steps: {num_steps}\n{result}"
 
 
 def reformat_output(
@@ -690,6 +718,10 @@ def main(
         None,
         help="Path to the file containing the chains.",
     ),
+    print_chains: bool = typer.Option(
+        False,
+        help="Whether to the prompt Chain of Thought chains.",
+    ),
 ) -> None:  # sourcery skip: low-code-quality
     "Run a GPT model on the given data and evaluate the results."
 
@@ -762,6 +794,7 @@ def main(
         temperature,
         num_samples,
         chains,
+        print_chains=print_chains,
         debug=debug,
     )
     formatted_output = reformat_output(model_result.output_data, result_mode)
