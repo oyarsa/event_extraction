@@ -496,10 +496,18 @@ def run_model(
                 )
 
         parsed_results = [result_mode.extract_result(r) for r in gpt_result.results]
+        chain_lengths = [count_steps(r) for r in gpt_result.results]
         result = most_common(parsed_results)
         results[msg.gold_label, result] += 1
 
-        output_data.append(msg.item | {"gpt_reward": result})
+        output_data.append(
+            msg.item
+            | {
+                "gpt_reward": result,
+                "gpt_outputs": gpt_result.results,
+                "chain_lengths": chain_lengths,
+            }
+        )
 
         if print_messages:
             output = [
