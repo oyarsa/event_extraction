@@ -171,7 +171,9 @@ def main() -> None:  # sourcery skip: low-code-quality
     )
     print(f"Number of configurations: {len(configurations)}\n")
 
-    for (prompt_version, user_prompt_file), use_chains, use_sampling in configurations:
+    for i, ((prompt_version, user_prompt_file), use_chains, use_sampling) in enumerate(
+        configurations
+    ):
         user_prompt = f"./prompts/qa/{user_prompt_file}"
         chains_path = args.chain_path if use_chains else None
 
@@ -184,7 +186,7 @@ def main() -> None:  # sourcery skip: low-code-quality
         )
 
         print(
-            f">>> {model} {prompt_version} - "
+            f">>> #{i+1} {model} {prompt_version} - "
             f"{'With chains' if use_chains else 'No chains'} - "
             f"{f'With sampling (K: {k} + T: {t})' if use_sampling else 'No sampling'}"
             f" - Examples: {n}"
