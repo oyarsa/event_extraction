@@ -51,6 +51,8 @@ def run_evaluation(
 prompt_configs: list[tuple[str, str]] = [
     ("Instructions Valid v1", "instructions_valid.txt"),
     ("Instructions Valid v2", "instructions_valid_v2.txt"),
+    ("Instructions Valid v1 CoT", "instructions_valid_cot.txt"),
+    ("Instructions Valid v2 CoT", "instructions_valid_cot_v2.txt"),
 ]
 
 
@@ -116,9 +118,9 @@ def main() -> None:  # sourcery skip: low-code-quality
         "--prompt-configs",
         type=int,
         nargs="+",
-        default=[0, 1],
-        choices=[0, 1],
-        help="Indices of prompt configurations to use (0-based).",
+        default=range(len(prompt_configs)),
+        choices=range(len(prompt_configs)),
+        help="Indices of prompt configurations to use. See --list-prompts.",
     )
     parser.add_argument(
         "--chains-configs",
@@ -185,7 +187,7 @@ def main() -> None:  # sourcery skip: low-code-quality
             f">>> {model} {prompt_version} - "
             f"{'With chains' if use_chains else 'No chains'} - "
             f"{f'With sampling (K: {k} + T: {t})' if use_sampling else 'No sampling'}"
-            f"- Examples: {n}"
+            f" - Examples: {n}"
         )
 
         run_evaluation(
