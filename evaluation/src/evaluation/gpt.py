@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # pyright: basic
 import hashlib
+import inspect
 import json
 import logging
 import math
@@ -15,6 +16,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
+from types import FrameType
 from typing import Any, Optional, cast
 
 import openai
@@ -33,6 +35,16 @@ from tqdm import tqdm
 from evaluation import log, metrics
 
 logger = logging.getLogger("evaluation.gpt")
+
+
+def get_func_params(current_frame: FrameType | None) -> dict[str, Any]:
+    "Get the parameters of the function that called this function (names and values)."
+    if current_frame is None or current_frame.f_back is None:
+        return {}
+
+    arg_names, _, _, arg_values = inspect.getargvalues(current_frame.f_back)
+    args = {name: arg_values[name] for name in arg_names}
+    return args | arg_values.get("kwargs", {})
 
 
 def get_current_commit_shorthash() -> str:
@@ -756,10 +768,12 @@ def main(
         raise ValueError("Temperature is set but number of samples is not.")
 
     git_hash = get_current_commit_shorthash()
+    params = get_func_params(inspect.currentframe())
     reproduction_info = {
         "command": sys.argv,
         "data_hash": hash_file(file),
         "git_hash": git_hash,
+        "params": params,
     }
 
     if run_name is None:
