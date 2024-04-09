@@ -778,6 +778,8 @@ def main(
             run_name += f"-k{num_samples}"
         if temperature != 0:
             run_name += f"-t{temperature}"
+        if chains_path:
+            run_name += "-chains"
 
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
