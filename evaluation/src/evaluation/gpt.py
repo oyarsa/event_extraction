@@ -6,6 +6,7 @@ import logging
 import math
 import random
 import re
+import subprocess
 import sys
 import textwrap
 import time
@@ -32,6 +33,17 @@ from tqdm import tqdm
 from evaluation import log, metrics
 
 logger = logging.getLogger("evaluation.gpt")
+
+
+def get_current_commit_shorthash() -> str:
+    try:
+        return (
+            subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
+            .decode("utf-8")
+            .strip()
+        )
+    except subprocess.CalledProcessError:
+        return "unknown"
 
 
 def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
@@ -743,9 +755,11 @@ def main(
     if (num_samples is None or num_samples == 1) and temperature != 0:
         raise ValueError("Temperature is set but number of samples is not.")
 
+    git_hash = get_current_commit_shorthash()
     reproduction_info = {
         "command": sys.argv,
         "data_hash": hash_file(file),
+        "git_hash": git_hash,
     }
 
     if run_name is None:
@@ -768,6 +782,8 @@ def main(
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
     log.setup_logger(logger, output_path)
+
+    logger.info(f"Git hash: {git_hash}")
     logger.info(f"Run name: {run_name}")
 
     openai_config: dict[str, dict[str, str]] = json.loads(
