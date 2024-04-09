@@ -75,7 +75,7 @@ class ListPrompts(argparse.Action):
         parser.exit()
 
 
-def main() -> None:  # sourcery skip: low-code-quality
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Run GPT evaluations with different configurations",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,

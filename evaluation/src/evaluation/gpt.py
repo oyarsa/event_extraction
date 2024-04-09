@@ -745,7 +745,7 @@ def main(
         False,
         help="Whether to the prompt Chain of Thought chains.",
     ),
-) -> None:  # sourcery skip: low-code-quality
+) -> None:
     "Run a GPT model on the given data and evaluate the results."
 
     if model not in MODEL_COSTS:
