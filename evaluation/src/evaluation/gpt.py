@@ -297,7 +297,7 @@ def make_message_extraction(item: dict[str, Any]) -> tuple[str, str]:
     extraction_entities, _ = parse_instance(item["output"])
     extraction = (
         "Extraction:\n"
-        f"Cause: \n"
+        f"Cause: {' | '.join(extraction_entities['Cause'])}\n"
         f"Effect: {' | '.join(extraction_entities['Effect'])}\n"
     )
 
