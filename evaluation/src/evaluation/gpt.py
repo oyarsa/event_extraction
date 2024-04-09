@@ -445,6 +445,7 @@ class ModelResult:
     output_data: list[dict[str, Any]]
     results: dict[tuple[int, int], int]
     total_cost: float
+    model_used: str
 
 
 def most_common(lst: list[int]) -> int:
@@ -468,6 +469,7 @@ def run_model(
 ) -> ModelResult:
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
     total_cost = 0
+    model_used: str | None = None
     filtered = 0
     output_data: list[dict[str, Any]] = []
     chain_prompt = make_chain_prompt(chains, result_mode) if chains else None
@@ -485,6 +487,7 @@ def run_model(
             debug=debug,
         )
         total_cost += gpt_result.cost
+        model_used = gpt_result.model_used
 
         if gpt_result.filtered is FilterStatus.FILTERED:
             filtered += 1
@@ -545,7 +548,7 @@ def run_model(
             logger.info("\n".join(output))
 
     logger.info(f"Total filtered: {filtered}")
-    return ModelResult(output_data, results, total_cost)
+    return ModelResult(output_data, results, total_cost, model_used or "<unknown>")
 
 
 def extract_lines(text: str) -> str:
@@ -826,6 +829,7 @@ def main(
 
     logger.info(f"\n{confusion_matrix(model_result.results)}\n")
     logger.info(f"Total cost: ${model_result.total_cost}")
+    logger.info(f"Model used: {model_result.model_used}")
 
 
 if __name__ == "__main__":
