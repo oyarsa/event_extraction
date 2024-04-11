@@ -37,14 +37,30 @@ from evaluation import log, metrics
 logger = logging.getLogger("evaluation.gpt")
 
 
+def make_serialisable(obj: Any) -> Any:
+    match obj:
+        case dict():
+            return {k: make_serialisable(v) for k, v in obj.items()}
+        case list() | tuple():
+            return [make_serialisable(v) for v in obj]
+        case int() | float() | bool() | str() | None:
+            return obj
+        case _:
+            return str(obj)
+
+
 def get_func_params(current_frame: FrameType | None) -> dict[str, Any]:
-    "Get the parameters of the function that called this function (names and values)."
+    """Get the parameters of the function that called this function (names and values).
+
+    The values are ensured to be JSON serialisable.
+    """
     if current_frame is None or current_frame.f_back is None:
         return {}
 
     arg_names, _, _, arg_values = inspect.getargvalues(current_frame.f_back)
     args = {name: arg_values[name] for name in arg_names}
-    return args | arg_values.get("kwargs", {})
+    kwargs = arg_values.get("kwargs", {})
+    return make_serialisable(args | kwargs)
 
 
 def get_current_commit_shorthash() -> str:
@@ -802,9 +818,10 @@ def main(
     if tag:
         run_name += f"-{tag}"
 
+    ts = datetime.now(timezone.utc).isoformat()
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
-    log.setup_logger(logger, output_path)
+    log.setup_logger(logger, output_path, file_name=f"train_{ts}.log")
 
     logger.info(f"Git hash: {git_hash}")
     logger.info(f"Run name: {run_name}")
@@ -863,7 +880,6 @@ def main(
     )
 
     with Path("cost.csv").open("a") as f:
-        ts = datetime.now(timezone.utc).isoformat()
         f.write(f"{ts},{model_result.total_cost}\n")
 
     logger.info(f"\n{confusion_matrix(model_result.results)}\n")
