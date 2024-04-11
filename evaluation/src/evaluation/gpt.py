@@ -738,6 +738,10 @@ def main(
         None,
         help="Name of the run. Generated from the model and prompts if not provided.",
     ),
+    tag: Optional[str] = typer.Option(
+        None,
+        help="Tag to add to the run name.",
+    ),
     all_data: bool = typer.Option(
         False,
         help="Whether to run the entire dataset. If true, n is ignored.",
@@ -795,6 +799,8 @@ def main(
             run_name += f"-t{temperature}"
         if chains_path:
             run_name += "-chains"
+    if tag:
+        run_name += f"-{tag}"
 
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
