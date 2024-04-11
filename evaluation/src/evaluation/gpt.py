@@ -7,7 +7,6 @@ import logging
 import math
 import random
 import re
-import subprocess
 import sys
 import textwrap
 import time
@@ -16,7 +15,6 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from types import FrameType
 from typing import Any, Optional, cast
 
 import openai
@@ -35,43 +33,6 @@ from tqdm import tqdm
 from evaluation import log, metrics
 
 logger = logging.getLogger("evaluation.gpt")
-
-
-def make_serialisable(obj: Any) -> Any:
-    match obj:
-        case dict():
-            return {k: make_serialisable(v) for k, v in obj.items()}
-        case list() | tuple():
-            return [make_serialisable(v) for v in obj]
-        case int() | float() | bool() | str() | None:
-            return obj
-        case _:
-            return str(obj)
-
-
-def get_func_params(current_frame: FrameType | None) -> dict[str, Any]:
-    """Get the parameters of the function that called this function (names and values).
-
-    The values are ensured to be JSON serialisable.
-    """
-    if current_frame is None or current_frame.f_back is None:
-        return {}
-
-    arg_names, _, _, arg_values = inspect.getargvalues(current_frame.f_back)
-    args = {name: arg_values[name] for name in arg_names}
-    kwargs = arg_values.get("kwargs", {})
-    return make_serialisable(args | kwargs)
-
-
-def get_current_commit_shorthash() -> str:
-    try:
-        return (
-            subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
-            .decode("utf-8")
-            .strip()
-        )
-    except subprocess.CalledProcessError:
-        return "unknown"
 
 
 def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
@@ -788,8 +749,8 @@ def main(
     if (num_samples is None or num_samples == 1) and temperature != 0:
         raise ValueError("Temperature is set but number of samples is not.")
 
-    git_hash = get_current_commit_shorthash()
-    params = get_func_params(inspect.currentframe())
+    git_hash = log.get_current_commit_shorthash()
+    params = log.get_func_params(inspect.currentframe(), serialise=True)
     reproduction_info = {
         "command": sys.argv,
         "data_hash": hash_file(file),
