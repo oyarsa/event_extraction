@@ -533,6 +533,7 @@ def run_model(
                 "gpt_reward": result,
                 "gpt_outputs": gpt_result.results,
                 "chain_lengths": chain_lengths,
+                "chain_results": parsed_results,
             }
         )
 
