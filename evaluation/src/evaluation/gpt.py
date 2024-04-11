@@ -332,13 +332,13 @@ class ResultMode(str, Enum):
             case ResultMode.VALID | ResultMode.SCORE:
                 return int(item["valid"])
 
-    def get_pred(self, gpt_reward: int) -> int:
+    def get_pred(self, result: int) -> int:
         "Prediction label from the GPT output."
         match self:
             case ResultMode.SCORE:
-                return int(gpt_reward >= 4)
+                return int(result >= 4)
             case ResultMode.VALID | ResultMode.LIKERT:
-                return gpt_reward
+                return result
 
     def get_input_score(self, item: dict[str, Any]) -> int:
         """Score that we will send to the GPT model as the gold.
@@ -507,7 +507,7 @@ def run_model(
         output_data.append(
             msg.item
             | {
-                "gpt_reward": result,
+                "gpt_result": result,
                 "gpt_outputs": gpt_result.results,
                 "chain_lengths": chain_lengths,
                 "chain_results": parsed_results,
@@ -577,7 +577,7 @@ def reformat_output(
     return [
         {
             "gold": result_mode.get_gold(item),
-            "pred": result_mode.get_pred(item["gpt_reward"]),
+            "pred": result_mode.get_pred(item["gpt_result"]),
             "passage": item["input"],
             "output": item["output"],
             "annotation": item["gold"],
