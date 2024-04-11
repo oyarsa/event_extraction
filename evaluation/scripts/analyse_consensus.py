@@ -11,6 +11,7 @@ import math
 import subprocess
 import tempfile
 from dataclasses import dataclass
+from enum import Enum
 
 import numpy as np
 import numpy.typing as npt
@@ -35,15 +36,20 @@ def ord_consensus(data: list[int], *, labels: list[int]) -> float:
     )
 
 
-def bin_consensus(data: list[int], kind: str) -> float:
-    if kind == "entropy":
-        return entropy(data)
-    elif kind == "gini":
-        return gini_coefficient(data)
-    elif kind == "majority":
-        return majority_pct(data)
-    else:
-        raise ValueError(f"Unknown kind: {kind}")
+class BinConsensus(str, Enum):
+    ENTROPY = "entropy"
+    GINI = "gini"
+    MAJORITY = "majority"
+
+
+def bin_consensus(data: list[int], kind: BinConsensus) -> float:
+    match kind:
+        case BinConsensus.ENTROPY:
+            return entropy(data)
+        case BinConsensus.GINI:
+            return gini_coefficient(data)
+        case BinConsensus.MAJORITY:
+            return majority_pct(data)
 
 
 def get_majority(data: list[int]) -> int:
@@ -60,10 +66,10 @@ def calc_probabilities(binary_vector: list[int]) -> npt.NDArray[np.float64]:
 
 
 def entropy(binary_vector: list[int]) -> float:
-    """
-    Calculate the entropy of a binary vector containing 0s and 1s.
-    Entropy is calculated using the formula: -sum(p(x) * log2(p(x)))
-    where p(x) is the proportion of each unique value in the vector.
+    """Calculate the entropy of a binary vector containing 0s and 1s.
+
+    Entropy is calculated using the formula: -sum(p(x) * log2(p(x))) where p(x) is the
+    proportion of each unique value in the vector.
     """
     probabilities = calc_probabilities(binary_vector)
     entropy_value = -np.sum(probabilities * np.log2(probabilities))
@@ -71,10 +77,10 @@ def entropy(binary_vector: list[int]) -> float:
 
 
 def gini_coefficient(binary_vector: list[int]) -> float:
-    """
-    Calculate the Gini coefficient of a binary vector containing 0s and 1s.
-    Gini coefficient is calculated using the formula: 1 - sum(p(x)^2)
-    where p(x) is the proportion of each unique value in the vector.
+    """Calculate the Gini coefficient of a binary vector containing 0s and 1s.
+
+    Gini coefficient is calculated using the formula: 1 - sum(p(x)^2) where p(x) is the
+    proportion of each unique value in the vector.
     """
     probabilities = calc_probabilities(binary_vector)
     gini_value = 1 - np.sum(probabilities**2)
@@ -82,6 +88,7 @@ def gini_coefficient(binary_vector: list[int]) -> float:
 
 
 def describe(numbers: list[float]) -> dict[str, float]:
+    """Descriptive statistics for a list of numbers."""
     nums = np.array(numbers)
     return {
         "mean": float(np.mean(nums)),
@@ -113,8 +120,7 @@ def list_range(data: list[list[int]]) -> list[int]:
 
 
 def gnuplot(data: list[float], title: str, xlabel: str) -> str:
-    """Given a list of data, plot the cumulative distribution using gnuplot."""
-
+    """Given a list of numbers, plot the cumulative distribution using gnuplot."""
     data.sort()
     n = len(data)
     cumulative_data = [(i + 1) / n * 100 for i in range(n)]
@@ -160,9 +166,9 @@ def main() -> None:
     parser.add_argument(
         "--bin-consensus",
         "-b",
-        type=str,
-        choices=["entropy", "gini", "majority"],
-        default="majority",
+        type=BinConsensus,
+        choices=[x.value for x in BinConsensus],
+        default=BinConsensus.MAJORITY.value,
         help="The type of binary consensus to calculate",
     )
     parser.add_argument(
