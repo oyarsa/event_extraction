@@ -151,7 +151,12 @@ def main() -> None:
         description=__doc__.splitlines()[0],
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("file", type=argparse.FileType())
+    parser.add_argument(
+        "file",
+        type=argparse.FileType(),
+        help="The JSON file to read. Should be a list of objects with 'chain_lengths'"
+        " and 'chain_results' keys.",
+    )
     parser.add_argument(
         "--bin-consensus",
         "-b",
