@@ -118,8 +118,18 @@ def get_majority(data: list[int]) -> int:
     return max(set(data), key=data.count)
 
 
+def normalise(x: float, low: float, high: float) -> float:
+    return (x - low) / (high - low)
+
+
 def majority_pct(data: list[int]) -> float:
-    return data.count(get_majority(data)) / len(data)
+    n = len(data)
+    if n <= 1:
+        return 1
+
+    min_majority = (n // 2 + 1) / n
+    maj_ratio = data.count(get_majority(data)) / n
+    return normalise(maj_ratio, min_majority, 1)
 
 
 def calc_probabilities(binary_vector: list[int]) -> npt.NDArray[np.float64]:
