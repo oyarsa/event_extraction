@@ -10,17 +10,79 @@ import json
 import math
 import subprocess
 import tempfile
+from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 import numpy as np
 import numpy.typing as npt
+
+
+def unique_values(iterables: Iterable[Iterable[Any]]) -> list[Any]:
+    """Build a list of unique values from iterables maintaining the order."""
+    seen = set()
+    return [
+        seen.add(item) or item
+        for iterable in iterables
+        for item in iterable
+        if item not in seen
+    ]
+
+
+def records_to_table(items: list[dict[str, Any]]) -> tuple[list[str], list[list[Any]]]:
+    """Given a list of dictionaries, convert to table where each row is a record.
+
+    The keys of the dictionaries are used as the header of the table.
+
+    Returns (header, rows).
+    """
+    header = unique_values(items)
+    rows = [[item[key] for key in header] for item in items]
+    return header, rows
+
+
+def transpose_table(
+    header: list[str], rows: list[list[Any]]
+) -> tuple[list[str], list[list[Any]]]:
+    """Transpose a table where each row is a record.
+
+    The header is the first column of the new table.
+
+    Returns (header, rows).
+    """
+    table = [[header[i]] + [row[i] for row in rows] for i in range(len(header))]
+    return table[0], table[1:]
+
+
+def render_table(header: list[str], values: list[list[Any]]) -> str:
+    # Calculate the maximum length for each column, considering both headers and the
+    # data in values
+    max_lengths = [
+        max(len(str(row[i])) if i < len(row) else 0 for row in [header, *values])
+        for i in range(len(header))
+    ]
+
+    fmt_parts = [f"{{{i}:<{len}}}" for i, len in enumerate(max_lengths)]
+    fmt_string = " | ".join(fmt_parts)
+
+    def format_row(row: list[Any]) -> str:
+        return fmt_string.format(*(map(str, row)))
+
+    header_line = format_row(header)
+    separator_line = " | ".join("-" * length for length in max_lengths)
+    rows = [format_row(row) for row in values]
+
+    return "\n".join([header_line, separator_line, *rows])
 
 
 def ord_consensus(data: list[int], *, labels: list[int]) -> float:
     """From "Consensus and dissention: A measure of ordinal dispersion (2007)"
     By William J. Tastle, Mark J. Wierman.
     """
+    if len(data) < 2:
+        return 1
+
     # Make sure the labels start at 0 for bincount
     data = [x - min(labels) for x in data]
     p = np.bincount(data, minlength=len(labels)) / len(data)
@@ -115,7 +177,7 @@ def report(description: dict[str, float], title: str) -> str:
 
 def list_range(data: list[list[int]]) -> list[int]:
     minval = min(x for lst in data for x in lst)
-    maxval = min(x for lst in data for x in lst)
+    maxval = max(x for lst in data for x in lst)
     return list(range(minval, maxval + 1))
 
 
@@ -164,17 +226,9 @@ def main() -> None:
         " and 'chain_results' keys.",
     )
     parser.add_argument(
-        "--bin-consensus",
-        "-b",
-        type=BinConsensus,
-        choices=[x.value for x in BinConsensus],
-        default=BinConsensus.MAJORITY.value,
-        help="The type of binary consensus to calculate",
-    )
-    parser.add_argument(
         "--plot",
         action=argparse.BooleanOptionalAction,
-        default=True,
+        default=False,
         help="Plot the cumulative distribution of consensus values (requires gnuplot)",
     )
     args = parser.parse_args()
@@ -190,25 +244,37 @@ def main() -> None:
     lengths = [entry.lengths for entry in data]
     results = [entry.results for entry in data]
 
-    # <title, k, consensus>
-    measures = [
-        (
-            "Ordinal Consensus for chain lengths",
-            get_majority([len(x) for x in lengths]),
-            [ord_consensus(x, labels=list_range(lengths)) for x in lengths],
-        ),
-        (
-            f"Binary Consensus ({args.bin_consensus}) for chain results",
-            get_majority([len(x) for x in results]),
-            [bin_consensus(x, args.bin_consensus) for x in results],
+    records: list[dict[str, Any]] = [
+        {
+            "name": "lengths (ordinal)",
+            "consensus": [
+                ord_consensus(x, labels=list_range(lengths)) for x in lengths
+            ],
+            "k": get_majority([len(x) for x in lengths]),
+        },
+        *(
+            {
+                "name": f"results ({kind.value})",
+                "consensus": [bin_consensus(x, kind) for x in results],
+                "k": get_majority([len(x) for x in results]),
+            }
+            for kind in BinConsensus
         ),
     ]
 
-    for title, k, con in measures:
-        print(report(describe(con) | {"k": k}, title))
-        if args.plot:
-            print(gnuplot(con, title, "Percentile"))
-        print()
+    described_records = [
+        {"name": x["name"], **describe(x["consensus"]), "k": x["k"]} for x in records
+    ]
+    header, rows = transpose_table(*records_to_table(described_records))
+    fmt_rows = [
+        [f"{cell: .3f}" if isinstance(cell, float) else cell for cell in row]
+        for row in rows
+    ]
+    print(render_table(header, fmt_rows))
+
+    if args.plot:
+        for x in records:
+            print(gnuplot(x["consensus"], x["name"], "Percentile"))
 
 
 if __name__ == "__main__":
