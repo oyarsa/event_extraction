@@ -152,17 +152,17 @@ def gini_coefficient(binary_vector: list[int]) -> float:
 def describe(numbers: list[float]) -> dict[str, float]:
     """Descriptive statistics for a list of numbers."""
     nums = np.array(numbers)
-    return {
-        "mean": float(np.mean(nums)),
-        "median": float(np.median(nums)),
-        "std_dev": float(np.std(nums)),
-        "variance": float(np.var(nums)),
-        "min": float(np.min(nums)),
-        "max": float(np.max(nums)),
-        "range": float(np.max(nums) - np.min(nums)),
-        "q1": float(np.percentile(nums, 25)),
-        "q3": float(np.percentile(nums, 75)),
-        "iqr": float(np.percentile(nums, 75) - np.percentile(nums, 25)),
+    r = {
+        "mean": np.mean(nums),
+        "std_dev": np.std(nums),
+        "variance": np.var(nums),
+        "range": np.max(nums) - np.min(nums),
+        "iqr": np.percentile(nums, 75) - np.percentile(nums, 25),
+        "min": np.min(nums),
+        "q1": np.percentile(nums, 25),
+        "median": np.median(nums),
+        "q3": np.percentile(nums, 75),
+        "max": np.max(nums),
     }
 
 
