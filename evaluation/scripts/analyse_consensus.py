@@ -232,6 +232,11 @@ def main() -> None:
         default=False,
         help="Plot the cumulative distribution of consensus values (requires gnuplot)",
     )
+    parser.add_argument(
+        "--save",
+        type=argparse.FileType("w"),
+        help="File to save the consensus results.",
+    )
     args = parser.parse_args()
 
     @dataclass
@@ -276,6 +281,9 @@ def main() -> None:
     if args.plot:
         for x in records:
             print(gnuplot(x["consensus"], x["name"], "Percentile"))
+
+    if args.save:
+        json.dump(records, args.save, indent=2)
 
 
 if __name__ == "__main__":
