@@ -164,6 +164,7 @@ def describe(numbers: list[float]) -> dict[str, float]:
         "q3": np.percentile(nums, 75),
         "max": np.max(nums),
     }
+    return {k: 0.0 if v == -0.0 else float(v) for k, v in r.items()}
 
 
 def report(description: dict[str, float], title: str) -> str:
@@ -267,7 +268,7 @@ def main() -> None:
     ]
     header, rows = transpose_table(*records_to_table(described_records))
     fmt_rows = [
-        [f"{cell: .3f}" if isinstance(cell, float) else cell for cell in row]
+        [f"{cell:.3f}" if isinstance(cell, float) else cell for cell in row]
         for row in rows
     ]
     print(render_table(header, fmt_rows))
