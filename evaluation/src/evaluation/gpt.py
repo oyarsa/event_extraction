@@ -74,6 +74,10 @@ MODEL_COSTS = {
         0.00001,
         0.00003,
     ),
+    "gpt-4-turbo-2024-04-09": (  # in: $10.00 / 1M tokens, out: $30.00 / 1M tokens
+        0.00001,
+        0.00003,
+    ),
 }
 
 SUPPORTED_MODES = ("qa", "extraction")
@@ -307,6 +311,20 @@ class ResultMode(str, Enum):
     LIKERT = "likert"
 
     def extract_result(self, result: str) -> int:
+        """Extract the validity/score result from the GPT output.
+
+        The last line is expected to contain the result. This function is
+        case-insensitive and ignores whitespace. It supports the following formats:
+
+        For ResultMode.VALID:
+        - "validity: <true/false>"
+        - "valid: <true/false>"
+
+        For ResultMode.LIKERT and ResultMode.SCORE:
+        - "score: <integer>"
+
+        If the format is not recognized, a warning is logged and 0 is returned.
+        """
         regex = "(validity|valid|score):"
         last_line = result.splitlines()[-1].lower()
         last_line = re.sub(regex, "", last_line).strip()
