@@ -1,4 +1,5 @@
 # pyright: basic
+import inspect
 import json
 import logging
 import re
@@ -49,7 +50,10 @@ def run_gpt(
         presence_penalty=0,
         seed=0,
     )
-    result = response.choices[0].message.content
+    result = response.choices[0].message.content or "<empty>"
+    if result == "<empty>":
+        logger.warning("Empty response. Prompt:")
+        logger.warning(user_prompt)
 
     if print_messages:
         heading = "=" * 15
@@ -68,7 +72,7 @@ def run_gpt(
     cost = calculate_cost(model, response)
 
     return GptResult(
-        results=[result or "<empty>"],
+        results=[result],
         cost=cost,
         model_used=response.model,
         filtered=filtered,
@@ -208,13 +212,18 @@ def main(
         help="Print the generated chains.",
     ),
     result_mode: ResultMode = typer.Option(ResultMode.VALID, help="Result mode."),
+    n: Optional[int] = typer.Option(None, "-n", help="Number of chains to generate."),
 ) -> None:
     if model not in MODEL_COSTS:
         raise ValueError(f"Invalid model. Options: {tuple(MODEL_COSTS)}")
 
+    git_hash = log.get_current_commit_shorthash()
+    params = log.get_func_params(inspect.currentframe(), serialise=True)
     reproduction_info = {
         "command": sys.argv,
         "data_hash": hash_file(file),
+        "git_hash": git_hash,
+        "params": params,
     }
 
     if run_name is None:
@@ -239,7 +248,7 @@ def main(
             input=d["input"], answer=d["output"], score=result_mode.get_input_score(d)
         )
         for d in json.loads(file.read_text())
-    ]
+    ][:n]
 
     system_prompt = system_prompt_path.read_text()
     user_template = user_template_path.read_text()
