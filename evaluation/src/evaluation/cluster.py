@@ -83,7 +83,7 @@ if __name__ == "__main__":
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("input", type=Path, help="Path to the input JSON file")
-    parser.add_argument("--k", type=int, default=8, help="Number of clusters")
+    parser.add_argument("-k", type=int, default=8, help="Number of clusters")
     parser.add_argument("--output", type=Path, help="Path to the output JSON file")
     parser.add_argument(
         "--model",
