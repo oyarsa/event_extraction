@@ -4,7 +4,30 @@ import subprocess
 import sys
 from pathlib import Path
 from types import FrameType
-from typing import Any
+from typing import Any, ClassVar
+
+
+class ColourFormatter(logging.Formatter):
+    """Logging colored formatter.
+
+    Adapted from https://stackoverflow.com/a/56944256/3638629
+    """
+
+    formats: ClassVar = {
+        logging.DEBUG: "\x1b[38;21m",  # grey
+        logging.INFO: "\x1b[37m",  # white
+        logging.WARNING: "\x1b[38;5;226m",  # yellow
+        logging.ERROR: "\x1b[38;5;196m",  # red
+        logging.CRITICAL: "\x1b[31;1m",  # bold red
+    }
+    reset: ClassVar = "\x1b[0m"
+
+    def format(self, record: logging.LogRecord) -> str:
+        msg = super().format(record)
+        if colour := self.formats.get(record.levelno):
+            return colour + msg + self.reset
+        else:
+            return msg
 
 
 def setup_logger(
@@ -15,16 +38,15 @@ def setup_logger(
 ) -> None:
     logger.setLevel(logging.INFO)
 
-    formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(name)s | %(message)s", "%Y-%m-%d %H:%M:%S"
-    )
+    fmt = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+    datefmt = "%Y-%m-%d %H:%M:%S"
 
     file_handler = logging.FileHandler(output_dir / file_name, mode=mode)
-    file_handler.setFormatter(formatter)
+    file_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
     logger.addHandler(file_handler)
 
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(formatter)
+    console_handler.setFormatter(ColourFormatter(fmt=fmt, datefmt=datefmt))
     logger.addHandler(console_handler)
 
 
