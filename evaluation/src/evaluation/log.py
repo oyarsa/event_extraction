@@ -13,14 +13,14 @@ class ColourFormatter(logging.Formatter):
     Adapted from https://stackoverflow.com/a/56944256/3638629
     """
 
-    formats: ClassVar = {
+    formats: ClassVar[dict[int, str]] = {
         logging.DEBUG: "\x1b[38;21m",  # grey
         logging.INFO: "\x1b[37m",  # white
         logging.WARNING: "\x1b[38;5;226m",  # yellow
         logging.ERROR: "\x1b[38;5;196m",  # red
         logging.CRITICAL: "\x1b[31;1m",  # bold red
     }
-    reset: ClassVar = "\x1b[0m"
+    reset: ClassVar[str] = "\x1b[0m"
 
     def format(self, record: logging.LogRecord) -> str:
         msg = super().format(record)
