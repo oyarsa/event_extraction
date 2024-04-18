@@ -400,6 +400,11 @@ def run_model(
             filtered += 1
             logger.info(f"Content filtered. Occurrences: {filtered}.")
 
+        output_data.append(msg.item | {"gpt_result": result.result})
+
+        model_used = result.model_used
+        total_cost += result.cost
+
     logger.info(f"Total filtered: {filtered}")
     return ModelResult(output_data, results, total_cost, model_used or "<unknown>")
 
