@@ -125,6 +125,16 @@ class GptSolveResult:
     filtered: FilterStatus
 
 
+@dataclass
+class GptProgressiveResult:
+    cost: float
+    model_used: str
+    result: int
+    data: dict[str, Any]
+    filtered: FilterStatus
+    turns: int
+
+
 def run_solve(
     client: openai.OpenAI,
     model: str,
@@ -299,11 +309,11 @@ def run_progressive_refinement(
     refinement_system_prompt: str,
     print_refinement_messages: bool,
     print_refinement_chains: bool,
-) -> GptSolveResult:
+) -> GptProgressiveResult:
     total_cost = 0
     solution_log: list[GptSolveResult] = []
 
-    for _ in range(num_turns):
+    for i in range(num_turns):
         solution = run_solve(
             client,
             model,
@@ -322,7 +332,14 @@ def run_progressive_refinement(
 
         # The last two solutions are the same, so we can stop early
         if solution_log and solution.result == solution_log[-1].result:
-            return dataclasses.replace(solution, cost=total_cost)
+            return GptProgressiveResult(
+                cost=total_cost,
+                model_used=solution.model_used,
+                result=solution.result,
+                data=solution.data,
+                filtered=solution.filtered,
+                turns=i + 1,
+            )
         solution_log.append(solution)
 
         refined = run_refinement(
@@ -341,7 +358,14 @@ def run_progressive_refinement(
         msg = refined.new_msg
 
     result = result_selection.select_result([s.result for s in solution_log])
-    return dataclasses.replace(solution_log[-1], result=result, cost=total_cost)
+    return GptProgressiveResult(
+        cost=total_cost,
+        model_used=solution.model_used,
+        result=result,
+        data=solution.data,
+        filtered=solution.filtered,
+        turns=num_turns,
+    )
 
 
 def run_model(
@@ -400,7 +424,9 @@ def run_model(
             filtered += 1
             logger.info(f"Content filtered. Occurrences: {filtered}.")
 
-        output_data.append(msg.item | {"gpt_result": result.result})
+        output_data.append(
+            msg.item | {"gpt_result": result.result, "turns": result.turns}
+        )
 
         model_used = result.model_used
         total_cost += result.cost
