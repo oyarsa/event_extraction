@@ -54,7 +54,7 @@ Original problem:
 
 Answer: {c.answer}
 
-Improved problem:
+Rewritten problem:
 {c.chain}
 """
         for i, c in enumerate(refinements, 1)
