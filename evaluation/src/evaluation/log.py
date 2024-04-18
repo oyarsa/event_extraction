@@ -2,9 +2,21 @@ import inspect
 import logging
 import subprocess
 import sys
+from enum import Enum
 from pathlib import Path
 from types import FrameType
 from typing import Any, ClassVar
+
+
+class LogLevel(str, Enum):
+    DEBUG = "debug"
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
+
+    def to_std(self) -> int:
+        return getattr(logging, self.name)
 
 
 class ColourFormatter(logging.Formatter):
@@ -35,8 +47,9 @@ def setup_logger(
     output_dir: Path,
     file_name: str = "train.log",
     mode: str = "a",
+    level: LogLevel = LogLevel.INFO,
 ) -> None:
-    logger.setLevel(logging.INFO)
+    logger.setLevel(level.to_std())
 
     fmt = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
     datefmt = "%Y-%m-%d %H:%M:%S"
