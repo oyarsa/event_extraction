@@ -556,7 +556,8 @@ def main(
     if run_name is None:
         model_name = model if api_type == "openai" else api_type
         run_name = (
-            f"{model_name}-sys_{system_prompt_path.name}-user_{user_prompt_path.name}"
+            f"refinement-{model_name}-sys_{solve_system_prompt_path.name}"
+            f"-user_{user_prompt_path.name}"
         )
         if all_data:
             run_name += "-all"
