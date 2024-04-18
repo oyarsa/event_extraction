@@ -395,10 +395,19 @@ class ResultMode(str, Enum):
 
 @dataclass
 class Message:
-    item: dict[str, Any]
-    answer_msg: str
-    gpt_msg: str
+    gold: str
+    answer: str
+    context: str
     gold_label: int
+    item: dict[str, Any]
+
+    @property
+    def answer_msg(self) -> str:
+        return "\n".join([self.gold, self.answer]).strip()
+
+    @property
+    def gpt_msg(self) -> str:
+        return "\n".join([self.context, self.answer]).strip()
 
 
 def make_messages(
@@ -416,11 +425,16 @@ def make_messages(
                 answer = f"answer: {item['output']}"
                 gold = f"Gold: {item['gold']}"
 
-        answer_msg = "\n".join([gold, answer]).strip()
-        gpt_msg = "\n".join([context, answer]).strip()
-
         gold_label = result_mode.get_gold(item)
-        messages.append(Message(item, answer_msg, gpt_msg, gold_label))
+        messages.append(
+            Message(
+                item=item,
+                gold=gold,
+                answer=answer,
+                context=context,
+                gold_label=gold_label,
+            )
+        )
 
     return messages
 
