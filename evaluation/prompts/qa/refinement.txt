@@ -1,0 +1,1 @@
+Rewrite a new version of the original input (including the question and context) to be more understandable and easier to answer. Don't omit any useful information.
