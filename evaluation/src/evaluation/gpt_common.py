@@ -222,7 +222,7 @@ def run_gpt(
         model=model,
         messages=messages,
         temperature=temperature,
-        top_p=1,
+        top_p=None if temperature == 0 else 1,
         frequency_penalty=0,
         presence_penalty=0,
         seed=0,
