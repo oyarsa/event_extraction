@@ -192,6 +192,7 @@ def print_refinement_message(
     print_refinements: bool,
 ) -> None:
     output = [
+        ">>>>> REFINEMENT <<<<<",
         "-" * 80,
         system_prompt,
         "-" * 80,
@@ -229,6 +230,7 @@ def print_solve_message(
     print_chains: bool,
 ) -> None:
     output = [
+        ">>>>> SOLVE <<<<<",
         "-" * 80,
         system_prompt,
         "-" * 80,
