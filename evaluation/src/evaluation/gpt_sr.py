@@ -499,6 +499,10 @@ def main(
         ResultSelection.MAJORITY,
         help="Strategy for selecting the final result.",
     ),
+    log_level: log.LogLevel = typer.Option(
+        log.LogLevel.INFO,
+        help="Logging level.",
+    ),
 ) -> None:
     "Run a GPT model on the given data and evaluate the results."
 
@@ -542,7 +546,7 @@ def main(
     ts = datetime.now(timezone.utc).isoformat()
     output_path = output_dir / run_name
     output_path.mkdir(exist_ok=True, parents=True)
-    log.setup_logger(logger, output_path, file_name=f"train_{ts}.log")
+    log.setup_logger(logger, output_path, file_name=f"train_{ts}.log", level=log_level)
 
     logger.info(f"Git hash: {git_hash}")
     logger.info(f"Run name: {run_name}")
