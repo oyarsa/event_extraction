@@ -14,7 +14,7 @@ import typer
 from openai.types.chat import ChatCompletionMessageParam
 
 from evaluation import log
-from evaluation.gpt import (
+from evaluation.gpt_common import (
     MODEL_COSTS,
     FilterStatus,
     GptResult,
