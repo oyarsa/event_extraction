@@ -481,7 +481,7 @@ def main(
         help=f"Which GPT model to use. Options: {tuple(MODEL_COSTS)}.",
     ),
     print_solve_messages: bool = typer.Option(
-        True,
+        False,
         help="Whether to print messages for the solving turn including the prompt,"
         " context, gold, and prediction.",
     ),
@@ -548,7 +548,7 @@ def main(
         exists=True,
     ),
     print_refinement_messages: bool = typer.Option(
-        True,
+        False,
         help="Whether to print messages for the refinement turn including the prompt,"
         " context, gold, and prediction.",
     ),

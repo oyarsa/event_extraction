@@ -208,7 +208,7 @@ def main(
         help=f"Which GPT model to use. Options: {tuple(MODEL_COSTS)}.",
     ),
     print_messages: bool = typer.Option(
-        True,
+        False,
         help="Whether to print messages including the prompt, context, gold, and"
         " prediction.",
     ),
