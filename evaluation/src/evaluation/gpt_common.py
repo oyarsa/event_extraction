@@ -571,4 +571,5 @@ Explanation:
 {result_mode.display}: {result_mode.convert_score(c.score)}
 """
         for i, c in enumerate(chains, 1)
+        if c.chain and c.chain != "<empty>"
     )
