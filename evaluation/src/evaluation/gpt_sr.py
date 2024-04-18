@@ -283,19 +283,22 @@ def run_progressive_refinement(
     client: openai.OpenAI,
     model: str,
     msg: Message,
-    system_prompt: str,
+    solve_system_prompt: str,
     user_prompt: str,
     temperature: float,
     num_samples: int | None,
     chain_prompt: str | None,
-    print_messages: bool,
+    print_solve_messages: bool,
     result_mode: ResultMode,
     debug: bool,
-    print_chains: bool,
+    print_solve_chains: bool,
     refinement_prompt: str,
     refinements: str,
     num_turns: int,
     result_selection: ResultSelection,
+    refinement_system_prompt: str,
+    print_refinement_messages: bool,
+    print_refinement_chains: bool,
 ) -> GptSolveResult:
     total_cost = 0
     solution_log: list[GptSolveResult] = []
@@ -305,15 +308,15 @@ def run_progressive_refinement(
             client,
             model,
             msg,
-            system_prompt,
+            solve_system_prompt,
             user_prompt,
             temperature,
             num_samples,
             chain_prompt,
-            print_messages,
+            print_solve_messages,
             result_mode,
             debug,
-            print_chains,
+            print_solve_chains,
         )
         total_cost += solution.cost
 
@@ -326,12 +329,12 @@ def run_progressive_refinement(
             client,
             model,
             msg,
-            system_prompt,
+            refinement_system_prompt,
             refinement_prompt,
-            print_messages,
+            print_refinement_messages,
             refinements,
             debug,
-            print_chains,
+            print_refinement_chains,
         )
         total_cost += refined.cost
         # This updates the problem (i.e. the message) for the next turn
@@ -345,7 +348,7 @@ def run_model(
     messages: list[Message],
     model: str,
     client: openai.OpenAI,
-    system_prompt: str,
+    solve_system_prompt: str,
     user_prompt: str,
     print_messages: bool,
     result_mode: ResultMode,
@@ -357,6 +360,9 @@ def run_model(
     print_chains: bool,
     num_turns: int,
     result_selection: ResultSelection,
+    refinement_system_prompt: str,
+    print_refinement_messages: bool,
+    print_refinement_chains: bool,
     debug: bool,
 ) -> ModelResult:
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
@@ -372,7 +378,7 @@ def run_model(
             client,
             model,
             msg,
-            system_prompt,
+            solve_system_prompt,
             user_prompt,
             temperature,
             num_samples,
@@ -385,6 +391,9 @@ def run_model(
             refinement_chain_prompt,
             num_turns,
             result_selection,
+            refinement_system_prompt,
+            print_refinement_messages,
+            print_refinement_chains,
         )
         results[msg.gold_label, result.result] += 1
         if result.filtered is FilterStatus.FILTERED:
@@ -402,9 +411,9 @@ def main(
         " 'input', 'output', 'gold', 'valid').",
         exists=True,
     ),
-    system_prompt_path: Path = typer.Option(
+    solve_system_prompt_path: Path = typer.Option(
         ...,
-        "--system-prompt",
+        "--solve-system-prompt",
         help="Path to the system prompt file.",
         exists=True,
     ),
@@ -440,10 +449,10 @@ def main(
         "gpt-4-0125-preview",
         help=f"Which GPT model to use. Options: {tuple(MODEL_COSTS)}.",
     ),
-    print_messages: bool = typer.Option(
+    print_solve_messages: bool = typer.Option(
         True,
-        help="Whether to print messages including the prompt, context, gold, and"
-        " prediction.",
+        help="Whether to print messages for the solving turn including the prompt,"
+        " context, gold, and prediction.",
     ),
     debug: bool = typer.Option(
         False,
@@ -479,9 +488,9 @@ def main(
         ...,
         help="Path to the file containing the chains.",
     ),
-    print_chains: bool = typer.Option(
+    print_solve_chains: bool = typer.Option(
         False,
-        help="Whether to the prompt Chain of Thought chains.",
+        help="Whether to the print the solving Chain of Thought chains.",
     ),
     refinement_path: Path = typer.Option(
         ...,
@@ -500,6 +509,21 @@ def main(
     result_selection: ResultSelection = typer.Option(
         ResultSelection.MAJORITY,
         help="Strategy for selecting the final result.",
+    ),
+    refinement_system_prompt_path: Path = typer.Option(
+        ...,
+        "--refinement-system-prompt",
+        help="Path to the system prompt file.",
+        exists=True,
+    ),
+    print_refinement_messages: bool = typer.Option(
+        True,
+        help="Whether to print messages for the refinement turn including the prompt,"
+        " context, gold, and prediction.",
+    ),
+    print_refinement_chains: bool = typer.Option(
+        False,
+        help="Whether to the print the refinement Chain of Thought chains.",
     ),
     log_level: log.LogLevel = typer.Option(
         log.LogLevel.INFO,
@@ -573,8 +597,9 @@ def main(
         sampled_data = valids + invalids
 
     messages = make_messages(sampled_data, data_mode, result_mode)
-    system_prompt = system_prompt_path.read_text()
+    solve_system_prompt = solve_system_prompt_path.read_text()
     user_prompt = user_prompt_path.read_text()
+    refinement_system_prompt = refinement_system_prompt_path.read_text()
     refinement_prompt = refinement_prompt_path.read_text()
     chains = load_chains(chains_path)
     refinements = load_chains(refinement_path)
@@ -583,18 +608,21 @@ def main(
         messages,
         model,
         client,
-        system_prompt,
+        solve_system_prompt,
         user_prompt,
-        print_messages,
+        print_solve_messages,
         result_mode,
         temperature,
         num_samples,
         chains,
         refinements,
         refinement_prompt,
-        print_chains,
+        print_solve_chains,
         num_turns,
         result_selection,
+        refinement_system_prompt,
+        print_refinement_messages,
+        print_refinement_chains,
         debug,
     )
     formatted_output = reformat_output(model_result.output_data, result_mode)
@@ -604,6 +632,7 @@ def main(
         json.dumps(model_result.output_data, indent=2)
     )
     (output_path / "results.json").write_text(json.dumps(formatted_output, indent=2))
+
     (output_path / "metrics.json").write_text(json.dumps(metrics_, indent=2))
     (output_path / "reproduction.json").write_text(
         json.dumps(reproduction_info, indent=2)
