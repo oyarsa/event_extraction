@@ -12,6 +12,7 @@ from typing import Optional
 import openai
 import typer
 from openai.types.chat import ChatCompletionMessageParam
+from tqdm import tqdm
 
 from evaluation import log
 from evaluation.gpt_common import (
@@ -157,7 +158,7 @@ def generate_chains(
     results: list[ChainResult] = []
     total_cost = 0
 
-    for d in data:
+    for d in tqdm(data):
         chain, cost = generate_chain(
             client, model, d, system_prompt, user_template, result_mode, print_results
         )
