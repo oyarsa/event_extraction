@@ -94,7 +94,7 @@ def run_refinement(
     )
 
     result = gpt_result.results[0]
-    new_msg = dataclasses.replace(msg, item=msg.item | {"item": result})
+    new_msg = dataclasses.replace(msg, context=result)
 
     if print_messages:
         print_refinement_message(
