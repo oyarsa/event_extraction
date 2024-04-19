@@ -62,6 +62,49 @@ Rewritten problem:
 
 
 @dataclass
+class GptPromptOptResult:
+    cost: float
+    model_used: str
+    new_prompt: str
+    filtered: FilterStatus
+
+
+def run_prompt_opt(
+    client: openai.OpenAI,
+    model: str,
+    old_prompt: str,
+    system_prompt: str,
+    prompt_opt_prompt: str,
+    print_messages: bool,
+    debug: bool,
+) -> GptPromptOptResult:
+    gpt_result = run_gpt(
+        client=client,
+        model=model,
+        message=old_prompt,
+        system_prompt=system_prompt,
+        user_prompt=prompt_opt_prompt,
+        temperature=0.0,
+        num_samples=None,
+        chain_prompt=None,
+        debug=debug,
+    )
+    new_prompt = gpt_result.results[0]
+
+    if print_messages:
+        print_prompt_opt_message(
+            system_prompt, prompt_opt_prompt, gpt_result, old_prompt, new_prompt
+        )
+
+    return GptPromptOptResult(
+        cost=gpt_result.cost,
+        model_used=gpt_result.model_used,
+        new_prompt=new_prompt,
+        filtered=gpt_result.filtered,
+    )
+
+
+@dataclass
 class GptRefinementResult:
     cost: float
     model_used: str
@@ -192,6 +235,37 @@ def run_solve(
     )
 
 
+def print_prompt_opt_message(
+    system_prompt: str,
+    user_prompt: str,
+    gpt_result: GptResult,
+    old_prompt: str,
+    result: str,
+) -> None:
+    output = [
+        ">>>>> PROMPT OPTIMISATION <<<<<",
+        "-" * 80,
+        system_prompt,
+        "-" * 80,
+        user_prompt,
+        "-" * 80,
+        old_prompt,
+    ]
+    if gpt_result.filtered is FilterStatus.UNFILTERED:
+        output.extend(
+            [
+                "-" * 80,
+                "\nGPT: ",
+                result,
+                "*" * 80,
+                "",
+            ]
+        )
+    else:
+        output.append("Filtered output.")
+    logger.info("\n".join(output))
+
+
 def print_refinement_message(
     system_prompt: str,
     user_prompt: str,
@@ -309,6 +383,9 @@ def run_progressive_refinement(
     refinement_system_prompt: str,
     print_refinement_messages: bool,
     print_refinement_chains: bool,
+    prompt_opt_prompt: str | None,
+    prompt_opt_system_prompt: str | None,
+    print_prompt_opt_messages: bool,
 ) -> GptProgressiveResult:
     total_cost = 0
     solution_log: list[GptSolveResult] = []
@@ -357,6 +434,20 @@ def run_progressive_refinement(
         # This updates the problem (i.e. the message) for the next turn
         msg = refined.new_msg
 
+        if prompt_opt_prompt and prompt_opt_system_prompt:
+            optimised_prompt = run_prompt_opt(
+                client,
+                model,
+                user_prompt,
+                prompt_opt_system_prompt,
+                prompt_opt_prompt,
+                print_prompt_opt_messages,
+                debug=debug,
+            )
+            total_cost += optimised_prompt.cost
+            # Updates the prompt for the next turn
+            user_prompt = user_prompt.replace(msg.context, optimised_prompt.new_prompt)
+
     result = result_selection.select_result([s.result for s in solution_log])
     return GptProgressiveResult(
         cost=total_cost,
@@ -387,6 +478,9 @@ def run_model(
     refinement_system_prompt: str,
     print_refinement_messages: bool,
     print_refinement_chains: bool,
+    prompt_opt_prompt: str | None,
+    prompt_opt_system_prompt: str | None,
+    print_prompt_opt_messages: bool,
     debug: bool,
 ) -> ModelResult:
     results: defaultdict[tuple[int, int], int] = defaultdict(int)
@@ -418,6 +512,9 @@ def run_model(
             refinement_system_prompt,
             print_refinement_messages,
             print_refinement_chains,
+            prompt_opt_prompt,
+            prompt_opt_system_prompt,
+            print_prompt_opt_messages,
         )
         results[msg.gold_label, result.result] += 1
         if result.filtered is FilterStatus.FILTERED:
@@ -530,7 +627,7 @@ def main(
     refinement_prompt_path: Path = typer.Option(
         ...,
         "--refinement-prompt",
-        help="Path to the refinement prompt file.",
+        help="Path to the refinement user prompt file.",
         exists=True,
     ),
     num_turns: int = typer.Option(
@@ -544,7 +641,7 @@ def main(
     refinement_system_prompt_path: Path = typer.Option(
         ...,
         "--refinement-system-prompt",
-        help="Path to the system prompt file.",
+        help="Path to the refinement system prompt file.",
         exists=True,
     ),
     print_refinement_messages: bool = typer.Option(
@@ -555,6 +652,23 @@ def main(
     print_refinement_chains: bool = typer.Option(
         False,
         help="Whether to the print the refinement Chain of Thought chains.",
+    ),
+    prompt_opt_user_prompt_path: Optional[Path] = typer.Option(
+        None,
+        "--prompt-opt-user-prompt",
+        help="Path to the prompt optimisation user prompt file.",
+        exists=True,
+    ),
+    prompt_opt_system_prompt_path: Optional[Path] = typer.Option(
+        None,
+        "--prompt-opt-system-prompt",
+        help="Path to the prompt optimisation system prompt file.",
+        exists=True,
+    ),
+    print_prompt_opt_messages: bool = typer.Option(
+        False,
+        help="Whether to print messages for the prompt optimisation turn including the"
+        " old prompt and the GPT output (new prompt).",
     ),
     log_level: log.LogLevel = typer.Option(
         log.LogLevel.INFO,
@@ -629,10 +743,20 @@ def main(
         sampled_data = valids + invalids
 
     messages = make_messages(sampled_data, data_mode, result_mode)
+
     solve_system_prompt = solve_system_prompt_path.read_text()
-    user_prompt = user_prompt_path.read_text()
+    solve_user_prompt = user_prompt_path.read_text()
     refinement_system_prompt = refinement_system_prompt_path.read_text()
     refinement_prompt = refinement_prompt_path.read_text()
+    prompt_opt_prompt = (
+        prompt_opt_user_prompt_path.read_text() if prompt_opt_user_prompt_path else None
+    )
+    prompt_opt_system_prompt = (
+        prompt_opt_system_prompt_path.read_text()
+        if prompt_opt_system_prompt_path
+        else None
+    )
+
     chains = load_chains(chains_path)
     refinements = load_chains(refinement_path)
 
@@ -641,7 +765,7 @@ def main(
         model,
         client,
         solve_system_prompt,
-        user_prompt,
+        solve_user_prompt,
         print_solve_messages,
         result_mode,
         temperature,
@@ -655,6 +779,9 @@ def main(
         refinement_system_prompt,
         print_refinement_messages,
         print_refinement_chains,
+        prompt_opt_prompt,
+        prompt_opt_system_prompt,
+        print_prompt_opt_messages,
         debug,
     )
     formatted_output = reformat_output(model_result.output_data, result_mode)
