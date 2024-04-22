@@ -45,7 +45,8 @@ logger = logging.getLogger("classifier")
 class Prompt(Enum):
     PASSAGE = "passage"
     GOLD = "gold"
-    FULL = "both"
+    COMBINED = "both"
+    INSTRUCTIONS = "instructions"
 
 
 @dataclasses.dataclass
@@ -434,15 +435,27 @@ def get_prompt(prompt: Prompt, data: list[DataEntry]) -> list[str]:
             return [d.input for d in data]
         case Prompt.GOLD:
             return [d.gold for d in data]
-        case Prompt.FULL:
-            return [f"Input:\n{d.input}\nReference answer:\n{d.gold}" for d in data]
+        case Prompt.COMBINED:
+            return [f"Input:\n{d.input}\n\nReference answer:\n{d.gold}" for d in data]
+        case Prompt.INSTRUCTIONS:
+            return [
+                f"""\
+Given the following input and reference answers, decide whether the given answer is valid:
+
+Input:
+{d.input}
+
+Reference answer:
+{d.gold}"""
+                for d in data
+            ]
 
 
 def get_answer(prompt: Prompt, data: list[DataEntry]) -> list[str]:
     match prompt:
         case Prompt.PASSAGE | Prompt.GOLD:
             return [d.output for d in data]
-        case Prompt.FULL:
+        case Prompt.COMBINED | Prompt.INSTRUCTIONS:
             return [f"Candidate answer:\n{d.output}" for d in data]
 
 
