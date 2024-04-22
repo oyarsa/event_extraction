@@ -76,7 +76,7 @@ class Config:
     # Name of the output directory. If unspecified, will be generated the current
     # ISO timestamp.
     output_name: str | None = None
-    # Which prompt to use: passage, gold answer, or both
+    # Which prompt to use
     prompt: Prompt = Prompt.PASSAGE
     # Do train
     do_train: bool = True
