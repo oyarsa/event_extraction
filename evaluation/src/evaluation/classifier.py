@@ -30,6 +30,7 @@ from transformers import (
     get_scheduler,
 )
 
+from evaluation import log
 from evaluation.metrics import (
     EvaluationResult,
     calc_metrics,
@@ -650,8 +651,14 @@ def main() -> None:
     setup_logger(output_dir)
     logger.info(f"\n{config}")
     logger.info(f"Output directory: {output_dir.resolve()}\n")
+
     (output_dir / "args.json").write_text(
-        json.dumps(dataclasses.asdict(config), default=str, indent=2)
+        json.dumps(
+            dataclasses.asdict(config)
+            | {"git_commit": log.get_current_commit_shorthash()},
+            default=str,
+            indent=2,
+        )
     )
 
     label_config = get_labelling(config.model_type)
