@@ -11,7 +11,7 @@
   "output_path": "output/scripttest",
   "seed": 0,
   "output_name": "fcr-deberta-v3-large",
-  "use_passage": true,
+  "prompt": "PASSAGE",
   "do_train": true,
   "do_test": true,
   "do_inference": true,

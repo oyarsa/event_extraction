@@ -9,6 +9,7 @@ import sys
 import warnings
 from collections.abc import Mapping
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +42,12 @@ from evaluation.metrics import (
 logger = logging.getLogger("classifier")
 
 
+class Prompt(Enum):
+    PASSAGE = "passage"
+    GOLD = "gold"
+    FULL = "both"
+
+
 @dataclasses.dataclass
 class Config:
     # Classifier model name or path
@@ -68,8 +75,8 @@ class Config:
     # Name of the output directory. If unspecified, will be generated the current
     # ISO timestamp.
     output_name: str | None = None
-    # Whether to use the passage as part of the model input
-    use_passage: bool = False
+    # Which prompt to use: passage, gold answer, or both
+    prompt: Prompt = Prompt.PASSAGE
     # Do train
     do_train: bool = True
     # Do test
@@ -421,23 +428,35 @@ def load_json(path: Path, n: int | None) -> list[DataEntry]:
     ]
 
 
+def get_prompt(prompt: Prompt, data: list[DataEntry]) -> list[str]:
+    match prompt:
+        case Prompt.PASSAGE:
+            return [d.input for d in data]
+        case Prompt.GOLD:
+            return [d.gold for d in data]
+        case Prompt.FULL:
+            return [f"Input:\n{d.input}\nReference answer:\n{d.gold}" for d in data]
+
+
+def get_answer(prompt: Prompt, data: list[DataEntry]) -> list[str]:
+    match prompt:
+        case Prompt.PASSAGE | Prompt.GOLD:
+            return [d.output for d in data]
+        case Prompt.FULL:
+            return [f"Candidate answer:\n{d.output}" for d in data]
+
+
 def preprocess_data(
     data: list[DataEntry],
     tokenizer: PreTrainedTokenizer,
     max_seq_length: int,
     batch_size: int,
-    use_passage: bool,
+    prompt: Prompt,
     has_labels: bool,
 ) -> DataLoader:
-    if use_passage:
-        text = [d.input for d in data]
-    else:
-        text = [d.gold for d in data]
-    pair = [d.output for d in data]
-
     model_inputs = tokenizer(
-        text,
-        pair,
+        text=get_prompt(prompt, data),
+        text_pair=get_answer(prompt, data),
         padding="max_length",
         truncation=True,
         return_tensors="pt",
@@ -536,7 +555,7 @@ def run_training(
         tokenizer,
         config.max_seq_length,
         config.batch_size,
-        config.use_passage,
+        config.prompt,
         has_labels=True,
     )
 
@@ -546,7 +565,7 @@ def run_training(
         tokenizer,
         config.max_seq_length,
         config.batch_size,
-        config.use_passage,
+        config.prompt,
         has_labels=True,
     )
 
@@ -601,7 +620,7 @@ def run_evaluation(
         tokenizer,
         config.max_seq_length,
         config.batch_size,
-        config.use_passage,
+        config.prompt,
         has_labels=True,
     )
 
@@ -629,7 +648,7 @@ def run_inference(
         tokenizer,
         config.max_seq_length,
         config.batch_size,
-        config.use_passage,
+        config.prompt,
         has_labels=False,
     )
 
