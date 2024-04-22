@@ -291,9 +291,9 @@ def main(
         run_name += f"-{tag}"
 
     ts = datetime.now(timezone.utc).isoformat()
-    output_path = output_dir / run_name
+    output_path = output_dir / run_name / ts
     output_path.mkdir(exist_ok=True, parents=True)
-    log.setup_logger(logger, output_path, file_name=f"train_{ts}.log")
+    log.setup_logger(logger, output_path)
 
     logger.info(f"Git hash: {git_hash}")
     logger.info(f"Run name: {run_name}")
