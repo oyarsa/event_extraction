@@ -440,7 +440,7 @@ def get_prompt(prompt: Prompt, data: list[DataEntry]) -> list[str]:
         case Prompt.INSTRUCTIONS:
             return [
                 f"""\
-Given the following input and reference answers, decide whether the given answer is valid:
+Given the following input and reference answers, decide whether the candidate answer is valid:
 
 Input:
 {d.input}
