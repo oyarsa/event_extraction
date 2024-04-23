@@ -98,6 +98,8 @@ class Config:
     model_type: str = "valid"
     # Metric to compare best models and decide early stopping
     metric_for_best: str = "f1"
+    # Number of prompt examples to print
+    print_prompt_examples: int = 0
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -461,16 +463,41 @@ def get_answer(prompt: Prompt, data: list[DataEntry]) -> list[str]:
             return [f"Candidate answer:\n{d.output}" for d in data]
 
 
+def print_prompt_examples(prompt: Prompt, data: list[DataEntry], *, n: int) -> None:
+    if n == 0:
+        return
+    print_prompt_example(prompt, [d for d in data if d.valid], "Valid examples", n)
+    print_prompt_example(
+        prompt, [d for d in data if not d.valid], "Invalid examples", n
+    )
+
+
+def print_prompt_example(
+    prompt: Prompt, data: list[DataEntry], title: str, n: int
+) -> None:
+    logger.warning(f"\n\n>>> {title}\n")
+    for _ in range(n):
+        idx = random.randint(0, len(data) - 1)
+        prompt_ = get_prompt(prompt, [data[idx]])[0]
+        answer = get_answer(prompt, [data[idx]])[0]
+        sep = "-" * 40
+        example = f"Prompt\n{sep}\n{prompt_}\n\nAnswer\n{sep}\n{answer}\n\n"
+        logger.warning(f"\n{example}")
+
+
 def preprocess_data(
     data: list[DataEntry],
     tokenizer: PreTrainedTokenizer,
     max_seq_length: int,
     batch_size: int,
     prompt: Prompt,
+    prompt_examples: int,
     has_labels: bool,
 ) -> DataLoader:
     prompts = get_prompt(prompt, data)
     answers = get_answer(prompt, data)
+
+    print_prompt_examples(prompt, data, n=prompt_examples)
 
     model_inputs = tokenizer(
         text=prompts,
@@ -578,6 +605,7 @@ def run_training(
         config.max_seq_length,
         config.batch_size,
         config.prompt,
+        config.print_prompt_examples,
         has_labels=True,
     )
 
@@ -588,6 +616,7 @@ def run_training(
         config.max_seq_length,
         config.batch_size,
         config.prompt,
+        config.print_prompt_examples,
         has_labels=True,
     )
 
@@ -644,6 +673,7 @@ def run_evaluation(
         config.max_seq_length,
         config.batch_size,
         config.prompt,
+        config.print_prompt_examples,
         has_labels=True,
     )
 
@@ -672,6 +702,7 @@ def run_inference(
         config.max_seq_length,
         config.batch_size,
         config.prompt,
+        config.print_prompt_examples,
         has_labels=False,
     )
 
