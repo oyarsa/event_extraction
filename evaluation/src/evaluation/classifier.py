@@ -96,6 +96,8 @@ class Config:
     lr_scheduler: str = "constant"
     # Type of model: entailment or valid
     model_type: str = "valid"
+    # Metric to compare best models and decide early stopping
+    metric_for_best: str = "f1"
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -305,8 +307,8 @@ def train(
     learning_rate: float,
     early_stopping_patience: int,
     scheduler_type: str,
+    metric_for_best: str,
     metrics_file: Path,
-    metric_for_best: str = "f1",
 ) -> PreTrainedModel:
     model = model.to(device)  # type: ignore
     optimizer = AdamW(model.parameters(), lr=learning_rate)
@@ -595,6 +597,7 @@ def run_training(
         config.learning_rate,
         config.early_stopping_patience,
         config.lr_scheduler,
+        config.metric_for_best,
         metrics_file,
     )
     save_model(trained_model, tokenizer, output_dir)
