@@ -496,15 +496,18 @@ def save_model(
 
 
 def setup_logger(output_dir: Path) -> None:
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        handlers=[
-            logging.FileHandler(output_dir / "train.log"),
-            logging.StreamHandler(sys.stdout),
-        ],
-    )
+    logger.setLevel(logging.INFO)
+
+    fmt = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+    datefmt = "%Y-%m-%d %H:%M:%S"
+
+    file_handler = logging.FileHandler(output_dir / "train.log")
+    file_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
+    logger.addHandler(file_handler)
+
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(log.ColourFormatter(fmt=fmt, datefmt=datefmt))
+    logger.addHandler(console_handler)
 
 
 def suppress_transformers_warnings() -> None:
