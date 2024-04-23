@@ -469,9 +469,12 @@ def preprocess_data(
     prompt: Prompt,
     has_labels: bool,
 ) -> DataLoader:
+    prompts = get_prompt(prompt, data)
+    answers = get_answer(prompt, data)
+
     model_inputs = tokenizer(
-        text=get_prompt(prompt, data),
-        text_pair=get_answer(prompt, data),
+        text=prompts,
+        text_pair=answers,
         padding="max_length",
         truncation=True,
         return_tensors="pt",
