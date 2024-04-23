@@ -694,10 +694,12 @@ def main() -> None:
     logger.info(f"\n{config}")
     logger.info(f"Output directory: {output_dir.resolve()}\n")
 
+    git_commit = log.get_current_commit_shorthash()
+    logger.info(f"Git commit: {git_commit}")
+
     (output_dir / "args.json").write_text(
         json.dumps(
-            dataclasses.asdict(config)
-            | {"git_commit": log.get_current_commit_shorthash()},
+            dataclasses.asdict(config) | {"git_commit": git_commit},
             default=str,
             indent=2,
         )
