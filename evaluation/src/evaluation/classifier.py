@@ -504,7 +504,8 @@ def setup_logger(output_dir: Path) -> None:
     fmt = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
     datefmt = "%Y-%m-%d %H:%M:%S"
 
-    file_handler = logging.FileHandler(output_dir / "train.log")
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    file_handler = logging.FileHandler(output_dir / f"train_{ts}.log")
     file_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
     logger.addHandler(file_handler)
 
