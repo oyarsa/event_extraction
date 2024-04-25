@@ -57,6 +57,7 @@ from self_critique.metric.fgcr_metric_cls import parse_instance
 from self_critique.util import (
     get_current_commit_shorthash,
     get_device,
+    report_gpu_memory,
     resolve_path,
     save_model,
     set_seed,
@@ -897,4 +898,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    report_gpu_memory(main, logger)
