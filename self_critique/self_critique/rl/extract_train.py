@@ -105,7 +105,7 @@ class Config:
     # Gradient accumulation steps
     gradient_accumulation_steps: int = 1
     # Maximum sequence length for Seq2Seq model
-    max_seq_length: int = 128
+    max_input_seq_length: int = 128
     # Fixed random seed
     seed: int = 0
     # Maximum number of samples used for training
@@ -844,7 +844,7 @@ def main() -> None:
     train_dataset = preprocess_data(
         tokeniser=extract.tokenizer,
         data=train_data,
-        max_seq_length=args.max_seq_length,
+        max_seq_length=args.max_input_seq_length,
         device="cpu",
         eval_prompt=args.eval_prompt,
         desc="training",
@@ -856,7 +856,7 @@ def main() -> None:
         eval_dataset = preprocess_data(
             tokeniser=extract.tokenizer,
             data=eval_dataset,
-            max_seq_length=args.max_seq_length,
+            max_seq_length=args.max_input_seq_length,
             device="cpu",
             eval_prompt=args.eval_prompt,
             desc="evaluation",
