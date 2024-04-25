@@ -18,6 +18,7 @@ import dataclasses
 import json
 import logging
 import os
+import warnings
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -136,7 +137,7 @@ class Config:
     # Log with either 'wandb' or 'tensorboard'
     log_with: str | None = None
     # Every N batches to evaluate the model
-    eval_batches: int = 10
+    eval_batches: int = 100
     # Reward type: 'entailment' or 'valid'
     reward_type: str = "entailment"
     # Whether to perform training
@@ -806,6 +807,18 @@ def get_labelling(reward_type: str) -> tuple[dict[str, int], dict[int, str], str
     return label2id, id2label, true_class
 
 
+def suppress_warnings() -> None:
+    suppress_transformers_warnings()
+    # trl PPO warning on high KL divergence
+    warnings.filterwarnings(
+        "ignore",
+        message="The average ratio of batch .* exceeds threshold .*. Skipping batch.",
+        category=UserWarning,
+    )
+    # accelerate warning about how the linux kernel 5.4 is too old, but it works fine
+    logging.getLogger("accelerate").setLevel(logging.ERROR)
+
+
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
     args = resolve_arg_paths(args)
@@ -827,7 +840,7 @@ def main() -> None:
     )
 
     set_seed(args.seed)
-    suppress_transformers_warnings()
+    suppress_warnings()
 
     label2id, id2label, true_class = get_labelling(args.reward_type)
 
