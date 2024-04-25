@@ -148,6 +148,8 @@ class Config:
     rewrite: bool = False
     # Which prompt to use
     eval_prompt: EvalPrompt = EvalPrompt.COMBINED
+    # Max sequence length for the reward model
+    max_reward_seq_length: int = 400
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -363,7 +365,7 @@ def train_extract(
 
             scores, labels = run_reward(
                 reward=reward,
-                max_seq_length=args.max_seq_length,
+                max_seq_length=args.max_reward_seq_length,
                 batch_size=args.batch_size,
                 sentence1=batch["eval_inputs"],
                 sentence2=extract_response,
@@ -626,7 +628,7 @@ def generate_and_reward(
 
     scores, reward_labels = run_reward(
         reward=reward,
-        max_seq_length=args.max_seq_length,
+        max_seq_length=args.max_reward_seq_length,
         batch_size=args.batch_size,
         sentence1=original_sentence,
         sentence2=extract_response_txt_rw,
