@@ -22,6 +22,7 @@ from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import Any, TypedDict, cast
 
@@ -56,6 +57,21 @@ from self_critique.minimal.util import (
 )
 
 logger = logging.getLogger("extract_train")
+
+
+class EvalPrompt(Enum):
+    PASSAGE = "passage"
+    GOLD = "gold"
+    COMBINED = "combined"
+
+    def get_eval_input(self, entry: "Seq2SeqEntry") -> str:
+        match self:
+            case EvalPrompt.PASSAGE:
+                return entry.context
+            case EvalPrompt.GOLD:
+                return entry.answer
+            case EvalPrompt.COMBINED:
+                return f"{entry.context}\n{entry.answer}"
 
 
 @dataclass
@@ -120,6 +136,8 @@ class Config:
     do_eval: bool = True
     # Whether to rewrite the extraction output to natural language using a template
     rewrite: bool = False
+    # Which prompt to use
+    eval_prompt: EvalPrompt = EvalPrompt.GOLD
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -341,7 +359,7 @@ def train_extract(
                 reward=reward,
                 max_seq_length=args.max_seq_length,
                 batch_size=args.batch_size,
-                sentence1=batch["context"],
+                sentence1=batch["eval_inputs"],
                 sentence2=extract_response,
                 device=device,
                 true_class=true_class,
@@ -474,11 +492,13 @@ def preprocess_data(
     data: list[Seq2SeqEntry],
     max_seq_length: int,
     device: str | torch.device,
+    eval_prompt: EvalPrompt,
     desc: str | None = None,
 ) -> Dataset:
     desc = desc or ""
     source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
     target_texts = [d.answers for d in data]
+    eval_inputs = [eval_prompt.get_eval_input(d) for d in data]
 
     model_inputs = tokeniser(
         source_texts,
@@ -499,6 +519,7 @@ def preprocess_data(
         input_tokens=model_inputs,
         target_tokens=labels,
         data=data,
+        eval_inputs=eval_inputs,
         device=device,
     )
 
@@ -510,6 +531,7 @@ class Seq2SeqDatasetEntry(TypedDict):
     id: str
     answers: str
     context: str
+    eval_inputs: str
 
 
 class Seq2SeqDatasetSeries(TypedDict):
@@ -519,6 +541,7 @@ class Seq2SeqDatasetSeries(TypedDict):
     id: list[str]
     answers: list[str]
     context: list[str]
+    eval_inputs: list[str]
 
 
 @dataclass
@@ -526,6 +549,7 @@ class Seq2SeqDataset(Dataset):
     input_tokens: Mapping[str, torch.Tensor]
     target_tokens: Mapping[str, torch.Tensor]
     data: list[Seq2SeqEntry]
+    eval_inputs: list[str]
     device: str | torch.device
 
     def __len__(self) -> int:
@@ -539,6 +563,7 @@ class Seq2SeqDataset(Dataset):
             "id": self.data[idx].id,
             "answers": self.data[idx].answers,
             "context": self.data[idx].context,
+            "eval_inputs": self.eval_inputs[idx],
         }
 
 
@@ -618,12 +643,12 @@ def evaluate(
     with torch.no_grad():
         for batch in tqdm(loader, desc=desc):
             inputs = batch["input_ids"].to(device)
-            original_sentence = batch["context"]
+            eval_inputs: list[str] = batch["eval_inputs"]
 
             rl_output = generate_and_reward(
                 cast(PreTrainedModel, extract.model),
                 inputs,
-                original_sentence,
+                eval_inputs,
                 args,
                 extract.tokenizer,
                 reward,
@@ -636,7 +661,7 @@ def evaluate(
             ref_output = generate_and_reward(
                 extract_ref,
                 inputs,
-                original_sentence,
+                eval_inputs,
                 args,
                 extract.tokenizer,
                 reward,
@@ -653,6 +678,7 @@ def evaluate(
                     "id": batch["id"][i],
                     "answers": batch["answers"][i],
                     "context": batch["context"][i],
+                    "eval_inputs": batch["eval_inputs"][i],
                     "rl_extract_txt": rl_output.extract_txt[i],
                     "ref_extract_txt": ref_output.extract_txt[i],
                     "reward_label": rl_output.reward_labels[i],
@@ -810,6 +836,7 @@ def main() -> None:
         data=train_data,
         max_seq_length=args.max_seq_length,
         device="cpu",
+        eval_prompt=args.eval_prompt,
         desc="training",
     )
 
@@ -821,6 +848,7 @@ def main() -> None:
             data=eval_dataset,
             max_seq_length=args.max_seq_length,
             device="cpu",
+            eval_prompt=args.eval_prompt,
             desc="evaluation",
         )
 
