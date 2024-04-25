@@ -139,7 +139,7 @@ class Config:
     # Whether to rewrite the extraction output to natural language using a template
     rewrite: bool = False
     # Which prompt to use
-    eval_prompt: EvalPrompt = EvalPrompt.GOLD
+    eval_prompt: EvalPrompt = EvalPrompt.COMBINED
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
