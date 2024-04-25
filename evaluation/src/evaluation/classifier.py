@@ -11,7 +11,7 @@ from collections.abc import Mapping
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import simple_parsing
@@ -26,6 +26,7 @@ from transformers import (
     AutoConfig,
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    BatchEncoding,
     PreTrainedModel,
     PreTrainedTokenizer,
     get_scheduler,
@@ -485,6 +486,15 @@ def print_prompt_example(
         logger.warning(f"\n{example}")
 
 
+def get_max_seq_length(
+    model_inputs: BatchEncoding, tokenizer: PreTrainedTokenizer
+) -> int:
+    input_ids = model_inputs["input_ids"]
+    non_padding_tokens = cast(torch.Tensor, input_ids != tokenizer.pad_token_id)
+    actual_lengths = non_padding_tokens.sum(dim=1)
+    return int(actual_lengths.max().item())
+
+
 def preprocess_data(
     data: list[DataEntry],
     tokenizer: PreTrainedTokenizer,
@@ -508,6 +518,8 @@ def preprocess_data(
         max_length=max_seq_length,
         return_token_type_ids=True,
     )
+    logger.info(f"Max sequence length: {get_max_seq_length(model_inputs, tokenizer)}")
+
     if has_labels:
         labels = torch.tensor([int(d.valid) for d in data])
     else:
