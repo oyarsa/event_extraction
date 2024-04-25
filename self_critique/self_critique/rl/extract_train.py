@@ -456,10 +456,21 @@ def train_extract(
 
 @dataclass
 class Seq2SeqEntry:
+    """Entry in a Seq2Seq dataset.
+
+    Fields:
+        id: The unique identifier for this entry.
+        context: The input for this entry. E.g. original text for extraction or
+            question + passage for QA).
+        question: The question for this entry. E.g. for extraction, it's
+            "What are the events?"
+        answer: The gold answer for the entry.
+    """
+
     id: str
     context: str
     question: str
-    answers: str
+    answer: str
 
 
 def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEntry]:
@@ -481,7 +492,7 @@ def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEn
             id=d["id"],
             context=d["context"],
             question=d["question"],
-            answers=d["answers"],
+            answer=d["answers"],
         )
         for d in data
     ][:max_samples]
@@ -497,7 +508,7 @@ def preprocess_data(
 ) -> Dataset:
     desc = desc or ""
     source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
-    target_texts = [d.answers for d in data]
+    target_texts = [d.answer for d in data]
     eval_inputs = [eval_prompt.get_eval_input(d) for d in data]
 
     model_inputs = tokeniser(
@@ -529,7 +540,7 @@ class Seq2SeqDatasetEntry(TypedDict):
     attention_mask: torch.Tensor
     labels: torch.Tensor
     id: str
-    answers: str
+    answer: str
     context: str
     eval_inputs: str
 
@@ -539,7 +550,7 @@ class Seq2SeqDatasetSeries(TypedDict):
     attention_mask: torch.Tensor
     labels: torch.Tensor
     id: list[str]
-    answers: list[str]
+    answer: list[str]
     context: list[str]
     eval_inputs: list[str]
 
@@ -561,7 +572,7 @@ class Seq2SeqDataset(Dataset):
             "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
             "labels": self.target_tokens["input_ids"][idx].to(self.device),
             "id": self.data[idx].id,
-            "answers": self.data[idx].answers,
+            "answer": self.data[idx].answer,
             "context": self.data[idx].context,
             "eval_inputs": self.eval_inputs[idx],
         }
@@ -676,7 +687,7 @@ def evaluate(
             output.extend(
                 {
                     "id": batch["id"][i],
-                    "answers": batch["answers"][i],
+                    "answer": batch["answer"][i],
                     "context": batch["context"][i],
                     "eval_inputs": batch["eval_inputs"][i],
                     "rl_extract_txt": rl_output.extract_txt[i],
