@@ -1,3 +1,4 @@
+import subprocess
 from importlib import resources
 from pathlib import Path
 
@@ -27,3 +28,14 @@ def get_device() -> torch.device:
     else:
         device = "cpu"
     return torch.device(device)
+
+
+def get_current_commit_shorthash() -> str:
+    try:
+        return (
+            subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
+            .decode("utf-8")
+            .strip()
+        )
+    except subprocess.CalledProcessError:
+        return "unknown"
