@@ -1,11 +1,11 @@
 import logging
 import os
+import random
 import subprocess
 import sys
 import warnings
 from importlib import resources
 from pathlib import Path
-from random import random
 from typing import ClassVar
 
 import numpy as np

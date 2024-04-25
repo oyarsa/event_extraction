@@ -17,6 +17,7 @@ import copy
 import dataclasses
 import json
 import logging
+import os
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -28,6 +29,11 @@ from typing import Any, TypedDict, cast
 import simple_parsing
 import torch
 from torch.utils.data import DataLoader, Dataset, TensorDataset
+
+# Suppress TensorFlow warnings. This must be done before importing transformers.
+# Yes, it's an ugly hack, but it's necessary.
+# ruff: noqa: E402
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 from torch.utils.tensorboard.writer import SummaryWriter
 from tqdm import tqdm
 from transformers import (
@@ -206,7 +212,7 @@ def load_seq2seq_model(model_name: str, *, train: bool) -> Module:
 
 
 def text_decode(tokenizer: PreTrainedTokenizer, tensor: torch.Tensor) -> list[str]:
-    output = tokenizer.batch_decode(torch.tensor([r[1:] for r in tensor]))
+    output = tokenizer.batch_decode([r[1:] for r in tensor])
     return [clean_response(o) for o in output]
 
 
@@ -238,10 +244,7 @@ def run_reward(
     true_class: str,
 ) -> tuple[list[torch.FloatTensor], list[str]]:
     inputs = text_encode(reward.tokenizer, max_seq_length, sentence1, sentence2)
-    dataset = TensorDataset(
-        torch.tensor(inputs["input_ids"]),
-        torch.tensor(inputs["attention_mask"]),
-    )
+    dataset = TensorDataset(inputs["input_ids"], inputs["attention_mask"])
     loader = DataLoader(dataset, batch_size=batch_size)
 
     scores: list[torch.FloatTensor] = []
@@ -352,9 +355,7 @@ def train_extract(
                 penalty_alpha=args.degeneration_penalty,
                 top_k=args.contrastive_top_k,
             )
-            extract_response = text_decode(
-                extract.tokenizer, torch.tensor(response_tensors)
-            )
+            extract_response = text_decode(extract.tokenizer, response_tensors)
             if rewrite:
                 extract_response = [rewrite_extraction(x) for x in extract_response]
 
@@ -615,7 +616,7 @@ def generate_and_reward(
         penalty_alpha=args.degeneration_penalty,
         top_k=args.contrastive_top_k,
     )
-    extract_response_txt = text_decode(tokenizer, torch.tensor(extract_response_tensor))
+    extract_response_txt = text_decode(tokenizer, extract_response_tensor)
     if rewrite:
         extract_response_txt_rw = [rewrite_extraction(s) for s in extract_response_txt]
     else:
