@@ -45,7 +45,7 @@ logger = logging.getLogger("classifier")
 class Prompt(Enum):
     PASSAGE = "passage"
     GOLD = "gold"
-    COMBINED = "both"
+    COMBINED = "combined"
     INSTRUCTIONS = "instructions"
 
 
@@ -77,7 +77,7 @@ class Config:
     # ISO timestamp.
     output_name: str | None = None
     # Which prompt to use
-    prompt: Prompt = Prompt.PASSAGE
+    prompt: Prompt = Prompt.COMBINED
     # Do train
     do_train: bool = True
     # Do test
@@ -440,7 +440,7 @@ def get_prompt(prompt: Prompt, data: list[DataEntry]) -> list[str]:
         case Prompt.GOLD:
             return [d.gold for d in data]
         case Prompt.COMBINED:
-            return [f"Input:\n{d.input}\n\nReference answer:\n{d.gold}" for d in data]
+            return [f"{d.input}\n{d.gold}" for d in data]
         case Prompt.INSTRUCTIONS:
             return [
                 f"""\
@@ -457,9 +457,9 @@ Reference answer:
 
 def get_answer(prompt: Prompt, data: list[DataEntry]) -> list[str]:
     match prompt:
-        case Prompt.PASSAGE | Prompt.GOLD:
+        case Prompt.PASSAGE | Prompt.GOLD | Prompt.COMBINED:
             return [d.output for d in data]
-        case Prompt.COMBINED | Prompt.INSTRUCTIONS:
+        case Prompt.INSTRUCTIONS:
             return [f"Candidate answer:\n{d.output}" for d in data]
 
 
