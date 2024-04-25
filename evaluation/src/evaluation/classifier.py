@@ -22,15 +22,6 @@ from torch.optim import AdamW
 from torch.optim.lr_scheduler import LRScheduler
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
-from transformers import (
-    AutoConfig,
-    AutoModelForSequenceClassification,
-    AutoTokenizer,
-    BatchEncoding,
-    PreTrainedModel,
-    PreTrainedTokenizer,
-    get_scheduler,
-)
 
 from evaluation import log
 from evaluation.metrics import (
@@ -38,6 +29,19 @@ from evaluation.metrics import (
     calc_metrics,
     report_gpu_memory,
     report_metrics,
+)
+
+# Suppress TensorFlow warnings. This must be done before importing transformers.
+# Yes, it's an ugly hack, but it's necessary.
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+from transformers import (  # noqa: E402
+    AutoConfig,
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    BatchEncoding,
+    PreTrainedModel,
+    PreTrainedTokenizer,
+    get_scheduler,
 )
 
 logger = logging.getLogger("classifier")
