@@ -14,7 +14,6 @@ import torch
 import torch.backends.mps
 from tqdm import tqdm
 
-from self_critique.minimal.util import set_seed, suppress_transformers_warnings
 from self_critique.rl.extract_train import (
     Module,
     get_labelling,
@@ -25,6 +24,7 @@ from self_critique.rl.extract_train import (
     save_results,
     setup_logger,
 )
+from self_critique.util import set_seed, suppress_transformers_warnings
 
 logger = logging.getLogger("self.reward")
 

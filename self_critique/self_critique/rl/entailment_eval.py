@@ -13,7 +13,6 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
-from self_critique.minimal.util import set_seed, suppress_transformers_warnings
 from self_critique.rl.extract_train import (
     LABELLER,
     Module,
@@ -24,6 +23,7 @@ from self_critique.rl.extract_train import (
     text_decode,
     text_encode,
 )
+from self_critique.util import set_seed, suppress_transformers_warnings
 
 
 @dataclass

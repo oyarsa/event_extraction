@@ -15,8 +15,7 @@ from transformers import PreTrainedModel, PreTrainedTokenizer
 from transformers.modeling_outputs import Seq2SeqLMOutput
 
 import self_critique.rl.extract_train as ex
-from self_critique.minimal.util import set_seed, suppress_transformers_warnings
-from self_critique.util import get_device
+from self_critique.util import get_device, set_seed, suppress_transformers_warnings
 
 logger = logging.getLogger("self.ensemble")
 

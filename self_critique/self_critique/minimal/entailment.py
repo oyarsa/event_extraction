@@ -22,13 +22,20 @@ from transformers import (
 )
 
 from self_critique.minimal.config import Config
-from self_critique.minimal.util import (
+from self_critique.util import (
     log_metrics,
     save_model,
     set_seed,
-    setup_logging,
     suppress_transformers_warnings,
 )
+
+
+def setup_logging(log_level: str) -> None:
+    logging.basicConfig(
+        level=logging.getLevelName(log_level.upper()),
+        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
 
 @dataclass

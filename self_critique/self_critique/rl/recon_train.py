@@ -39,11 +39,7 @@ from trl import (
     create_reference_model,
 )
 
-from self_critique.minimal.util import (
-    save_model,
-    set_seed,
-    suppress_transformers_warnings,
-)
+from self_critique.util import save_model, set_seed, suppress_transformers_warnings
 
 
 @dataclass

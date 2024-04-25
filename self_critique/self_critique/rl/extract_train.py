@@ -17,7 +17,6 @@ import copy
 import dataclasses
 import json
 import logging
-import sys
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -48,11 +47,14 @@ from trl import (
 )
 from trl.models.modeling_base import PreTrainedModelWrapper
 
-import self_critique.util
 from self_critique.metric.fgcr_metric_cls import parse_instance
-from self_critique.minimal.util import (
+from self_critique.util import (
+    get_current_commit_shorthash,
+    get_device,
+    resolve_path,
     save_model,
     set_seed,
+    setup_logger,
     suppress_transformers_warnings,
 )
 
@@ -310,6 +312,7 @@ def train_extract(
     best_ratio = 0.0
 
     device = ppo_trainer.accelerator.device
+    logger.info(f"Training on {device}")
     reward = reward.to(device)
     tb_writer = SummaryWriter(log_dir=output_dir / "tb")
 
@@ -733,7 +736,7 @@ def resolve(path_or_name: str | Path) -> str:
     """Resolve the path to from the project root. If it exists, return it,
     otherwise return the original path.
     """
-    resolved = self_critique.util.resolve_path(path_or_name)
+    resolved = resolve_path(path_or_name)
     if Path(resolved).exists():
         return str(resolved)
     return str(path_or_name)
@@ -747,18 +750,6 @@ def resolve_arg_paths(args: Config) -> Config:
         train_file=Path(resolve(args.train_file)),
         eval_file=Path(resolve(args.eval_file)) if args.eval_file else None,
         output_dir=Path(resolve(args.output_dir)),
-    )
-
-
-def setup_logger(output_dir: Path) -> None:
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        handlers=[
-            logging.FileHandler(output_dir / "train.log"),
-            logging.StreamHandler(sys.stdout),
-        ],
     )
 
 
@@ -820,9 +811,9 @@ def main() -> None:
     run_name = args.run_name or datetime.now().isoformat()
     output_dir = args.output_dir / run_name
     output_dir.mkdir(exist_ok=True, parents=True)
-    setup_logger(output_dir)
+    setup_logger(logger, output_dir)
 
-    git_commit = self_critique.util.get_current_commit_shorthash()
+    git_commit = get_current_commit_shorthash()
     logger.info(f"\n{args}")
     logger.info(f"output files: {output_dir}")
     logger.info(f"git commit: {git_commit}")
@@ -886,7 +877,7 @@ def main() -> None:
         save_model(extract.model, extract.tokenizer, output_dir)
 
     if eval_dataset is not None and args.do_eval:
-        device = device or self_critique.util.get_device()
+        device = device or get_device()
         eval_result = evaluate(
             dataset=eval_dataset,
             extract=extract.to(device),

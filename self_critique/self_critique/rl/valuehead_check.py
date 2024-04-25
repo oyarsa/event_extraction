@@ -55,8 +55,7 @@ from trl import (
     create_reference_model,
 )
 
-import self_critique.util
-from self_critique.minimal.util import set_seed, suppress_transformers_warnings
+from self_critique.util import resolve_path, set_seed, suppress_transformers_warnings
 
 logger = logging.getLogger("extract_train")
 
@@ -652,7 +651,7 @@ def resolve(path_or_name: str | Path) -> str:
     """Resolve the path to from the project root. If it exists, return it,
     otherwise return the original path.
     """
-    resolved = self_critique.util.resolve_path(path_or_name)
+    resolved = resolve_path(path_or_name)
     if Path(resolved).exists():
         return str(resolved)
     return str(path_or_name)
