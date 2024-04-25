@@ -722,11 +722,10 @@ def main() -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
 
     setup_logger(output_dir)
-    logger.info(f"\n{config}")
-    logger.info(f"Output directory: {output_dir.resolve()}\n")
-
     git_commit = log.get_current_commit_shorthash()
-    logger.info(f"Git commit: {git_commit}")
+    logger.info(f"\n{config}")
+    logger.info(f"Output directory: {output_dir.resolve()}")
+    logger.info(f"Git commit: {git_commit}\n")
 
     (output_dir / "args.json").write_text(
         json.dumps(
