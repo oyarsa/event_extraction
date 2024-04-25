@@ -516,7 +516,6 @@ def preprocess_data(
 ) -> Dataset:
     desc = desc or ""
     source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
-    target_texts = [d.answer for d in data]
     eval_inputs = [eval_prompt.get_eval_input(d) for d in data]
 
     model_inputs = tokeniser(
@@ -526,17 +525,9 @@ def preprocess_data(
         truncation=True,
         max_length=max_seq_length,
     )
-    labels = tokeniser(
-        text_target=target_texts,
-        padding="max_length",
-        return_tensors="pt",
-        max_length=max_seq_length,
-        truncation=True,
-    )
 
     return Seq2SeqDataset(
         input_tokens=model_inputs,
-        target_tokens=labels,
         data=data,
         eval_inputs=eval_inputs,
         device=device,
@@ -546,7 +537,6 @@ def preprocess_data(
 class Seq2SeqDatasetEntry(TypedDict):
     input_ids: torch.Tensor
     attention_mask: torch.Tensor
-    labels: torch.Tensor
     id: str
     answer: str
     context: str
@@ -556,7 +546,6 @@ class Seq2SeqDatasetEntry(TypedDict):
 class Seq2SeqDatasetSeries(TypedDict):
     input_ids: torch.Tensor
     attention_mask: torch.Tensor
-    labels: torch.Tensor
     id: list[str]
     answer: list[str]
     context: list[str]
@@ -566,7 +555,6 @@ class Seq2SeqDatasetSeries(TypedDict):
 @dataclass
 class Seq2SeqDataset(Dataset):
     input_tokens: Mapping[str, torch.Tensor]
-    target_tokens: Mapping[str, torch.Tensor]
     data: list[Seq2SeqEntry]
     eval_inputs: list[str]
     device: str | torch.device
@@ -578,7 +566,6 @@ class Seq2SeqDataset(Dataset):
         return {
             "input_ids": self.input_tokens["input_ids"][idx].to(self.device),
             "attention_mask": self.input_tokens["attention_mask"][idx].to(self.device),
-            "labels": self.target_tokens["input_ids"][idx].to(self.device),
             "id": self.data[idx].id,
             "answer": self.data[idx].answer,
             "context": self.data[idx].context,
