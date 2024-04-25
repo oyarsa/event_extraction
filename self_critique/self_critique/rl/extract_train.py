@@ -23,7 +23,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import Any, TypedDict, cast
 
 import simple_parsing
 import torch
@@ -45,6 +45,7 @@ from trl import (
     PPOTrainer,
     create_reference_model,
 )
+from trl.models.modeling_base import PreTrainedModelWrapper
 
 import self_critique.util
 from self_critique.metric.fgcr_metric_cls import parse_instance
@@ -140,11 +141,14 @@ def data_collator(data: Sequence[Mapping[str, Any]]) -> dict[str, list[Any]]:
 
 @dataclass
 class Module:
-    model: PreTrainedModel
+    model: PreTrainedModelWrapper
     tokenizer: PreTrainedTokenizer
 
     def to(self, device: torch.device) -> "Module":
-        return Module(self.model.to(device), self.tokenizer)
+        return Module(
+            self.model.to(device),
+            self.tokenizer,
+        )
 
 
 def load_reward_model(
@@ -182,7 +186,7 @@ def load_seq2seq_model(model_name: str, *, train: bool) -> Module:
 
 
 def text_decode(tokenizer: PreTrainedTokenizer, tensor: torch.Tensor) -> list[str]:
-    output = tokenizer.batch_decode([r[1:] for r in tensor])
+    output = tokenizer.batch_decode(torch.tensor([r[1:] for r in tensor]))
     return [clean_response(o) for o in output]
 
 
@@ -214,7 +218,10 @@ def run_reward(
     true_class: str,
 ) -> tuple[list[torch.FloatTensor], list[str]]:
     inputs = text_encode(reward.tokenizer, max_seq_length, sentence1, sentence2)
-    dataset = TensorDataset(inputs["input_ids"], inputs["attention_mask"])
+    dataset = TensorDataset(
+        torch.tensor(inputs["input_ids"]),
+        torch.tensor(inputs["attention_mask"]),
+    )
     loader = DataLoader(dataset, batch_size=batch_size)
 
     scores: list[torch.FloatTensor] = []
@@ -274,11 +281,12 @@ def train_extract(
     ppo_trainer = PPOTrainer(
         config=ppo_config,
         model=extract.model,
-        ref_model=extract_ref,
+        ref_model=cast(PreTrainedModelWrapper, extract_ref),
         tokenizer=extract.tokenizer,
         dataset=train_dataset,
         data_collator=data_collator,
     )
+    assert ppo_trainer.dataloader, "Error initialising PPOTrainer dataloader."
 
     best_model = copy.deepcopy(ppo_trainer.model)
     best_ratio = 0.0
@@ -323,7 +331,9 @@ def train_extract(
                 penalty_alpha=args.degeneration_penalty,
                 top_k=args.contrastive_top_k,
             )
-            extract_response = text_decode(extract.tokenizer, response_tensors)
+            extract_response = text_decode(
+                extract.tokenizer, torch.tensor(response_tensors)
+            )
             if rewrite:
                 extract_response = [rewrite_extraction(x) for x in extract_response]
 
@@ -566,7 +576,7 @@ def generate_and_reward(
         penalty_alpha=args.degeneration_penalty,
         top_k=args.contrastive_top_k,
     )
-    extract_response_txt = text_decode(tokenizer, extract_response_tensor)
+    extract_response_txt = text_decode(tokenizer, torch.tensor(extract_response_tensor))
     if rewrite:
         extract_response_txt_rw = [rewrite_extraction(s) for s in extract_response_txt]
     else:
@@ -611,7 +621,7 @@ def evaluate(
             original_sentence = batch["context"]
 
             rl_output = generate_and_reward(
-                extract.model,
+                cast(PreTrainedModel, extract.model),
                 inputs,
                 original_sentence,
                 args,
@@ -791,7 +801,7 @@ def main() -> None:
         raise ValueError("Must provide a training file")
 
     extract = load_seq2seq_valuehead_model(args.extraction_model, train=True)
-    extract_ref = create_reference_model(extract.model)
+    extract_ref = create_reference_model(cast(PreTrainedModelWrapper, extract.model))
     reward = load_reward_model(args.reward_model, label2id=label2id, id2label=id2label)
 
     train_data = load_data(args.train_file, args.max_train_samples)
@@ -818,7 +828,7 @@ def main() -> None:
     if args.do_train:
         extract, device = train_extract(
             extract=extract,
-            extract_ref=extract_ref,
+            extract_ref=cast(PreTrainedModel, extract_ref),
             reward=reward,
             train_dataset=train_dataset,
             args=args,
@@ -838,7 +848,7 @@ def main() -> None:
             dataset=eval_dataset,
             extract=extract.to(device),
             reward=reward.to(device),
-            extract_ref=extract_ref.to(device),
+            extract_ref=cast(PreTrainedModel, extract_ref.to(device)),
             args=args,
             label2id=label2id,
             id2label=id2label,

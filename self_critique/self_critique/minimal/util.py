@@ -8,7 +8,8 @@ from pathlib import Path
 import numpy as np
 import torch
 import transformers
-from transformers import PreTrainedModel, PreTrainedTokenizer
+from transformers import PreTrainedTokenizer
+from trl.models.modeling_base import PreTrainedModelWrapper
 
 
 def setup_logging(log_level: str) -> None:
@@ -44,7 +45,7 @@ def set_seed(seed: int) -> None:
 
 
 def save_model(
-    model: PreTrainedModel, tokeniser: PreTrainedTokenizer, output_dir: Path
+    model: PreTrainedModelWrapper, tokeniser: PreTrainedTokenizer, output_dir: Path
 ) -> None:
     model.config.save_pretrained(output_dir)
     model.save_pretrained(output_dir)
