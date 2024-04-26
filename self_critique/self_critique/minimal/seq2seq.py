@@ -59,7 +59,16 @@ def load_data(file_path: Path) -> list[Seq2SeqEntry]:
     data = json.loads(file_path.read_text())
     if "data" in data:
         data = data["data"]
-    return [Seq2SeqEntry(**d) for d in data]
+    return [
+        Seq2SeqEntry(
+            id=d["id"],
+            context=d["context"],
+            question=d["question"],
+            answers=d["answers"],
+            question_type=d["question_type"],
+        )
+        for d in data
+    ]
 
 
 def preprocess_data(
