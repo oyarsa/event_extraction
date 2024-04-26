@@ -427,6 +427,8 @@ def infer(
 def load_model(
     model_name_or_path: str | Path, max_seq_length: int, device: str
 ) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
+    if isinstance(model_name_or_path, Path):
+        model_name_or_path = model_name_or_path.resolve()
     logger.info("Loading model from %s", model_name_or_path)
 
     model_config = AutoConfig.from_pretrained(model_name_or_path)
