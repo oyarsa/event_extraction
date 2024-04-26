@@ -14,5 +14,10 @@
     "test_file": "../data/genqa_joint/test.json",
     "max_train_samples": null,
     "max_eval_samples": null,
-    "max_predict_samples": null
+    "max_predict_samples": null,
+	"generation_top_k": null,
+	"generation_top_p": null,
+	"degeneration_penalty": null,
+	"generation_do_sample": false,
+	"add_question": true
 }
