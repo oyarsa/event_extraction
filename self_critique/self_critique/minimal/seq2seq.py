@@ -182,7 +182,6 @@ def eval(
     tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
     config: Seq2SeqConfig,
-    generation_kwargs: dict[str, Any],
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -196,24 +195,25 @@ def eval(
     all_data: list[Seq2SeqDatasetSeries] = []
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
-            outputs = model(
-                input_ids=inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-                labels=inputs["labels"],
-            )
+            logits = model(inputs["input_ids"], labels=inputs["labels"]).logits
 
             # CrossEntropy wants [batch * seq_len, num_classes] and [batch * seq_len]
             loss = criterion(
                 # [batch, seq_len, vocab_size] -> [batch * seq_len, vocab_size]
-                outputs.logits.reshape(-1, outputs.logits.size(-1)),
+                logits.reshape(-1, logits.size(-1)),
                 # [batch, seq_len] -> [batch * seq_len]
                 inputs["labels"].reshape(-1),
             )
             total_loss += loss.item()
 
-            predicted_ids = model.generate(inputs["input_ids"], **generation_kwargs)
+            # Greedy decoding (highest probability token at each step).
+            # This is NOT using the same parameters as the generation_kwargs,
+            # which is used for `generate()` during inference (see `infer` function).
+            # The reason is performance; `generate()` takes forever, so it slows down
+            # training significantly.
+            prediction_ids = torch.argmax(logits, dim=-1)
 
-            all_predictions.extend(predicted_ids)
+            all_predictions.extend(prediction_ids)
             all_data.append(inputs)
 
             num_batches += 1
@@ -250,7 +250,6 @@ def train(
     train_data: list[Seq2SeqEntry],
     eval_data: list[Seq2SeqEntry] | None,
     config: Seq2SeqConfig,
-    generation_kwargs: dict[str, Any],
 ) -> PreTrainedModel:
     train_data = train_data[: config.max_train_samples]
     train_loader = preprocess_data(
@@ -322,7 +321,6 @@ def train(
                 tokeniser,
                 eval_loader,
                 config,
-                generation_kwargs,
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logger.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
@@ -508,9 +506,7 @@ def main() -> None:
     if config.do_train:
         if train_data is None:
             raise ValueError("train_file must be specified when training")
-        model = train(
-            model, tokeniser, train_data, eval_data, config, generation_kwargs
-        )
+        model = train(model, tokeniser, train_data, eval_data, config)
         if config.load_best_model_at_end:
             logger.info("Loading best model from %s", config.output_dir.resolve())
             model, tokeniser = load_model(
