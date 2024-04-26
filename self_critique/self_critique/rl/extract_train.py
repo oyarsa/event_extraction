@@ -608,16 +608,14 @@ def generate_and_reward(
     extract_response_tensor = extract_model.generate(inputs, **generation_kwargs)
     extract_response_txt = text_decode(tokenizer, extract_response_tensor)
     if rewrite:
-        extract_response_txt_rw = [rewrite_extraction(s) for s in extract_response_txt]
-    else:
-        extract_response_txt_rw = extract_response_txt
+        extract_response_txt = [rewrite_extraction(s) for s in extract_response_txt]
 
     scores, reward_labels = run_reward(
         reward=reward,
         max_seq_length=args.max_reward_seq_length,
         batch_size=args.batch_size,
         sentence1=original_sentence,
-        sentence2=extract_response_txt_rw,
+        sentence2=extract_response_txt,
         device=device,
         true_class=true_class,
         label2id=label2id,
