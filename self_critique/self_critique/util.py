@@ -15,14 +15,16 @@ import warnings
 from collections.abc import Callable, Generator
 from importlib import resources
 from pathlib import Path
-from typing import Any, ClassVar, cast
+from typing import TYPE_CHECKING, Any, ClassVar, cast
 
 import numpy as np
 import torch
 import torch.backends.mps
 import transformers
 from transformers import PreTrainedTokenizer
-from trl.models.modeling_base import PreTrainedModelWrapper
+
+if TYPE_CHECKING:
+    from trl.models.modeling_base import PreTrainedModelWrapper
 
 
 def get_root(module: str) -> str:
@@ -101,7 +103,7 @@ def setup_logger(
 
 
 def save_model(
-    model: PreTrainedModelWrapper, tokeniser: PreTrainedTokenizer, output_dir: Path
+    model: "PreTrainedModelWrapper", tokeniser: PreTrainedTokenizer, output_dir: Path
 ) -> None:
     model.config.save_pretrained(output_dir)
     model.save_pretrained(output_dir)
