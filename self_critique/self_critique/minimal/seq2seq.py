@@ -1,4 +1,5 @@
 # pyright: basic
+import dataclasses
 import json
 import logging
 import os
@@ -26,6 +27,7 @@ from transformers import (
 from self_critique import metric
 from self_critique.minimal.config import Config
 from self_critique.util import (
+    get_current_commit_shorthash,
     log_metrics,
     report_gpu_memory,
     save_model,
@@ -457,10 +459,21 @@ def main() -> None:
     set_seed(config.seed)
     suppress_transformers_warnings()
 
-    setup_logging(config.log_level)
-    logger.info(str(config))
-
     config.output_dir.mkdir(exist_ok=True, parents=True)
+    setup_logging(config.log_level)
+
+    git_commit = get_current_commit_shorthash()
+    logger.info(f"\n{config}")
+    logger.info(f"output files: {config.output_dir}")
+    logger.info(f"git commit: {git_commit}")
+
+    (config.output_dir / "args.json").write_text(
+        json.dumps(
+            dataclasses.asdict(config) | {"git_commit": git_commit},
+            default=str,
+            indent=2,
+        )
+    )
 
     model, tokeniser = load_model(
         config.model_name_or_path, config.max_seq_length, config.device
