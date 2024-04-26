@@ -23,6 +23,7 @@ from self_critique import metric
 from self_critique.minimal.config import Config
 from self_critique.util import (
     log_metrics,
+    report_gpu_memory,
     save_model,
     set_seed,
     suppress_transformers_warnings,
@@ -492,4 +493,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    report_gpu_memory(main, logger)
