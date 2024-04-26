@@ -1,5 +1,5 @@
 {
-    "model_name_or_path": "google-t5/t5-large",
+    "model_name_or_path": "google/flan-t5-large",
     "do_train": true,
     "do_eval": true,
     "do_predict": true,
