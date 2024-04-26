@@ -515,7 +515,7 @@ def preprocess_data(
     desc: str | None = None,
 ) -> Dataset:
     desc = desc or ""
-    source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
+    source_texts = [d.context.strip() for d in data]
     eval_inputs = [eval_prompt.get_eval_input(d) for d in data]
 
     model_inputs = tokeniser(
