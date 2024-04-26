@@ -358,11 +358,8 @@ def calculate_metrics(
         for entry, out in zip(data, output)
     ]
 
-    if mode == "reconstruct":
-        return metric.ReconstructMetric()._compute(
-            predictions=predictions, references=references
-        )
-    return metric.FGCRCls()._compute(predictions=predictions, references=references)
+    metric_cls = metric.FGCRCls if mode == "extract" else metric.ReconstructMetric
+    return metric_cls()._compute(predictions=predictions, references=references)
 
 
 @dataclass
