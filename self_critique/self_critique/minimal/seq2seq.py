@@ -97,7 +97,11 @@ def preprocess_data(
 ) -> DataLoader:
     desc = desc or ""
     logger.info(f"Preprocessing {desc} data")
-    source_texts = [d.context.strip() for d in data]
+
+    if config.add_question:
+        source_texts = [f"{d.question}\n{d.context.lstrip()}" for d in data]
+    else:
+        source_texts = [d.context.strip() for d in data]
     target_texts = [d.answers for d in data]
 
     model_inputs = tokeniser(
