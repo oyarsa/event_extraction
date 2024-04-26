@@ -1,7 +1,6 @@
 # pyright: basic
 import json
 import logging
-import sys
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
@@ -436,14 +435,12 @@ def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
 def main() -> None:
     config = simple_parsing.parse(Seq2SeqConfig, add_config_path_arg=True)
     if config.mode not in ["reconstruct", "extract"]:
-        print(f"Invalid mode: {config.mode}")
-        sys.exit(1)
+        raise SystemExit(f"Invalid mode: {config.mode}")
 
     set_seed(config.seed)
+    suppress_transformers_warnings()
 
     setup_logging(config.log_level)
-
-    suppress_transformers_warnings()
     logger.info(str(config))
 
     config.output_dir.mkdir(exist_ok=True, parents=True)
