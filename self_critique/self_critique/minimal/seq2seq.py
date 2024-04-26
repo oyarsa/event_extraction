@@ -1,6 +1,7 @@
 # pyright: basic
 import json
 import logging
+import os
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
@@ -10,6 +11,9 @@ import simple_parsing
 import torch
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+# ruff: noqa: E402
 from transformers import (
     AutoConfig,
     AutoModelForSeq2SeqLM,
