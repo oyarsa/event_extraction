@@ -11,7 +11,7 @@
 	"max_input_seq_length": 160,
 	"max_reward_seq_length": 400,
 	"mini_batch_size": 8,
-	"batch_size": 16,
+	"batch_size": 8,
 	"kl_penalty": "mse",
 	"adaptive_kl_ctrl": true,
 	"init_kl_coef": 0.2,
