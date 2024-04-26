@@ -5,7 +5,7 @@
 	"train_file": "../data/genqa_joint/train.json",
 	"eval_file": "../data/genqa_joint/dev.json",
 	"reward_model": "../evaluation/output/classifier/fcr-deberta-v3-xsmall-combined",
-	"extraction_model": "output/t5-base-extract",
+	"extraction_model": "output/t5-large-extract",
 	"output_dir": "output/rl",
 	"max_generation_length": 200,
 	"max_input_seq_length": 160,
