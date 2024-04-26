@@ -338,19 +338,23 @@ def calculate_metrics(
     output: list[str],
     mode: str,
 ) -> dict[str, float]:
-    references: list[metric.MetricReference] = [
-        {
-            "id": entry["id"],
-            "answers": entry["answers"],
-            "question_type": entry["question_type"],
-        }
+    references = [
+        metric.MetricReference(
+            {
+                "id": entry["id"],
+                "answers": entry["answers"],
+                "question_type": entry["question_type"],
+            }
+        )
         for entry in data
     ]
-    predictions: list[metric.MetricPrediction] = [
-        {
-            "id": entry["id"],
-            "prediction_text": out,
-        }
+    predictions = [
+        metric.MetricPrediction(
+            {
+                "id": entry["id"],
+                "prediction_text": out,
+            }
+        )
         for entry, out in zip(data, output)
     ]
 
