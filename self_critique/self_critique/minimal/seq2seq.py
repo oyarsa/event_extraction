@@ -80,8 +80,8 @@ def preprocess_data(
     desc: str | None = None,
 ) -> DataLoader:
     desc = desc or ""
-    source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
     logger.info(f"Preprocessing {desc} data")
+    source_texts = [d.context.strip() for d in data]
     target_texts = [d.answers for d in data]
 
     model_inputs = tokeniser(
