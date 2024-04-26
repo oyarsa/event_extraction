@@ -222,8 +222,8 @@ def collect_model_data(
     model_data: list[Seq2SeqDatasetEntry] = []
     for d in all_data:
         for i in range(len(d["id"])):
-            entry = {k: d[k][i] for k in d}  # type: ignore[literal-required]
-            model_data.append(Seq2SeqDatasetEntry(**entry))  # type: ignore[misc]
+            entry = {k: d[k][i] for k in d}
+            model_data.append(Seq2SeqDatasetEntry(**entry))
     return model_data
 
 
