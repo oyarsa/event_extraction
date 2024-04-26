@@ -51,13 +51,15 @@ class Seq2SeqConfig(Config):
     # Seq2Seq mode: 'extract' or 'reconstruct. Changes the loss function and metrics.
     mode: str = "extract"
     # Generation top-k used for reranking
-    generation_top_k: int = 5
+    generation_top_k: int | None = None
     # Generation top-p used for selecting tokens
-    generation_top_p: float = 1.0
+    generation_top_p: float | None = None
     # Contrastive degeneration penalty (alphe)
-    degeneration_penalty: float = 0.5
+    degeneration_penalty: float | None = None
     # Whether to sample during generation
     generation_do_sample: bool = False
+    # Whether to add the question to the prompt
+    add_question: bool = False
 
 
 @dataclass
