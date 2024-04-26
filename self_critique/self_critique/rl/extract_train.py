@@ -120,10 +120,14 @@ class Config:
     run_name: str | None = None
     # Path to evaluation data
     eval_file: Path | None = None
-    # Contrastive top-k used for reranking
-    contrastive_top_k: int = 5
+    # Generation top-k used for reranking
+    generation_top_k: int = 5
     # Contrastive degeneration penalty (alphe)
     degeneration_penalty: float = 0.5
+    # Generation top-p used for selecting tokens
+    generation_top_p: float = 1.0
+    # Whether to sample during generation
+    generation_do_sample: bool = False
     # KL penalty options:
     #    `kl`: model_logp - ref_logp
     #    `abs`: abs(kl)
@@ -293,7 +297,8 @@ def train_extract(
     label2id: dict[str, int],
     id2label: dict[int, str],
     rewrite: bool,
-) -> tuple[Module, torch.device]:
+    generation_kwargs: dict[str, Any],
+) -> tuple[Module, torch.device]:  # sourcery skip: low-code-quality
     ppo_config = PPOConfig(
         model_name=args.extraction_model,
         learning_rate=args.learning_rate,
@@ -336,6 +341,7 @@ def train_extract(
             label2id=label2id,
             id2label=id2label,
             rewrite=rewrite,
+            generation_kwargs=generation_kwargs,
             desc="Eval (-1)",
         )
         save_results(
@@ -353,12 +359,7 @@ def train_extract(
             query_tensors = batch["input_ids"]
 
             # Contrastive generation
-            response_tensors = ppo_trainer.generate(
-                query_tensors,
-                max_length=args.max_generation_length,
-                penalty_alpha=args.degeneration_penalty,
-                top_k=args.contrastive_top_k,
-            )
+            response_tensors = ppo_trainer.generate(query_tensors, **generation_kwargs)
             extract_response = text_decode(extract.tokenizer, response_tensors)
             if rewrite:
                 extract_response = [rewrite_extraction(x) for x in extract_response]
@@ -386,7 +387,7 @@ def train_extract(
             }
             ppo_trainer.log_stats(stats, log_batch, rewards)
 
-            if eval_dataset is not None and batch_idx % eval_batches == 0:
+            if eval_dataset is not None and (batch_idx + 1) % eval_batches == 0:
                 eval_result = evaluate(
                     dataset=eval_dataset,
                     extract=extract,
@@ -398,6 +399,7 @@ def train_extract(
                     label2id=label2id,
                     id2label=id2label,
                     rewrite=rewrite,
+                    generation_kwargs=generation_kwargs,
                     desc=f"Eval  ({epoch}.{batch_idx+1})",
                 )
                 save_results(
@@ -447,6 +449,7 @@ def train_extract(
                 label2id=label2id,
                 id2label=id2label,
                 rewrite=rewrite,
+                generation_kwargs=generation_kwargs,
                 desc=f"Eval  ({epoch})",
             )
             save_results(
@@ -599,14 +602,10 @@ def generate_and_reward(
     label2id: dict[str, int],
     id2label: dict[int, str],
     rewrite: bool,
+    generation_kwargs: dict[str, Any],
 ) -> BlockOutput:
     # Contrastive generation
-    extract_response_tensor = extract_model.generate(
-        inputs,
-        max_length=args.max_generation_length,
-        penalty_alpha=args.degeneration_penalty,
-        top_k=args.contrastive_top_k,
-    )
+    extract_response_tensor = extract_model.generate(inputs, **generation_kwargs)
     extract_response_txt = text_decode(tokenizer, extract_response_tensor)
     if rewrite:
         extract_response_txt_rw = [rewrite_extraction(s) for s in extract_response_txt]
@@ -639,6 +638,7 @@ def evaluate(
     label2id: dict[str, int],
     id2label: dict[int, str],
     rewrite: bool,
+    generation_kwargs: dict[str, Any],
     desc: str | None = None,
 ) -> list[dict[str, Any]]:
     desc = desc or "Evaluate"
@@ -663,6 +663,7 @@ def evaluate(
                 label2id,
                 id2label,
                 rewrite,
+                generation_kwargs,
             )
             ref_output = generate_and_reward(
                 extract_ref,
@@ -676,6 +677,7 @@ def evaluate(
                 label2id,
                 id2label,
                 rewrite,
+                generation_kwargs,
             )
 
             assert len(rl_output.reward_labels) == len(inputs)
@@ -862,6 +864,14 @@ def main() -> None:
             desc="evaluation",
         )
 
+    generation_kwargs = {
+        "max_length": args.max_generation_length,
+        "penalty_alpha": args.degeneration_penalty,
+        "top_k": args.generation_top_k,
+        "top_p": args.generation_top_p,
+        "do_sample": args.generation_do_sample,
+    }
+
     device: torch.device | None = None
     if args.do_train:
         extract, device = train_extract(
@@ -877,6 +887,7 @@ def main() -> None:
             label2id=label2id,
             id2label=id2label,
             rewrite=args.rewrite,
+            generation_kwargs=generation_kwargs,
         )
         save_model(extract.model, extract.tokenizer, output_dir)
 
@@ -893,6 +904,7 @@ def main() -> None:
             true_class=true_class,
             device=device,
             rewrite=args.rewrite,
+            generation_kwargs=generation_kwargs,
         )
         save_results(result=eval_result, dir=output_dir, file_name="eval_result.json")
 

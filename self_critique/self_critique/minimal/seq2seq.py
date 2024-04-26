@@ -6,7 +6,7 @@ import os
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TypedDict
+from typing import Any, TypedDict
 
 import simple_parsing
 import torch
@@ -50,6 +50,14 @@ def setup_logging(log_level: str) -> None:
 class Seq2SeqConfig(Config):
     # Seq2Seq mode: 'extract' or 'reconstruct. Changes the loss function and metrics.
     mode: str = "extract"
+    # Generation top-k used for reranking
+    generation_top_k: int = 5
+    # Generation top-p used for selecting tokens
+    generation_top_p: float = 1.0
+    # Contrastive degeneration penalty (alphe)
+    degeneration_penalty: float = 0.5
+    # Whether to sample during generation
+    generation_do_sample: bool = False
 
 
 @dataclass
@@ -168,6 +176,7 @@ def eval(
     tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
     config: Seq2SeqConfig,
+    generation_kwargs: dict[str, Any],
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -196,11 +205,7 @@ def eval(
             )
             total_loss += loss.item()
 
-            predicted_ids = model.generate(
-                inputs["input_ids"],
-                num_beams=config.generation_num_beams or model.config.num_beams,
-                max_length=config.max_seq_length,
-            )
+            predicted_ids = model.generate(inputs["input_ids"], **generation_kwargs)
 
             all_predictions.extend(predicted_ids)
             all_data.append(inputs)
@@ -239,6 +244,7 @@ def train(
     train_data: list[Seq2SeqEntry],
     eval_data: list[Seq2SeqEntry] | None,
     config: Seq2SeqConfig,
+    generation_kwargs: dict[str, Any],
 ) -> PreTrainedModel:
     train_data = train_data[: config.max_train_samples]
     train_loader = preprocess_data(
@@ -310,6 +316,7 @@ def train(
                 tokeniser,
                 eval_loader,
                 config,
+                generation_kwargs,
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logger.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
@@ -380,6 +387,7 @@ def infer(
     data: list[Seq2SeqEntry],
     config: Seq2SeqConfig,
     desc: str,
+    generation_kwargs: dict[str, Any],
     max_samples: int | None = None,
 ) -> InferenceResult:
     """Perform prediction on data.
@@ -405,11 +413,7 @@ def infer(
     all_data: list[Seq2SeqDatasetSeries] = []
 
     for inputs in tqdm(loader, desc=desc):
-        batch_predicted_ids = model.generate(
-            inputs["input_ids"],
-            num_beams=config.generation_num_beams or model.config.num_beams,
-            max_length=config.max_seq_length,
-        )
+        batch_predicted_ids = model.generate(inputs["input_ids"], **generation_kwargs)
         predicted_ids.extend(batch_predicted_ids)
         all_data.append(inputs)
 
@@ -487,10 +491,20 @@ def main() -> None:
     if config.test_file is not None:
         predict_data = load_data(config.test_file)
 
+    generation_kwargs = {
+        "max_length": config.max_seq_length,
+        "penalty_alpha": config.degeneration_penalty,
+        "top_k": config.generation_top_k,
+        "top_p": config.generation_top_p,
+        "do_sample": config.generation_do_sample,
+    }
+
     if config.do_train:
         if train_data is None:
             raise ValueError("train_file must be specified when training")
-        model = train(model, tokeniser, train_data, eval_data, config)
+        model = train(
+            model, tokeniser, train_data, eval_data, config, generation_kwargs
+        )
         if config.load_best_model_at_end:
             logger.info("Loading best model from %s", config.output_dir.resolve())
             model, tokeniser = load_model(
@@ -503,7 +517,13 @@ def main() -> None:
                 "validation_file must be specified when evaluating training"
             )
         result = infer(
-            model, tokeniser, eval_data, config, "evaluation", config.max_eval_samples
+            model,
+            tokeniser,
+            eval_data,
+            config,
+            "evaluation",
+            generation_kwargs,
+            config.max_eval_samples,
         )
         save_results("evaluation", config.output_dir, result)
 
@@ -516,6 +536,7 @@ def main() -> None:
             predict_data,
             config,
             "prediction",
+            generation_kwargs,
             config.max_predict_samples,
         )
         save_results("prediction", config.output_dir, result)
