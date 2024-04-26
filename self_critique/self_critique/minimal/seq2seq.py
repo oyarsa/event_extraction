@@ -29,6 +29,8 @@ from self_critique.util import (
     suppress_transformers_warnings,
 )
 
+logger = logging.getLogger("minimal.seq2seq")
+
 
 def setup_logging(log_level: str) -> None:
     logging.basicConfig(
@@ -69,8 +71,8 @@ def preprocess_data(
     desc: str | None = None,
 ) -> DataLoader:
     desc = desc or ""
-    logging.info(f"Preprocessing {desc} data")
     source_texts = [f"{d.question.lstrip()}\n{d.context.lstrip()}" for d in data]
+    logger.info(f"Preprocessing {desc} data")
     target_texts = [d.answers for d in data]
 
     model_inputs = tokeniser(
@@ -190,11 +192,11 @@ def eval(
 
             num_batches += 1
 
-    logging.info("Decoding output")
+    logger.info("Decoding output")
     predicted_texts = tokeniser.batch_decode(all_predictions, skip_special_tokens=True)
 
     model_data = collect_model_data(all_data)
-    logging.info("Calculating metrics")
+    logger.info("Calculating metrics")
     metrics = calculate_metrics(model_data, predicted_texts, config.mode)
     log_metrics(metrics, desc)
     avg_loss = total_loss / num_batches
@@ -285,7 +287,7 @@ def train(
             num_batches += 1
 
         avg_loss = total_loss / num_batches
-        logging.info(f"Epoch {epoch+1}, training loss: {avg_loss}")
+        logger.info(f"Epoch {epoch+1}, training loss: {avg_loss}")
 
         if eval_data and eval_loader is not None:
             eval_result = eval(
@@ -295,13 +297,13 @@ def train(
                 config,
                 desc=f"Epoch {epoch+1} evaluation",
             )
-            logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
+            logger.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
 
             if eval_result.metrics["f1"] > best_f1:
                 best_f1 = eval_result.metrics["f1"]
                 early_stopping_counter = 0
 
-                logging.info(
+                logger.info(
                     "New best model! Saving to: %s", config.output_dir.resolve()
                 )
                 save_model(model, tokeniser, config.output_dir)
@@ -309,7 +311,7 @@ def train(
                 early_stopping_counter += 1
 
             if early_stopping_counter >= config.early_stopping_patience:
-                logging.info(
+                logger.info(
                     f"Early stopping: {early_stopping_counter} epochs without improvement"
                 )
                 break
@@ -369,11 +371,11 @@ def infer(
     `model` must be a Seq2Seq model and compatible with `tokeniser`.
     """
     desc = desc.capitalize()
-    logging.info("*** %s ***", desc)
+    logger.info("*** %s ***", desc)
     model.eval()
 
     data = data[:max_samples]
-    logging.info("%d samples", len(data))
+    logger.info("%d samples", len(data))
     loader = preprocess_data(
         tokeniser,
         data,
@@ -411,7 +413,7 @@ def infer(
 def load_model(
     model_name_or_path: str | Path, max_seq_length: int, device: str
 ) -> tuple[PreTrainedModel, PreTrainedTokenizer]:
-    logging.info("Loading model from %s", model_name_or_path)
+    logger.info("Loading model from %s", model_name_or_path)
 
     model_config = AutoConfig.from_pretrained(model_name_or_path)
     model = AutoModelForSeq2SeqLM.from_pretrained(
@@ -426,7 +428,7 @@ def load_model(
 
 def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
     desc = desc.lower()
-    logging.info("Saving %s results to: %s", desc, output_dir.resolve())
+    logger.info("Saving %s results to: %s", desc, output_dir.resolve())
     (output_dir / f"{desc}_output.json").write_text(json.dumps(result.predictions))
     (output_dir / f"{desc}_metrics.json").write_text(json.dumps(result.metrics))
 
@@ -436,12 +438,13 @@ def main() -> None:
     if config.mode not in ["reconstruct", "extract"]:
         print(f"Invalid mode: {config.mode}")
         sys.exit(1)
+
     set_seed(config.seed)
 
     setup_logging(config.log_level)
-    logging.info("%s", config)
 
     suppress_transformers_warnings()
+    logger.info(str(config))
 
     config.output_dir.mkdir(exist_ok=True, parents=True)
 
@@ -462,7 +465,7 @@ def main() -> None:
             raise ValueError("train_file must be specified when training")
         model = train(model, tokeniser, train_data, eval_data, config)
         if config.load_best_model_at_end:
-            logging.info("Loading best model from %s", config.output_dir.resolve())
+            logger.info("Loading best model from %s", config.output_dir.resolve())
             model, tokeniser = load_model(
                 config.output_dir, config.max_seq_length, config.device
             )
