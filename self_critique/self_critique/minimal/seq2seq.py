@@ -26,6 +26,7 @@ from transformers import (
 
 from self_critique import metric
 from self_critique.minimal.config import Config
+from self_critique.minimal.generate import generate
 from self_critique.util import (
     get_current_commit,
     log_metrics,
@@ -111,6 +112,7 @@ def preprocess_data(
         truncation=True,
         max_length=config.max_seq_length,
     )
+
     labels = tokeniser(
         text_target=target_texts,
         padding="max_length",
@@ -182,6 +184,7 @@ def eval(
     tokeniser: PreTrainedTokenizer,
     loader: DataLoader,
     config: Seq2SeqConfig,
+    generation_kwargs: dict[str, Any],
     desc: str | None = None,
 ) -> EvalResult:
     model.eval()
@@ -192,10 +195,15 @@ def eval(
     num_batches = 0
 
     all_predictions: list[torch.Tensor] = []
+    gen_all_predictions: list[torch.Tensor] = []
     all_data: list[Seq2SeqDatasetSeries] = []
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
-            logits = model(inputs["input_ids"], labels=inputs["labels"]).logits
+            logits = model(
+                inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                labels=inputs["labels"],
+            ).logits
 
             # CrossEntropy wants [batch * seq_len, num_classes] and [batch * seq_len]
             loss = criterion(
@@ -206,25 +214,55 @@ def eval(
             )
             total_loss += loss.item()
 
-            # Greedy decoding (highest probability token at each step).
-            # This is NOT using the same parameters as the generation_kwargs,
-            # which is used for `generate()` during inference (see `infer` function).
-            # The reason is performance; `generate()` takes forever, so it slows down
-            # training significantly.
-            prediction_ids = torch.argmax(logits, dim=-1)
+            prediction_ids = generate(
+                model,
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                **generation_kwargs,
+            )
+            gen_prediction_ids = model.generate(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                **generation_kwargs,
+            )
 
             all_predictions.extend(prediction_ids)
+            gen_all_predictions.extend(gen_prediction_ids)
             all_data.append(inputs)
 
             num_batches += 1
 
     logger.info("Decoding output")
     predicted_texts = tokeniser.batch_decode(all_predictions, skip_special_tokens=True)
+    gen_predicted_texts = tokeniser.batch_decode(
+        gen_all_predictions, skip_special_tokens=True
+    )
+
+    if predicted_texts[0] == gen_predicted_texts[0]:
+        logger.info("\n>>>> Greedy and generation outputs match")
+    else:
+        logger.info(
+            """
+Greedy: %s
+
+Generation: %s
+
+""",
+            predicted_texts[0],
+            gen_predicted_texts[0],
+        )
+        raise ValueError("Greedy and generation outputs do not match")
 
     model_data = collect_model_data(all_data)
+
     logger.info("Calculating metrics")
+
     metrics = calculate_metrics(model_data, predicted_texts, config.mode)
-    log_metrics(metrics, desc)
+    log_metrics(metrics, f"{desc}: my method")
+
+    gen_metrics = calculate_metrics(model_data, gen_predicted_texts, config.mode)
+    log_metrics(gen_metrics, f"{desc}: original method")
+
     avg_loss = total_loss / num_batches
     return EvalResult(
         loss=avg_loss,
@@ -250,6 +288,7 @@ def train(
     train_data: list[Seq2SeqEntry],
     eval_data: list[Seq2SeqEntry] | None,
     config: Seq2SeqConfig,
+    generation_kwargs: dict[str, Any],
 ) -> PreTrainedModel:
     train_data = train_data[: config.max_train_samples]
     train_loader = preprocess_data(
@@ -321,6 +360,7 @@ def train(
                 tokeniser,
                 eval_loader,
                 config,
+                generation_kwargs,
                 desc=f"Epoch {epoch+1} evaluation",
             )
             logger.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
@@ -417,7 +457,12 @@ def infer(
     all_data: list[Seq2SeqDatasetSeries] = []
 
     for inputs in tqdm(loader, desc=desc):
-        batch_predicted_ids = model.generate(inputs["input_ids"], **generation_kwargs)
+        batch_predicted_ids = generate(
+            model,
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
+            **generation_kwargs,
+        )
         predicted_ids.extend(batch_predicted_ids)
         all_data.append(inputs)
 
@@ -496,17 +541,20 @@ def main() -> None:
         predict_data = load_data(config.test_file)
 
     generation_kwargs = {
-        "max_length": config.max_seq_length,
+        "max_new_tokens": config.max_seq_length,
         "penalty_alpha": config.degeneration_penalty,
         "top_k": config.generation_top_k,
         "top_p": config.generation_top_p,
         "do_sample": config.generation_do_sample,
+        "num_beams": config.generation_num_beams,
     }
 
     if config.do_train:
         if train_data is None:
             raise ValueError("train_file must be specified when training")
-        model = train(model, tokeniser, train_data, eval_data, config)
+        model = train(
+            model, tokeniser, train_data, eval_data, config, generation_kwargs
+        )
         if config.load_best_model_at_end:
             logger.info("Loading best model from %s", config.output_dir.resolve())
             model, tokeniser = load_model(
