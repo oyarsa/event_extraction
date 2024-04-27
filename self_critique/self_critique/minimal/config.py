@@ -16,7 +16,7 @@ class Config:
     # Maximum length of the input sequence
     max_seq_length: int = 256
     # Number of beams to use for beam search
-    generation_num_beams: int | None = None
+    generation_num_beams: int = 1
     # Batch size for training
     per_device_train_batch_size: int = 32
     # Batch size for evaluation
