@@ -1,5 +1,5 @@
 {
-    "model_name_or_path": "t5-base",
+    "model_name_or_path": "t5-small",
     "do_train": true,
     "do_eval": true,
     "do_predict": false,
