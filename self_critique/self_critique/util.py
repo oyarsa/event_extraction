@@ -1,4 +1,5 @@
 import contextlib
+
 import dataclasses
 import logging
 import multiprocessing
@@ -51,15 +52,27 @@ def get_device() -> torch.device:
     return torch.device(device)
 
 
-def get_current_commit_shorthash() -> str:
+def is_git_repo_dirty() -> bool:
     try:
-        return (
+        output = subprocess.check_output(["git", "status", "--porcelain"])
+        return output.strip() != b""
+    except subprocess.CalledProcessError:
+        return False
+
+
+def get_current_commit() -> str:
+    try:
+        git_hash = (
             subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
             .decode("utf-8")
             .strip()
         )
     except subprocess.CalledProcessError:
         return "unknown"
+    else:
+        if is_git_repo_dirty():
+            git_hash += " (dirty)"
+        return git_hash
 
 
 class ColourFormatter(logging.Formatter):

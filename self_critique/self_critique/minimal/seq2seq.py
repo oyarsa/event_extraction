@@ -27,7 +27,7 @@ from transformers import (
 from self_critique import metric
 from self_critique.minimal.config import Config
 from self_critique.util import (
-    get_current_commit_shorthash,
+    get_current_commit,
     log_metrics,
     report_gpu_memory,
     save_model,
@@ -470,10 +470,10 @@ def main() -> None:
     config.output_dir.mkdir(exist_ok=True, parents=True)
     setup_logging(config.log_level)
 
-    git_commit = get_current_commit_shorthash()
+    git_commit = get_current_commit()
     logger.info(f"\n{config}")
-    logger.info(f"output files: {config.output_dir}")
-    logger.info(f"git commit: {git_commit}")
+    logger.info(f"Git commit: {git_commit}")
+    logger.info(f"Output files: {config.output_dir}")
 
     (config.output_dir / "args.json").write_text(
         json.dumps(
