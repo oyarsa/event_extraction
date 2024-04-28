@@ -17,7 +17,6 @@
 # Refactored down to only the essentials I need.
 
 import copy
-import inspect
 from typing import Any
 
 import torch
@@ -34,8 +33,7 @@ def generate(
     attention_mask: torch.Tensor,
     **kwargs: Any,
 ) -> torch.LongTensor:
-    r"""
-    Generates sequences of token ids for models with a language modeling head.
+    """Generates sequences of token ids for models with a language modeling head.
 
     Parameters:
         input_ids (`torch.LongTensor` of shape `(batch_size, sequence_length)`):
@@ -52,9 +50,11 @@ def generate(
     """
     generation_config = copy.deepcopy(model.generation_config)
     model_kwargs = generation_config.update(**kwargs)
-    model_kwargs["attention_mask"] = attention_mask
-    model_kwargs = _prepare_encoder_decoder_kwargs_for_generation(
-        model, input_ids, model_kwargs
+
+    model_kwargs["encoder_outputs"] = model.get_encoder()(
+        input_ids=input_ids,
+        attention_mask=attention_mask,
+        return_dict=True,
     )
 
     batch_size = input_ids.shape[0]
@@ -71,27 +71,9 @@ def generate(
         model,
         input_ids,
         pad_token_id=generation_config.pad_token_id,
+        attention_mask=attention_mask,
         **model_kwargs,
     )
-
-
-def _prepare_encoder_decoder_kwargs_for_generation(
-    model: PreTrainedModel, inputs_tensor: torch.Tensor, model_kwargs: dict[str, Any]
-) -> dict[str, Any]:
-    encoder = model.get_encoder()
-
-    encoder_signature = set(inspect.signature(encoder.forward).parameters)
-    encoder_kwargs = {
-        argument: value
-        for argument, value in model_kwargs.items()
-        if argument in encoder_signature
-    }
-
-    encoder_kwargs["return_dict"] = True
-    encoder_kwargs[model.main_input_name] = inputs_tensor
-    model_kwargs["encoder_outputs"] = encoder(**encoder_kwargs)
-
-    return model_kwargs
 
 
 def _greedy_search(
@@ -100,10 +82,7 @@ def _greedy_search(
     pad_token_id: int,
     **model_kwargs,
 ) -> torch.LongTensor:
-    r"""
-    Generates sequences of token ids for models with a language modeling head using
-    **greedy decoding** and can be used for text-decoder, text-to-text, speech-to-text,
-    and vision-to-text models.
+    """Generates sequences of token ids using **greedy decoding**.
 
     Parameters:
         input_ids (`torch.LongTensor` of shape `(batch_size, sequence_length)`):
@@ -137,7 +116,7 @@ def _greedy_search(
             output_attentions=model.generation_config.output_attentions,
         )
 
-        # TODO: What is this doing?
+        # the new tokens are the last item of the logits in the seq_len dimension
         next_token_logits = outputs.logits[:, -1, :]
         next_tokens = torch.argmax(next_token_logits, dim=-1)
 
@@ -161,6 +140,7 @@ def _greedy_search(
 def _eos_token_stop_criteria(
     input_ids: torch.LongTensor, eos_token_id: torch.LongTensor
 ) -> torch.BoolTensor:
+    """Check if the last token is the EOS token."""
     if input_ids.device.type == "mps":
         # https://github.com/pytorch/pytorch/issues/77764#issuecomment-2067838075
         return (
