@@ -561,6 +561,7 @@ def suppress_transformers_warnings() -> None:
     "Remove annoying messages about tokenisers and unititialised weights."
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
+    warnings.filterwarnings("ignore", module="torch._utils")
     transformers.logging.set_verbosity_error()
 
 
