@@ -35,15 +35,19 @@ def annotate_entry(gold: str, pred: str) -> bool | None:
     cause_pred, effect_pred = parse_instance(pred)
     cause_gold, effect_gold = parse_instance(gold)
 
+    # All clauses are empty means it's invalid.
     if not (cause_pred and effect_pred and cause_gold and effect_gold):
         return False
 
+    # Exact match means it's valid.
     if cause_pred == cause_gold and effect_pred == effect_gold:
         return True
 
+    # For both cause and effect, if one is a substring of the other, then it _could_ be
+    # valid. Needs a manual check.
     if symm_substr(cause_pred, cause_gold) and symm_substr(effect_pred, effect_gold):
         return None
-
+    # If not substrings, it must be invalid.
     return False
 
 
