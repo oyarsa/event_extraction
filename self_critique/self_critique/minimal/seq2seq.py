@@ -26,7 +26,6 @@ from transformers import (
 
 from self_critique import metric
 from self_critique.minimal.config import Config
-from self_critique.minimal.generate import generate
 from self_critique.util import (
     get_current_commit,
     log_metrics,
@@ -195,7 +194,6 @@ def eval(
     num_batches = 0
 
     all_predictions: list[torch.Tensor] = []
-    gen_all_predictions: list[torch.Tensor] = []
     all_data: list[Seq2SeqDatasetSeries] = []
     with torch.no_grad():
         for inputs in tqdm(loader, desc=desc):
@@ -214,54 +212,25 @@ def eval(
             )
             total_loss += loss.item()
 
-            prediction_ids = generate(
-                model,
-                input_ids=inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-                **generation_kwargs,
-            )
-            gen_prediction_ids = model.generate(
+            prediction_ids = model.generate(
                 input_ids=inputs["input_ids"],
                 attention_mask=inputs["attention_mask"],
                 **generation_kwargs,
             )
 
             all_predictions.extend(prediction_ids)
-            gen_all_predictions.extend(gen_prediction_ids)
             all_data.append(inputs)
 
             num_batches += 1
 
     logger.info("Decoding output")
     predicted_texts = tokeniser.batch_decode(all_predictions, skip_special_tokens=True)
-    gen_predicted_texts = tokeniser.batch_decode(
-        gen_all_predictions, skip_special_tokens=True
-    )
-
-    if predicted_texts[0] == gen_predicted_texts[0]:
-        logger.info("\n>>>> Greedy and generation outputs match")
-    else:
-        logger.info(
-            """
-Greedy: %s
-
-Generation: %s
-
-""",
-            predicted_texts[0],
-            gen_predicted_texts[0],
-        )
-        raise ValueError("Greedy and generation outputs do not match")
-
     model_data = collect_model_data(all_data)
 
     logger.info("Calculating metrics")
 
     metrics = calculate_metrics(model_data, predicted_texts, config.mode)
-    log_metrics(metrics, f"{desc}: my method")
-
-    gen_metrics = calculate_metrics(model_data, gen_predicted_texts, config.mode)
-    log_metrics(gen_metrics, f"{desc}: original method")
+    log_metrics(metrics, desc, logger)
 
     avg_loss = total_loss / num_batches
     return EvalResult(
@@ -457,8 +426,7 @@ def infer(
     all_data: list[Seq2SeqDatasetSeries] = []
 
     for inputs in tqdm(loader, desc=desc):
-        batch_predicted_ids = generate(
-            model,
+        batch_predicted_ids = model.generate(
             input_ids=inputs["input_ids"],
             attention_mask=inputs["attention_mask"],
             **generation_kwargs,
@@ -470,7 +438,7 @@ def infer(
 
     model_data = collect_model_data(all_data)
     metrics = calculate_metrics(model_data, predicted_texts, config.mode)
-    log_metrics(metrics, desc)
+    log_metrics(metrics, desc, logger)
 
     output = [
         {"input": d["context"], "output": out, "gold": d["answers"]}
