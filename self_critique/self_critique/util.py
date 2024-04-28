@@ -138,13 +138,18 @@ def set_seed(seed: int) -> None:
     torch.cuda.manual_seed_all(seed)
 
 
-def log_metrics(metrics: dict[str, float], desc: str | None) -> None:
+def log_metrics(
+    metrics: dict[str, float], desc: str | None, logger: logging.Logger | None = None
+) -> None:
+    if logger is None:
+        logger = logging.getLogger(__name__)
+
     desc = desc or "metrics"
-    logging.info(f">>>> {desc.upper()}")
+    logger.info(f">>>> {desc.upper()}")
 
     padding = max(len(k) for k in metrics)
     for k, v in metrics.items():
-        logging.info(f"    {k:>{padding}}: {v}")
+        logger.info(f"    {k:>{padding}}: {v}")
 
 
 @dataclasses.dataclass
