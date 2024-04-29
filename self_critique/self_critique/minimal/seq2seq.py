@@ -21,7 +21,6 @@ from transformers import (
     AutoTokenizer,
     PreTrainedModel,
     PreTrainedTokenizer,
-    get_linear_schedule_with_warmup,
 )
 
 from self_critique import metric
@@ -274,9 +273,6 @@ def train(
     assert tokeniser.pad_token_id is not None
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokeniser.pad_token_id)
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
-    scheduler = get_linear_schedule_with_warmup(
-        optimizer, 0, config.num_train_epochs * len(train_loader)
-    )
 
     model.train()
 
@@ -324,7 +320,6 @@ def train(
             ):
                 optimizer.step()
                 optimizer.zero_grad()
-                scheduler.step()
 
             total_loss += loss.item()
             num_batches += 1
