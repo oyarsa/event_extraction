@@ -60,6 +60,8 @@ class Seq2SeqConfig(Config):
     generation_do_sample: bool = False
     # Whether to add the question to the prompt
     add_question: bool = False
+    # How many batch steps to accumulate before backprop
+    gradient_accumulation_steps: int = 1
 
 
 @dataclass
@@ -300,8 +302,9 @@ def train(
         total_loss = 0
         num_batches = 0
 
-        for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
-            optimizer.zero_grad()
+        for i, inputs in enumerate(
+            tqdm(train_loader, desc=f"Epoch {epoch+1} training")
+        ):
 
             outputs = model(
                 input_ids=inputs["input_ids"],
@@ -313,10 +316,15 @@ def train(
             loss = criterion(
                 logits.view(-1, logits.shape[-1]), inputs["labels"].view(-1)
             )
+            loss = loss / config.gradient_accumulation_steps
             loss.backward()
 
-            optimizer.step()
-            scheduler.step()
+            if (i + 1) % config.gradient_accumulation_steps == 0 or i + 1 == len(
+                train_loader
+            ):
+                optimizer.step()
+                optimizer.zero_grad()
+                scheduler.step()
 
             total_loss += loss.item()
             num_batches += 1
