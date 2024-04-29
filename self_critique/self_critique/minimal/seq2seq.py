@@ -290,7 +290,8 @@ def train(
             desc="evaluation",
         )
 
-    best_f1 = -1.0
+    # TODO: Parametrise which metric to use for early stopping
+    best_em = -1.0
     early_stopping_counter = 0
 
     for epoch in range(config.num_train_epochs):
@@ -334,8 +335,8 @@ def train(
             )
             logger.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
 
-            if eval_result.metrics["f1"] > best_f1:
-                best_f1 = eval_result.metrics["f1"]
+            if eval_result.metrics["em"] > best_em:
+                best_em = eval_result.metrics["em"]
                 early_stopping_counter = 0
 
                 logger.info(
@@ -353,7 +354,7 @@ def train(
 
     # Either we're not saving based on eval f1, or we're at the end of training
     # and we haven't saved yet
-    if best_f1 == -1:
+    if best_em == -1:
         save_model(model, tokeniser, config.output_dir)
 
     return model
