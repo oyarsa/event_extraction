@@ -15,9 +15,9 @@
     "max_train_samples": null,
     "max_eval_samples": null,
     "max_predict_samples": null,
-	"generation_top_k": 5,
-	"generation_top_p": 1,
-	"degeneration_penalty": 0.5,
-	"do_sample": false,
-	"add_question": false
+	"generation_top_k": null,
+	"generation_top_p": null,
+	"degeneration_penalty": null,
+	"generation_do_sample": false,
+	"add_question": true
 }
