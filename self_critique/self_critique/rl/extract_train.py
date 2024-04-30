@@ -95,8 +95,10 @@ class Config:
     reward_model: str
     # Learning rate
     learning_rate: float = 1e-5
-    # PPO minibatch size
+    # PPO minibatch size (inner PPO loop)
     ppo_minibatch_size: int = 16
+    # PPO batch size (outer training loop)
+    ppo_batch_size: int = 256
     # Reward model batch size
     reward_batch_size: int = 256
     # Epochs
@@ -127,6 +129,8 @@ class Config:
     generation_top_p: float = 1.0
     # Whether to sample during generation
     generation_do_sample: bool = False
+    # Number of beams for Beam Search
+    generation_num_beams: int = 1
     # KL penalty options:
     #    `kl`: model_logp - ref_logp
     #    `abs`: abs(kl)
@@ -139,7 +143,7 @@ class Config:
     init_kl_coef: float = 0.2
     # Log with either 'wandb' or 'tensorboard'
     log_with: str | None = None
-    # Every N batches to evaluate the model
+    # Evaluate the model every N batches (waiting for the whole epoch takes too long)
     eval_batches: int = 100
     # Reward type: 'entailment' or 'valid'
     reward_type: str = "entailment"
@@ -207,18 +211,20 @@ def load_seq2seq_valuehead_model(model_name: str, *, train: bool) -> Module:
     return Module(model, tokenizer)
 
 
-def load_seq2seq_model(model_name: str, *, train: bool) -> Module:
+def load_seq2seq_model(model_name: str, max_seq_length: str, *, train: bool) -> Module:
     model_config = AutoConfig.from_pretrained(model_name)
     model = AutoModelForSeq2SeqLM.from_pretrained(
         model_name, config=model_config
     ).train(train)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    return Module(model, tokenizer)
+    tokeniser = AutoTokenizer.from_pretrained(
+        model_name, model_max_length=max_seq_length
+    )
+    model.resize_token_embeddings(len(tokeniser))
+    return Module(model, tokeniser)
 
 
 def text_decode(tokenizer: PreTrainedTokenizer, tensor: torch.Tensor) -> list[str]:
-    output = tokenizer.batch_decode([r[1:] for r in tensor])
-    return [clean_response(o) for o in output]
+    return tokenizer.batch_decode(tensor, skip_special_tokens=True)
 
 
 def text_encode(
@@ -305,7 +311,7 @@ def train_extract(
         model_name=args.extraction_model,
         learning_rate=args.learning_rate,
         mini_batch_size=args.ppo_minibatch_size,
-        batch_size=args.reward_batch_size,
+        batch_size=args.ppo_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         adap_kl_ctrl=args.adaptive_kl_ctrl,
         kl_penalty=args.kl_penalty,
@@ -330,12 +336,11 @@ def train_extract(
     reward = reward.to(device)
     tb_writer = SummaryWriter(log_dir=output_dir / "tb")
 
-    # Evaluate before training to facilitate comparison with batches
     if eval_dataset is not None:
-        eval_result = evaluate(
+        ref_desc = "Ref eval"
+        ref_result = evaluate(
             dataset=eval_dataset,
-            extract=extract,
-            extract_ref=extract_ref,
+            extract=Module(extract_ref, extract.tokenizer),
             reward=reward,
             args=args,
             device=device,
@@ -343,14 +348,16 @@ def train_extract(
             label2id=label2id,
             id2label=id2label,
             generation_kwargs=generation_kwargs,
-            desc="Eval (-1)",
+            desc=ref_desc,
         )
         save_results(
-            result=eval_result,
+            result=ref_result,
             dir=output_dir,
-            file_name="mini_eval_result_0.0.json",
+            file_name="ref_result.json",
         )
-        log_tensorboard(tb_writer, eval_result, -1, true_class)
+        log_tensorboard(tb_writer, ref_result, -1, true_class)
+        log_label_distribution(ref_result, desc=ref_desc)
+        exit()
 
     for epoch in range(args.num_epochs):
         for batch_idx, batch in enumerate(
@@ -358,9 +365,14 @@ def train_extract(
         ):
             ppo_trainer.model.train()
             query_tensors = batch["input_ids"]
+            attention_mask = batch["attention_mask"]
 
             # Contrastive generation
-            response_tensors = ppo_trainer.generate(query_tensors, **generation_kwargs)
+            response_tensors = ppo_trainer.generate(
+                input_ids=query_tensors,
+                attention_mask=attention_mask,
+                **generation_kwargs,
+            )
             extract_response = text_decode(extract.tokenizer, response_tensors)
 
             scores, labels = run_reward(
@@ -386,11 +398,12 @@ def train_extract(
             }
             ppo_trainer.log_stats(stats, log_batch, rewards)
 
+            # Mid-epoch evaluation
             if eval_dataset is not None and (batch_idx + 1) % eval_batches == 0:
+                desc = f"Eval  ({epoch}.{batch_idx+1})"
                 eval_result = evaluate(
                     dataset=eval_dataset,
                     extract=extract,
-                    extract_ref=extract_ref,
                     reward=reward,
                     args=args,
                     device=device,
@@ -398,13 +411,16 @@ def train_extract(
                     label2id=label2id,
                     id2label=id2label,
                     generation_kwargs=generation_kwargs,
-                    desc=f"Eval  ({epoch}.{batch_idx+1})",
+                    desc=desc,
                 )
                 save_results(
                     result=eval_result,
                     dir=output_dir,
                     file_name=f"mini_eval_result_{epoch}.{batch_idx+1}.json",
                 )
+
+                log_label_distribution(ref_result, desc="Reference")
+                log_label_distribution(eval_result, desc=desc)
                 log_tensorboard(
                     tb_writer,
                     eval_result,
@@ -436,24 +452,27 @@ def train_extract(
                     )
 
         if eval_dataset is not None:
+            desc = f"Eval  ({epoch})"
             eval_result = evaluate(
                 dataset=eval_dataset,
                 extract=extract,
                 reward=reward,
-                extract_ref=extract_ref,
                 args=args,
                 device=device,
                 true_class=true_class,
                 label2id=label2id,
                 id2label=id2label,
                 generation_kwargs=generation_kwargs,
-                desc=f"Eval  ({epoch})",
+                desc=desc,
             )
             save_results(
                 result=eval_result,
                 dir=output_dir,
                 file_name=f"eval_result_{epoch}.json",
             )
+            log_label_distribution(ref_result, desc="Reference")
+            log_label_distribution(eval_result, desc=desc)
+
     logger.info(
         "Finished training. Best model at %s with ratio %f.",
         output_dir / "best",
@@ -515,7 +534,7 @@ def preprocess_data(
     desc: str | None = None,
 ) -> Dataset:
     desc = desc or ""
-    source_texts = [d.context.strip() for d in data]
+    source_texts = [f"{d.question}\n{d.context.lstrip()}" for d in data]
     eval_inputs = [eval_prompt.get_eval_input(d) for d in data]
 
     model_inputs = tokeniser(
@@ -588,11 +607,10 @@ class BlockOutput:
 
 
 def generate_and_reward(
-    extract_model: PreTrainedModel,
-    inputs: torch.Tensor,
+    extract: Module,
+    inputs: Mapping[str, torch.Tensor],
     original_sentence: list[str],
     args: Config,
-    tokenizer: PreTrainedTokenizer,
     reward: Module,
     device: torch.device,
     true_class: str,
@@ -600,9 +618,12 @@ def generate_and_reward(
     id2label: dict[int, str],
     generation_kwargs: dict[str, Any],
 ) -> BlockOutput:
-    # Contrastive generation
-    extract_response_tensor = extract_model.generate(inputs, **generation_kwargs)
-    extract_response_txt = text_decode(tokenizer, extract_response_tensor)
+    extract_response_tensor = extract.model.generate(
+        input_ids=inputs["input_ids"].to(device),
+        attention_mask=inputs["attention_mask"].to(device),
+        **generation_kwargs,
+    )
+    extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
     scores, reward_labels = run_reward(
         reward=reward,
@@ -622,7 +643,6 @@ def generate_and_reward(
 def evaluate(
     dataset: Dataset,
     extract: Module,
-    extract_ref: PreTrainedModel,
     reward: Module,
     device: torch.device,
     args: Config,
@@ -630,37 +650,21 @@ def evaluate(
     label2id: dict[str, int],
     id2label: dict[int, str],
     generation_kwargs: dict[str, Any],
-    desc: str | None = None,
+    desc: str = "Evaluate",
 ) -> list[dict[str, Any]]:
-    desc = desc or "Evaluate"
     loader = DataLoader(dataset, batch_size=args.reward_batch_size)
     extract.model.eval()
 
-    output: list[dict[str, Any]] = []
+    output_data: list[dict[str, Any]] = []
     with torch.no_grad():
         for batch in tqdm(loader, desc=desc):
-            inputs = batch["input_ids"].to(device)
             eval_inputs: list[str] = batch["eval_inputs"]
 
-            rl_output = generate_and_reward(
-                cast(PreTrainedModel, extract.model),
-                inputs,
+            output = generate_and_reward(
+                extract,
+                batch,
                 eval_inputs,
                 args,
-                extract.tokenizer,
-                reward,
-                device,
-                true_class,
-                label2id,
-                id2label,
-                generation_kwargs,
-            )
-            ref_output = generate_and_reward(
-                extract_ref,
-                inputs,
-                eval_inputs,
-                args,
-                extract.tokenizer,
                 reward,
                 device,
                 true_class,
@@ -669,33 +673,25 @@ def evaluate(
                 generation_kwargs,
             )
 
-            assert len(rl_output.reward_labels) == len(inputs)
-            output.extend(
+            assert len(output.reward_labels) == len(batch["input_ids"])
+            output_data.extend(
                 {
                     "id": batch["id"][i],
                     "answer": batch["answer"][i],
                     "context": batch["context"][i],
                     "eval_inputs": batch["eval_inputs"][i],
-                    "rl_extract_txt": rl_output.extract_txt[i],
-                    "ref_extract_txt": ref_output.extract_txt[i],
-                    "reward_label": rl_output.reward_labels[i],
-                    "ref_reward_label": ref_output.reward_labels[i],
-                    "scores": rl_output.scores[i].tolist(),
+                    "output": output.extract_txt[i],
+                    "reward_label": output.reward_labels[i],
+                    "scores": output.scores[i].tolist(),
                 }
-                for i in range(len(inputs))
+                for i in range(len(output.reward_labels))
             )
 
-    log_label_distribution(
-        [d["reward_label"] for d in output], desc=f"{desc}: RL model"
-    )
-    log_label_distribution(
-        [d["ref_reward_label"] for d in output], desc=f"{desc}: Ref model"
-    )
-
-    return output
+    return output_data
 
 
-def log_label_distribution(labels: list[str], desc: str = "Model") -> None:
+def log_label_distribution(result: list[dict[str, Any]], desc: str) -> None:
+    labels = [d["reward_label"] for d in result]
     label_dist = Counter(labels)
     msg = "\n".join(
         [
@@ -842,7 +838,9 @@ def main() -> None:
         "top_k": args.generation_top_k,
         "top_p": args.generation_top_p,
         "do_sample": args.generation_do_sample,
+        "num_beams": args.generation_num_beams,
     }
+    logger.info(f"Generation type: {log_generation_type(generation_kwargs)}")
 
     device: torch.device | None = None
     if args.do_train:
@@ -868,7 +866,6 @@ def main() -> None:
             dataset=eval_dataset,
             extract=extract.to(device),
             reward=reward.to(device),
-            extract_ref=cast(PreTrainedModel, extract_ref.to(device)),
             args=args,
             label2id=label2id,
             id2label=id2label,
@@ -879,6 +876,33 @@ def main() -> None:
         save_results(result=eval_result, dir=output_dir, file_name="eval_result.json")
 
     logger.info(f"Reminder: output files are in {output_dir}")
+
+
+def log_generation_type(args: dict[str, Any]) -> str:
+    """Figure out which form of generation will be used based on the arguments.
+
+    From the transformers documentation[1]:
+
+    - greedy decoding if num_beams=1 and do_sample=False
+    - contrastive search if penalty_alpha>0. and top_k>1
+    - multinomial sampling if num_beams=1 and do_sample=True
+    - beam-search decoding if num_beams>1 and do_sample=False
+    - beam-search multinomial sampling if num_beams>1 and do_sample=True
+
+    [1] https://huggingface.co/docs/transformers/en/main_classes/text_generation#transformers.GenerationConfig
+    """
+    # sourcery skip: hoist-repeated-if-condition, remove-redundant-if
+    if args["num_beams"] == 1 and not args["do_sample"]:
+        return "greedy decoding"
+    if args["penalty_alpha"] > 0.0 and args["top_k"] > 1:
+        return "contrastive search"
+    if args["num_beams"] == 1 and args["do_sample"]:
+        return "multinomial sampling"
+    if args["num_beams"] > 1 and not args["do_sample"]:
+        return "beam-search decoding"
+    if args["num_beams"] > 1 and args["do_sample"]:
+        return "beam-search multinomial sampling"
+    return "unknown generation type"
 
 
 if __name__ == "__main__":
