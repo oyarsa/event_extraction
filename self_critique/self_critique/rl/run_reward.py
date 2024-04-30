@@ -31,15 +31,10 @@ from self_critique import metric
 from self_critique.metric.fgcr_metric_cls import parse_instance
 from self_critique.rl.extract_train import (
     Module,
-    get_labelling,
-    load_reward_model,
-    log_label_distribution,
-    rewrite_extraction,
     run_reward,
     save_results,
     setup_logger,
 )
-from self_critique.util import set_seed, suppress_transformers_warnings
 from self_critique.util import (
     get_current_commit,
     set_seed,
@@ -68,17 +63,15 @@ class Config:
     # Path to the data to be evaluated
     data_file: Path
     # Reward model type ("valid" or "entailment")
-    reward_type: str
+    reward_type: str = "valid"
     # Maximum sequence length
-    max_seq_length: int = 128
+    max_seq_length: int = 400
     # Batch size
     batch_size: int = 32
     # Seed
     seed: int = 0
     # Max samples
     max_samples: int | None = None
-    # Whether to rewrite the structured output using a template
-    rewrite: bool = False
     # Path to the output directory
     output_dir: Path = Path("output/reward")
     # Name of the directory inside the output dir for this run
@@ -184,36 +177,29 @@ def evaluate(
     reward: Module,
     device: torch.device,
     args: Config,
-    true_class: str,
-    label2id: dict[str, int],
-    id2label: dict[int, str],
-    rewrite: bool,
+    label_config: LabelConfig,
     batch_size: int,
     desc: str | None = None,
 ) -> list[dict[str, Any]]:
     desc = desc or "Evaluate"
+    batches = list(batched(dataset, batch_size))
 
     output: list[dict[str, Any]] = []
-    for batch in tqdm(batched(dataset, batch_size), desc=desc):
-        inputs = [x.input for x in batch]
+    for batch in tqdm(batches, desc=desc):
+        inputs = [f"{x.input}\n{x.gold}" for x in batch]
         extractions = [x.output for x in batch]
         golds = [x.gold for x in batch]
-
-        if rewrite:
-            extractions_in = [rewrite_extraction(s) for s in extractions]
-        else:
-            extractions_in = extractions
 
         scores, reward_labels = run_reward(
             reward=reward,
             max_seq_length=args.max_seq_length,
             batch_size=args.batch_size,
             sentence1=inputs,
-            sentence2=extractions_in,
+            sentence2=extractions,
             device=device,
-            true_class=true_class,
-            label2id=label2id,
-            id2label=id2label,
+            true_class=label_config.true_class,
+            label2id=label_config.label2id,
+            id2label=label_config.id2label,
         )
 
         assert len(reward_labels) == len(inputs)
@@ -227,17 +213,18 @@ def evaluate(
             }
             for i in range(len(inputs))
         )
-    log_label_distribution(
-        [d["reward_label"] for d in output], desc=f"{desc}: RL model"
-    )
 
     return output
 
 
-def save_metrics(
-    results: list[dict[str, Any]], true_class: str, output_dir: Path
-) -> None:
-    metrics = {
+def get_metrics(results: list[dict[str, Any]], true_class: str) -> dict[str, Any]:
+    extract_metrics = calculate_extract_metrics(
+        data=[
+            EvalEntry(input=r["input"], output=r["rl_extract_txt"], gold=r["gold"])
+            for r in results
+        ]
+    )
+    return {
         "reward": sum(r["reward_label"] == true_class for r in results) / len(results),
         "classes": {
             class_: sum(r["reward_label"] == class_ for r in results)
@@ -245,7 +232,6 @@ def save_metrics(
         },
         "em": extract_metrics["em"],
     }
-    (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
 
 
 def get_device() -> torch.device:
@@ -319,7 +305,10 @@ def main() -> None:
         batch_size=args.batch_size,
     )
     save_results(results, output_dir)
-    save_metrics(results, true_class, output_dir)
+
+    metrics = get_metrics(results, label_config.true_class)
+    (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
+    logger.info(f"\n>>>> METRICS\n{json.dumps(metrics, indent=2)}")
 
 
 if __name__ == "__main__":
