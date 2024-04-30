@@ -19,6 +19,16 @@ from tqdm import tqdm
 # Yes, it's an ugly hack, but it's necessary.
 # ruff: noqa: E402
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+from transformers import (
+    AutoConfig,
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    PreTrainedModel,
+    PreTrainedTokenizer,
+)
+
+from self_critique import metric
+from self_critique.metric.fgcr_metric_cls import parse_instance
 from self_critique.rl.extract_train import (
     Module,
     get_labelling,
@@ -82,6 +92,34 @@ class EvalEntry:
     input: str
     output: str
     gold: str
+
+
+def hash_entry(entry: EvalEntry) -> str:
+    return str(hash((entry.input, entry.gold)))
+
+
+def calculate_extract_metrics(data: list[EvalEntry]) -> dict[str, float]:
+    references = [
+        metric.MetricReference(
+            {
+                "id": hash_entry(entry),
+                "answers": entry.gold,
+                "question_type": parse_instance(entry.gold)[1] or "none",
+            }
+        )
+        for entry in data
+    ]
+    predictions = [
+        metric.MetricPrediction(
+            {
+                "id": hash_entry(entry),
+                "prediction_text": entry.output,
+            }
+        )
+        for entry in data
+    ]
+
+    return metric.FGCRCls()._compute(predictions=predictions, references=references)
 
 
 def load_data(file_path: Path, max_samples: int | None = None) -> list[EvalEntry]:
@@ -170,6 +208,7 @@ def save_metrics(
             class_: sum(r["reward_label"] == class_ for r in results)
             for class_ in {r["reward_label"] for r in results}
         },
+        "em": extract_metrics["em"],
     }
     (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
 
