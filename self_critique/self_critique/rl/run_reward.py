@@ -3,6 +3,7 @@ import dataclasses
 import itertools
 import json
 import logging
+import os
 from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
@@ -14,6 +15,10 @@ import torch
 import torch.backends.mps
 from tqdm import tqdm
 
+# Suppress TensorFlow warnings. This must be done before importing transformers.
+# Yes, it's an ugly hack, but it's necessary.
+# ruff: noqa: E402
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 from self_critique.rl.extract_train import (
     Module,
     get_labelling,
