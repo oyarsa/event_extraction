@@ -8,19 +8,19 @@ authors = [
 dependencies = [
     "datasets==2.12.0",
     "evaluate==0.4.1",
-    "scikit-learn==1.2.2",
-    "simple-parsing==0.1.2.post1",
-    "torch==2.0.0",
-    "tqdm==4.65.0",
-    "transformers==4.33.2",
-    "trl==0.5.0",
+    "scikit-learn>=1.2.2",
+    "simple-parsing>=0.1.2.post1",
+    "torch>=2.0.0",
+    "tqdm>=4.65.0",
+    "transformers>=4.33.2",
+    "trl>=0.5.0",
     "typer>=0.9.0",
     "numpy>=1.24.3",
     "accelerate>=0.20.3",
     "bert-score>=0.3.13",
     "rouge-score>=0.1.2",
     "nltk>=3.8.1",
-    "BLEURT @ git+https://github.com/google-research/bleurt.git",
+    "BLEURT @ git+https://github.com/google-research/bleurt.git@cebe7e6",
 ]
 requires-python = ">=3.10,<3.11"
 license = {text = "GPL-3.0-only"}
