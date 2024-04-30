@@ -97,9 +97,9 @@ class Config:
     # Learning rate
     learning_rate: float = 1e-5
     # PPO minibatch size
-    mini_batch_size: int = 16
+    ppo_minibatch_size: int = 16
     # Reward model batch size
-    batch_size: int = 256
+    reward_batch_size: int = 256
     # Epochs
     num_epochs: int = 1
     # Gradient accumulation steps
@@ -308,8 +308,8 @@ def train_extract(
     ppo_config = PPOConfig(
         model_name=args.extraction_model,
         learning_rate=args.learning_rate,
-        mini_batch_size=args.mini_batch_size,
-        batch_size=args.batch_size,
+        mini_batch_size=args.ppo_minibatch_size,
+        batch_size=args.reward_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         adap_kl_ctrl=args.adaptive_kl_ctrl,
         kl_penalty=args.kl_penalty,
@@ -373,7 +373,7 @@ def train_extract(
             scores, labels = run_reward(
                 reward=reward,
                 max_seq_length=args.max_reward_seq_length,
-                batch_size=args.batch_size,
+                batch_size=args.reward_batch_size,
                 sentence1=batch["eval_inputs"],
                 sentence2=extract_response,
                 device=device,
@@ -619,7 +619,7 @@ def generate_and_reward(
     scores, reward_labels = run_reward(
         reward=reward,
         max_seq_length=args.max_reward_seq_length,
-        batch_size=args.batch_size,
+        batch_size=args.reward_batch_size,
         sentence1=original_sentence,
         sentence2=extract_response_txt,
         device=device,
@@ -646,7 +646,7 @@ def evaluate(
     desc: str | None = None,
 ) -> list[dict[str, Any]]:
     desc = desc or "Evaluate"
-    loader = DataLoader(dataset, batch_size=args.batch_size)
+    loader = DataLoader(dataset, batch_size=args.reward_batch_size)
     extract.model.eval()
 
     output: list[dict[str, Any]] = []
