@@ -61,11 +61,6 @@ class FGCRCls(evaluate.Metric):
             pred_entities, pred_relation = parse_instance(pred["prediction_text"])
             ref_entities, ref_relation = parse_instance(refer["answers"])
 
-            assert ref_relation == refer["question_type"], (
-                "Extracted reference relation does not match the question type: ",
-                f"{ref_relation} != {refer['question_type']}",
-            )
-
             for itype in ref_entities:
                 instance: Instance = {
                     "id": refer["id"],
