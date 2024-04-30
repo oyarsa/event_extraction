@@ -122,11 +122,11 @@ class Config:
     # Path to evaluation data
     eval_file: Path | None = None
     # Generation top-k used for reranking
-    generation_top_k: int = 5
+    generation_top_k: int | None = None
     # Contrastive degeneration penalty (alphe)
-    degeneration_penalty: float = 0.5
+    degeneration_penalty: float | None = None
     # Generation top-p used for selecting tokens
-    generation_top_p: float = 1.0
+    generation_top_p: float | None = None
     # Whether to sample during generation
     generation_do_sample: bool = False
     # Number of beams for Beam Search
@@ -357,7 +357,6 @@ def train_extract(
         )
         log_tensorboard(tb_writer, ref_result, -1, true_class)
         log_label_distribution(ref_result, desc=ref_desc)
-        exit()
 
     for epoch in range(args.num_epochs):
         for batch_idx, batch in enumerate(
@@ -365,12 +364,9 @@ def train_extract(
         ):
             ppo_trainer.model.train()
             query_tensors = batch["input_ids"]
-            attention_mask = batch["attention_mask"]
 
-            # Contrastive generation
             response_tensors = ppo_trainer.generate(
-                input_ids=query_tensors,
-                attention_mask=attention_mask,
+                query_tensors,
                 **generation_kwargs,
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
@@ -802,6 +798,15 @@ def main() -> None:
     suppress_warnings()
 
     label2id, id2label, true_class = get_labelling(args.reward_type)
+    generation_kwargs = {
+        "max_length": args.max_generation_length,
+        "penalty_alpha": args.degeneration_penalty,
+        "top_k": args.generation_top_k,
+        "top_p": args.generation_top_p,
+        "do_sample": args.generation_do_sample,
+        "num_beams": args.generation_num_beams,
+    }
+    logger.info(f"Generation type: {log_generation_type(generation_kwargs)}")
 
     if args.train_file is None:
         raise ValueError("Must provide a training file")
@@ -831,16 +836,6 @@ def main() -> None:
             eval_prompt=args.eval_prompt,
             desc="evaluation",
         )
-
-    generation_kwargs = {
-        "max_length": args.max_generation_length,
-        "penalty_alpha": args.degeneration_penalty,
-        "top_k": args.generation_top_k,
-        "top_p": args.generation_top_p,
-        "do_sample": args.generation_do_sample,
-        "num_beams": args.generation_num_beams,
-    }
-    logger.info(f"Generation type: {log_generation_type(generation_kwargs)}")
 
     device: torch.device | None = None
     if args.do_train:
@@ -892,16 +887,24 @@ def log_generation_type(args: dict[str, Any]) -> str:
     [1] https://huggingface.co/docs/transformers/en/main_classes/text_generation#transformers.GenerationConfig
     """
     # sourcery skip: hoist-repeated-if-condition, remove-redundant-if
-    if args["num_beams"] == 1 and not args["do_sample"]:
-        return "greedy decoding"
-    if args["penalty_alpha"] > 0.0 and args["top_k"] > 1:
+    if (
+        args["penalty_alpha"]
+        and args["top_k"]
+        and args["penalty_alpha"] > 0.0
+        and args["top_k"] > 1
+    ):
         return "contrastive search"
-    if args["num_beams"] == 1 and args["do_sample"]:
-        return "multinomial sampling"
-    if args["num_beams"] > 1 and not args["do_sample"]:
-        return "beam-search decoding"
-    if args["num_beams"] > 1 and args["do_sample"]:
-        return "beam-search multinomial sampling"
+
+    if args["num_beams"] == 1:
+        if args["do_sample"]:
+            return "multinomial sampling"
+        else:
+            return "greedy decoding"
+    if args["num_beams"] > 1:
+        if args["do_sample"]:
+            return "beam-search multinomial sampling"
+        else:
+            return "beam-search decoding"
     return "unknown generation type"
 
 
