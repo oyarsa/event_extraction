@@ -56,7 +56,7 @@ from trl.models.modeling_base import PreTrainedModelWrapper
 
 from self_critique.metric.fgcr_metric_cls import parse_instance
 from self_critique.util import (
-    get_current_commit_shorthash,
+    get_current_commit,
     get_device,
     report_gpu_memory,
     resolve_path,
@@ -234,9 +234,10 @@ def text_encode(
         text=text,
         text_pair=text_pair,
         padding="max_length",
-        return_tensors="pt",
         truncation=True,
+        return_tensors="pt",
         max_length=max_seq_length,
+        return_token_type_ids=True,
     )
 
 
@@ -252,7 +253,11 @@ def run_reward(
     true_class: str,
 ) -> tuple[list[torch.FloatTensor], list[str]]:
     inputs = text_encode(reward.tokenizer, max_seq_length, sentence1, sentence2)
-    dataset = TensorDataset(inputs["input_ids"], inputs["attention_mask"])
+    dataset = TensorDataset(
+        inputs["input_ids"],
+        inputs["attention_mask"],
+        inputs["token_type_ids"],
+    )
     loader = DataLoader(dataset, batch_size=batch_size)
 
     scores: list[torch.FloatTensor] = []
@@ -260,10 +265,11 @@ def run_reward(
 
     reward.model.eval()
     with torch.no_grad():
-        for input_ids, attention_mask in loader:
+        for input_ids, attention_mask, token_type_ids in loader:
             outputs = reward.model(
                 input_ids=input_ids.to(device),
                 attention_mask=attention_mask.to(device),
+                token_type_ids=token_type_ids.to(device),
             )
             # Get logit for the reward class and use it as a score
             scores.extend(outputs.logits.select(dim=-1, index=label2id[true_class]))
@@ -817,7 +823,7 @@ def main() -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
     setup_logger(logger, output_dir)
 
-    git_commit = get_current_commit_shorthash()
+    git_commit = get_current_commit()
     logger.info(f"\n{args}")
     logger.info(f"output files: {output_dir}")
     logger.info(f"git commit: {git_commit}")
