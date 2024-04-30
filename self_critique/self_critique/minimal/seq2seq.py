@@ -288,6 +288,7 @@ def train(
 
     # TODO: Parametrise which metric to use for early stopping
     best_em = -1.0
+    best_epoch = -1
     early_stopping_counter = 0
 
     for epoch in range(config.num_train_epochs):
@@ -331,6 +332,7 @@ def train(
 
             if eval_result.metrics["em"] > best_em:
                 best_em = eval_result.metrics["em"]
+                best_epoch = epoch + 1
                 early_stopping_counter = 0
 
                 logger.info(
@@ -342,7 +344,8 @@ def train(
 
             if early_stopping_counter >= config.early_stopping_patience:
                 logger.info(
-                    f"Early stopping: {early_stopping_counter} epochs without improvement"
+                    f"Early stopping: {early_stopping_counter} epochs without improvement."
+                    f" Best EM: {best_em} at epoch {best_epoch}."
                 )
                 break
 
