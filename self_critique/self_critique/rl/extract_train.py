@@ -54,7 +54,6 @@ from trl import (
 )
 from trl.models.modeling_base import PreTrainedModelWrapper
 
-from self_critique.metric.fgcr_metric_cls import parse_instance
 from self_critique.util import (
     get_current_commit,
     get_device,
@@ -148,8 +147,6 @@ class Config:
     do_train: bool = True
     # Whether to perform evaluation
     do_eval: bool = True
-    # Whether to rewrite the extraction output to natural language using a template
-    rewrite: bool = False
     # Which prompt to use
     eval_prompt: EvalPrompt = EvalPrompt.COMBINED
     # Max sequence length for the reward model
@@ -302,7 +299,6 @@ def train_extract(
     true_class: str,
     label2id: dict[str, int],
     id2label: dict[int, str],
-    rewrite: bool,
     generation_kwargs: dict[str, Any],
 ) -> tuple[Module, torch.device]:  # sourcery skip: low-code-quality
     ppo_config = PPOConfig(
@@ -346,7 +342,6 @@ def train_extract(
             true_class=true_class,
             label2id=label2id,
             id2label=id2label,
-            rewrite=rewrite,
             generation_kwargs=generation_kwargs,
             desc="Eval (-1)",
         )
@@ -367,8 +362,6 @@ def train_extract(
             # Contrastive generation
             response_tensors = ppo_trainer.generate(query_tensors, **generation_kwargs)
             extract_response = text_decode(extract.tokenizer, response_tensors)
-            if rewrite:
-                extract_response = [rewrite_extraction(x) for x in extract_response]
 
             scores, labels = run_reward(
                 reward=reward,
@@ -404,7 +397,6 @@ def train_extract(
                     true_class=true_class,
                     label2id=label2id,
                     id2label=id2label,
-                    rewrite=rewrite,
                     generation_kwargs=generation_kwargs,
                     desc=f"Eval  ({epoch}.{batch_idx+1})",
                 )
@@ -454,7 +446,6 @@ def train_extract(
                 true_class=true_class,
                 label2id=label2id,
                 id2label=id2label,
-                rewrite=rewrite,
                 generation_kwargs=generation_kwargs,
                 desc=f"Eval  ({epoch})",
             )
@@ -607,14 +598,11 @@ def generate_and_reward(
     true_class: str,
     label2id: dict[str, int],
     id2label: dict[int, str],
-    rewrite: bool,
     generation_kwargs: dict[str, Any],
 ) -> BlockOutput:
     # Contrastive generation
     extract_response_tensor = extract_model.generate(inputs, **generation_kwargs)
     extract_response_txt = text_decode(tokenizer, extract_response_tensor)
-    if rewrite:
-        extract_response_txt = [rewrite_extraction(s) for s in extract_response_txt]
 
     scores, reward_labels = run_reward(
         reward=reward,
@@ -641,7 +629,6 @@ def evaluate(
     true_class: str,
     label2id: dict[str, int],
     id2label: dict[int, str],
-    rewrite: bool,
     generation_kwargs: dict[str, Any],
     desc: str | None = None,
 ) -> list[dict[str, Any]]:
@@ -666,7 +653,6 @@ def evaluate(
                 true_class,
                 label2id,
                 id2label,
-                rewrite,
                 generation_kwargs,
             )
             ref_output = generate_and_reward(
@@ -680,7 +666,6 @@ def evaluate(
                 true_class,
                 label2id,
                 id2label,
-                rewrite,
                 generation_kwargs,
             )
 
@@ -761,23 +746,6 @@ def adjust_casing(ss: list[str]) -> list[str]:
     if not ss:
         return []
     return [ss[0].capitalize()] + [decapitalise(s) for s in ss[1:]]
-
-
-def rewrite_extraction(extraction: str) -> str:
-    """Rewrite structured extraction into natural language using a template.
-
-    Simple case:
-    > [Cause] This is a cause [Effect] This is an effect
-    This is a cause, causes this is an effect
-
-    Complex case:
-    > [Cause] This cause 1 | This cause 2 [Effect] This effect 1 | This effect 2
-    This cause 1, and this cause 2 causes this effect 1 and this effect 2
-    """
-    entities, _ = parse_instance(extraction)
-    new_causes = ", and ".join(adjust_casing(entities["Cause"]))
-    new_effects = ", and ".join(adjust_casing(entities["Effect"]))
-    return f"{new_causes}, causes {new_effects}"
 
 
 def get_labelling(reward_type: str) -> tuple[dict[str, int], dict[int, str], str]:
@@ -890,7 +858,6 @@ def main() -> None:
             true_class=true_class,
             label2id=label2id,
             id2label=id2label,
-            rewrite=args.rewrite,
             generation_kwargs=generation_kwargs,
         )
         save_model(extract.model, extract.tokenizer, output_dir)
@@ -907,7 +874,6 @@ def main() -> None:
             id2label=id2label,
             true_class=true_class,
             device=device,
-            rewrite=args.rewrite,
             generation_kwargs=generation_kwargs,
         )
         save_results(result=eval_result, dir=output_dir, file_name="eval_result.json")
