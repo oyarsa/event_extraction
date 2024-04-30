@@ -149,6 +149,36 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[list[T]]:
         yield list(batch)
 
 
+@dataclasses.dataclass
+class LabelConfig:
+    label2id: dict[str, int]
+    id2label: dict[int, str]
+    true_class: str
+
+
+def get_labelling(reward_type: str) -> LabelConfig:
+    "Get configuration necessary for labelling entailment or valid models."
+    reward_type = reward_type.casefold()
+    if reward_type.casefold() == "entailment":
+        label2id = {
+            "CONTRADICTION": 0,
+            "ENTAILMENT": 1,
+            "NEUTRAL": 2,
+        }
+        true_class = "ENTAILMENT"
+    elif reward_type.casefold() == "valid":
+        label2id = {
+            "INVALID": 0,
+            "VALID": 1,
+        }
+        true_class = "VALID"
+    else:
+        raise ValueError(f"Unknown reward type: {reward_type}")
+    id2label = {id: label for label, id in label2id.items()}
+
+    return LabelConfig(label2id, id2label, true_class)
+
+
 def evaluate(
     dataset: list[EvalEntry],
     reward: Module,
@@ -229,6 +259,23 @@ def get_device() -> torch.device:
     return torch.device(device)
 
 
+def load_reward_model(
+    model_name_or_path: str, label_config: LabelConfig
+) -> tuple[PreTrainedTokenizer, PreTrainedModel]:
+    config = AutoConfig.from_pretrained(
+        model_name_or_path, num_labels=len(label_config.label2id)
+    )
+    config.label2id = label_config.label2id
+    config.id2label = label_config.id2label
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+
+    model = AutoModelForSequenceClassification.from_pretrained(
+        model_name_or_path, config=config
+    )
+    return tokenizer, model
+
+
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
 
@@ -256,10 +303,11 @@ def main() -> None:
     set_seed(args.seed)
     suppress_transformers_warnings()
 
-    label2id, id2label, true_class = get_labelling(args.reward_type)
+    label_config = get_labelling(args.reward_type)
 
     device = get_device()
-    reward = load_reward_model(args.model_path, label2id, id2label).to(device)
+    tokeniser, model = load_reward_model(args.model_path, label_config)
+    reward = Module(model.to(device), tokeniser)
 
     dataset = load_data(args.data_file, args.max_samples)
     results = evaluate(
@@ -267,10 +315,7 @@ def main() -> None:
         reward=reward,
         device=device,
         args=args,
-        true_class=true_class,
-        label2id=label2id,
-        id2label=id2label,
-        rewrite=args.rewrite,
+        label_config=label_config,
         batch_size=args.batch_size,
     )
     save_results(results, output_dir)
