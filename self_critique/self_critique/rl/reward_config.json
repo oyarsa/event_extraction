@@ -1,0 +1,5 @@
+{
+	"model_path": "../evaluation/output/classifier/fcr-deberta-v3-xsmall-combined-2",
+	"max_seq_length": 400,
+	"run_name": "reward"
+}
