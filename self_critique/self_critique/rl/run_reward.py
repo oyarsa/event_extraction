@@ -40,6 +40,11 @@ from self_critique.rl.extract_train import (
     setup_logger,
 )
 from self_critique.util import set_seed, suppress_transformers_warnings
+from self_critique.util import (
+    get_current_commit,
+    set_seed,
+    suppress_transformers_warnings,
+)
 
 logger = logging.getLogger("self.reward")
 
@@ -233,12 +238,19 @@ def main() -> None:
         output_dir = args.output_dir / datetime.now().isoformat()
     output_dir.mkdir(exist_ok=True, parents=True)
 
-    setup_logger(output_dir)
+    setup_logger(logger, output_dir)
+
+    git_commit = get_current_commit()
     logger.info(f"\n{args}")
-    logger.info(f"output files: {output_dir}")
+    logger.info(f"Git commit: {git_commit}")
+    logger.info(f"Output files: {args.output_dir}")
 
     (output_dir / "args.json").write_text(
-        json.dumps(dataclasses.asdict(args), default=str, indent=2)
+        json.dumps(
+            dataclasses.asdict(args) | {"git_commit": git_commit},
+            default=str,
+            indent=2,
+        )
     )
 
     set_seed(args.seed)
