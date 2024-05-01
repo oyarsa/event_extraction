@@ -1,0 +1,10 @@
+>>> /tmp/.psub.OmKTRg5vHR
+precision: 64.70%
+recall: 74.53%
+f1: 69.27%
+em: 28.24%
+cls_accuracy: 57.34%
+cls_precision: 46.72%
+cls_recall: 45.71%
+cls_f1: 44.49%
+

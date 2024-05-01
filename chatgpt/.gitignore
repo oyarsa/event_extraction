@@ -1,3 +1,4 @@
 keys.json
 .vscode/
-output/
+output/*
+!output/main-results/

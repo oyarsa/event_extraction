@@ -1,0 +1,10 @@
+>>> /tmp/.psub.Mxsa3SygTc
+precision: 66.78%
+recall: 74.08%
+f1: 70.24%
+em: 34.00%
+cls_accuracy: 36.76%
+cls_precision: 42.57%
+cls_recall: 47.27%
+cls_f1: 31.07%
+
