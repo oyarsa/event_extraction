@@ -165,7 +165,13 @@ class Config:
     def __str__(self) -> str:
         config_lines = [">>>> CONFIGURATION"]
         for key, val in dataclasses.asdict(self).items():
-            value = val.resolve() if isinstance(val, Path) else val
+            match val:
+                case Path(path=path):
+                    value = path.resolve()
+                case EvalPrompt(name=name):
+                    value = name
+                case _:
+                    value = val
             config_lines.append(f"  {key}: {value}")
         return "\n".join(config_lines)
 
