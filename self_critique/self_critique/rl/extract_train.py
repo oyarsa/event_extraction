@@ -857,6 +857,7 @@ def main() -> None:
 
     if eval_dataset is not None and args.do_eval:
         device = device or get_device()
+        desc = "Final evaluation"
         eval_result = evaluate(
             dataset=eval_dataset,
             extract=extract.to(device),
@@ -867,7 +868,9 @@ def main() -> None:
             true_class=true_class,
             device=device,
             generation_kwargs=generation_kwargs,
+            desc=desc,
         )
+        log_label_distribution(eval_result, desc=desc)
         save_results(result=eval_result, dir=output_dir, file_name="eval_result.json")
 
     logger.info(f"Reminder: output files are in {output_dir}")
