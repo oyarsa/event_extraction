@@ -1,0 +1,17 @@
+Given the context, reference extraction, candidate extraction and evaluation result, generate the steps to evaluate whether the candidate extraction is valid or not.
+Both the reference and the candidate represent the extraction of the causes, relation and effects from the context.
+The extractions have the format `[Cause] <cause> [Relation] <relation> [Effect] <effect>`.
+The candidate extraction is valid if has the same meaning as the reference.
+
+Context:
+{INPUT}
+
+Reference extraction:
+{GOLD}
+
+Candidate extraction:
+{OUTPUT}
+
+{RESULT_MODE}: {RESULT}
+
+Let's think step by step:
