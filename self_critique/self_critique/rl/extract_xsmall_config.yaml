@@ -22,9 +22,12 @@ reward_batch_size: 96
 ppo_batch_size: 96
 ppo_minibatch_size: 96
 
+# PPO parameters
 kl_penalty: kl
 adaptive_kl_ctrl: true
 init_kl_coef: 0.2
+use_reward_scaling: false
+use_reward_norm: false
 
 # Greedy decoding
 generation_top_k: null

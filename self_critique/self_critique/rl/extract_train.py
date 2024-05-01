@@ -155,6 +155,10 @@ class Config:
     eval_prompt: EvalPrompt = EvalPrompt.COMBINED
     # Max sequence length for the reward model
     max_reward_seq_length: int = 400
+    # Use reward scaling for PPO
+    use_reward_scaling: bool = False
+    # Use reward normalization for PPO
+    use_reward_norm: bool = False
 
     def __init__(self, **kwargs: Any) -> None:
         "Ignore unknown arguments"
@@ -323,6 +327,8 @@ def train_extract(
         kl_penalty=args.kl_penalty,
         init_kl_coef=args.init_kl_coef,
         log_with=args.log_with,
+        use_score_scaling=args.use_reward_scaling,
+        use_score_norm=args.use_reward_norm,
     )
     ppo_trainer = PPOTrainer(
         config=ppo_config,
@@ -332,7 +338,8 @@ def train_extract(
         dataset=train_dataset,
         data_collator=data_collator,
     )
-    assert ppo_trainer.dataloader, "Error initialising PPOTrainer dataloader."
+    if not ppo_trainer.dataloader:
+        raise ValueError("Error initialising PPOTrainer dataloader.")
 
     best_model = copy.deepcopy(ppo_trainer.model)
     best_ratio = 0.0
@@ -377,7 +384,7 @@ def train_extract(
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
 
-            scores, labels = run_reward(
+            rewards, labels = run_reward(
                 reward=reward,
                 max_seq_length=args.max_reward_seq_length,
                 batch_size=args.reward_batch_size,
@@ -388,7 +395,6 @@ def train_extract(
                 label2id=label2id,
                 id2label=id2label,
             )
-            rewards = scores
 
             stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
             stats["metrics/reward_ratio"] = sum(
