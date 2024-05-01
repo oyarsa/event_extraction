@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import warnings
+from datetime import datetime
 from pathlib import Path
 from typing import Any, cast
 
@@ -10,6 +11,12 @@ import numpy.typing as npt
 import torch
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
+
+
+# sourcery skip: avoid-single-character-names-functions
+def p(*args: Any, **kwargs: Any) -> None:
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"{ts} | ", *args, **kwargs)
 
 
 def get_device() -> str:
@@ -34,7 +41,9 @@ def load_data(file_path: Path) -> tuple[list[dict[str, Any]], list[str]]:
 
 
 def encode_sentences(sentences: list[str], model_name: str, device: str) -> npt.NDArray:
+    p(3.1)
     model = SentenceTransformer(model_name, device=device)
+    p(3.2)
     return cast(npt.NDArray, model.encode(sentences))
 
 
@@ -64,13 +73,19 @@ def get_cluster_centers(
 def main(
     input_file: Path, k: int, output_file: Path, model: str, seed: int, device: str
 ) -> None:
+    p(1)
     suppress_warnings()
+    p(2)
     data, sentences = load_data(input_file)
+    p(3)
     vectors = encode_sentences(sentences, model, device)
+    p(4)
     cluster_labels, cluster_center_vectors = cluster_vectors(vectors, k, seed)
+    p(5)
     cluster_center_items = get_cluster_centers(
         data, vectors, cluster_labels, cluster_center_vectors
     )
+    p(6)
 
     output_file = output_file or Path(f"{input_file.stem}_{k}_clustered.json")
     print(f"Saving output to {output_file}")
