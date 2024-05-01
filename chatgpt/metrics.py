@@ -2,7 +2,7 @@
 import re
 import string
 from collections import Counter, defaultdict
-from enum import StrEnum, auto
+from enum import Enum
 from typing import TypedDict
 
 from sklearn.metrics import precision_recall_fscore_support
@@ -29,9 +29,9 @@ class MetricReference(TypedDict):
     context: str
 
 
-class StructureFormat(StrEnum):
-    TAGS = auto()
-    LINES = auto()
+class StructureFormat(str, Enum):
+    TAGS = "tags"
+    LINES = "lines"
 
 
 def calculate_metrics(
