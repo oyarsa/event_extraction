@@ -7,6 +7,7 @@ import openai
 from tqdm import tqdm
 
 from common import (
+    MODEL_COSTS,
     ChatCompletion,
     calculate_cost,
     get_result,
@@ -382,6 +383,9 @@ def main() -> None:
 
     if args.sys_prompt < 0 or args.sys_prompt >= len(USER_PROMPTS):
         raise IndexError(f"Invalid system prompt index: {args.prompt}")
+
+    if args.model not in MODEL_COSTS:
+        raise ValueError(f"Model {args.model} not found in costs table.")
 
     run_extraction(
         client,

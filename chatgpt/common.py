@@ -91,6 +91,14 @@ MODEL_COSTS = {
         0.00003,
         0.00006,
     ),
+    "gpt-3.5-turbo-0125": (  # in: $0.001 / 1K tokens, out: $0.002 / 1K tokens
+        0.000001,
+        0.000002,
+    ),
+    "gpt-4-0125-preview": (  # in: $0.03 / 1K tokens, out: $0.06 / 1K tokens
+        0.00003,
+        0.00006,
+    ),
 }
 
 
@@ -126,11 +134,12 @@ def log_args(args: argparse.Namespace, path: Path | None) -> None:
         if isinstance(value, Path):
             args_dict[key] = str(value)
 
+    out = json.dumps(args_dict, indent=2)
     if path is not None:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(args_dict))
+        path.write_text(out)
     else:
-        print(json.dumps(args_dict, indent=2))
+        print(out)
 
 
 def init_argparser(*, prompt: bool = True) -> argparse.ArgumentParser:
