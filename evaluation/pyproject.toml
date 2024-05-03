@@ -64,7 +64,7 @@ ignore = [
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "ruff<1.0.0,>=0.2.1",
+    "ruff<1.0.0,>=0.4",
     "black<25.0.0,>=24.2.0",
 ]
 

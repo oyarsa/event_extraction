@@ -33,7 +33,7 @@ build-backend = "pdm.backend"
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "ruff>=0.0.263",
+    "ruff>=0.4.2",
     "black>=23.3.0",
     "ipykernel>=6.23.1",
     "tensorboard>=2.12.2",
