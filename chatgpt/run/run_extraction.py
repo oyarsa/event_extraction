@@ -13,11 +13,12 @@ import typer
 def main(
     env: str = "dev",
     mode: str = "lines",
-    key: str = "kcl",
+    keys_file: str = os.path.expanduser("~/.config/event_extraction/keys.json"),
+    key: str = "azure",
     run_name: Optional[str] = None,
     data: Optional[Path] = None,
-    user_prompt: int = 0,
-    system_prompt: int = 0,
+    user_prompt: int = 1,
+    system_prompt: int = 1,
     model: str = "gpt-3.5-turbo",
     envs: bool = False,
 ) -> None:
@@ -42,9 +43,9 @@ def main(
         raise ValueError(f"Invalid mode {mode}")
 
     available_models = ["gpt-3.5-turbo", "gpt-4"]
-    if model not in available_models:
+    if not any(model.startswith(x) for x in available_models):
         raise ValueError(
-            f"Invalid model {model}. Options: {', '.join(available_models)}"
+            f"Invalid model {model}. Options: {', '.join(available_models)} and derived."
         )
 
     input_file, examples_file = map(Path, files[env])
@@ -56,16 +57,14 @@ def main(
             user_prompt = 1
         elif mode == "tags":
             user_prompt = 2
-        model = "gpt-4-1106-preview"
-    elif model.startswith("gpt-3.5"):
-        model = "gpt-3.5-turbo-0613"
-    else:
+    elif not model.startswith("gpt-3.5"):
         raise ValueError(f"Invalid model {model}")
 
     input_file = data or Path("data") / "extraction" / mode / input_file
 
     # Go to level above script's directory
     # This should be the chatgpt project root
+    # TODO: Use git root instead
     os.chdir(Path(__file__).parent.parent)
 
     output_dir = Path("output") / "extraction" / env / mode / model / run_name
@@ -75,7 +74,7 @@ def main(
     args = [
         sys.executable,
         "extraction.py",
-        "keys.json",
+        keys_file,
         key,
         "--model",
         model,
