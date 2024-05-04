@@ -1,3 +1,25 @@
+[project]
+name = "chatgpt"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Italo Silva", email = "italo@maleldil.com"},
+]
+dependencies = [
+	"openai>=1.12.0",
+	"ratelimit>=2.2.1",
+	"scikit-learn>=1.2.2",
+	"tiktoken>=0.3.2",
+	"tqdm>=4.65.0",
+	"typer>=0.9.0"
+]
+requires-python = ">=3.10,<3.11"
+license = {text = "GPL-3.0-only"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
 [tool.ruff]
 extend = "../pyproject.toml"
 
