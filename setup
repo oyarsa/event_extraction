@@ -1,4 +1,5 @@
 #!/bin/sh
+# Set up python dependencies using either uv or pip-tools
 
 # Check if a Python virtual environment is active
 if [ -z "${VIRTUAL_ENV}" ]; then
