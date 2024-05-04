@@ -4,17 +4,12 @@ Causal event extraction from text
 
 ## Setup
 
-1. Clone the repository
-2. Install the requirements
-```fish
-> uv venv
-> source .venv/bin/activate.fish # or .venv/bin/activate on bash/zsh
-> uv pip compile requirements.in -o requirements.txt
-> uv pip sync requirements.txt
-```
+1. Setup a virtual environment
+2. Install dependencies with `./setup`
+Requires `uv` or `pip-tools`.
 
 I recommend using [uv](https://github.com/astral-sh/uv) for managing dependencies
-because it's a lot faster, but it should work with python's built-in `venv`, `pip` and
+because it's a lot faster, but it should work with python's built-in `venv` and
 `pip-tools` as well.
 
 ## Projects
