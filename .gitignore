@@ -214,3 +214,6 @@ Sessionx.vim
 # Clojure
 .clj-kondo
 .calva
+
+# pip-tools generated requirements.txt file is platform-specific
+/requirements.txt
