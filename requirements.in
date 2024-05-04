@@ -1,2 +1,5 @@
+-c agreement/requirements.txt
+-c chatgpt/requirements.txt
+
 -e ./self_critique
 -e ./evaluation
