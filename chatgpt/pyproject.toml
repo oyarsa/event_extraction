@@ -20,6 +20,9 @@ license = {text = "GPL-3.0-only"}
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
+[tool.pyright]
+typeCheckingMode = "basic"
+
 [tool.ruff]
 extend = "../pyproject.toml"
 

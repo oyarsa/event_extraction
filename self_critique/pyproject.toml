@@ -47,7 +47,7 @@ isort = { known-first-party = ["trainer-seq2seq", "metric"] }
 extend-ignore = ["UP007"]  # HF doesn't like T | None
 
 [tool.pyright]
-typeCheckingMode = "off"
+typeCheckingMode = "basic"
 useLibraryCodeForTypes = false
 reportMissingImports = false
 
