@@ -358,6 +358,7 @@ def train(
             best_metric = metrics[metric_for_best]
             model.save_pretrained(best_model_path)
             logger.info(f"New best: {best_metric:.4f} {metric_for_best}")
+            epochs_without_improvement = 0
         else:
             epochs_without_improvement += 1
             logger.info(f"{epochs_without_improvement} epochs without improvement")
@@ -562,6 +563,7 @@ def suppress_transformers_warnings() -> None:
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     warnings.filterwarnings("ignore", module="transformers.convert_slow_tokenizer")
     warnings.filterwarnings("ignore", module="torch._utils")
+    warnings.filterwarnings("ignore", module="huggingface_hub.file_download")
     transformers.logging.set_verbosity_error()
 
 
