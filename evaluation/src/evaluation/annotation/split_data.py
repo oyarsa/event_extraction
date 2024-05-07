@@ -34,6 +34,14 @@ def load_and_process_data(input: Path) -> list[dict[str, Any]]:
     ]
 
 
+def save_splits(
+    name: str, output_dir: Path, splits: list[list[dict[str, Any]]]
+) -> None:
+    for i, subset in enumerate(splits):
+        path = output_dir / f"{name}_subset_{i}.json"
+        path.write_text(json.dumps(subset, indent=2))
+
+
 def main(
     input: Path, output_dir: Path, num_subsets: int, common_pct: float, seed: int
 ) -> None:
@@ -44,9 +52,7 @@ def main(
     splits = split_data(data, num_subsets, common_pct)
     print(f"Split length: {len(splits[0])} x {num_subsets} ({common_pct:.0%} common)")
 
-    for i, subset in enumerate(splits):
-        path = output_dir / f"{input.name}_subset_{i}.json"
-        path.write_text(json.dumps(subset, indent=2))
+    save_splits(input.name, output_dir, splits)
 
 
 if __name__ == "__main__":
