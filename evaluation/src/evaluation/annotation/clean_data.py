@@ -3,11 +3,11 @@ import argparse
 import json
 from pathlib import Path
 
-from evaluation.annotation.split_data import clean_item
+from evaluation.annotation.split_data import load_and_process_data
 
 
 def main(input: Path, output: Path) -> None:
-    data = [clean_item(item) for item in json.loads(input.read_text())]
+    data = load_and_process_data(input)
     output.write_text(json.dumps(data, indent=2))
 
 

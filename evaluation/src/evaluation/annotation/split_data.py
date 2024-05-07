@@ -23,12 +23,15 @@ def split_data(
     return [common + remaining[i * size : (i + 1) * size] for i in range(num_subsets)]
 
 
-def clean_item(item: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "text": item["input"],
-        "annotation": item["gold"],
-        "model": item["output"],
-    }
+def load_and_process_data(input: Path) -> list[dict[str, Any]]:
+    return [
+        {
+            "text": item["input"],
+            "annotation": item["gold"],
+            "model": item["output"],
+        }
+        for item in json.loads(input.read_text())
+    ]
 
 
 def main(
@@ -37,7 +40,7 @@ def main(
     random.seed(seed)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    data = [clean_item(item) for item in json.loads(input.read_text())]
+    data = load_and_process_data(input)
     splits = split_data(data, num_subsets, common_pct)
     print(f"Split length: {len(splits[0])} x {num_subsets} ({common_pct:.0%} common)")
 
