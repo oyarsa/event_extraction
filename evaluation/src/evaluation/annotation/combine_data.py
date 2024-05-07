@@ -6,6 +6,7 @@ from typing import Any
 
 from evaluation.annotation.split_data import (
     load_and_process_data,
+    report_splits,
     save_splits,
     split_data,
 )
@@ -29,6 +30,7 @@ def main(
 
     splits = split_data(all_data, num_subsets, common_pct)
     save_splits("test_combined", output_dir, splits)
+    report_splits(all_data, common_pct, num_subsets, splits)
 
 
 def add_metadata(item: dict[str, Any], model: str) -> dict[str, Any]:

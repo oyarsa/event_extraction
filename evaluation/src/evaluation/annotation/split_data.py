@@ -42,6 +42,18 @@ def save_splits(
         path.write_text(json.dumps(subset, indent=2))
 
 
+def report_splits(
+    all_data: list[dict[str, Any]],
+    common_pct: float,
+    num_subsets: int,
+    splits: list[list[dict[str, Any]]],
+) -> None:
+    print(
+        f"Split length: {len(splits[0])} x {num_subsets} ({common_pct:.0%} common ="
+        f" {int(len(all_data) * common_pct):.0f} items)"
+    )
+
+
 def main(
     input: Path, output_dir: Path, num_subsets: int, common_pct: float, seed: int
 ) -> None:
@@ -50,9 +62,9 @@ def main(
 
     data = load_and_process_data(input)
     splits = split_data(data, num_subsets, common_pct)
-    print(f"Split length: {len(splits[0])} x {num_subsets} ({common_pct:.0%} common)")
 
     save_splits(input.name, output_dir, splits)
+    report_splits(data, common_pct, num_subsets, splits)
 
 
 if __name__ == "__main__":
