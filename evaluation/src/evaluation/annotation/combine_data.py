@@ -42,9 +42,12 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "file_models",
-        type=Path,
+        type=str,
         nargs="+",
         help="List of comma separated pairs. Each pair is file,model.",
+    )
+    parser.add_argument(
+        "output_dir", type=Path, help="Output directory to save the split datasets"
     )
     parser.add_argument(
         "--num-subsets",
@@ -68,7 +71,6 @@ if __name__ == "__main__":
         default=0,
         help="Random seed for reproducibility",
     )
-    parser.add_argument("model", type=str, help="The model to use for the annotation.")
     args = parser.parse_args()
     main(
         args.file_models, args.output_dir, args.num_subsets, args.common_pct, args.seed
