@@ -129,6 +129,7 @@ def make_filter_response(messages: list[dict[str, str]]) -> ChatCompletion:
 
 class FilterStatus(Enum):
     "Filter status for the GPT model output."
+
     UNFILTERED = 0
     FILTERED = 1
 
@@ -296,6 +297,7 @@ def make_message_extraction(item: dict[str, Any]) -> tuple[str, str]:
 
 class ResultMode(str, Enum):
     "Result mode for the GPT model."
+
     VALID = "valid"
     SCORE = "score"
     LIKERT = "likert"
@@ -460,15 +462,21 @@ def most_common(lst: list[int]) -> int:
 
 
 def extract_lines(text: str) -> str:
+    """Extract lines between explanation/analysis and the score."""
     pattern = r"(?i)(?:explanation|analysis):\s*(.*?)\s*(?:validity|valid|score):"
     if match := re.search(pattern, text, re.DOTALL):
         return match[1].strip()
     return ""
 
 
+def starts_with_number(text: str) -> bool:
+    """Line starts with any whitespace followed by a number and a word boundary."""
+    return bool(re.match(r"^\s*\d+\b", text))
+
+
 def count_steps(result: str) -> int:
     steps = extract_lines(result)
-    return sum(bool(line.strip()) for line in steps.splitlines())
+    return sum(starts_with_number(line) for line in steps.splitlines())
 
 
 def format_result(i: int, result: str) -> str:
