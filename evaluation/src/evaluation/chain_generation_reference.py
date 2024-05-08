@@ -133,17 +133,14 @@ def indent(text: str) -> str:
     )
 
 
-def print_result(data: ChainData, result_mode: ResultMode, result: str) -> str:
-    out: list[str] = [
-        "",
-        f"Input:\n{indent(data.input)}",
-        f"Reference:\n{indent(data.gold)}",
-        f"Candidate:\n{indent(data.output)}",
-        f"{result_mode.display}:\n{data.score}",
-        f"Chain:\n{indent(result)}",
-        "\n",
-    ]
-    return "\n".join(out)
+def render_result(data: ChainData, result_mode: ResultMode, result: str) -> str:
+    return (
+        f"\nInput:\n{indent(data.input)}\n"
+        f"Reference:\n{indent(data.gold)}\n"
+        f"Candidate:\n{indent(data.output)}\n"
+        f"{result_mode.display}:\n{data.score}\n"
+        f"Chain:\n{indent(result)}\n\n"
+    )
 
 
 def generate_chains(
