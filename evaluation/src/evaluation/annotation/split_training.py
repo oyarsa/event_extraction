@@ -13,7 +13,7 @@ import string
 from collections import Counter
 from enum import Enum
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 
 from evaluation.gpt_common import parse_instance as parse_instance_
 
