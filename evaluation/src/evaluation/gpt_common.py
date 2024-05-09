@@ -9,7 +9,7 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, TypedDict, cast
 
 import openai
 import pandas as pd
@@ -27,7 +27,13 @@ from evaluation import metrics
 logger = logging.getLogger("evaluation.gpt")
 
 
-def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
+# sourcery skip: snake-case-variable-declarations
+class Instance(TypedDict):
+    Cause: list[str]
+    Effect: list[str]
+
+
+def parse_instance(answer: str) -> tuple[Instance, str | None]:
     matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
     if not matches:
         return {
