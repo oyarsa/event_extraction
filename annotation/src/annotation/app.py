@@ -163,6 +163,10 @@ def load_user_progress(
     )
 
 
+def set_answer(instance_id: str) -> None:
+    st.session_state[instance_id] = st.session_state[checkbox_id(instance_id)]
+
+
 def render_instance(
     instance: AnnotationInstance,
     prolific_id: str,
@@ -175,10 +179,17 @@ def render_instance(
     render_clauses("Reference answer", instance.annotation)
     render_clauses("Model answer", instance.model)
 
+    if instance.id not in st.session_state:
+        st.session_state[instance.id] = load_answer(
+            instance.id, prolific_id, answer_dir, annotation_data
+        )
+
     valid = st.checkbox(
         "Valid?",
         key=checkbox_id(instance.id),
-        value=load_answer(instance.id, prolific_id, answer_dir, annotation_data),
+        value=st.session_state[instance.id],
+        on_change=set_answer,
+        kwargs={"instance_id": instance.id},
     )
 
     if DEBUG:
@@ -262,7 +273,7 @@ def progress(
     if col1.button("Previous"):
         goto_page(page_idx - 1)
     if col2.button("Save & Next"):
-        checkbox_answer = st.session_state[checkbox_id(instance_id)]
+        checkbox_answer = st.session_state[instance_id]
         save_progress(
             prolific_id, answer_dir, page_idx, checkbox_answer, annotation_data
         )
