@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import ClassVar
 
 import streamlit as st
+from typing_extensions import override
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ class ColourFormatter(logging.Formatter):
     }
     reset: ClassVar[str] = "\x1b[0m"
 
+    @override
     def format(self, record: logging.LogRecord) -> str:
         msg = super().format(record)
         if colour := self.formats.get(record.levelno):
