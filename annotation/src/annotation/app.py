@@ -1,3 +1,5 @@
+"""Streamlit app to annotate evaluation data."""
+
 import argparse
 import hashlib
 import json
@@ -175,9 +177,12 @@ def main(log_path: Path, data_path: Path, answer_path: Path) -> None:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--log-path", type=Path, default="logs")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument("--data-path", type=Path, default="data/test.json")
     parser.add_argument("--answer-path", type=Path, default="data/answers.json")
+    parser.add_argument("--log-path", type=Path, default="logs")
     args = parser.parse_args()
+
     main(args.log_path, args.data_path, args.answer_path)
