@@ -166,6 +166,10 @@ def main(log_path: Path, data_path: Path, answer_path: Path) -> None:
     setup_logger(logger, log_path)
     annotation_data = load_data(data_path)
 
+    if st.query_params.get("prolific_id") is not None:
+        enabled = True
+        st.session_state["prolific_id"] = st.query_params["prolific_id"]
+
     if prolific_id := st.text_input(
         "Prolific ID", key="prolific_id", placeholder="Prolific ID"
     ):
@@ -175,7 +179,7 @@ def main(log_path: Path, data_path: Path, answer_path: Path) -> None:
         enabled = False
         st.write("Please enter your Prolific ID to start.")
 
-    st.title("Annotate the data")
+    heading("Annotate the data", 1)
 
     for i, instance in enumerate(annotation_data):
         heading(f"#{i + 1}", 2)
