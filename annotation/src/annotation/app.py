@@ -86,6 +86,8 @@ class AnnotationInstance:
     text: str
     annotation: ParsedInstance
     model: ParsedInstance
+    # Keeping the original data just in case
+    original: dict[str, str]
 
 
 def heading(text: str, level: int) -> None:
@@ -101,16 +103,20 @@ def render_clauses(header: str, instance: ParsedInstance) -> None:
 def save_answer(instance: AnnotationInstance, key: str, answer_path: Path) -> None:
     valid = st.session_state[key]
     prolific_id = st.session_state["prolific_id"]
-    ts = datetime.now().isoformat()
 
-    logger.info(f"{instance.id} - {valid}")
+    logger.info(f"{instance.id} - {prolific_id} - {valid}")
 
     item = json.dumps(
-        {"id": instance.id, "prolific_id": prolific_id, "ts": ts, "answer": valid},
-        indent=2,
+        {
+            "id": instance.id,
+            "prolific_id": prolific_id,
+            "ts": datetime.now().isoformat(),
+            "answer": valid,
+            "original": instance.original,
+        },
     )
     with answer_path.open("a") as f:
-        f.write(item + "\n")
+        print(item, file=f, flush=True)
 
 
 def render_instance(
@@ -119,7 +125,6 @@ def render_instance(
     heading("Text", 3)
     st.write(instance.text)
 
-    st.write(instance.text)
     render_clauses("Reference answer", instance.annotation)
     render_clauses("Model answer", instance.model)
 
@@ -149,6 +154,7 @@ def load_data(path: Path) -> list[AnnotationInstance]:
             text=d["text"],
             annotation=ann,
             model=model,
+            original=d,
         )
         for d in json.loads(path.read_text())
         if (ann := parse_instance(d["annotation"]))
@@ -172,7 +178,7 @@ def main(log_path: Path, data_path: Path, answer_path: Path) -> None:
     st.title("Annotate the data")
 
     for i, instance in enumerate(annotation_data):
-        st.write(f"## #{i + 1}")
+        heading(f"#{i + 1}", 2)
         render_instance(instance, i, answer_path, enabled)
 
 
