@@ -164,7 +164,9 @@ def load_user_progress(
 
 
 def set_answer(instance_id: str) -> None:
-    st.session_state[instance_id] = st.session_state[checkbox_id(instance_id)]
+    st.session_state[instance_id] = (
+        0 if st.session_state[radio_id(instance_id)] == "Valid" else 1
+    )
 
 
 def render_instance(
@@ -172,22 +174,27 @@ def render_instance(
     prolific_id: str,
     answer_dir: Path,
     annotation_data: list[AnnotationInstance],
-) -> None:
+) -> bool:
+    """Renders the instance and returns True if the user has selected a valid answer."""
     heading("Text", 3)
     st.write(instance.text)
 
     render_clauses("Reference answer", instance.annotation)
     render_clauses("Model answer", instance.model)
 
+    previous_answer = load_answer(instance.id, prolific_id, answer_dir, annotation_data)
     if instance.id not in st.session_state:
-        st.session_state[instance.id] = load_answer(
-            instance.id, prolific_id, answer_dir, annotation_data
-        )
+        st.session_state[instance.id] = previous_answer
 
-    valid = st.checkbox(
-        "Valid?",
-        key=checkbox_id(instance.id),
-        value=st.session_state[instance.id],
+    label = "Is the model output valid relative to the reference?"
+    heading(label, 3)
+    valid = st.radio(
+        label,
+        ["Valid", "Invalid"],
+        label_visibility="collapsed",
+        index=None if previous_answer is None else int(previous_answer),
+        horizontal=True,
+        key=radio_id(instance.id),
         on_change=set_answer,
         kwargs={"instance_id": instance.id},
     )
@@ -195,9 +202,14 @@ def render_instance(
     if DEBUG:
         st.write("Valid? ", valid)
 
+    if valid is None:
+        st.write("Please select an answer.")
+        return False
+    return True
 
-def checkbox_id(instance_id: str) -> str:
-    return f"cb_{instance_id}"
+
+def radio_id(instance_id: str) -> str:
+    return f"rd_{instance_id}"
 
 
 def load_answer(
@@ -205,12 +217,12 @@ def load_answer(
     prolific_id: str,
     answer_dir: Path,
     annotation_data: list[AnnotationInstance],
-) -> bool:
+) -> bool | None:
     user_data = load_user_progress(prolific_id, answer_dir, annotation_data)
-    result = next(
-        (item.answer for item in user_data.items if item.id == instance_id), False
+    return next(
+        (item.answer for item in user_data.items if item.id == instance_id),
+        None,
     )
-    return result or False
 
 
 def hash_instance(instance: dict[str, str]) -> str:
@@ -232,10 +244,10 @@ def load_data(path: Path) -> list[AnnotationInstance]:
     ]
 
 
-def setup_prolific() -> str | None:
+def setup_prolific(prolific_id_param: str) -> str | None:
     """Sets up the Prolific ID. If it's not set, the page will be disabled."""
     if "prolific_id" in st.query_params:
-        st.session_state["prolific_id"] = st.query_params["prolific_id"]
+        st.session_state["prolific_id"] = st.query_params[prolific_id_param]
 
     if prolific_id := st.text_input(
         "Enter your Prolific ID", key="prolific_id", placeholder="Prolific ID"
@@ -307,16 +319,12 @@ def reset_user_data(prolific_id: str, answer_dir: Path) -> None:
 
 def get_page_idx(
     annotation_data: list[AnnotationInstance], answer_dir: Path, prolific_id: str
-) -> int | None:
+) -> int:
     if "page_idx" in st.session_state:
         return st.session_state["page_idx"]
 
     # Find the first unanswered question so the user can continue from they left off
     first_unanswered_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
-    if first_unanswered_idx == len(annotation_data) - 1:
-        # TODO: make this a page that the user can navigate back to other items
-        st.write("You have answered all questions.")
-        return None
 
     # User starting now
     if first_unanswered_idx is None:
@@ -328,24 +336,30 @@ def get_page_idx(
     return page_idx
 
 
-def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> None:
-    prolific_id = setup_prolific()
+def render_page(
+    annotation_data: list[AnnotationInstance], answer_dir: Path, prolific_id_param: str
+) -> None:
+    prolific_id = setup_prolific(prolific_id_param)
     if prolific_id is None:
         return
 
     page_idx = get_page_idx(annotation_data, answer_dir, prolific_id)
-    if page_idx is None:
+
+    if page_idx >= len(annotation_data):
+        heading("You have answered all questions.", 2)
         return
 
     heading("Annotate the data", 1)
     heading(f"#{page_idx + 1}", 2)
 
     instance = annotation_data[page_idx]
-    render_instance(instance, prolific_id, answer_dir, annotation_data)
-    progress(prolific_id, answer_dir, annotation_data, instance.id, page_idx)
+    if render_instance(instance, prolific_id, answer_dir, annotation_data):
+        progress(prolific_id, answer_dir, annotation_data, instance.id, page_idx)
 
 
-def main(log_path: Path, annotation_data_path: Path, answer_dir: Path) -> None:
+def main(
+    log_path: Path, annotation_data_path: Path, answer_dir: Path, prolific_id_param: str
+) -> None:
     setup_logger(logger, log_path)
     annotation_data = load_data(annotation_data_path)
     answer_dir.mkdir(exist_ok=True, parents=True)
@@ -355,7 +369,7 @@ def main(log_path: Path, annotation_data_path: Path, answer_dir: Path) -> None:
         st.write("TODO")
         st.write(f"Number of instances: {len(annotation_data)}")
 
-    render_page(annotation_data, answer_dir)
+    render_page(annotation_data, answer_dir, prolific_id_param)
 
 
 if __name__ == "__main__":
@@ -365,6 +379,7 @@ if __name__ == "__main__":
     parser.add_argument("--data-file", type=Path, default="data/test.json")
     parser.add_argument("--answer-dir", type=Path, default="data/answers")
     parser.add_argument("--log-path", type=Path, default="logs")
+    parser.add_argument("--prolific-id-param", default="prolific_id")
     args = parser.parse_args()
 
-    main(args.log_path, args.data_file, args.answer_dir)
+    main(args.log_path, args.data_file, args.answer_dir, args.prolific_id_param)
