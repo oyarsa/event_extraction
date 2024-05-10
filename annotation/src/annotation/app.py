@@ -6,8 +6,7 @@ import json
 import logging
 import re
 import sys
-from dataclasses import dataclass
-from datetime import datetime
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, ClassVar
 
@@ -15,6 +14,8 @@ import streamlit as st
 from typing_extensions import override
 
 logger = logging.getLogger(__name__)
+
+DEBUG = True
 
 
 class ColourFormatter(logging.Formatter):
@@ -87,7 +88,32 @@ class AnnotationInstance:
     annotation: ParsedInstance
     model: ParsedInstance
     # Keeping the original data just in case
-    original: dict[str, str]
+    data: dict[str, Any]
+
+
+@dataclass
+class UserProgressItem:
+    id: str
+    data: dict[str, Any]
+    answer: bool | None
+
+
+@dataclass
+class UserProgress:
+    prolific_id: str
+    items: list[UserProgressItem]
+
+    @classmethod
+    def from_data(
+        cls, prolific_id: str, data: list[AnnotationInstance]
+    ) -> "UserProgress":
+        return cls(
+            prolific_id=prolific_id,
+            items=[UserProgressItem(id=d.id, data=d.data, answer=None) for d in data],
+        )
+
+    def set_answer(self, idx: int, answer: bool) -> None:
+        self.items[idx].answer = answer
 
 
 def heading(text: str, level: int) -> None:
@@ -100,29 +126,52 @@ def render_clauses(header: str, instance: ParsedInstance) -> None:
     st.markdown(f"**Effects**: {instance.effect}")
 
 
-def save(answer_path: Path, item: dict[str, Any]) -> None:
-    with answer_path.open("a") as f:
-        print(json.dumps(item), file=f, flush=True)
+def save_progress(
+    prolific_id: str,
+    answer_dir: Path,
+    idx: int,
+    answer: bool,
+    input_data: list[AnnotationInstance],
+) -> None:
+    user_data = load_user_progress(prolific_id, answer_dir, input_data)
+    user_data.set_answer(idx, answer)
+
+    get_user_path(answer_dir, prolific_id).write_text(
+        json.dumps(asdict(user_data), indent=2)
+    )
 
 
-def save_answer(instance: AnnotationInstance, key: str, answer_path: Path) -> None:
-    valid = st.session_state[key]
-    prolific_id = st.session_state["prolific_id"]
+def get_user_path(answer_dir: Path, prolific_id: str) -> Path:
+    return answer_dir / f"{prolific_id}.json"
 
-    logger.info(f"{instance.id} - {prolific_id} - {valid}")
 
-    item = {
-        "id": instance.id,
-        "prolific_id": prolific_id,
-        "ts": datetime.now().isoformat(),
-        "answer": valid,
-        "original": instance.original,
-    }
-    save(answer_path, item)
+def load_user_progress(
+    prolific_id: str, answer_dir: Path, input_data: list[AnnotationInstance]
+) -> UserProgress:
+    """Loads the user's progress from the answer file."""
+    user_path = get_user_path(answer_dir, prolific_id)
+    if not user_path.exists():
+        return UserProgress.from_data(prolific_id, input_data)
+
+    data = json.loads(user_path.read_text())
+    return UserProgress(
+        prolific_id=data["prolific_id"],
+        items=[
+            UserProgressItem(id=item["id"], data=item["data"], answer=item["answer"])
+            for item in data["items"]
+        ],
+    )
+
+
+def set_answer(instance_id: str) -> None:
+    st.session_state[instance_id] = st.session_state[checkbox_id(instance_id)]
 
 
 def render_instance(
-    instance: AnnotationInstance, num: int, answer_path: Path, enabled: bool
+    instance: AnnotationInstance,
+    prolific_id: str,
+    answer_dir: Path,
+    annotation_data: list[AnnotationInstance],
 ) -> None:
     heading("Text", 3)
     st.write(instance.text)
@@ -130,19 +179,33 @@ def render_instance(
     render_clauses("Reference answer", instance.annotation)
     render_clauses("Model answer", instance.model)
 
-    key = f"box_{num}"
     valid = st.checkbox(
         "Valid?",
-        key=key,
-        disabled=not enabled,
-        on_change=save_answer,
-        kwargs={
-            "instance": instance,
-            "key": key,
-            "answer_path": answer_path,
-        },
+        key=checkbox_id(instance.id),
+        value=load_answer(instance.id, prolific_id, answer_dir, annotation_data),
+        on_change=set_answer,
+        kwargs={"instance_id": instance.id},
     )
-    st.write("Valid? ", valid)
+
+    if DEBUG:
+        st.write("Valid? ", valid)
+
+
+def checkbox_id(instance_id: str) -> str:
+    return f"cb_{instance_id}"
+
+
+def load_answer(
+    instance_id: str,
+    prolific_id: str,
+    answer_dir: Path,
+    annotation_data: list[AnnotationInstance],
+) -> bool:
+    user_data = load_user_progress(prolific_id, answer_dir, annotation_data)
+    result = next(
+        (item.answer for item in user_data.items if item.id == instance_id), False
+    )
+    return result or False
 
 
 def hash_instance(instance: dict[str, str]) -> str:
@@ -156,7 +219,7 @@ def load_data(path: Path) -> list[AnnotationInstance]:
             text=d["text"],
             annotation=ann,
             model=model,
-            original=d,
+            data=d,
         )
         for d in json.loads(path.read_text())
         if (ann := parse_instance(d["annotation"]))
@@ -164,44 +227,137 @@ def load_data(path: Path) -> list[AnnotationInstance]:
     ]
 
 
-def setup_prolific() -> bool:
+def setup_prolific() -> str | None:
     """Sets up the Prolific ID. If it's not set, the page will be disabled."""
-    if st.query_params.get("prolific_id") is not None:
+    if "prolific_id" in st.query_params:
         st.session_state["prolific_id"] = st.query_params["prolific_id"]
 
     if prolific_id := st.text_input(
         "Enter your Prolific ID", key="prolific_id", placeholder="Prolific ID"
     ):
         st.write("Your Prolific ID is:", prolific_id)
-        return True
+        return prolific_id
 
     st.write("Please enter your Prolific ID to start.")
-    return False
+    return None
 
 
-def render_page(annotation_data, answer_path: Path) -> None:
-    enabled = setup_prolific()
+def find_last_entry_idx(
+    prolific_id: str, answer_dir: Path, annotation_data: list[AnnotationInstance]
+) -> int | None:
+    user_path = get_user_path(answer_dir, prolific_id)
+    if not user_path.exists():
+        return None
+
+    user_progress = load_user_progress(prolific_id, answer_dir, annotation_data)
+    # First non-None (i.e. first unanswered) answer
+    return next(i for i, item in enumerate(user_progress.items) if item.answer is None)
+
+
+def progress(
+    prolific_id: str,
+    answer_dir: Path,
+    annotation_data: list[AnnotationInstance],
+    instance_id: str,
+    page_idx: int,
+) -> None:
+    col1, col2 = st.columns(2)
+
+    if col1.button("Previous"):
+        goto_page(page_idx - 1)
+    if col2.button("Save & Next"):
+        checkbox_answer = st.session_state[checkbox_id(instance_id)]
+        save_progress(
+            prolific_id, answer_dir, page_idx, checkbox_answer, annotation_data
+        )
+        goto_page(page_idx + 1)
+
+
+def goto_page(page_idx: int) -> None:
+    st.session_state["page_idx"] = page_idx
+    st.rerun()
+
+
+def read_user_data(path: Path) -> list[dict[str, Any]]:
+    return json.loads(path.read_text())
+
+
+def write_user_data(path: Path, data: list[dict[str, Any]]) -> None:
+    path.write_text(json.dumps(data, indent=2))
+
+
+def reset_user_data(prolific_id: str, answer_dir: Path) -> None:
+    user_path = get_user_path(answer_dir, prolific_id)
+    if not user_path.exists():
+        return
+
+    user_data = read_user_data(user_path)
+    for item in user_data:
+        item["answer"] = None
+
+    write_user_data(user_path, user_data)
+
+
+def get_page_idx(
+    annotation_data: list[AnnotationInstance], answer_dir: Path, prolific_id: str
+) -> int | None:
+    if "page_idx" in st.session_state:
+        return st.session_state["page_idx"]
+
+    # Find the first unanswered question so the user can continue from they left off
+    first_unanswered_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
+    if first_unanswered_idx == len(annotation_data) - 1:
+        # TODO: make this a page that the user can navigate back to other items
+        st.write("You have answered all questions.")
+        return None
+
+    # User starting now
+    if first_unanswered_idx is None:
+        page_idx = 0
+    else:
+        page_idx = first_unanswered_idx
+
+    st.session_state["page_idx"] = page_idx
+    return page_idx
+
+
+def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> None:
+    prolific_id = setup_prolific()
+    if prolific_id is None:
+        return
+
+    page_idx = get_page_idx(annotation_data, answer_dir, prolific_id)
+    if page_idx is None:
+        return
 
     heading("Annotate the data", 1)
-    for i, instance in enumerate(annotation_data):
-        heading(f"#{i + 1}", 2)
-        render_instance(instance, i, answer_path, enabled)
+    heading(f"#{page_idx + 1}", 2)
+
+    instance = annotation_data[page_idx]
+    render_instance(instance, prolific_id, answer_dir, annotation_data)
+    progress(prolific_id, answer_dir, annotation_data, instance.id, page_idx)
 
 
-def main(log_path: Path, data_path: Path, answer_path: Path) -> None:
+def main(log_path: Path, annotation_data_path: Path, answer_dir: Path) -> None:
     setup_logger(logger, log_path)
-    annotation_data = load_data(data_path)
+    annotation_data = load_data(annotation_data_path)
+    answer_dir.mkdir(exist_ok=True, parents=True)
 
-    render_page(annotation_data, answer_path)
+    with st.sidebar:
+        st.title("Instructions")
+        st.write("TODO")
+        st.write(f"Number of instances: {len(annotation_data)}")
+
+    render_page(annotation_data, answer_dir)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument("--data-path", type=Path, default="data/test.json")
-    parser.add_argument("--answer-path", type=Path, default="data/answers.json")
+    parser.add_argument("--data-file", type=Path, default="data/test.json")
+    parser.add_argument("--answer-dir", type=Path, default="data/answers")
     parser.add_argument("--log-path", type=Path, default="logs")
     args = parser.parse_args()
 
-    main(args.log_path, args.data_path, args.answer_path)
+    main(args.log_path, args.data_file, args.answer_dir)
