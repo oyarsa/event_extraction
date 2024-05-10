@@ -163,10 +163,6 @@ def load_user_progress(
     )
 
 
-def set_answer(instance_id: str) -> None:
-    st.session_state[instance_id] = st.session_state[checkbox_id(instance_id)]
-
-
 def render_instance(
     instance: AnnotationInstance,
     prolific_id: str,
@@ -183,8 +179,6 @@ def render_instance(
         "Valid?",
         key=checkbox_id(instance.id),
         value=load_answer(instance.id, prolific_id, answer_dir, annotation_data),
-        on_change=set_answer,
-        kwargs={"instance_id": instance.id},
     )
 
     if DEBUG:
@@ -251,7 +245,9 @@ def find_last_entry_idx(
 
     user_progress = load_user_progress(prolific_id, answer_dir, annotation_data)
     # First non-None (i.e. first unanswered) answer
-    return next(i for i, item in enumerate(user_progress.items) if item.answer is None)
+    return next(
+        (i for i, item in enumerate(user_progress.items) if item.answer is None), None
+    )
 
 
 def progress(
