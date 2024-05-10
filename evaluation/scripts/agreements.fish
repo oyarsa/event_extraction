@@ -27,7 +27,7 @@ for split in eval test
         set -l label $labels[$i]
 
         set -l matches (
-			jq "map(select($filter)) | map(select(.pred == .gold)) | length" $file
+            jq "map(select($filter)) | map(select(.pred == .gold)) | length" $file
         )
         set -l length (jq length $file)
 

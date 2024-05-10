@@ -13,7 +13,7 @@ set classifier_output $argv[1]
 set human_output $argv[2]
 
 jq 'map({
-	input: .passage,
-	valid: (.gold == 1),
-	gold: .annotation
+    input: .passage,
+    valid: (.gold == 1),
+    gold: .annotation
 })' $classifier_output >$human_output

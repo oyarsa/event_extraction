@@ -57,10 +57,10 @@ warn_unused_ignores = false
 
 [[tool.mypy.overrides]]
 module = [
-	"torch.*",
-	"transformers",
-	"datasets",
-	"trl",
-	"evaluate",
+    "torch.*",
+    "transformers",
+    "datasets",
+    "trl",
+    "evaluate",
 ]
 ignore_missing_imports = true

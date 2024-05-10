@@ -2,14 +2,14 @@
 
 Scripts:
 - `extraction.py`: extract cause, effect and relations from text.
-	- Uses the same data format as the `genqa_joint` model
-	- Uses some instances as demonstration examples
+    - Uses the same data format as the `genqa_joint` model
+    - Uses some instances as demonstration examples
 - `contradiction_sentence.py`: generates a simple contradiction to the input.
   No examples.
 - `contradiction_structured.py`: creates a contradiction from structured input.
-	- The contradiction is obtained by swapping cause and effect
-	- Uses the same data format as the reconstruct model
-	- Uses some instances as demonstration examples
+    - The contradiction is obtained by swapping cause and effect
+    - Uses the same data format as the reconstruct model
+    - Uses some instances as demonstration examples
 
 Run `python <script>.py -h` for options.
 
