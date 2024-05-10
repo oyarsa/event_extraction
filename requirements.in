@@ -2,3 +2,4 @@
 -e ./chatgpt
 -e ./evaluation
 -e ./self_critique
+-e ./annotation
