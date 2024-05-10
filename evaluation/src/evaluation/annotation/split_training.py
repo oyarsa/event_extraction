@@ -46,11 +46,12 @@ def contains_subsequence(subseq: list[str], lst: list[str]) -> bool:
     )
 
 
-def find_any_common_subsequence(lst1: list[str], lst2: list[str]) -> bool:
+def find_any_common_subsequence(
+    lst1: list[str], lst2: list[str], min_length: int
+) -> bool:
     """Check if any contiguous subsequence of any length exists between lst1 and lst2."""
     len1 = len(lst1)
     len2 = len(lst2)
-    min_length = 2
 
     for length in range(min_length, min(len1, len2) + 1):
         for start in range(len1 - length + 1):
@@ -61,14 +62,17 @@ def find_any_common_subsequence(lst1: list[str], lst2: list[str]) -> bool:
     return False
 
 
-def do_sequences_intersect(str1: str, str2: str) -> bool:
-    """Check if there is a common sequence of words between two strings in order."""
+def do_sequences_intersect(str1: str, str2: str, min_length: int) -> bool:
+    """Check if there is a common sequence of words between two strings in order.
+
+    Subsequences of length less than min_length are ignored.
+    """
     words1 = clean_str(str1).split()
     words2 = clean_str(str2).split()
 
-    return find_any_common_subsequence(words1, words2) or find_any_common_subsequence(
-        words2, words1
-    )
+    return find_any_common_subsequence(
+        words1, words2, min_length
+    ) or find_any_common_subsequence(words2, words1, min_length)
 
 
 class AnnotationTag(Enum):
@@ -78,7 +82,9 @@ class AnnotationTag(Enum):
     NO_INTERSECTION = "no_intersection"
 
 
-def needs_annotation(annotation: str, model: str) -> AnnotationTag:
+def needs_annotation(
+    annotation: str, model: str, min_subseq_length: int
+) -> AnnotationTag:
     """Check if the output needs manual annotation or can be done by rules alone."""
     cause_gold, effect_gold = parse_instance(annotation)
     cause_pred, effect_pred = parse_instance(model)
@@ -92,9 +98,9 @@ def needs_annotation(annotation: str, model: str) -> AnnotationTag:
         return AnnotationTag.EXACT_MATCH
 
     # No subsequence intersection between gold and predicted means it's invalid.
-    if not do_sequences_intersect(cause_gold, cause_pred) or not do_sequences_intersect(
-        effect_gold, effect_pred
-    ):
+    if not do_sequences_intersect(
+        cause_gold, cause_pred, min_subseq_length
+    ) or not do_sequences_intersect(effect_gold, effect_pred, min_subseq_length):
         return AnnotationTag.NO_INTERSECTION
 
     return AnnotationTag.NEEDS_ANNOTATION
@@ -108,9 +114,16 @@ def parse_instance(text: str) -> tuple[str | None, str | None]:
     return None, None
 
 
-def annotate(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def annotate(
+    data: list[dict[str, Any]], min_subseq_length: int
+) -> list[dict[str, Any]]:
     return [
-        item | {"tag": needs_annotation(item["annotation"], item["model"])}
+        item
+        | {
+            "tag": needs_annotation(
+                item["annotation"], item["model"], min_subseq_length
+            )
+        }
         for item in data
     ]
 
@@ -183,13 +196,18 @@ def save_annotation_results(
 
 
 def main(
-    input: Path, output_dir: Path, num_subsets: int, common_pct: float, seed: int
+    input: Path,
+    output_dir: Path,
+    num_subsets: int,
+    common_pct: float,
+    seed: int,
+    min_subseq_length: int,
 ) -> None:
     random.seed(seed)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     data = load_and_reshape_data(input)
-    annotated_data = annotate(data)
+    annotated_data = annotate(data, min_subseq_length)
 
     annotation_ratios = calc_annotation_ratios(annotated_data)
     print(show_annotation_results(annotation_ratios), end="\n\n")
@@ -233,6 +251,19 @@ if __name__ == "__main__":
         default=0,
         help="Random seed for reproducibility",
     )
+    parser.add_argument(
+        "--min-subseq-length",
+        type=int,
+        default=1,
+        help="Minimum subsequence length for intersection check",
+    )
     args = parser.parse_args()
 
-    main(args.input, args.output_dir, args.num_subsets, args.common_pct, args.seed)
+    main(
+        args.input,
+        args.output_dir,
+        args.num_subsets,
+        args.common_pct,
+        args.seed,
+        args.min_subseq_length,
+    )
