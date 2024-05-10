@@ -9,7 +9,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import ClassVar
+from typing import Any, ClassVar
 
 import streamlit as st
 from typing_extensions import override
@@ -100,23 +100,25 @@ def render_clauses(header: str, instance: ParsedInstance) -> None:
     st.markdown(f"**Effects**: {instance.effect}")
 
 
+def save(answer_path: Path, item: dict[str, Any]) -> None:
+    with answer_path.open("a") as f:
+        print(json.dumps(item), file=f, flush=True)
+
+
 def save_answer(instance: AnnotationInstance, key: str, answer_path: Path) -> None:
     valid = st.session_state[key]
     prolific_id = st.session_state["prolific_id"]
 
     logger.info(f"{instance.id} - {prolific_id} - {valid}")
 
-    item = json.dumps(
-        {
-            "id": instance.id,
-            "prolific_id": prolific_id,
-            "ts": datetime.now().isoformat(),
-            "answer": valid,
-            "original": instance.original,
-        },
-    )
-    with answer_path.open("a") as f:
-        print(item, file=f, flush=True)
+    item = {
+        "id": instance.id,
+        "prolific_id": prolific_id,
+        "ts": datetime.now().isoformat(),
+        "answer": valid,
+        "original": instance.original,
+    }
+    save(answer_path, item)
 
 
 def render_instance(
@@ -162,28 +164,35 @@ def load_data(path: Path) -> list[AnnotationInstance]:
     ]
 
 
+def setup_prolific() -> bool:
+    """Sets up the Prolific ID. If it's not set, the page will be disabled."""
+    if st.query_params.get("prolific_id") is not None:
+        st.session_state["prolific_id"] = st.query_params["prolific_id"]
+
+    if prolific_id := st.text_input(
+        "Enter your Prolific ID", key="prolific_id", placeholder="Prolific ID"
+    ):
+        st.write("Your Prolific ID is:", prolific_id)
+        return True
+
+    st.write("Please enter your Prolific ID to start.")
+    return False
+
+
+def render_page(annotation_data, answer_path: Path) -> None:
+    enabled = setup_prolific()
+
+    heading("Annotate the data", 1)
+    for i, instance in enumerate(annotation_data):
+        heading(f"#{i + 1}", 2)
+        render_instance(instance, i, answer_path, enabled)
+
+
 def main(log_path: Path, data_path: Path, answer_path: Path) -> None:
     setup_logger(logger, log_path)
     annotation_data = load_data(data_path)
 
-    if st.query_params.get("prolific_id") is not None:
-        enabled = True
-        st.session_state["prolific_id"] = st.query_params["prolific_id"]
-
-    if prolific_id := st.text_input(
-        "Prolific ID", key="prolific_id", placeholder="Prolific ID"
-    ):
-        enabled = True
-        st.write("Your Prolific ID is:", prolific_id)
-    else:
-        enabled = False
-        st.write("Please enter your Prolific ID to start.")
-
-    heading("Annotate the data", 1)
-
-    for i, instance in enumerate(annotation_data):
-        heading(f"#{i + 1}", 2)
-        render_instance(instance, i, answer_path, enabled)
+    render_page(annotation_data, answer_path)
 
 
 if __name__ == "__main__":
