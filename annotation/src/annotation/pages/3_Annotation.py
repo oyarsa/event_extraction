@@ -7,7 +7,7 @@ import logging
 import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, NewType
 
 import streamlit as st
 
@@ -51,6 +51,9 @@ class UserProgressItem:
     answer: bool | None
 
 
+ItemIndex = NewType("ItemIndex", int)
+
+
 @dataclass
 class UserProgress:
     prolific_id: str
@@ -66,7 +69,11 @@ class UserProgress:
             items=[UserProgressItem(id=d.id, data=d.data, answer=None) for d in data],
         )
 
-    def set_answer(self, idx: int, answer: bool) -> None:
+    def set_answer(self, idx: ItemIndex, answer: bool) -> None:
+        """Sets the answer for the item at the given index.
+
+        The index should come from the items list itself, so it should be safe.
+        """
         self.items[idx].answer = answer
 
 
@@ -79,7 +86,7 @@ def render_clauses(header: str, instance: ParsedInstance) -> None:
 def save_progress(
     prolific_id: str,
     answer_dir: Path,
-    idx: int,
+    idx: ItemIndex,
     answer: bool,
     input_data: list[AnnotationInstance],
 ) -> None:
@@ -196,16 +203,22 @@ def load_data(path: Path) -> list[AnnotationInstance]:
 
 def find_last_entry_idx(
     prolific_id: str, answer_dir: Path, annotation_data: list[AnnotationInstance]
-) -> int | None:
+) -> ItemIndex:
+    """If there is a last entry, return its index, otherwise return 0.
+
+    The 0 means the user is starting now.
+    """
     user_path = get_user_path(answer_dir, prolific_id)
     if not user_path.exists():
-        return None
+        return ItemIndex(0)
 
     user_progress = load_user_progress(prolific_id, answer_dir, annotation_data)
     # First non-None (i.e. first unanswered) answer
-    return next(
+    idx = next(
         (i for i, item in enumerate(user_progress.items) if item.answer is None), None
     )
+    # If there are no answered questions, idx will be None, so return 0
+    return ItemIndex(idx if idx is not None else 0)
 
 
 def goto_page(page_idx: int) -> None:
@@ -233,18 +246,6 @@ def reset_user_data(prolific_id: str, answer_dir: Path) -> None:
     write_user_data(user_path, user_data)
 
 
-def get_page_idx(
-    annotation_data: list[AnnotationInstance], answer_dir: Path, prolific_id: str
-) -> int:
-    # Find the first unanswered question so the user can continue from they left off
-    first_unanswered_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
-    if first_unanswered_idx is not None:
-        return first_unanswered_idx
-
-    # User starting now
-    return 0
-
-
 def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> None:
     prolific_id = get_prolific_id()
     if not prolific_id:
@@ -252,9 +253,11 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
         return
 
     if "page_idx" in st.session_state:
-        page_idx = st.session_state["page_idx"]
+        page_idx: ItemIndex = st.session_state["page_idx"]
     else:
-        page_idx = get_page_idx(annotation_data, answer_dir, prolific_id)
+        # Find the first unanswered question so the user can continue from they left off.
+        # If there are no unanswered questions, start from the beginning.
+        page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
         st.session_state["page_idx"] = page_idx
 
     if page_idx >= len(annotation_data):
