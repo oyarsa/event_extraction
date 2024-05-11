@@ -1,6 +1,6 @@
 import streamlit as st
 
-from annotation.common import ask_login, get_prolific_id, section_links, set_prolific_id
+from annotation.common import get_prolific_id, section_links, set_prolific_id
 
 
 def main() -> None:
