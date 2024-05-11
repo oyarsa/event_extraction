@@ -6,7 +6,17 @@ from typing import ClassVar
 import streamlit as st
 from typing_extensions import override
 
-_PROLIFIC_STATE_KEY = "state_prolific"
+
+def section_links() -> None:
+    """Show links to the instructions and annotation pages in a row."""
+    instruction_col, annotation_col = st.columns([0.12, 0.88])
+    instruction_col.page_link(
+        "pages/2_Instructions.py",
+        label=colour("Instructions", bg="red"),
+    )
+    annotation_col.page_link(
+        "pages/3_Annotation.py", label=colour("Annotation page", bg="green")
+    )
 
 
 def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
@@ -15,6 +25,9 @@ def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
     if bg is not None:
         return f":{bg}-background[{text}]"
     return text
+
+
+_PROLIFIC_STATE_KEY = "state_prolific"
 
 
 def set_prolific_id(prolific_id: str) -> None:

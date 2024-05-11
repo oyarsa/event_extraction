@@ -1,7 +1,6 @@
 import streamlit as st
 
-from annotation.common import ask_login, colour, get_prolific_id
-from annotation.instructions import render_instructions
+from annotation.common import ask_login, get_prolific_id, section_links
 
 
 def main() -> None:
@@ -11,11 +10,7 @@ def main() -> None:
         ask_login()
 
     st.title("Welcome")
-    render_instructions()
-
-    st.page_link(
-        "pages/3_Annotation.py", label=colour("Go to annotation page", bg="grey")
-    )
+    section_links()
 
 
 if __name__ == "__main__":
