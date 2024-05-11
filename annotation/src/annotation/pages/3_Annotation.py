@@ -118,7 +118,7 @@ def set_answer(instance_id: str) -> None:
     )
 
 
-def render_instance(
+def answer_instance(
     instance: AnnotationInstance,
     prolific_id: str,
     answer_dir: Path,
@@ -207,25 +207,6 @@ def find_last_entry_idx(
     )
 
 
-def progress(
-    prolific_id: str,
-    answer_dir: Path,
-    annotation_data: list[AnnotationInstance],
-    instance_id: str,
-    page_idx: int,
-) -> None:
-    col1, col2 = st.columns(2)
-
-    if col1.button("Previous"):
-        goto_page(page_idx - 1)
-    if col2.button("Save & Next"):
-        checkbox_answer = st.session_state[instance_id]
-        save_progress(
-            prolific_id, answer_dir, page_idx, checkbox_answer, annotation_data
-        )
-        goto_page(page_idx + 1)
-
-
 def goto_page(page_idx: int) -> None:
     st.session_state["page_idx"] = page_idx
     st.rerun()
@@ -254,20 +235,13 @@ def reset_user_data(prolific_id: str, answer_dir: Path) -> None:
 def get_page_idx(
     annotation_data: list[AnnotationInstance], answer_dir: Path, prolific_id: str
 ) -> int:
-    if "page_idx" in st.session_state:
-        return st.session_state["page_idx"]
-
     # Find the first unanswered question so the user can continue from they left off
     first_unanswered_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
+    if first_unanswered_idx is not None:
+        return first_unanswered_idx
 
     # User starting now
-    if first_unanswered_idx is None:
-        page_idx = 0
-    else:
-        page_idx = first_unanswered_idx
-
-    st.session_state["page_idx"] = page_idx
-    return page_idx
+    return 0
 
 
 def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> None:
@@ -276,7 +250,12 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
         ask_login()
         return
 
-    page_idx = get_page_idx(annotation_data, answer_dir, prolific_id)
+    if "page_idx" in st.session_state:
+        page_idx = st.session_state["page_idx"]
+    else:
+        page_idx = get_page_idx(annotation_data, answer_dir, prolific_id)
+        st.session_state["page_idx"] = page_idx
+
     if page_idx >= len(annotation_data):
         heading("You have answered all questions.", 2)
         return
@@ -285,8 +264,20 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
     heading(f"#{page_idx + 1}", 2)
 
     instance = annotation_data[page_idx]
-    if render_instance(instance, prolific_id, answer_dir, annotation_data):
-        progress(prolific_id, answer_dir, annotation_data, instance.id, page_idx)
+    answered = answer_instance(instance, prolific_id, answer_dir, annotation_data)
+
+    col1, col2 = st.columns(2)
+    if page_idx > 0 and col1.button("Previous"):
+        goto_page(page_idx - 1)
+
+    # TODO: I think this is not turing on right after login, even if the user has
+    # answered this already.
+    if answered and col2.button("Save & Next"):
+        checkbox_answer = st.session_state[instance.id]
+        save_progress(
+            prolific_id, answer_dir, page_idx, checkbox_answer, annotation_data
+        )
+        goto_page(page_idx + 1)
 
 
 def main(log_path: Path, annotation_data_path: Path, answer_dir: Path) -> None:
