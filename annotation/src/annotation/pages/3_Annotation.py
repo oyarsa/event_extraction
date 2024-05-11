@@ -6,6 +6,7 @@ import json
 import logging
 import re
 from dataclasses import asdict, dataclass
+from enum import Enum
 from pathlib import Path
 from typing import Any, NewType
 
@@ -34,6 +35,11 @@ def parse_instance(answer: str) -> ParsedInstance | None:
     return ParsedInstance(causes, effects)
 
 
+class Answer(str, Enum):
+    VALID = "valid"
+    INVALID = "invalid"
+
+
 @dataclass
 class AnnotationInstance:
     id: str
@@ -48,7 +54,7 @@ class AnnotationInstance:
 class UserProgressItem:
     id: str
     data: dict[str, Any]
-    answer: bool | None
+    answer: Answer | None
 
 
 ItemIndex = NewType("ItemIndex", int)
@@ -69,7 +75,7 @@ class UserProgress:
             items=[UserProgressItem(id=d.id, data=d.data, answer=None) for d in data],
         )
 
-    def set_answer(self, idx: ItemIndex, answer: bool) -> None:
+    def set_answer(self, idx: ItemIndex, answer: Answer) -> None:
         """Sets the answer for the item at the given index.
 
         The index should come from the items list itself, so it should be safe.
@@ -87,7 +93,7 @@ def save_progress(
     prolific_id: str,
     answer_dir: Path,
     idx: ItemIndex,
-    answer: bool,
+    answer: Answer,
     input_data: list[AnnotationInstance],
 ) -> None:
     user_data = load_user_progress(prolific_id, answer_dir, input_data)
@@ -114,7 +120,13 @@ def load_user_progress(
     return UserProgress(
         prolific_id=data["prolific_id"],
         items=[
-            UserProgressItem(id=item["id"], data=item["data"], answer=item["answer"])
+            UserProgressItem(
+                id=item["id"],
+                data=item["data"],
+                answer=Answer[item["answer"].upper()]
+                if item["answer"] is not None
+                else None,
+            )
             for item in data["items"]
         ],
     )
@@ -125,7 +137,7 @@ def answer_instance(
     prolific_id: str,
     answer_dir: Path,
     annotation_data: list[AnnotationInstance],
-) -> str | None:
+) -> Answer | None:
     """Renders the instance and returns True if the user has selected a valid answer."""
     st.subheader("Source Text")
     st.write(instance.text)
@@ -137,9 +149,9 @@ def answer_instance(
     if instance.id not in st.session_state:
         st.session_state[answer_state_id(instance.id)] = previous_answer
 
-    index = None
+    radio_index = None
     if previous_answer is not None:
-        index = 0 if previous_answer else 1
+        radio_index = 0 if previous_answer is Answer.VALID else 1
 
     label = "Is the model output valid relative to the reference?"
     st.subheader(label)
@@ -147,19 +159,19 @@ def answer_instance(
         label,
         ["Valid", "Invalid"],
         label_visibility="collapsed",
-        index=index,
+        index=radio_index,
         horizontal=True,
         key=answer_radio_id(instance.id),
-        kwargs={"instance_id": instance.id},
     )
 
     if DEBUG:
         st.write("Valid? ", answer)
 
-    if answer is None:
-        st.write("Please select an answer.")
-        return None
-    return answer
+    if answer is not None:
+        return Answer[answer.upper()]
+
+    st.write("Please select an answer.")
+    return None
 
 
 def answer_radio_id(instance_id: str) -> str:
@@ -175,7 +187,7 @@ def load_answer(
     prolific_id: str,
     answer_dir: Path,
     annotation_data: list[AnnotationInstance],
-) -> bool | None:
+) -> Answer | None:
     user_data = load_user_progress(prolific_id, answer_dir, annotation_data)
     return next(
         (item.answer for item in user_data.items if item.id == instance_id),
@@ -183,7 +195,7 @@ def load_answer(
     )
 
 
-def hash_instance(instance: dict[str, str]) -> str:
+def hash_instance(instance: dict[str, Any]) -> str:
     return hashlib.sha256(json.dumps(instance).encode()).hexdigest()[:8]
 
 
@@ -247,21 +259,31 @@ def reset_user_data(prolific_id: str, answer_dir: Path) -> None:
     write_user_data(user_path, user_data)
 
 
+def goto_latest(
+    prolific_id: str, answer_dir: Path, annotation_data: list[AnnotationInstance]
+) -> ItemIndex:
+    page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
+    st.session_state["page_idx"] = page_idx
+    return page_idx
+
+
 def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> None:
     prolific_id = get_prolific_id()
     if not prolific_id:
         ask_login()
         return
 
-    if "page_idx" in st.session_state:
+    # Find the first unanswered question so the user can continue from they left off.
+    # If there are no unanswered questions, start from the beginning.
+    if st.button("Go to latest"):
+        page_idx = goto_latest(prolific_id, answer_dir, annotation_data)
+    # If the key exists, the user is currently annotating, or is coming back from the
+    # same session.
+    elif "page_idx" in st.session_state:
         page_idx: ItemIndex = st.session_state["page_idx"]
+    # Otherwise, automatically go to the latest entry.
     else:
-        # Find the first unanswered question so the user can continue from they left off.
-        # If there are no unanswered questions, start from the beginning.
-        # TODO: Ensure that this is working properly after login. It seems to be fine
-        # between page changes.
-        page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
-        st.session_state["page_idx"] = page_idx
+        page_idx = goto_latest(prolific_id, answer_dir, annotation_data)
 
     if page_idx >= len(annotation_data):
         st.subheader("You have answered all questions.")
@@ -273,15 +295,12 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
     instance = annotation_data[page_idx]
     answer = answer_instance(instance, prolific_id, answer_dir, annotation_data)
 
-    col1, col2 = st.columns(2)
-    if page_idx > 0 and col1.button("Previous"):
+    prev_col, next_col = st.columns(2)
+    if page_idx > 0 and prev_col.button("Previous"):
         goto_page(page_idx - 1)
 
-    # TODO: I think this is not turing on right after login, even if the user has
-    # answered this already.
-    if answer is not None and col2.button("Save & Next"):
-        valid = answer == "Valid"
-        save_progress(prolific_id, answer_dir, page_idx, valid, annotation_data)
+    if answer is not None and next_col.button("Save & Next"):
+        save_progress(prolific_id, answer_dir, page_idx, answer, annotation_data)
         goto_page(page_idx + 1)
 
 
