@@ -11,11 +11,11 @@ def section_links() -> None:
     """Show links to the instructions and annotation pages in a row."""
     instruction_col, annotation_col = st.columns([0.12, 0.88])
     instruction_col.page_link(
-        "pages/2_Instructions.py",
+        "pages/1_Instructions.py",
         label=colour("Instructions", bg="red"),
     )
     annotation_col.page_link(
-        "pages/3_Annotation.py", label=colour("Annotation page", bg="green")
+        "pages/2_Annotation.py", label=colour("Annotation page", bg="green")
     )
 
 
@@ -38,7 +38,7 @@ def get_prolific_id() -> str | None:
     if prolific_id := st.session_state.get(_PROLIFIC_STATE_KEY):
         show_id, logout = st.columns([0.35, 0.65])
         with show_id:
-            subsubheader(f"**Your Prolific ID is: {prolific_id}**")
+            subsubheader(f"**Your Prolific ID is:** `{prolific_id}`")
 
         if logout.button("Log out", type="primary"):
             st.session_state.pop(_PROLIFIC_STATE_KEY, None)
@@ -53,7 +53,7 @@ def ask_login() -> None:
     msg, link = st.columns([0.75, 0.25])
     with msg:
         subsubheader("You're not logged in. Log in with your Prolific ID.")
-    link.page_link("pages/1_Log_In.py", label=colour("Log In", bg="blue"))
+    link.page_link("Start_Page.py", label=colour("Log In", bg="blue"))
 
 
 def subsubheader(text: str) -> None:
