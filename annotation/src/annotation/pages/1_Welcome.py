@@ -18,7 +18,7 @@ def main() -> None:
         key="prolific_input_id",
         placeholder="Prolific ID",
     ):
-        st.session_state[PROLIFIC_STATE_KEY] = prolific_id
+        set_prolific_id(prolific_id)
         st.rerun()
 
 

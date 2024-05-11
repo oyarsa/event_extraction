@@ -11,7 +11,7 @@ from typing import Any
 
 import streamlit as st
 
-from annotation.common import ask_login, check_prolific_id, heading, setup_logger
+from annotation.common import ask_login, get_prolific_id, heading, setup_logger
 
 logger = logging.getLogger(__name__)
 DEBUG = True
@@ -271,7 +271,7 @@ def get_page_idx(
 
 
 def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> None:
-    prolific_id = check_prolific_id()
+    prolific_id = get_prolific_id()
     if not prolific_id:
         ask_login()
         return

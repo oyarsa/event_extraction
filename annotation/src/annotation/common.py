@@ -9,13 +9,15 @@ from typing_extensions import override
 _PROLIFIC_STATE_KEY = "state_prolific"
 
 
-def check_prolific_id() -> str | None:
-    if prolific_id := st.session_state.get(PROLIFIC_STATE_KEY):
 def set_prolific_id(prolific_id: str) -> None:
     st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
+
+
+def get_prolific_id() -> str | None:
+    if prolific_id := st.session_state.get(_PROLIFIC_STATE_KEY):
         st.write(f"Your Prolific ID is: {prolific_id}")
         if st.button("Log out"):
-            st.session_state.pop(PROLIFIC_STATE_KEY, None)
+            st.session_state.pop(_PROLIFIC_STATE_KEY, None)
             st.rerun()
         return prolific_id
     return None
