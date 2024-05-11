@@ -57,9 +57,10 @@ class UserProgress:
     items: list[UserProgressItem]
 
     @classmethod
-    def from_data(
+    def from_unannotated_data(
         cls, prolific_id: str, data: list[AnnotationInstance]
     ) -> "UserProgress":
+        """Initialise from the original, unannotated data."""
         return cls(
             prolific_id=prolific_id,
             items=[UserProgressItem(id=d.id, data=d.data, answer=None) for d in data],
@@ -100,7 +101,7 @@ def load_user_progress(
     """Loads the user's progress from the answer file."""
     user_path = get_user_path(answer_dir, prolific_id)
     if not user_path.exists():
-        return UserProgress.from_data(prolific_id, input_data)
+        return UserProgress.from_unannotated_data(prolific_id, input_data)
 
     data = json.loads(user_path.read_text())
     return UserProgress(
