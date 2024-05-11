@@ -257,6 +257,8 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
     else:
         # Find the first unanswered question so the user can continue from they left off.
         # If there are no unanswered questions, start from the beginning.
+        # TODO: Ensure that this is working properly after login. It seems to be fine
+        # between page changes.
         page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
         st.session_state["page_idx"] = page_idx
 
