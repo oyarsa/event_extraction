@@ -120,18 +120,12 @@ def load_user_progress(
     )
 
 
-def set_answer(instance_id: str) -> None:
-    st.session_state[answer_state_id(instance_id)] = (
-        0 if st.session_state[answer_radio_id(instance_id)] == "Valid" else 1
-    )
-
-
 def answer_instance(
     instance: AnnotationInstance,
     prolific_id: str,
     answer_dir: Path,
     annotation_data: list[AnnotationInstance],
-) -> bool:
+) -> str | None:
     """Renders the instance and returns True if the user has selected a valid answer."""
     st.subheader("Source Text")
     st.write(instance.text)
@@ -143,26 +137,29 @@ def answer_instance(
     if instance.id not in st.session_state:
         st.session_state[answer_state_id(instance.id)] = previous_answer
 
+    index = None
+    if previous_answer is not None:
+        index = 0 if previous_answer else 1
+
     label = "Is the model output valid relative to the reference?"
     st.subheader(label)
-    valid = st.radio(
+    answer = st.radio(
         label,
         ["Valid", "Invalid"],
         label_visibility="collapsed",
-        index=None if previous_answer is None else int(previous_answer),
+        index=index,
         horizontal=True,
         key=answer_radio_id(instance.id),
-        on_change=set_answer,
         kwargs={"instance_id": instance.id},
     )
 
     if DEBUG:
-        st.write("Valid? ", valid)
+        st.write("Valid? ", answer)
 
-    if valid is None:
+    if answer is None:
         st.write("Please select an answer.")
-        return False
-    return True
+        return None
+    return answer
 
 
 def answer_radio_id(instance_id: str) -> str:
@@ -274,7 +271,7 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
     st.header(f"Entry {page_idx + 1} of {len(annotation_data)}")
 
     instance = annotation_data[page_idx]
-    answered = answer_instance(instance, prolific_id, answer_dir, annotation_data)
+    answer = answer_instance(instance, prolific_id, answer_dir, annotation_data)
 
     col1, col2 = st.columns(2)
     if page_idx > 0 and col1.button("Previous"):
@@ -282,11 +279,9 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
 
     # TODO: I think this is not turing on right after login, even if the user has
     # answered this already.
-    if answered and col2.button("Save & Next"):
-        checkbox_answer = st.session_state[answer_state_id(instance.id)]
-        save_progress(
-            prolific_id, answer_dir, page_idx, checkbox_answer, annotation_data
-        )
+    if answer is not None and col2.button("Save & Next"):
+        valid = answer == "Valid"
+        save_progress(prolific_id, answer_dir, page_idx, valid, annotation_data)
         goto_page(page_idx + 1)
 
 
