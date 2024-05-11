@@ -3,3 +3,5 @@
 -e ./evaluation
 -e ./self_critique
 -e ./annotation
+
+ruff>=0.4

@@ -1,4 +1,3 @@
-# noqa: N999
 from annotation.common import ask_login, check_prolific_id
 from annotation.instructions import heading, render_instructions
 

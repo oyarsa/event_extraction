@@ -1,7 +1,7 @@
 [project]
 name = "annotation"
 version = "0.1.0"
-description = "Default template for PDM package"
+description = "Streamlit app for annotation text extraction data"
 authors = [
     {name = "Italo Silva", email = "italo@maleldil.com"},
 ]
@@ -23,3 +23,12 @@ distribution = true
 
 [tool.pyright]
 typeCheckingMode = "basic"
+
+[tool.ruff]
+extend = "../pyproject.toml"
+
+[tool.ruff.lint]
+extend-ignore = ["N999"] # Streamlit apps have non-standard file/module names
+
+[tool.ruff.lint.isort]
+known-first-party = ["annotation"]
