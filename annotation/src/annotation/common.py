@@ -99,7 +99,7 @@ def setup_logger(
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.setLevel(logging.getLevelName(level.upper()))
 
-    fmt = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+    fmt = "%(asctime)s | %(levelname)s | %(name)s:%(lineno)d | %(message)s"
     datefmt = "%Y-%m-%d %H:%M:%S"
 
     file_handler = logging.FileHandler(output_dir / file_name, mode=mode)

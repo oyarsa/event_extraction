@@ -13,7 +13,7 @@ import streamlit as st
 
 from annotation.common import ask_login, get_prolific_id, setup_logger
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("annotation.pages.3_Annotation")
 DEBUG = True
 
 
