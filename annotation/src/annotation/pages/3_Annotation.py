@@ -77,10 +77,10 @@ class UserProgress:
         self.items[idx].answer = answer
 
 
-def render_clauses(header: str, instance: ParsedInstance) -> None:
+def render_clauses(header: str, reference: str, model: str) -> None:
     st.subheader(header)
-    st.markdown(f"**Causes**: {instance.cause}")
-    st.markdown(f"**Effects**: {instance.effect}")
+    st.markdown(f"**Reference**: {reference}")
+    st.markdown(f"**Model**: {model}")
 
 
 def save_progress(
@@ -136,8 +136,8 @@ def answer_instance(
     st.subheader("Source Text")
     st.write(instance.text)
 
-    render_clauses("Reference answer", instance.annotation)
-    render_clauses("Model answer", instance.model)
+    render_clauses("Cause", instance.annotation.cause, instance.model.cause)
+    render_clauses("Effect", instance.annotation.effect, instance.model.effect)
 
     previous_answer = load_answer(instance.id, prolific_id, answer_dir, annotation_data)
     if instance.id not in st.session_state:
