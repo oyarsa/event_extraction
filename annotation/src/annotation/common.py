@@ -25,9 +25,9 @@ def get_prolific_id() -> str | None:
     if prolific_id := st.session_state.get(_PROLIFIC_STATE_KEY):
         show_id, logout = st.columns([0.35, 0.65])
         with show_id:
-            heading(f"**Your Prolific ID is: {prolific_id}**", 4)
+            subsubheader(f"**Your Prolific ID is: {prolific_id}**")
 
-        if logout.button("Log out"):
+        if logout.button("Log out", type="primary"):
             st.session_state.pop(_PROLIFIC_STATE_KEY, None)
             st.rerun()
 
@@ -39,8 +39,12 @@ def get_prolific_id() -> str | None:
 def ask_login() -> None:
     msg, link = st.columns([0.75, 0.25])
     with msg:
-        heading("You're not logged in. Log in with your Prolific ID.", 4)
+        subsubheader("You're not logged in. Log in with your Prolific ID.")
     link.page_link("pages/1_Log_In.py", label=colour("Log In", bg="blue"))
+
+
+def subsubheader(text: str) -> None:
+    heading(text, 4)
 
 
 def heading(text: str, level: int) -> None:
