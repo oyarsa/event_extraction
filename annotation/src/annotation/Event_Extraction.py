@@ -1,67 +1,21 @@
-"""Streamlit app to annotate evaluation data."""
+"""Streamlit app to annotate evaluation data."""  # noqa: N999
 
 import argparse
 import hashlib
 import json
 import logging
 import re
-import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, ClassVar
+from typing import Any
 
 import streamlit as st
-from typing_extensions import override
+
+from annotation.common import heading, setup_logger
+from annotation.instructions import render_instructions
 
 logger = logging.getLogger(__name__)
-
 DEBUG = True
-
-
-class ColourFormatter(logging.Formatter):
-    """Logging colored formatter.
-
-    Adapted from https://stackoverflow.com/a/56944256/3638629
-    """
-
-    formats: ClassVar[dict[int, str]] = {
-        logging.DEBUG: "\x1b[38;21m",  # grey
-        logging.INFO: "\x1b[37m",  # white
-        logging.WARNING: "\x1b[38;5;226m",  # yellow
-        logging.ERROR: "\x1b[38;5;196m",  # red
-        logging.CRITICAL: "\x1b[31;1m",  # bold red
-    }
-    reset: ClassVar[str] = "\x1b[0m"
-
-    @override
-    def format(self, record: logging.LogRecord) -> str:
-        msg = super().format(record)
-        if colour := self.formats.get(record.levelno):
-            return colour + msg + self.reset
-        else:
-            return msg
-
-
-def setup_logger(
-    logger: logging.Logger,
-    output_dir: Path,
-    file_name: str = "train.log",
-    mode: str = "a",
-    level: str = "info",
-) -> None:
-    output_dir.mkdir(exist_ok=True, parents=True)
-    logger.setLevel(logging.getLevelName(level.upper()))
-
-    fmt = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
-    datefmt = "%Y-%m-%d %H:%M:%S"
-
-    file_handler = logging.FileHandler(output_dir / file_name, mode=mode)
-    file_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
-    logger.addHandler(file_handler)
-
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(ColourFormatter(fmt=fmt, datefmt=datefmt))
-    logger.addHandler(console_handler)
 
 
 @dataclass
@@ -114,10 +68,6 @@ class UserProgress:
 
     def set_answer(self, idx: int, answer: bool) -> None:
         self.items[idx].answer = answer
-
-
-def heading(text: str, level: int) -> None:
-    st.markdown(f"{'#' * level} {text}")
 
 
 def render_clauses(header: str, instance: ParsedInstance) -> None:
@@ -244,13 +194,27 @@ def load_data(path: Path) -> list[AnnotationInstance]:
     ]
 
 
-def setup_prolific(prolific_id_param: str) -> str | None:
+def prolific_input_cb(text_key: str, state_key: str) -> None:
+    if text := st.session_state.get(text_key):
+        st.session_state[state_key] = text
+    else:
+        st.session_state.pop(state_key, None)
+
+
+def setup_prolific() -> str | None:
     """Sets up the Prolific ID. If it's not set, the page will be disabled."""
-    if "prolific_id" in st.query_params:
-        st.session_state["prolific_id"] = st.query_params[prolific_id_param]
+    text_key = "prolific_id"
+    state_key = f"_{text_key}"
+
+    if state_key in st.session_state:
+        st.session_state[text_key] = st.session_state[state_key]
 
     if prolific_id := st.text_input(
-        "Enter your Prolific ID", key="prolific_id", placeholder="Prolific ID"
+        "Enter your Prolific ID",
+        key=text_key,
+        placeholder="Prolific ID",
+        on_change=prolific_input_cb,
+        kwargs={"state_key": state_key, "text_key": text_key},
     ):
         st.write("Your Prolific ID is:", prolific_id)
         return prolific_id
@@ -336,11 +300,10 @@ def get_page_idx(
     return page_idx
 
 
-def render_page(
-    annotation_data: list[AnnotationInstance], answer_dir: Path, prolific_id_param: str
-) -> None:
-    prolific_id = setup_prolific(prolific_id_param)
+def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> None:
+    prolific_id = setup_prolific()
     if prolific_id is None:
+        render_instructions()
         return
 
     page_idx = get_page_idx(annotation_data, answer_dir, prolific_id)
@@ -357,19 +320,12 @@ def render_page(
         progress(prolific_id, answer_dir, annotation_data, instance.id, page_idx)
 
 
-def main(
-    log_path: Path, annotation_data_path: Path, answer_dir: Path, prolific_id_param: str
-) -> None:
+def main(log_path: Path, annotation_data_path: Path, answer_dir: Path) -> None:
     setup_logger(logger, log_path)
     annotation_data = load_data(annotation_data_path)
     answer_dir.mkdir(exist_ok=True, parents=True)
 
-    with st.sidebar:
-        st.title("Instructions")
-        st.write("TODO")
-        st.write(f"Number of instances: {len(annotation_data)}")
-
-    render_page(annotation_data, answer_dir, prolific_id_param)
+    render_page(annotation_data, answer_dir)
 
 
 if __name__ == "__main__":
@@ -379,7 +335,6 @@ if __name__ == "__main__":
     parser.add_argument("--data-file", type=Path, default="data/test.json")
     parser.add_argument("--answer-dir", type=Path, default="data/answers")
     parser.add_argument("--log-path", type=Path, default="logs")
-    parser.add_argument("--prolific-id-param", default="prolific_id")
     args = parser.parse_args()
 
-    main(args.log_path, args.data_file, args.answer_dir, args.prolific_id_param)
+    main(args.log_path, args.data_file, args.answer_dir)
