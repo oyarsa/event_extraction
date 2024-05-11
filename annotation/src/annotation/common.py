@@ -6,6 +6,24 @@ from typing import ClassVar
 import streamlit as st
 from typing_extensions import override
 
+PROLIFIC_INPUT_KEY = "input_prolific"
+PROLIFIC_STATE_KEY = "state_prolific"
+
+
+def check_prolific_id() -> str | None:
+    if prolific_id := st.session_state.get(PROLIFIC_STATE_KEY):
+        st.write(f"Your Prolific ID is: {prolific_id}")
+        if st.button("Log out"):
+            st.session_state.pop(PROLIFIC_STATE_KEY, None)
+            st.rerun()
+        return prolific_id
+    return None
+
+
+def ask_login() -> None:
+    st.write("You're not logged in. Please log in with your Prolific ID.")
+    st.page_link("pages/1_Welcome.py", label="Login page")
+
 
 def heading(text: str, level: int) -> None:
     st.markdown(f"{'#' * level} {text}")
