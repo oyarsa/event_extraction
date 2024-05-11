@@ -11,7 +11,7 @@ from typing import Any
 
 import streamlit as st
 
-from annotation.common import ask_login, get_prolific_id, heading, setup_logger
+from annotation.common import ask_login, get_prolific_id, setup_logger
 
 logger = logging.getLogger(__name__)
 DEBUG = True
@@ -70,7 +70,7 @@ class UserProgress:
 
 
 def render_clauses(header: str, instance: ParsedInstance) -> None:
-    heading(header, 3)
+    st.subheader(header)
     st.markdown(f"**Causes**: {instance.cause}")
     st.markdown(f"**Effects**: {instance.effect}")
 
@@ -125,7 +125,7 @@ def answer_instance(
     annotation_data: list[AnnotationInstance],
 ) -> bool:
     """Renders the instance and returns True if the user has selected a valid answer."""
-    heading("Text", 3)
+    st.subheader("Source Text")
     st.write(instance.text)
 
     render_clauses("Reference answer", instance.annotation)
@@ -136,7 +136,7 @@ def answer_instance(
         st.session_state[instance.id] = previous_answer
 
     label = "Is the model output valid relative to the reference?"
-    heading(label, 3)
+    st.subheader(label)
     valid = st.radio(
         label,
         ["Valid", "Invalid"],
@@ -257,11 +257,11 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
         st.session_state["page_idx"] = page_idx
 
     if page_idx >= len(annotation_data):
-        heading("You have answered all questions.", 2)
+        st.subheader("You have answered all questions.")
         return
 
-    heading("Annotate the data", 1)
-    heading(f"#{page_idx + 1}", 2)
+    st.title("Annotate the data")
+    st.header(f"Entry {page_idx + 1} of {len(annotation_data)}")
 
     instance = annotation_data[page_idx]
     answered = answer_instance(instance, prolific_id, answer_dir, annotation_data)

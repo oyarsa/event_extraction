@@ -9,23 +9,38 @@ from typing_extensions import override
 _PROLIFIC_STATE_KEY = "state_prolific"
 
 
+def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
+    if fg is not None:
+        return f":{fg}[{text}]"
+    if bg is not None:
+        return f":{bg}-background[{text}]"
+    return text
+
+
 def set_prolific_id(prolific_id: str) -> None:
     st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
 
 
 def get_prolific_id() -> str | None:
     if prolific_id := st.session_state.get(_PROLIFIC_STATE_KEY):
-        st.write(f"Your Prolific ID is: {prolific_id}")
-        if st.button("Log out"):
+        show_id, logout = st.columns([0.35, 0.65])
+        with show_id:
+            heading(f"**Your Prolific ID is: {prolific_id}**", 4)
+
+        if logout.button("Log out"):
             st.session_state.pop(_PROLIFIC_STATE_KEY, None)
             st.rerun()
+
         return prolific_id
+
     return None
 
 
 def ask_login() -> None:
-    st.write("You're not logged in. Please log in with your Prolific ID.")
-    st.page_link("pages/1_Welcome.py", label="Login page")
+    msg, link = st.columns([0.75, 0.25])
+    with msg:
+        heading("You're not logged in. Log in with your Prolific ID.", 4)
+    link.page_link("pages/1_Log_In.py", label=colour("Log In", bg="blue"))
 
 
 def heading(text: str, level: int) -> None:

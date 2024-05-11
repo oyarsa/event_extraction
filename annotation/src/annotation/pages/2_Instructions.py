@@ -1,6 +1,6 @@
 import streamlit as st
 
-from annotation.common import get_prolific_id
+from annotation.common import colour, get_prolific_id
 from annotation.instructions import render_instructions
 
 
@@ -8,7 +8,9 @@ def main() -> None:
     get_prolific_id()
     render_instructions()
 
-    st.page_link("pages/3_Annotation.py", label="Data annotation")
+    st.page_link(
+        "pages/3_Annotation.py", label=colour("Go to annotation page", bg="grey")
+    )
 
 
 if __name__ == "__main__":
