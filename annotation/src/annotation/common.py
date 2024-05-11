@@ -6,12 +6,13 @@ from typing import ClassVar
 import streamlit as st
 from typing_extensions import override
 
-PROLIFIC_INPUT_KEY = "input_prolific"
-PROLIFIC_STATE_KEY = "state_prolific"
+_PROLIFIC_STATE_KEY = "state_prolific"
 
 
 def check_prolific_id() -> str | None:
     if prolific_id := st.session_state.get(PROLIFIC_STATE_KEY):
+def set_prolific_id(prolific_id: str) -> None:
+    st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
         st.write(f"Your Prolific ID is: {prolific_id}")
         if st.button("Log out"):
             st.session_state.pop(PROLIFIC_STATE_KEY, None)

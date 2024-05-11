@@ -1,10 +1,10 @@
 import streamlit as st
 
-from annotation.common import PROLIFIC_INPUT_KEY, PROLIFIC_STATE_KEY, check_prolific_id
+from annotation.common import get_prolific_id, set_prolific_id
 
 
 def main() -> None:
-    if check_prolific_id():
+    if get_prolific_id():
         st.write(
             "You're logged in. Move on to the annotation page or review the"
             " instructions."
@@ -15,7 +15,7 @@ def main() -> None:
 
     if prolific_id := st.text_input(
         "Enter your Prolific ID",
-        key=PROLIFIC_INPUT_KEY,
+        key="prolific_input_id",
         placeholder="Prolific ID",
     ):
         st.session_state[PROLIFIC_STATE_KEY] = prolific_id
