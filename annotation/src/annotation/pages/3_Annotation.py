@@ -121,8 +121,8 @@ def load_user_progress(
 
 
 def set_answer(instance_id: str) -> None:
-    st.session_state[instance_id] = (
-        0 if st.session_state[radio_id(instance_id)] == "Valid" else 1
+    st.session_state[answer_state_id(instance_id)] = (
+        0 if st.session_state[answer_radio_id(instance_id)] == "Valid" else 1
     )
 
 
@@ -141,7 +141,7 @@ def answer_instance(
 
     previous_answer = load_answer(instance.id, prolific_id, answer_dir, annotation_data)
     if instance.id not in st.session_state:
-        st.session_state[instance.id] = previous_answer
+        st.session_state[answer_state_id(instance.id)] = previous_answer
 
     label = "Is the model output valid relative to the reference?"
     st.subheader(label)
@@ -151,7 +151,7 @@ def answer_instance(
         label_visibility="collapsed",
         index=None if previous_answer is None else int(previous_answer),
         horizontal=True,
-        key=radio_id(instance.id),
+        key=answer_radio_id(instance.id),
         on_change=set_answer,
         kwargs={"instance_id": instance.id},
     )
@@ -165,8 +165,12 @@ def answer_instance(
     return True
 
 
-def radio_id(instance_id: str) -> str:
-    return f"rd_{instance_id}"
+def answer_radio_id(instance_id: str) -> str:
+    return f"answer_radio_{instance_id}"
+
+
+def answer_state_id(instance_id: str) -> str:
+    return f"answer_state_{instance_id}"
 
 
 def load_answer(
@@ -279,7 +283,7 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
     # TODO: I think this is not turing on right after login, even if the user has
     # answered this already.
     if answered and col2.button("Save & Next"):
-        checkbox_answer = st.session_state[instance.id]
+        checkbox_answer = st.session_state[answer_state_id(instance.id)]
         save_progress(
             prolific_id, answer_dir, page_idx, checkbox_answer, annotation_data
         )
