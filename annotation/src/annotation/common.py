@@ -59,6 +59,7 @@ def setup_logger(
     file_name: str = "train.log",
     mode: str = "a",
     level: str = "info",
+    colour: bool = False,
 ) -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.setLevel(logging.getLevelName(level.upper()))
@@ -70,7 +71,7 @@ def setup_logger(
     file_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
     logger.addHandler(file_handler)
 
+    fmt_cls = ColourFormatter if colour else logging.Formatter
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
-    # console_handler.setFormatter(ColourFormatter(fmt=fmt, datefmt=datefmt))
+    console_handler.setFormatter(fmt_cls(fmt=fmt, datefmt=datefmt))
     logger.addHandler(console_handler)
