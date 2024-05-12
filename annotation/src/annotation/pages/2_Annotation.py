@@ -258,14 +258,6 @@ def reset_user_data(prolific_id: str, answer_dir: Path) -> None:
     write_user_data(user_path, user_data)
 
 
-def goto_latest(
-    prolific_id: str, answer_dir: Path, annotation_data: list[AnnotationInstance]
-) -> ItemIndex:
-    page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
-    set_page(page_idx)
-    return page_idx
-
-
 def render_page(annotation_dir: Path, answer_dir: Path) -> None:
     prolific_id = get_prolific_id()
     if not prolific_id:
@@ -282,15 +274,13 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
 
     # Find the first unanswered question so the user can continue from they left off.
     # If there are no unanswered questions, start from the beginning.
-    if st.button("Go to latest"):
-        page_idx = goto_latest(prolific_id, answer_dir, annotation_data)
     # If the key exists, the user is currently annotating, or is coming back from the
     # same session.
-    elif "page_idx" in st.session_state:
+    if "page_idx" in st.session_state:
         page_idx: ItemIndex = st.session_state["page_idx"]
     # Otherwise, automatically go to the latest entry.
     else:
-        page_idx = goto_latest(prolific_id, answer_dir, annotation_data)
+        page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
 
     if page_idx >= len(annotation_data):
         st.subheader("You have answered all questions.")
@@ -304,13 +294,19 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
     instance = annotation_data[page_idx]
     answer = answer_instance(instance, prolific_id, answer_dir, annotation_data)
 
-    prev_col, next_col = st.columns(2)
+    prev_col, next_col, latest_col = st.columns(3)
     if page_idx > 0 and prev_col.button("Previous"):
         goto_page(page_idx - 1)
 
     if answer is not None and next_col.button("Save & Next"):
         save_progress(prolific_id, answer_dir, page_idx, answer, annotation_data)
         goto_page(page_idx + 1)
+
+    # Find the first unanswered question so the user can continue from they left off.
+    # If there are no unanswered questions, start from the beginning.
+    if latest_col.button("Go to latest"):
+        page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
+        goto_page(page_idx)
 
 
 def main() -> None:
