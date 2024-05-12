@@ -290,6 +290,8 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
 
     if page_idx >= len(annotation_data):
         st.subheader("You have answered all questions.")
+        if st.button("Go to start"):
+            goto_page(0)
         return
 
     st.title("Annotate the data")
