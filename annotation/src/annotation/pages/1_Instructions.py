@@ -9,7 +9,7 @@ def main() -> None:
     render_instructions()
 
     st.page_link(
-        "pages/2_Annotation.py", label=colour("Go to annotation page", bg="grey")
+        "pages/2_Annotation.py", label=colour("Go to annotation page", bg="green")
     )
 
 
