@@ -1,12 +1,6 @@
 import streamlit as st
 
-from annotation.common import (
-    get_config,
-    get_prolific_id,
-    reset_session_state,
-    section_links,
-    set_prolific_state_id,
-)
+from annotation.common import colour, get_config, get_prolific_id, set_prolific_state_id
 
 
 def main() -> None:
@@ -20,7 +14,15 @@ def main() -> None:
             " instructions."
         )
 
-        section_links()
+        instruction_col, annotation_col = st.columns([0.12, 0.88])
+        instruction_col.page_link(
+            "pages/1_Instructions.py",
+            label=colour("Instructions", bg="red"),
+        )
+        annotation_col.page_link(
+            "pages/2_Annotation.py", label=colour("Annotation page", bg="green")
+        )
+
         return
 
     if prolific_id := st.text_input(
@@ -28,9 +30,8 @@ def main() -> None:
         key="prolific_input_id",
         placeholder="Prolific ID",
     ):
-        config = get_config()
         # Data is divided in files, one per Prolific ID.
-        annotation_path = config.annotation_dir / f"{prolific_id}.json"
+        annotation_path = get_config().annotation_dir / f"{prolific_id}.json"
         if not annotation_path.exists():
             st.error("Invalid Prolific ID. Please try again.")
             return

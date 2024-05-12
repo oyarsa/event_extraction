@@ -11,18 +11,6 @@ from streamlit.source_util import get_pages
 from typing_extensions import override
 
 
-def section_links() -> None:
-    """Show links to the instructions and annotation pages in a row."""
-    instruction_col, annotation_col = st.columns([0.12, 0.88])
-    instruction_col.page_link(
-        "pages/1_Instructions.py",
-        label=colour("Instructions", bg="red"),
-    )
-    annotation_col.page_link(
-        "pages/2_Annotation.py", label=colour("Annotation page", bg="green")
-    )
-
-
 def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
     if fg is not None:
         return f":{fg}[{text}]"
