@@ -5,7 +5,12 @@ from pathlib import Path
 
 import streamlit as st
 
-from annotation.common import ask_login, get_config, get_prolific_id, setup_logger
+from annotation.common import (
+    ask_login,
+    get_config,
+    get_prolific_id,
+    setup_logger,
+)
 from annotation.model import (
     AnnotationInstance,
     Answer,
@@ -82,9 +87,8 @@ def goto_page(page_idx: int) -> None:
 
 
 def render_page(annotation_dir: Path, answer_dir: Path) -> None:
-    prolific_id = get_prolific_id()
+    prolific_id = get_prolific_id("annotation")
     if not prolific_id:
-        ask_login()
         return
 
     # Data is divided in files, one per Prolific ID.

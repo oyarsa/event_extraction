@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import ClassVar
 
 import streamlit as st
+import streamlit_authenticator as stauth
 import yaml
 from streamlit.runtime.scriptrunner import RerunData, RerunException
 from streamlit.source_util import get_pages
@@ -54,19 +55,24 @@ def set_prolific_state_id(prolific_id: str) -> None:
     st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
 
 
-def get_prolific_id() -> str | None:
-    prolific_id = st.session_state.get(_PROLIFIC_STATE_KEY)
-    if not prolific_id:
+def get_prolific_id(page: str) -> str | None:
+    authenticator = load_authenticator()
+    name, status, _ = authenticator.login()
+
+    if status is None or name is None:
+        st.warning("Please log in")
+        return None
+    elif status is False:
+        st.error("Username/password is incorrect")
         return None
 
+    prolific_id = st.session_state["name"]
     text_col, logout_col = st.columns([0.75, 0.25])
     with text_col:
         subsubheader(f"**Your Prolific ID is:** `{prolific_id}`")
 
-    if logout_col.button("Log out", type="primary"):
-        # Reset Prolific ID and page state
-        st.session_state.clear()
-        switch_page("Start Page")
+    with logout_col:
+        authenticator.logout(key=f"logout_{page}")
 
     return prolific_id
 
@@ -149,3 +155,14 @@ def setup_logger(
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(fmt_cls(fmt=fmt, datefmt=datefmt))
     logger.addHandler(console_handler)
+
+
+def load_authenticator() -> stauth.Authenticate:
+    with open("config/auth.yaml") as f:
+        auth_config = yaml.safe_load(f)
+    return stauth.Authenticate(
+        auth_config["credentials"],
+        auth_config["cookie"]["name"],
+        auth_config["cookie"]["key"],
+        auth_config["cookie"]["expiry_days"],
+    )

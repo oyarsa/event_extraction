@@ -1,10 +1,9 @@
 import streamlit as st
 
-from annotation.common import colour, get_prolific_id
+from annotation.common import colour
 
 
 def main() -> None:
-    get_prolific_id()
     st.title("Instructions")
     st.write("TODO")
 
