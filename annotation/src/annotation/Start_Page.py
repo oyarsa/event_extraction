@@ -19,9 +19,6 @@ def main() -> None:
             "You're logged in. Move on to the annotation page or review the"
             " instructions."
         )
-        if st.button("Log out", type="primary"):
-            reset_session_state()
-            st.rerun()
 
         section_links()
         return
