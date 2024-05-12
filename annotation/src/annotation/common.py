@@ -19,18 +19,6 @@ def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
     return text
 
 
-def reset_session_state() -> None:
-    for key in list(st.session_state):
-        del st.session_state[key]
-
-
-_PROLIFIC_STATE_KEY = "state_prolific"
-
-
-def set_prolific_state_id(prolific_id: str) -> None:
-    st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
-
-
 def standardise_page_name(name: str) -> str:
     return name.lower().replace("_", " ")
 
@@ -59,12 +47,21 @@ def switch_page(page_name: str) -> None:
     raise ValueError(f"Page not found: {page_name}.")
 
 
+_PROLIFIC_STATE_KEY = "state_prolific"
+
+
+def set_prolific_state_id(prolific_id: str) -> None:
+    st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
+
+
 def get_prolific_id() -> str | None:
     if prolific_id := st.session_state.get(_PROLIFIC_STATE_KEY):
         subsubheader(f"**Your Prolific ID is:** `{prolific_id}`")
         if st.button("Log out", type="primary"):
-            reset_session_state()
+            # Reset Prolific ID and page state
+            st.session_state.clear()
             switch_page("Start Page")
+
         return prolific_id
 
     return None
