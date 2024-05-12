@@ -55,16 +55,20 @@ def set_prolific_state_id(prolific_id: str) -> None:
 
 
 def get_prolific_id() -> str | None:
-    if prolific_id := st.session_state.get(_PROLIFIC_STATE_KEY):
+    prolific_id = st.session_state.get(_PROLIFIC_STATE_KEY)
+    if not prolific_id:
+        return None
+
+    text_col, logout_col = st.columns([0.75, 0.25])
+    with text_col:
         subsubheader(f"**Your Prolific ID is:** `{prolific_id}`")
-        if st.button("Log out", type="primary"):
-            # Reset Prolific ID and page state
-            st.session_state.clear()
-            switch_page("Start Page")
 
-        return prolific_id
+    if logout_col.button("Log out", type="primary"):
+        # Reset Prolific ID and page state
+        st.session_state.clear()
+        switch_page("Start Page")
 
-    return None
+    return prolific_id
 
 
 @dataclass
