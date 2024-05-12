@@ -1,8 +1,9 @@
 import streamlit as st
 
 from annotation.common import (
+    get_config,
     get_prolific_id,
-    reset_prolific_id,
+    reset_session_state,
     section_links,
     set_prolific_state_id,
 )
@@ -19,7 +20,7 @@ def main() -> None:
             " instructions."
         )
         if st.button("Log out", type="primary"):
-            reset_prolific_id()
+            reset_session_state()
             st.rerun()
 
         section_links()
@@ -30,6 +31,13 @@ def main() -> None:
         key="prolific_input_id",
         placeholder="Prolific ID",
     ):
+        config = get_config()
+        # Data is divided in files, one per Prolific ID.
+        annotation_path = config.annotation_dir / f"{prolific_id}.json"
+        if not annotation_path.exists():
+            st.error("Invalid Prolific ID. Please try again.")
+            return
+
         set_prolific_state_id(prolific_id)
         st.rerun()
 

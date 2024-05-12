@@ -1,9 +1,11 @@
 import logging
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 from typing import ClassVar
 
 import streamlit as st
+import yaml
 from typing_extensions import override
 
 
@@ -27,11 +29,12 @@ def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
     return text
 
 
+def reset_session_state() -> None:
+    for key in list(st.session_state):
+        del st.session_state[key]
+
+
 _PROLIFIC_STATE_KEY = "state_prolific"
-
-
-def reset_prolific_id() -> None:
-    st.session_state.pop(_PROLIFIC_STATE_KEY, None)
 
 
 def set_prolific_state_id(prolific_id: str) -> None:
@@ -46,10 +49,27 @@ def get_prolific_id() -> str | None:
     return None
 
 
+@dataclass
+class Config:
+    log_path: Path
+    annotation_dir: Path
+    answer_dir: Path
+
+
+def get_config() -> Config:
+    with open("config/params.yaml") as f:
+        config = yaml.safe_load(f)
+    return Config(
+        log_path=Path(config["log_path"]),
+        annotation_dir=Path(config["data"]["input"]),
+        answer_dir=Path(config["data"]["answers"]),
+    )
+
+
 def ask_login() -> None:
     msg, link = st.columns([0.75, 0.25])
     with msg:
-        subsubheader("You're not logged in. Log in with your Prolific ID.")
+        st.error("You're not logged in. Log in with your Prolific ID.")
     link.page_link("Start_Page.py", label=colour("Log In", bg="blue"))
 
 

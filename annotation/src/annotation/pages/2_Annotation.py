@@ -1,6 +1,5 @@
 """Streamlit app to annotate evaluation data."""
 
-import argparse
 import hashlib
 import json
 import logging
@@ -12,7 +11,7 @@ from typing import Any, NewType
 
 import streamlit as st
 
-from annotation.common import ask_login, get_prolific_id, setup_logger
+from annotation.common import ask_login, get_config, get_prolific_id, setup_logger
 
 logger = logging.getLogger("annotation.pages.3_Annotation")
 
@@ -263,11 +262,19 @@ def goto_latest(
     return page_idx
 
 
-def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> None:
+def render_page(annotation_dir: Path, answer_dir: Path) -> None:
     prolific_id = get_prolific_id()
     if not prolific_id:
         ask_login()
         return
+
+    # Data is divided in files, one per Prolific ID.
+    annotation_path = annotation_dir / f"{prolific_id}.json"
+    if not annotation_path.exists():
+        ask_login()
+        return
+
+    annotation_data = load_data(annotation_path)
 
     # Find the first unanswered question so the user can continue from they left off.
     # If there are no unanswered questions, start from the beginning.
@@ -300,21 +307,13 @@ def render_page(annotation_data: list[AnnotationInstance], answer_dir: Path) -> 
         goto_page(page_idx + 1)
 
 
-def main(log_path: Path, annotation_data_path: Path, answer_dir: Path) -> None:
-    setup_logger(logger, log_path)
-    annotation_data = load_data(annotation_data_path)
-    answer_dir.mkdir(exist_ok=True, parents=True)
+def main() -> None:
+    config = get_config()
+    config.answer_dir.mkdir(exist_ok=True, parents=True)
 
-    render_page(annotation_data, answer_dir)
+    setup_logger(logger, config.log_path)
+    render_page(config.annotation_dir, config.answer_dir)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument("--data-file", type=Path, default="data/test.json")
-    parser.add_argument("--answer-dir", type=Path, default="data/answers")
-    parser.add_argument("--log-path", type=Path, default="logs")
-    args = parser.parse_args()
-
-    main(args.log_path, args.data_file, args.answer_dir)
+    main()
