@@ -229,8 +229,12 @@ def find_last_entry_idx(
     return ItemIndex(idx if idx is not None else 0)
 
 
-def goto_page(page_idx: int) -> None:
+def set_page(page_idx: int) -> None:
     st.session_state["page_idx"] = page_idx
+
+
+def goto_page(page_idx: int) -> None:
+    set_page(page_idx)
     st.rerun()
 
 
@@ -258,7 +262,7 @@ def goto_latest(
     prolific_id: str, answer_dir: Path, annotation_data: list[AnnotationInstance]
 ) -> ItemIndex:
     page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
-    st.session_state["page_idx"] = page_idx
+    set_page(page_idx)
     return page_idx
 
 
