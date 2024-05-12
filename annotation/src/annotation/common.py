@@ -30,20 +30,17 @@ def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
 _PROLIFIC_STATE_KEY = "state_prolific"
 
 
-def set_prolific_id(prolific_id: str) -> None:
+def reset_prolific_id() -> None:
+    st.session_state.pop(_PROLIFIC_STATE_KEY, None)
+
+
+def set_prolific_state_id(prolific_id: str) -> None:
     st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
 
 
 def get_prolific_id() -> str | None:
     if prolific_id := st.session_state.get(_PROLIFIC_STATE_KEY):
-        show_id, logout = st.columns([0.35, 0.65])
-        with show_id:
-            subsubheader(f"**Your Prolific ID is:** `{prolific_id}`")
-
-        if logout.button("Log out", type="primary"):
-            st.session_state.pop(_PROLIFIC_STATE_KEY, None)
-            st.rerun()
-
+        subsubheader(f"**Your Prolific ID is:** `{prolific_id}`")
         return prolific_id
 
     return None
