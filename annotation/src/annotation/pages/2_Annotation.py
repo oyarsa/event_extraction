@@ -15,7 +15,6 @@ import streamlit as st
 from annotation.common import ask_login, get_prolific_id, setup_logger
 
 logger = logging.getLogger("annotation.pages.3_Annotation")
-DEBUG = True
 
 
 @dataclass
@@ -163,9 +162,6 @@ def answer_instance(
         horizontal=True,
         key=answer_radio_id(instance.id),
     )
-
-    if DEBUG:
-        st.write("Valid? ", answer)
 
     if answer is not None:
         return Answer[answer.upper()]
