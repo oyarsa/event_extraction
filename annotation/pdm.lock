@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:af517dc3829c14db6442f3013dbd6180a84ddfb093d5b0b0537d1350b7de5b0d"
+content_hash = "sha256:dccd25f0516fc31ce7bc891d0f76aef20dd56b1c7fe5add96b67c21c764450c1"
 
 [[package]]
 name = "altair"
@@ -151,20 +151,6 @@ marker = "platform_system == \"Windows\""
 files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
-]
-
-[[package]]
-name = "extra-streamlit-components"
-version = "0.1.71"
-requires_python = ">=3.6"
-summary = "An all-in-one place, to find complex or just natively unavailable components on streamlit."
-groups = ["default"]
-dependencies = [
-    "streamlit>=1.18.0",
-]
-files = [
-    {file = "extra_streamlit_components-0.1.71-py3-none-any.whl", hash = "sha256:c8e6f98446adecd3002756362e50d0669693b7673afaa89cebfced6415cc6bd3"},
-    {file = "extra_streamlit_components-0.1.71.tar.gz", hash = "sha256:d18314cf2ed009f95641882b50aa3bdb11b6a0eb6403fb43dbc8af1722419617"},
 ]
 
 [[package]]

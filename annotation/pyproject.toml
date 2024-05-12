@@ -9,7 +9,6 @@ dependencies = [
     "streamlit>=1.34.0",
     "watchdog>=4.0.0",
     "typing-extensions>=4.11.0",
-    "extra-streamlit-components>=0.1.71",
 ]
 requires-python = ">=3.10"
 readme = "README.md"
