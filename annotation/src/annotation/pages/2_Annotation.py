@@ -6,6 +6,7 @@ from pathlib import Path
 import streamlit as st
 
 from annotation.components import get_annotation_path, get_prolific_id
+from annotation.components import escape, get_annotation_path, get_username
 from annotation.model import (
     AnnotationInstance,
     Answer,
@@ -22,8 +23,8 @@ logger = logging.getLogger("annotation.pages.3_Annotation")
 
 def render_clauses(header: str, reference: str, model: str) -> None:
     st.subheader(header)
-    st.markdown(f"**Reference**: {reference}")
-    st.markdown(f"**Model**: {model}")
+    st.markdown(f"**Reference**: {escape(reference)}")
+    st.markdown(f"**Model**: {escape(model)}")
 
 
 def answer_instance(
@@ -34,7 +35,7 @@ def answer_instance(
 ) -> Answer | None:
     """Renders the instance and returns True if the user has selected a valid answer."""
     st.subheader("Source Text")
-    st.write(instance.text)
+    st.write(escape(instance.data["text"]))
 
     render_clauses("Cause", instance.annotation.cause, instance.model.cause)
     render_clauses("Effect", instance.annotation.effect, instance.model.effect)

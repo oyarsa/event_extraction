@@ -7,6 +7,23 @@ import yaml
 
 from annotation.util import get_config
 
+
+def escape(text: str) -> str:
+    """Escape characters that have special meaning in LaTeX."""
+    mapping = {
+        "$": r"\$",
+        "%": r"\%",
+        "&": r"\&",
+        "#": r"\#",
+        "_": r"\_",
+        "{": r"\{",
+        "}": r"\}",
+    }
+    for char, escaped in mapping.items():
+        text = text.replace(char, escaped)
+    return text
+
+
 Colour: TypeAlias = Literal[
     "blue", "green", "orange", "red", "violet", "grey", "rainbow"
 ]

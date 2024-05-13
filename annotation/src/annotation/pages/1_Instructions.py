@@ -1,10 +1,10 @@
 import streamlit as st
 
-from annotation.components import colour
+from annotation.components import colour, escape
 from annotation.util import get_config
 
 
-def annotation_link():
+def annotation_link() -> None:
     st.page_link(
         "pages/2_Annotation.py", label=colour("Go to annotation page", bg="green")
     )
@@ -17,7 +17,7 @@ def main() -> None:
         annotation_link()
 
     instructions = get_config().instructions_file.read_text()
-    st.markdown(instructions)
+    st.markdown(escape(instructions))
 
     annotation_link()
 
