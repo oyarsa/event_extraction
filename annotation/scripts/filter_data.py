@@ -64,7 +64,7 @@ class Tag(Enum):
     NO_INTERSECTION = "no_intersection"
 
 
-def get_tag(reference: str, model: str, min_subseq_length: int) -> Tag:
+def tag(reference: str, model: str, min_subseq_length: int) -> Tag:
     """Check if the output needs manual annotation or can be done by rules alone."""
     cause_gold, effect_gold = parse_instance(reference)
     cause_pred, effect_pred = parse_instance(model)
@@ -94,29 +94,35 @@ def parse_instance(text: str) -> tuple[str | None, str | None]:
     return None, None
 
 
-def tag(data: list[dict[str, Any]], min_subseq_length: int) -> list[dict[str, Any]]:
+def tag_data(
+    data: list[dict[str, Any]], min_subseq_length: int
+) -> list[dict[str, Any]]:
     return [
-        item
-        | {"tag": get_tag(item["reference"], item["model"], min_subseq_length).value}
+        item | {"tag": tag(item["reference"], item["model"], min_subseq_length)}
         for item in data
     ]
 
 
 def load_and_reshape_data(input: Path) -> list[dict[str, Any]]:
     """Load list of objects from a JSON file and reshape the dictionary keys."""
+    data = json.loads(input.read_text())
+
+    if not (isinstance(data, list) and isinstance(data[0], dict)):
+        raise TypeError("Data file should be a list of objects")
+
     return [
         {
             "text": item["input"],
             "reference": item["gold"],
             "model": item["output"],
         }
-        for item in json.loads(input.read_text())
+        for item in data
     ]
 
 
 def calc_tag_ratios(
     data: list[dict[str, Any]],
-) -> dict[str, dict[str, Any]]:
+) -> dict[Tag, dict[str, Any]]:
     tags = Counter(item["tag"] for item in data)
     total = sum(tags.values())
     return {
@@ -124,16 +130,16 @@ def calc_tag_ratios(
     }
 
 
-def show_tag_results(ratios: dict[str, dict[str, Any]]) -> str:
+def show_tag_results(ratios: dict[Tag, dict[str, Any]]) -> str:
     return "Tag results:\n" + "\n".join(
-        f"  {tag}: {d['count']} ({d['ratio']:.1%})" for tag, d in ratios.items()
+        f"  {tag.value}: {d['count']} ({d['ratio']:.1%})" for tag, d in ratios.items()
     )
 
 
 def remove_auto_tagged(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for item in data:
-        if item["tag"] == Tag.NEEDS_ANNOTATION.value:
+        if item["tag"] == Tag.NEEDS_ANNOTATION:
             item_ = item.copy()
             del item_["tag"]
             out.append(item_)
@@ -150,15 +156,14 @@ def main(
     output_dir.mkdir(parents=True, exist_ok=True)
 
     data = load_and_reshape_data(input_file)
-    tagged_data = tag(data, min_subseq_length)
+    tagged_data = tag_data(data, min_subseq_length)
 
     tag_ratios = calc_tag_ratios(tagged_data)
     print(show_tag_results(tag_ratios), end="\n\n")
 
     to_annotate = remove_auto_tagged(tagged_data)
 
-    (output_dir / "tag_ratios.json").write_text(json.dumps(tag_ratios))
-    (output_dir / "tagged.json").write_text(json.dumps(tagged_data))
+    (output_dir / "tagged.json").write_text(json.dumps(tagged_data, default=str))
     (output_dir / "to_annotate.json").write_text(json.dumps(to_annotate))
 
 
