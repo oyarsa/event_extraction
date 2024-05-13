@@ -13,6 +13,7 @@ class Config:
     log_path: Path
     annotation_dir: Path
     answer_dir: Path
+    instructions_file: Path
 
 
 def get_config() -> Config:
@@ -22,6 +23,7 @@ def get_config() -> Config:
         log_path=Path(config["log_path"]),
         annotation_dir=Path(config["data"]["input"]),
         answer_dir=Path(config["data"]["answers"]),
+        instructions_file=Path(config["instructions"]),
     )
 
 
