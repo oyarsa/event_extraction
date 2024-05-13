@@ -2,7 +2,8 @@ import json
 
 import streamlit as st
 
-from annotation.common import get_config, get_prolific_id
+from annotation.components import get_prolific_id
+from annotation.util import get_config
 
 
 def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:

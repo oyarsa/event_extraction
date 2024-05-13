@@ -2,7 +2,8 @@ from pathlib import Path
 
 import streamlit as st
 
-from annotation.common import colour, get_annotation_path, get_config, get_prolific_id
+from annotation.components import get_annotation_path, get_prolific_id
+from annotation.util import colour, get_config
 
 
 def main(annotation_dir: Path) -> None:

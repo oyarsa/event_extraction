@@ -5,12 +5,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from annotation.common import (
-    get_annotation_path,
-    get_config,
-    get_prolific_id,
-    setup_logger,
-)
+from annotation.components import get_annotation_path, get_prolific_id
 from annotation.model import (
     AnnotationInstance,
     Answer,
@@ -20,6 +15,7 @@ from annotation.model import (
     load_data,
     save_progress,
 )
+from annotation.util import get_config, setup_logger
 
 logger = logging.getLogger("annotation.pages.3_Annotation")
 

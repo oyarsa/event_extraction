@@ -1,6 +1,6 @@
 import streamlit as st
 
-from annotation.common import colour
+from annotation.util import colour
 
 
 def main() -> None:
