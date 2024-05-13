@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import sys
 from dataclasses import dataclass
@@ -8,13 +9,26 @@ import yaml
 from typing_extensions import override
 
 
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+
+
+def check_password(password: str, hashed: str) -> bool:
+    return hash_password(password) == hashed
+
+
+def check_auth(username: str, password: str) -> bool:
+    admin_password = get_config().admin_password
+    return username == "admin" and check_password(password, admin_password)
+
+
 @dataclass
 class Config:
     log_path: Path
     annotation_dir: Path
     answer_dir: Path
     instructions_file: Path
-    auth_file: Path
+    admin_password: str
 
 
 def get_config() -> Config:
@@ -25,7 +39,7 @@ def get_config() -> Config:
         annotation_dir=Path(config["data"]["input"]),
         answer_dir=Path(config["data"]["answers"]),
         instructions_file=Path(config["instructions"]),
-        auth_file=Path(config["auth"]),
+        admin_password=config["admin_password"],
     )
 
 
