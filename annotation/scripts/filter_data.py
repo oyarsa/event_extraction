@@ -57,7 +57,7 @@ def do_sequences_intersect(str1: str, str2: str, min_length: int) -> bool:
     ) or find_any_common_subsequence(words2, words1, min_length)
 
 
-class Tag(Enum):
+class Tag(str, Enum):
     EMPTY = "empty"
     EXACT_MATCH = "exact_match"
     NEEDS_ANNOTATION = "needs_annotation"
@@ -163,8 +163,10 @@ def main(
 
     to_annotate = remove_auto_tagged(tagged_data)
 
-    (output_dir / "tagged.json").write_text(json.dumps(tagged_data, default=str))
-    (output_dir / "to_annotate.json").write_text(json.dumps(to_annotate))
+    (output_dir / "tagged.json").write_text(
+        json.dumps(tagged_data, default=str, indent=2)
+    )
+    (output_dir / "to_annotate.json").write_text(json.dumps(to_annotate, indent=2))
 
 
 if __name__ == "__main__":
