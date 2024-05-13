@@ -114,7 +114,7 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
 
     # Find the first unanswered question so the user can continue from they left off.
     # If there are no unanswered questions, start from the beginning.
-    if latest_col.button("Go to last answered"):
+    if latest_col.button("Go to next unanswered"):
         page_idx = find_last_entry_idx(username, answer_dir, annotation_data)
         goto_page(page_idx)
 
