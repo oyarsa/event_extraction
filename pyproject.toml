@@ -26,6 +26,7 @@ ignore = [
     "E501",     # Line too long (let Black take care of this)
     "TRY003",   # Long messages outside exception class
     "SIM108",   # Use ternary operation instead of if-else block
-    "UP007"     # HFArgumentParser and Typer don't like T | None
+    "UP007",    # HFArgumentParser and Typer don't like T | None
+    "ISC001"    # Incompatible with the formatter
 ]
 
