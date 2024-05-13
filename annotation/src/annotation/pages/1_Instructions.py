@@ -5,9 +5,7 @@ from annotation.util import get_config
 
 
 def annotation_link() -> None:
-    st.page_link(
-        "pages/2_Annotation.py", label=colour("Go to annotation page", bg="green")
-    )
+    st.page_link("pages/2_Annotation.py", label=colour("Annotation page", bg="green"))
 
 
 def main() -> None:
