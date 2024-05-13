@@ -6,6 +6,7 @@ Cases that can be automatically annotated using rules are removed from the datas
 import argparse
 import json
 import random
+import re
 import string
 from collections import Counter
 from enum import Enum
@@ -16,9 +17,15 @@ from evaluation.gpt_common import parse_instance as parse_instance_
 
 
 def clean_str(s: str) -> str:
-    """Remove punctuation and convert to lowercase."""
-    punct_to_space = str.maketrans(string.punctuation, " " * len(string.punctuation))
-    return s.translate(punct_to_space).casefold()
+    """Remove punctuation, articles, repeated whitespace and convert to lowercase."""
+    s = s.casefold()
+    # Remove punctuation
+    s = "".join(c for c in s if c not in string.punctuation)
+    # Remove articles
+    s = re.sub(r"\b(a|an|the)\b", " ", s)
+    # Remove extra whitespace
+    s = " ".join(s.split())
+    return s
 
 
 def contains_subsequence(subseq: list[str], lst: list[str]) -> bool:
@@ -89,9 +96,9 @@ def tag(reference: str, model: str, min_subseq_length: int) -> Tag:
 def parse_instance(text: str) -> tuple[str | None, str | None]:
     inst, _ = parse_instance_(text)
     cause, effect = inst["Cause"], inst["Effect"]
-    if cause and effect:
-        return cause[0], effect[0]
-    return None, None
+    if not cause or not effect:
+        return None, None
+    return clean_str(cause[0]), clean_str(effect[0])
 
 
 def tag_data(
