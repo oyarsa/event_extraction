@@ -37,30 +37,6 @@ def standardise_page_name(name: str) -> str:
     return name.lower().replace("_", " ")
 
 
-def switch_page(page_name: str) -> None:
-    """Switch page programmatically in a multipage app.
-
-    Args:
-        page_name: Target page name. `1_Annotation.py` -> "Annotation",
-            `Start_Page.py` -> "Start Page"
-
-    Copied from https://github.com/arnaudmiribel/streamlit-extras/blob/cbfb787bd94edaf0ad7a55a0ba3782e94ee7fbe2/src/streamlit_extras/__init__.py#L23
-    """
-    page_name_std = standardise_page_name(page_name)
-    pages = get_pages("Start_Page.py")
-
-    for page_hash, config in pages.items():
-        if standardise_page_name(config["page_name"]) == page_name_std:
-            raise RerunException(
-                RerunData(
-                    page_script_hash=page_hash,
-                    page_name=page_name_std,
-                )
-            )
-
-    raise ValueError(f"Page not found: {page_name}.")
-
-
 def get_prolific_id(page: str) -> str | None:
     authenticator = load_authenticator()
     name, status, _ = authenticator.login()
