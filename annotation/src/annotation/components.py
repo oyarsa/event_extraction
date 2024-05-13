@@ -2,8 +2,6 @@ from pathlib import Path
 from typing import Literal, TypeAlias
 
 import streamlit as st
-from streamlit.runtime.scriptrunner import RerunData, RerunException
-from streamlit.source_util import get_pages
 
 
 def escape(text: str) -> str:
@@ -80,30 +78,6 @@ def standardise_page_name(name: str) -> str:
     return name.lower().replace("_", " ")
 
 
-def switch_page(page_name: str) -> None:
-    """Switch page programmatically in a multipage app.
-
-    Args:
-        page_name: Target page name. `1_Annotation.py` -> "Annotation",
-            `Start_Page.py` -> "Start Page"
-
-    Copied from https://github.com/arnaudmiribel/streamlit-extras/blob/cbfb787bd94edaf0ad7a55a0ba3782e94ee7fbe2/src/streamlit_extras/__init__.py#L23
-    """
-    page_name_std = standardise_page_name(page_name)
-    pages = get_pages("Start_Page.py")
-
-    for page_hash, config in pages.items():
-        if standardise_page_name(config["page_name"]) == page_name_std:
-            raise RerunException(
-                RerunData(
-                    page_script_hash=page_hash,
-                    page_name=page_name_std,
-                )
-            )
-
-    raise ValueError(f"Page not found: {page_name}.")
-
-
 def get_username(page: str) -> str | None:
     username: str | None = None
     if prolific_id := st.query_params.get(_PROLIFIC_ID_KEY):
@@ -131,6 +105,6 @@ def get_username(page: str) -> str | None:
         if st.button("Logout", key=f"logout_{page}"):
             st.session_state.pop(_PROLIFIC_ID_KEY, None)
             st.query_params.pop(_PROLIFIC_ID_KEY, None)
-            switch_page("start page")
+            st.switch_page("Start_Page.py")
 
     return username
