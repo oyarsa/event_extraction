@@ -1,14 +1,11 @@
+from pathlib import Path
+
 import streamlit as st
 
-from annotation.common import (
-    colour,
-    get_config,
-    get_prolific_id,
-    set_prolific_state_id,
-)
+from annotation.common import colour, get_annotation_path, get_config, get_prolific_id
 
 
-def main() -> None:
+def main(annotation_dir: Path) -> None:
     st.set_page_config(page_title="Event Extraction Annotation")
     st.title("Welcome")
 
@@ -25,12 +22,10 @@ def main() -> None:
         "pages/2_Annotation.py", label=colour("Annotation page", bg="green")
     )
 
-    # Data is divided in files, one per Prolific ID.
-    annotation_path = get_config().annotation_dir / f"{prolific_id}.json"
-    if not annotation_path.exists():
-        st.error("Invalid Prolific ID. Please try again.")
+    if get_annotation_path(annotation_dir, prolific_id) is None:
         return
 
 
 if __name__ == "__main__":
-    main()
+    config = get_config()
+    main(config.annotation_dir)

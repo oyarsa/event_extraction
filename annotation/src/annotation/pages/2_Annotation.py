@@ -6,6 +6,7 @@ from pathlib import Path
 import streamlit as st
 
 from annotation.common import (
+    get_annotation_path,
     get_config,
     get_prolific_id,
     setup_logger,
@@ -90,13 +91,8 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
     if not prolific_id:
         return
 
-    # Data is divided in files, one per Prolific ID.
-    annotation_path = annotation_dir / f"{prolific_id}.json"
-    if not annotation_path.exists():
-        st.error(
-            "Could not find a data file for you. Ensure you're using the correct"
-            " username."
-        )
+    annotation_path = get_annotation_path(annotation_dir, prolific_id)
+    if annotation_path is None:
         return
 
     annotation_data = load_data(annotation_path)

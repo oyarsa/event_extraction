@@ -20,6 +20,19 @@ def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
     return text
 
 
+def get_annotation_path(annotation_dir: Path, prolific_id: str) -> Path | None:
+    """Data is divided in files, one per Prolific ID."""
+    annotation_path = annotation_dir / f"{prolific_id}.json"
+    if annotation_path.exists():
+        return annotation_path
+
+    st.error(
+        "Could not find a data file for you. Ensure you're using the correct"
+        " username."
+    )
+    return None
+
+
 def standardise_page_name(name: str) -> str:
     return name.lower().replace("_", " ")
 
