@@ -8,14 +8,6 @@ import yaml
 from typing_extensions import override
 
 
-def colour(text: str, fg: str | None = None, bg: str | None = None) -> str:
-    if fg is not None:
-        return f":{fg}[{text}]"
-    if bg is not None:
-        return f":{bg}-background[{text}]"
-    return text
-
-
 @dataclass
 class Config:
     log_path: Path

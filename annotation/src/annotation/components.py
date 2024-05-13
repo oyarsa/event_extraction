@@ -1,8 +1,29 @@
 from pathlib import Path
+from typing import Literal, TypeAlias
 
 import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
+
+Colour: TypeAlias = Literal[
+    "blue", "green", "orange", "red", "violet", "grey", "rainbow"
+]
+
+
+def colour(text: str, fg: Colour | None = None, bg: Colour | None = None) -> str:
+    """Supported colours: blue, green, orange, red, violet, grey, rainbow.
+
+    Only one of fg or bg can be specified at the same time.
+    """
+    if fg and bg:
+        raise ValueError("Cannot specify both foreground and background colours.")
+
+    if fg is not None:
+        return f":{fg}[{text}]"
+    if bg is not None:
+        return f":{bg}-background[{text}]"
+
+    return text
 
 
 def get_annotation_path(annotation_dir: Path, prolific_id: str) -> Path | None:
