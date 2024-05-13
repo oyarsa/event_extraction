@@ -48,13 +48,6 @@ def switch_page(page_name: str) -> None:
     raise ValueError(f"Page not found: {page_name}.")
 
 
-_PROLIFIC_STATE_KEY = "state_prolific"
-
-
-def set_prolific_state_id(prolific_id: str) -> None:
-    st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
-
-
 def get_prolific_id(page: str) -> str | None:
     authenticator = load_authenticator()
     name, status, _ = authenticator.login()

@@ -31,8 +31,6 @@ def main() -> None:
         st.error("Invalid Prolific ID. Please try again.")
         return
 
-    set_prolific_state_id(prolific_id)
-
 
 if __name__ == "__main__":
     main()
