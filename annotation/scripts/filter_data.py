@@ -44,13 +44,13 @@ def find_any_common_subsequence(
     )
 
 
-def do_sequences_intersect(str1: str, str2: str, min_length: int) -> bool:
+def do_sentences_intersect(sent1: str, sent2: str, min_length: int) -> bool:
     """Check if there is a common sequence of words between two strings in order.
 
     Subsequences of length less than min_length are ignored.
     """
-    words1 = clean_str(str1).split()
-    words2 = clean_str(str2).split()
+    words1 = sent1.split()
+    words2 = sent2.split()
 
     return find_any_common_subsequence(
         words1, words2, min_length
@@ -78,9 +78,9 @@ def tag(reference: str, model: str, min_subseq_length: int) -> Tag:
         return Tag.EXACT_MATCH
 
     # No subsequence intersection between gold and predicted means it's invalid.
-    if not do_sequences_intersect(
+    if not do_sentences_intersect(
         cause_gold, cause_pred, min_subseq_length
-    ) or not do_sequences_intersect(effect_gold, effect_pred, min_subseq_length):
+    ) or not do_sentences_intersect(effect_gold, effect_pred, min_subseq_length):
         return Tag.NO_INTERSECTION
 
     return Tag.NEEDS_ANNOTATION
