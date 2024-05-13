@@ -2,7 +2,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from annotation.components import colour, get_annotation_path, get_prolific_id
+from annotation.components import colour, get_annotation_path, get_username
 from annotation.util import get_config
 
 
@@ -10,8 +10,8 @@ def main(annotation_dir: Path) -> None:
     st.set_page_config(page_title="Event Extraction Annotation")
     st.title("Welcome")
 
-    prolific_id = get_prolific_id("start_page")
-    if not prolific_id:
+    username = get_username("start_page")
+    if not username:
         return
 
     instruction_col, annotation_col = st.columns([0.12, 0.88])
@@ -23,7 +23,7 @@ def main(annotation_dir: Path) -> None:
         "pages/2_Annotation.py", label=colour("Annotation page", bg="green")
     )
 
-    if get_annotation_path(annotation_dir, prolific_id) is None:
+    if get_annotation_path(annotation_dir, username) is None:
         return
 
 

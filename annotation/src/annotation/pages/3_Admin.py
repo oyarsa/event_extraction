@@ -2,7 +2,7 @@ import json
 
 import streamlit as st
 
-from annotation.components import get_prolific_id
+from annotation.components import get_username
 from annotation.util import get_config
 
 
@@ -28,11 +28,11 @@ def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
 
 
 def main() -> None:
-    prolific_id = get_prolific_id("annotation")
-    if not prolific_id:
+    username = get_username("annotation")
+    if not username:
         return
 
-    if prolific_id != "admin":
+    if username != "admin":
         st.error("You are not the admin.")
         return
 

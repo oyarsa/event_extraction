@@ -45,9 +45,9 @@ def colour(text: str, fg: Colour | None = None, bg: Colour | None = None) -> str
     return text
 
 
-def get_annotation_path(annotation_dir: Path, prolific_id: str) -> Path | None:
-    """Data is divided in files, one per Prolific ID."""
-    annotation_path = annotation_dir / f"{prolific_id}.json"
+def get_annotation_path(annotation_dir: Path, username: str) -> Path | None:
+    """Data is divided in files, one per username."""
+    annotation_path = annotation_dir / f"{username}.json"
     if annotation_path.exists():
         return annotation_path
 
@@ -58,9 +58,9 @@ def get_annotation_path(annotation_dir: Path, prolific_id: str) -> Path | None:
     return None
 
 
-def get_prolific_id(page: str) -> str | None:
+def get_username(page: str) -> str | None:
     authenticator = load_authenticator()
-    name, status, _ = authenticator.login()
+    name, status, username = authenticator.login()
 
     if status is None or name is None:
         st.warning("Please log in")
@@ -69,23 +69,14 @@ def get_prolific_id(page: str) -> str | None:
         st.error("Username/password is incorrect")
         return None
 
-    prolific_id = st.session_state["name"]
     text_col, logout_col = st.columns([0.75, 0.25])
     with text_col:
-        subsubheader(f"**Your Prolific ID is:** `{prolific_id}`")
+        st.write(f"**Your username is:** `{username}`")
 
     with logout_col:
         authenticator.logout(key=f"logout_{page}")
 
-    return prolific_id
-
-
-def subsubheader(text: str) -> None:
-    heading(text, 4)
-
-
-def heading(text: str, level: int) -> None:
-    st.markdown(f"{'#' * level} {text}")
+    return username
 
 
 def load_authenticator() -> stauth.Authenticate:

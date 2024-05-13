@@ -5,7 +5,6 @@ from pathlib import Path
 
 import streamlit as st
 
-from annotation.components import get_annotation_path, get_prolific_id
 from annotation.components import escape, get_annotation_path, get_username
 from annotation.model import (
     AnnotationInstance,
@@ -29,7 +28,7 @@ def render_clauses(header: str, reference: str, model: str) -> None:
 
 def answer_instance(
     instance: AnnotationInstance,
-    prolific_id: str,
+    username: str,
     answer_dir: Path,
     annotation_data: list[AnnotationInstance],
 ) -> Answer | None:
@@ -40,7 +39,7 @@ def answer_instance(
     render_clauses("Cause", instance.annotation.cause, instance.model.cause)
     render_clauses("Effect", instance.annotation.effect, instance.model.effect)
 
-    previous_answer = load_answer(instance.id, prolific_id, answer_dir, annotation_data)
+    previous_answer = load_answer(instance.id, username, answer_dir, annotation_data)
     if instance.id not in st.session_state:
         st.session_state[answer_state_id(instance.id)] = previous_answer
 
@@ -74,35 +73,22 @@ def answer_state_id(instance_id: str) -> str:
     return f"answer_state_{instance_id}"
 
 
-def set_page(page_idx: int) -> None:
-    st.session_state["page_idx"] = page_idx
-
-
 def goto_page(page_idx: int) -> None:
-    set_page(page_idx)
+    st.session_state["page_idx"] = page_idx
     st.rerun()
 
 
 def render_page(annotation_dir: Path, answer_dir: Path) -> None:
-    prolific_id = get_prolific_id("annotation")
-    if not prolific_id:
+    username = get_username("annotation")
+    if not username:
         return
 
-    annotation_path = get_annotation_path(annotation_dir, prolific_id)
+    annotation_path = get_annotation_path(annotation_dir, username)
     if annotation_path is None:
         return
 
     annotation_data = load_data(annotation_path)
-
-    # Find the first unanswered question so the user can continue from they left off.
-    # If there are no unanswered questions, start from the beginning.
-    # If the key exists, the user is currently annotating, or is coming back from the
-    # same session.
-    if "page_idx" in st.session_state:
-        page_idx: ItemIndex = st.session_state["page_idx"]
-    # Otherwise, automatically go to the latest entry.
-    else:
-        page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
+    page_idx: ItemIndex = st.session_state.get("page_idx", 0)
 
     if page_idx >= len(annotation_data):
         st.subheader("You have answered all questions.")
@@ -113,20 +99,20 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
     st.title(f"Annotate ({page_idx + 1} of {len(annotation_data)})")
 
     instance = annotation_data[page_idx]
-    answer = answer_instance(instance, prolific_id, answer_dir, annotation_data)
+    answer = answer_instance(instance, username, answer_dir, annotation_data)
 
     prev_col, next_col, latest_col = st.columns([2, 2, 5])
     if page_idx > 0 and prev_col.button("Previous"):
         goto_page(page_idx - 1)
 
     if answer is not None and next_col.button("Save & Next"):
-        save_progress(prolific_id, answer_dir, page_idx, answer, annotation_data)
+        save_progress(username, answer_dir, page_idx, answer, annotation_data)
         goto_page(page_idx + 1)
 
     # Find the first unanswered question so the user can continue from they left off.
     # If there are no unanswered questions, start from the beginning.
     if latest_col.button("Go to latest"):
-        page_idx = find_last_entry_idx(prolific_id, answer_dir, annotation_data)
+        page_idx = find_last_entry_idx(username, answer_dir, annotation_data)
         goto_page(page_idx)
 
 
