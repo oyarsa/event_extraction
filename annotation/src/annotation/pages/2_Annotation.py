@@ -101,7 +101,7 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
     instance = annotation_data[page_idx]
     answer = answer_instance(instance, username, answer_dir, annotation_data)
 
-    prev_col, next_col, latest_col = st.columns([2, 2, 5])
+    prev_col, next_col, first_col, latest_col = st.columns([2, 2, 2, 5])
     if page_idx > 0 and prev_col.button("Previous"):
         goto_page(page_idx - 1)
 
@@ -109,9 +109,12 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
         save_progress(username, answer_dir, page_idx, answer, annotation_data)
         goto_page(page_idx + 1)
 
+    if page_idx > 0 and first_col.button("Go to first"):
+        goto_page(0)
+
     # Find the first unanswered question so the user can continue from they left off.
     # If there are no unanswered questions, start from the beginning.
-    if latest_col.button("Go to latest"):
+    if latest_col.button("Go to last answered"):
         page_idx = find_last_entry_idx(username, answer_dir, annotation_data)
         goto_page(page_idx)
 
