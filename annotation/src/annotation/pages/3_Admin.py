@@ -1,21 +1,20 @@
-from pathlib import Path
-
 import streamlit as st
+from evaluation.gpt_common import hashlib
+
+from annotation.common import get_prolific_id
+
+
+def hashkey(password: str) -> str:
+    return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
 
 def main() -> None:
-    admin_path = Path("config/admin_key")
-    if not admin_path.exists():
-        st.error("Admin key not found")
+    prolific_id = get_prolific_id("annotation")
+    if not prolific_id:
         return
 
-    admin_key = admin_path.read_text().strip()
-    key = st.text_input("Enter the admin key")
-    if not key:
-        return
-
-    if key != admin_key:
-        st.error("Invalid admin key")
+    if prolific_id != "admin":
+        st.error("You are not an admin")
         return
 
     st.header("Admin panel")
