@@ -109,8 +109,7 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
             goto_page(0)
         return
 
-    st.title("Annotate the data")
-    st.header(f"Entry {page_idx + 1} of {len(annotation_data)}")
+    st.title(f"Annotate ({page_idx + 1} of {len(annotation_data)})")
 
     instance = annotation_data[page_idx]
     answer = answer_instance(instance, prolific_id, answer_dir, annotation_data)
