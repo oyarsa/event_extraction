@@ -94,13 +94,6 @@ def get_config() -> Config:
     )
 
 
-def ask_login() -> None:
-    msg, link = st.columns([0.75, 0.25])
-    with msg:
-        st.error("You're not logged in. Log in with your Prolific ID.")
-    link.page_link("Start_Page.py", label=colour("Log In", bg="blue"))
-
-
 def subsubheader(text: str) -> None:
     heading(text, 4)
 
