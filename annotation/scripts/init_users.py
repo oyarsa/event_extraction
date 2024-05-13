@@ -5,8 +5,11 @@ include data like exact match.
 """
 
 import argparse
+import json
 import random
+import shutil
 import string
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -52,6 +55,14 @@ def generate_credentials(length: int) -> tuple[str, str]:
     return generate_random_string(length), generate_random_string(length)
 
 
+def backup_auth_file(auth_file: Path) -> None:
+    """Backup the authentication file."""
+    ts = datetime.now().strftime("%Y%m%d%H%M%S")
+    backup_file = auth_file.with_name(f"auth.{ts}.yaml")
+    shutil.copy(auth_file, backup_file)
+    print(f"Backed up {auth_file} to {backup_file}")
+
+
 def main(
     auth_file: Path,
     data_file: Path,
@@ -62,29 +73,40 @@ def main(
     seed: int,
 ) -> None:
     random.seed(seed)
+    data_output_dir.mkdir(parents=True, exist_ok=True)
 
+    backup_auth_file(auth_file)
     auth = yaml.safe_load(auth_file.read_text())
     data = yaml.safe_load(data_file.read_text())
 
     data_splits = split_data(data, num_users, common_pct)
+    users = auth["credentials"]["usernames"]
+    new_users = {"admin": users.pop("admin")}
+    creds: list[str] = []
 
     for split in data_splits:
         username, password = generate_credentials(username_length)
-        auth["users"] = {
+        new_users[username] = {
             "name": username,
             "password": password,
             "logged_in": False,
         }
-        (data_output_dir / f"{username}.yaml").write_text(yaml.dump(split))
+        (data_output_dir / f"{username}.json").write_text(json.dumps(split))
+        creds.append(f"{username},{password}")
+
+    auth["credentials"]["usernames"] = new_users
+
+    auth_file.write_text(yaml.dump(auth))
+    (auth_file.parent / "credentials.csv").write_text("\n".join(creds))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument("auth-file", type=Path, help="Path to the authentication file")
-    parser.add_argument("data-file", type=Path, help="Path to the data file")
-    parser.add_argument("num-users", type=int, help="Number of users to initialise")
+    parser.add_argument("auth_file", type=Path, help="Path to the authentication file")
+    parser.add_argument("data_file", type=Path, help="Path to the data file")
+    parser.add_argument("num_users", type=int, help="Number of users to initialise")
     parser.add_argument(
         "--data-output-dir",
         type=Path,
