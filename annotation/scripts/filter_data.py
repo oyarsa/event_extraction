@@ -57,35 +57,33 @@ def do_sequences_intersect(str1: str, str2: str, min_length: int) -> bool:
     ) or find_any_common_subsequence(words2, words1, min_length)
 
 
-class AnnotationTag(Enum):
+class Tag(Enum):
     EMPTY = "empty"
     EXACT_MATCH = "exact_match"
     NEEDS_ANNOTATION = "needs_annotation"
     NO_INTERSECTION = "no_intersection"
 
 
-def needs_annotation(
-    annotation: str, model: str, min_subseq_length: int
-) -> AnnotationTag:
+def get_tag(reference: str, model: str, min_subseq_length: int) -> Tag:
     """Check if the output needs manual annotation or can be done by rules alone."""
-    cause_gold, effect_gold = parse_instance(annotation)
+    cause_gold, effect_gold = parse_instance(reference)
     cause_pred, effect_pred = parse_instance(model)
 
     # All clauses are empty means it's invalid.
     if not cause_pred or not effect_pred or not cause_gold or not effect_gold:
-        return AnnotationTag.EMPTY
+        return Tag.EMPTY
 
     # Exact match means it's valid.
     if cause_pred == cause_gold and effect_pred == effect_gold:
-        return AnnotationTag.EXACT_MATCH
+        return Tag.EXACT_MATCH
 
     # No subsequence intersection between gold and predicted means it's invalid.
     if not do_sequences_intersect(
         cause_gold, cause_pred, min_subseq_length
     ) or not do_sequences_intersect(effect_gold, effect_pred, min_subseq_length):
-        return AnnotationTag.NO_INTERSECTION
+        return Tag.NO_INTERSECTION
 
-    return AnnotationTag.NEEDS_ANNOTATION
+    return Tag.NEEDS_ANNOTATION
 
 
 def parse_instance(text: str) -> tuple[str | None, str | None]:
@@ -96,16 +94,10 @@ def parse_instance(text: str) -> tuple[str | None, str | None]:
     return None, None
 
 
-def annotate(
-    data: list[dict[str, Any]], min_subseq_length: int
-) -> list[dict[str, Any]]:
+def tag(data: list[dict[str, Any]], min_subseq_length: int) -> list[dict[str, Any]]:
     return [
         item
-        | {
-            "tag": needs_annotation(
-                item["annotation"], item["model"], min_subseq_length
-            )
-        }
+        | {"tag": get_tag(item["reference"], item["model"], min_subseq_length).value}
         for item in data
     ]
 
@@ -115,46 +107,37 @@ def load_and_reshape_data(input: Path) -> list[dict[str, Any]]:
     return [
         {
             "text": item["input"],
-            "annotation": item["gold"],
+            "reference": item["gold"],
             "model": item["output"],
         }
         for item in json.loads(input.read_text())
     ]
 
 
-def calc_annotation_ratios(
+def calc_tag_ratios(
     data: list[dict[str, Any]],
-) -> dict[AnnotationTag, tuple[int, float]]:
+) -> dict[str, dict[str, Any]]:
     tags = Counter(item["tag"] for item in data)
     total = sum(tags.values())
-    return {tag: (count, count / total) for tag, count in tags.items()}
+    return {
+        tag: {"count": count, "ratio": count / total} for tag, count in tags.items()
+    }
 
 
-def show_annotation_results(ratios: dict[AnnotationTag, tuple[int, float]]) -> str:
-    return "Annotation results:\n" + "\n".join(
-        f"  {tag.value}: {count} ({ratio:.1%})"
-        for tag, (count, ratio) in ratios.items()
+def show_tag_results(ratios: dict[str, dict[str, Any]]) -> str:
+    return "Tag results:\n" + "\n".join(
+        f"  {tag}: {d['count']} ({d['ratio']:.1%})" for tag, d in ratios.items()
     )
 
 
-def remove_auto_annotated(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def remove_auto_tagged(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for item in data:
-        if item["tag"] is AnnotationTag.NEEDS_ANNOTATION:
+        if item["tag"] == Tag.NEEDS_ANNOTATION.value:
             item_ = item.copy()
             del item_["tag"]
             out.append(item_)
     return out
-
-
-def save_annotation_results(
-    path: Path, annotation_ratios: dict[AnnotationTag, tuple[int, float]]
-) -> None:
-    ratios = {
-        tag.value: {"count": count, "ratio": ratio}
-        for tag, (count, ratio) in annotation_ratios.items()
-    }
-    path.write_text(json.dumps(ratios, indent=2))
 
 
 def main(
@@ -167,14 +150,16 @@ def main(
     output_dir.mkdir(parents=True, exist_ok=True)
 
     data = load_and_reshape_data(input_file)
-    annotated_data = annotate(data, min_subseq_length)
+    tagged_data = tag(data, min_subseq_length)
 
-    annotation_ratios = calc_annotation_ratios(annotated_data)
-    print(show_annotation_results(annotation_ratios), end="\n\n")
-    save_annotation_results(output_dir / "annotation_ratios.json", annotation_ratios)
+    tag_ratios = calc_tag_ratios(tagged_data)
+    print(show_tag_results(tag_ratios), end="\n\n")
 
-    needs_annotation_data = remove_auto_annotated(annotated_data)
-    (output_dir / "to_annotate.json").write_text(json.dumps(needs_annotation_data))
+    to_annotate = remove_auto_tagged(tagged_data)
+
+    (output_dir / "tag_ratios.json").write_text(json.dumps(tag_ratios))
+    (output_dir / "tagged.json").write_text(json.dumps(tagged_data))
+    (output_dir / "to_annotate.json").write_text(json.dumps(to_annotate))
 
 
 if __name__ == "__main__":
@@ -182,9 +167,9 @@ if __name__ == "__main__":
         description=__doc__.splitlines()[0],
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("input-file", type=Path, help="Input JSON file")
+    parser.add_argument("input_file", type=Path, help="Input JSON file")
     parser.add_argument(
-        "output-dir", type=Path, help="Output directory to save the split datasets"
+        "output_dir", type=Path, help="Output directory to save the split datasets"
     )
     parser.add_argument(
         "--seed",
