@@ -56,17 +56,21 @@ def get_annotation_path(annotation_dir: Path, username: str) -> Path | None:
     return None
 
 
-_PROLIFIC_STATE_KEY = "prolific_id"
+_PROLIFIC_ID_KEY = "prolific_id"
 
 
-def get_prolific_id(page: str) -> str | None:
-    if prolific_id := st.session_state.get(_PROLIFIC_STATE_KEY):
+def get_prolific_id() -> str | None:
+    if prolific_id := st.query_params.get(_PROLIFIC_ID_KEY):
+        st.session_state[_PROLIFIC_ID_KEY] = prolific_id
+
+    if prolific_id := st.session_state.get(_PROLIFIC_ID_KEY):
+        st.query_params[_PROLIFIC_ID_KEY] = prolific_id
         return prolific_id
 
     st.write("Please enter your Prolific ID")
-    key = f"{_PROLIFIC_STATE_KEY}_{page}"
-    if prolific_id := st.text_input("Prolific ID", key=key):
-        st.session_state[_PROLIFIC_STATE_KEY] = prolific_id
+    if prolific_id := st.text_input("Prolific ID"):
+        st.session_state[_PROLIFIC_ID_KEY] = prolific_id
+        st.query_params[_PROLIFIC_ID_KEY] = prolific_id
         return prolific_id
 
     return None
@@ -101,7 +105,21 @@ def switch_page(page_name: str) -> None:
 
 
 def get_username(page: str) -> str | None:
-    username = get_prolific_id(page)
+    username: str | None = None
+    if prolific_id := st.query_params.get(_PROLIFIC_ID_KEY):
+        st.session_state[_PROLIFIC_ID_KEY] = prolific_id
+
+    if prolific_id := st.session_state.get(_PROLIFIC_ID_KEY):
+        st.query_params[_PROLIFIC_ID_KEY] = prolific_id
+        username = prolific_id
+
+    if username is None:
+        st.write("Please enter your Prolific ID")
+        if prolific_id := st.text_input("Prolific ID"):
+            st.session_state[_PROLIFIC_ID_KEY] = prolific_id
+            st.query_params[_PROLIFIC_ID_KEY] = prolific_id
+            username = prolific_id
+
     if username is None:
         return None
 
@@ -111,7 +129,8 @@ def get_username(page: str) -> str | None:
 
     with logout_col:
         if st.button("Logout", key=f"logout_{page}"):
-            st.session_state.pop(_PROLIFIC_STATE_KEY, None)
+            st.session_state.pop(_PROLIFIC_ID_KEY, None)
+            st.query_params.pop(_PROLIFIC_ID_KEY, None)
             switch_page("start page")
 
     return username

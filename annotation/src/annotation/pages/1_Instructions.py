@@ -1,6 +1,6 @@
 import streamlit as st
 
-from annotation.components import colour, escape
+from annotation.components import colour, escape, get_username
 from annotation.util import get_config
 
 
@@ -11,6 +11,10 @@ def annotation_link() -> None:
 
 
 def main() -> None:
+    username = get_username("instructions")
+    if not username:
+        return
+
     title_col, link_col = st.columns([0.5, 0.5])
     title_col.title("Instructions")
     with link_col:
