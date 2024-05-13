@@ -5,6 +5,8 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 
+from annotation.util import get_config
+
 Colour: TypeAlias = Literal[
     "blue", "green", "orange", "red", "violet", "grey", "rainbow"
 ]
@@ -70,8 +72,7 @@ def heading(text: str, level: int) -> None:
 
 
 def load_authenticator() -> stauth.Authenticate:
-    with open("config/auth.yaml") as f:
-        auth_config = yaml.safe_load(f)
+    auth_config = yaml.safe_load(get_config().auth_file.read_text())
     return stauth.Authenticate(
         auth_config["credentials"],
         auth_config["cookie"]["name"],

@@ -14,6 +14,7 @@ class Config:
     annotation_dir: Path
     answer_dir: Path
     instructions_file: Path
+    auth_file: Path
 
 
 def get_config() -> Config:
@@ -24,6 +25,7 @@ def get_config() -> Config:
         annotation_dir=Path(config["data"]["input"]),
         answer_dir=Path(config["data"]["answers"]),
         instructions_file=Path(config["instructions"]),
+        auth_file=Path(config["auth"]),
     )
 
 
