@@ -73,8 +73,11 @@ def answer_state_id(instance_id: str) -> str:
     return f"answer_state_{instance_id}"
 
 
+_PAGE_IDX_KEY = "page_idx"
+
+
 def goto_page(page_idx: int) -> None:
-    st.session_state["page_idx"] = page_idx
+    st.session_state[_PAGE_IDX_KEY] = page_idx
     st.rerun()
 
 
@@ -88,7 +91,7 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
         return
 
     annotation_data = load_data(annotation_path)
-    page_idx: ItemIndex = st.session_state.get("page_idx", 0)
+    page_idx: ItemIndex = st.session_state.get(_PAGE_IDX_KEY, 0)
 
     if page_idx >= len(annotation_data):
         st.subheader("You have answered all questions.")
