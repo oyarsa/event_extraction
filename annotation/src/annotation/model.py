@@ -119,14 +119,14 @@ def get_user_path(dir: Path, split_to_user_file: Path, username: str) -> Path:
         None,
     )
     if free is None:
-        logging.error(
+        logger.error(
             "No free slots available to assign data file. Username: %s", username
         )
         raise ValueError("No data file available")
 
     split_to_user[free] = username
     backup_and_write(split_to_user_file, json.dumps(split_to_user, indent=2))
-    logging.info("Assigned file %s to %s", free, username)
+    logger.info("Assigned file %s to %s", free, username)
 
     return dir / f"{free}.json"
 
