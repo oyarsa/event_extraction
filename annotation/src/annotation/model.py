@@ -174,8 +174,8 @@ def load_answer(
     )
 
 
-def hash_instance(instance: dict[str, Any]) -> str:
-    return hashlib.sha256(json.dumps(instance).encode()).hexdigest()[:8]
+def hash_instance(instance: dict[str, Any], length: int = 8) -> str:
+    return hashlib.sha256(json.dumps(instance).encode()).hexdigest()[:length]
 
 
 def load_data(path: Path) -> list[AnnotationInstance]:
