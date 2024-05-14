@@ -40,13 +40,14 @@ class AnnotationInstance:
     text: str
     annotation: ParsedInstance
     model: ParsedInstance
-    # Keeping the original data just in case
+    # The original data
     data: dict[str, Any]
 
 
 @dataclass
 class UserProgressItem:
     id: str
+    # The original data
     data: dict[str, Any]
     answer: Answer | None
 
