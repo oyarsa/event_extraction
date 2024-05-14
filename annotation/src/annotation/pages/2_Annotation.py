@@ -82,7 +82,7 @@ def goto_page(page_idx: int) -> None:
 
 
 def render_page(annotation_dir: Path, answer_dir: Path) -> None:
-    username = get_username("annotation")
+    username = get_username()
     if not username:
         return
 

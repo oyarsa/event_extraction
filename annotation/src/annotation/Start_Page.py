@@ -10,7 +10,7 @@ def main(annotation_dir: Path) -> None:
     st.set_page_config(page_title="Event Extraction Annotation")
     st.title("Welcome to the Event Extraction Annotation tool")
 
-    username = get_username("start_page")
+    username = get_username()
     if not username:
         return
 

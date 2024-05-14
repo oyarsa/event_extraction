@@ -28,7 +28,7 @@ def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
 
 
 def main() -> None:
-    username = get_username("annotation")
+    username = get_username()
     if not username:
         return
 

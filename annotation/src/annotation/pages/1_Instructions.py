@@ -9,7 +9,7 @@ def annotation_link() -> None:
 
 
 def main() -> None:
-    username = get_username("instructions")
+    username = get_username()
     if not username:
         return
 

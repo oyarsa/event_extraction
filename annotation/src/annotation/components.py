@@ -76,7 +76,7 @@ def standardise_page_name(name: str) -> str:
     return name.lower().replace("_", " ")
 
 
-def get_username(page: str) -> str | None:
+def get_username() -> str | None:
     username: str | None = None
     if prolific_id := st.query_params.get(_PROLIFIC_ID_KEY):
         st.session_state[_PROLIFIC_ID_KEY] = prolific_id
