@@ -76,6 +76,13 @@ def standardise_page_name(name: str) -> str:
     return name.lower().replace("_", " ")
 
 
+def logout_button() -> None:
+    if st.button("Logout"):
+        st.session_state.pop(_PROLIFIC_ID_KEY, None)
+        st.query_params.clear()
+        st.rerun()
+
+
 def get_username() -> str | None:
     username: str | None = None
     if prolific_id := st.query_params.get(_PROLIFIC_ID_KEY):
@@ -95,14 +102,6 @@ def get_username() -> str | None:
     if username is None:
         return None
 
-    text_col, logout_col = st.columns([0.75, 0.25])
-    with text_col:
-        st.write(f"**Your username is:** `{username}`")
-
-    with logout_col:
-        if st.button("Logout", key=f"logout_{page}"):
-            st.session_state.pop(_PROLIFIC_ID_KEY, None)
-            st.query_params.pop(_PROLIFIC_ID_KEY, None)
-            st.switch_page("Start_Page.py")
+    st.write(f"**Your username is:** `{username}`")
 
     return username

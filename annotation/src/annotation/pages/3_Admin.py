@@ -2,8 +2,8 @@ import json
 
 import streamlit as st
 
-from annotation.components import get_username
-from annotation.util import check_auth, check_password, get_config
+from annotation.components import get_username, logout_button
+from annotation.util import check_auth, get_config
 
 
 def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
@@ -36,9 +36,11 @@ def main() -> None:
     if not password:
         st.error("Please enter a password")
         return
-    if not check_auth(username, password):
-        st.error("Incorrect username or password")
+    if not check_auth(password):
+        st.error("Incorrect password")
         return
+
+    logout_button()
 
     st.header("Admin panel")
 

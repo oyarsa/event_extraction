@@ -17,9 +17,9 @@ def check_password(password: str, hashed: str) -> bool:
     return hash_password(password) == hashed
 
 
-def check_auth(username: str, password: str) -> bool:
+def check_auth(password: str) -> bool:
     admin_password = get_config().admin_password
-    return username == "admin" and check_password(password, admin_password)
+    return check_password(password, admin_password)
 
 
 @dataclass
