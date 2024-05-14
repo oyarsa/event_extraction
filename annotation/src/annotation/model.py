@@ -173,15 +173,3 @@ def read_user_data(path: Path) -> list[dict[str, Any]]:
 
 def write_user_data(path: Path, data: list[dict[str, Any]]) -> None:
     path.write_text(json.dumps(data, indent=2))
-
-
-def reset_user_data(username: str, answer_dir: Path) -> None:
-    user_path = get_user_path(answer_dir, username)
-    if not user_path.exists():
-        return
-
-    user_data = read_user_data(user_path)
-    for item in user_data:
-        item["answer"] = None
-
-    write_user_data(user_path, user_data)
