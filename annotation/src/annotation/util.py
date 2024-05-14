@@ -27,6 +27,7 @@ class Config:
     log_path: Path
     annotation_dir: Path
     answer_dir: Path
+    split_to_user: Path
     instructions_file: Path
     admin_password: str
 
@@ -38,6 +39,7 @@ def get_config() -> Config:
         log_path=Path(config["log_path"]),
         annotation_dir=Path(config["data"]["input"]),
         answer_dir=Path(config["data"]["answers"]),
+        split_to_user=Path(config["data"]["split_to_user"]),
         instructions_file=Path(config["instructions"]),
         admin_password=config["admin_password"],
     )

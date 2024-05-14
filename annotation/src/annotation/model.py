@@ -75,27 +75,33 @@ class UserProgress:
 def save_progress(
     username: str,
     answer_dir: Path,
+    split_to_user_file: Path,
     idx: ItemIndex,
     answer: Answer,
     input_data: list[AnnotationInstance],
 ) -> None:
-    user_data = load_user_progress(username, answer_dir, input_data)
+    user_data = load_user_progress(username, answer_dir, split_to_user_file, input_data)
     user_data.set_answer(idx, answer)
 
-    get_user_path(answer_dir, username).write_text(
+    get_user_path(answer_dir, split_to_user_file, username).write_text(
         json.dumps(asdict(user_data), indent=2)
     )
 
 
-def get_user_path(answer_dir: Path, username: str) -> Path:
-    return answer_dir / f"{username}.json"
+def get_user_path(answer_dir: Path, split_to_user_file: Path, username: str) -> Path:
+    split_to_user = json.loads(split_to_user_file.read_text())
+    user_to_split = {v: k for k, v in split_to_user.items()}
+    return answer_dir / user_to_split[username]
 
 
 def load_user_progress(
-    username: str, answer_dir: Path, input_data: list[AnnotationInstance]
+    username: str,
+    answer_dir: Path,
+    split_to_user_file: Path,
+    input_data: list[AnnotationInstance],
 ) -> UserProgress:
     """Loads the user's progress from the answer file."""
-    user_path = get_user_path(answer_dir, username)
+    user_path = get_user_path(answer_dir, split_to_user_file, username)
     if not user_path.exists():
         return UserProgress.from_unannotated_data(username, input_data)
 
@@ -119,9 +125,12 @@ def load_answer(
     instance_id: str,
     username: str,
     answer_dir: Path,
+    split_to_user_file: Path,
     annotation_data: list[AnnotationInstance],
 ) -> Answer | None:
-    user_data = load_user_progress(username, answer_dir, annotation_data)
+    user_data = load_user_progress(
+        username, answer_dir, split_to_user_file, annotation_data
+    )
     return next(
         (item.answer for item in user_data.items if item.id == instance_id),
         None,
@@ -148,17 +157,22 @@ def load_data(path: Path) -> list[AnnotationInstance]:
 
 
 def find_last_entry_idx(
-    username: str, answer_dir: Path, annotation_data: list[AnnotationInstance]
+    username: str,
+    answer_dir: Path,
+    split_to_user_file: Path,
+    annotation_data: list[AnnotationInstance],
 ) -> ItemIndex:
     """If there is a last entry, return its index, otherwise return 0.
 
     The 0 means the user is starting now.
     """
-    user_path = get_user_path(answer_dir, username)
+    user_path = get_user_path(answer_dir, split_to_user_file, username)
     if not user_path.exists():
         return ItemIndex(0)
 
-    user_progress = load_user_progress(username, answer_dir, annotation_data)
+    user_progress = load_user_progress(
+        username, answer_dir, split_to_user_file, annotation_data
+    )
     # First non-None (i.e. first unanswered) answer
     idx = next(
         (i for i, item in enumerate(user_progress.items) if item.answer is None), None

@@ -30,6 +30,7 @@ def answer_instance(
     instance: AnnotationInstance,
     username: str,
     answer_dir: Path,
+    split_to_user_file: Path,
     annotation_data: list[AnnotationInstance],
 ) -> Answer | None:
     """Renders the instance and returns True if the user has selected a valid answer."""
@@ -39,7 +40,9 @@ def answer_instance(
     render_clauses("Cause", instance.annotation.cause, instance.model.cause)
     render_clauses("Effect", instance.annotation.effect, instance.model.effect)
 
-    previous_answer = load_answer(instance.id, username, answer_dir, annotation_data)
+    previous_answer = load_answer(
+        instance.id, username, answer_dir, split_to_user_file, annotation_data
+    )
     if instance.id not in st.session_state:
         st.session_state[answer_state_id(instance.id)] = previous_answer
 
@@ -81,7 +84,9 @@ def goto_page(page_idx: int) -> None:
     st.rerun()
 
 
-def render_page(annotation_dir: Path, answer_dir: Path) -> None:
+def render_page(
+    annotation_dir: Path, answer_dir: Path, split_to_user_file: Path
+) -> None:
     username = get_username()
     if not username:
         return
@@ -102,14 +107,18 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
     st.title(f"Annotate ({page_idx + 1} of {len(annotation_data)})")
 
     instance = annotation_data[page_idx]
-    answer = answer_instance(instance, username, answer_dir, annotation_data)
+    answer = answer_instance(
+        instance, username, answer_dir, split_to_user_file, annotation_data
+    )
 
     prev_col, next_col, first_col, latest_col = st.columns([2, 2, 2, 5])
     if page_idx > 0 and prev_col.button("Previous"):
         goto_page(page_idx - 1)
 
     if answer is not None and next_col.button("Save & Next"):
-        save_progress(username, answer_dir, page_idx, answer, annotation_data)
+        save_progress(
+            username, answer_dir, split_to_user_file, page_idx, answer, annotation_data
+        )
         goto_page(page_idx + 1)
 
     if page_idx > 0 and first_col.button("Go to first"):
@@ -118,7 +127,9 @@ def render_page(annotation_dir: Path, answer_dir: Path) -> None:
     # Find the first unanswered question so the user can continue from they left off.
     # If there are no unanswered questions, start from the beginning.
     if latest_col.button("Go to next unanswered"):
-        page_idx = find_last_entry_idx(username, answer_dir, annotation_data)
+        page_idx = find_last_entry_idx(
+            username, answer_dir, split_to_user_file, annotation_data
+        )
         goto_page(page_idx)
 
 
@@ -127,7 +138,7 @@ def main() -> None:
     config.answer_dir.mkdir(exist_ok=True, parents=True)
 
     setup_logger(logger, config.log_path)
-    render_page(config.annotation_dir, config.answer_dir)
+    render_page(config.annotation_dir, config.answer_dir, config.split_to_user)
 
 
 if __name__ == "__main__":
