@@ -46,12 +46,11 @@ def get_annotation_path(
 ) -> Path | None:
     """Data is divided in files, one per username."""
     annotation_path = get_user_path(annotation_dir, split_to_user_file, username)
-    if annotation_path.exists():
+    if annotation_path is not None and annotation_path.exists():
         return annotation_path
 
     st.error(
-        "Could not find a data file for you. Ensure you're using the correct"
-        " username."
+        "Could not find a data file for you. Ensure you're using the correct username."
     )
     return None
 

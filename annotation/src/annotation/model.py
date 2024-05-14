@@ -88,12 +88,19 @@ def save_progress(
     user_data = load_user_progress(username, answer_dir, split_to_user_file, input_data)
     user_data.set_answer(idx, answer)
 
-    get_user_path(answer_dir, split_to_user_file, username).write_text(
-        json.dumps(asdict(user_data), indent=2)
-    )
+    path = get_user_path(answer_dir, split_to_user_file, username)
+    if path is None:
+        logger.error(
+            "Could not find a data file for user %s. Can't save progress. This shouldn't"
+            " have happened",
+            username,
+        )
+        return
+
+    path.write_text(json.dumps(asdict(user_data), indent=2))
 
 
-def get_user_path(dir: Path, split_to_user_file: Path, username: str) -> Path:
+def get_user_path(dir: Path, split_to_user_file: Path, username: str) -> Path | None:
     """Get the path to a user's file. Applicable to both annotation and answers file.
 
     There is a mapping (see Config.split_to_user_file) that maps the data split name to
@@ -122,7 +129,7 @@ def get_user_path(dir: Path, split_to_user_file: Path, username: str) -> Path:
         logger.error(
             "No free slots available to assign data file. Username: %s", username
         )
-        raise ValueError("No data file available")
+        return None
 
     split_to_user[free] = username
     backup_and_write(split_to_user_file, json.dumps(split_to_user, indent=2))
@@ -139,7 +146,7 @@ def load_user_progress(
 ) -> UserProgress:
     """Loads the user's progress from the answer file."""
     user_path = get_user_path(answer_dir, split_to_user_file, username)
-    if not user_path.exists():
+    if user_path is None or not user_path.exists():
         return UserProgress.from_unannotated_data(username, input_data)
 
     data = json.loads(user_path.read_text())
@@ -213,7 +220,7 @@ def find_last_entry_idx(
     The 0 means the user is starting now.
     """
     user_path = get_user_path(answer_dir, split_to_user_file, username)
-    if not user_path.exists():
+    if user_path is None or not user_path.exists():
         return ItemIndex(0)
 
     user_progress = load_user_progress(
