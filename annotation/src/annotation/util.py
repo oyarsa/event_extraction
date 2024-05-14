@@ -1,5 +1,6 @@
 import hashlib
 import logging
+import os
 import shutil
 import sys
 from dataclasses import dataclass
@@ -38,7 +39,16 @@ class Config:
 
 
 def get_config() -> Config:
-    with open("config/params.yaml") as f:
+    """Loads the configuration from a YAML file.
+
+    The path to the file can be set with the ANNOTATION_CONFIG_PATH environment variable.
+    The default is config/config.yaml, relative to the current directory of where the
+    script is run.
+
+    The paths listed in the configuration file are relative to current directory too.
+    """
+    config_path = os.environ.get("ANNOTATION_CONFIG_PATH", "config/config.yaml")
+    with open(config_path) as f:
         config = yaml.safe_load(f)
     return Config(
         log_path=Path(config["log_path"]),
