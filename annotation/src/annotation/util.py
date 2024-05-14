@@ -32,6 +32,7 @@ class Config:
     split_to_user_file: Path
     instructions_file: Path
     admin_password: str
+    completion_code: str
 
 
 def get_config() -> Config:
@@ -44,6 +45,7 @@ def get_config() -> Config:
         split_to_user_file=Path(config["data"]["split_to_user"]),
         instructions_file=Path(config["instructions"]),
         admin_password=config["admin_password"],
+        completion_code=config["completion_code"],
     )
 
 
