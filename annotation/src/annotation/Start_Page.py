@@ -6,7 +6,7 @@ import streamlit as st
 from annotation.components import colour, get_annotation_path, get_username
 from annotation.util import get_config, setup_logger
 
-logger = logging.getLogger("annotation.start_page")
+logger = logging.getLogger("annotation")
 
 
 def main(annotation_dir: Path, split_to_user_file: Path) -> None:

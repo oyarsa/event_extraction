@@ -10,6 +10,8 @@ from typing import ClassVar
 import yaml
 from typing_extensions import override
 
+logger = logging.getLogger("annotation.util")
+
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
@@ -103,5 +105,5 @@ def backup_and_write(file: Path, txt: str) -> None:
         ts = datetime.now().strftime("%Y%m%d%H%M%S")
         backup_file = file.with_suffix(f".{ts}{file.suffix}")
         shutil.copy(file, backup_file)
-        print(f"Backed up {file} to {backup_file}")
+        logger.info(f"Backed up {file} to {backup_file}")
     file.write_text(txt)
