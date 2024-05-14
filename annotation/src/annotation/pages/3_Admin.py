@@ -75,7 +75,16 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
 
     file_path.write_bytes(file.getvalue())
     split_to_user = json.loads(split_to_user_file.read_text())
-    split_to_user[file_path.stem] = None
+
+    name = file_path.stem
+    user = None
+    if name in split_to_user:
+        st.warning(f"File {file_path} already has a mapped user.")
+        if not st.button("Proceed anyway", key=f"confirm_map_{name}"):
+            return
+        user = split_to_user[name]
+
+    split_to_user[file_path.stem] = user
     backup_and_write(split_to_user_file, json.dumps(split_to_user, indent=2))
 
     logger.info("Uploaded %s and updated the source-to-user file.", file_path)
