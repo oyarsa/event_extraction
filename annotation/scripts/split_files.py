@@ -10,6 +10,8 @@ import argparse
 import hashlib
 import json
 import random
+import shutil
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -45,6 +47,13 @@ def hash_data(data: list[dict[str, Any]]) -> str:
     return hashlib.sha256(data_txt).hexdigest()[:8]
 
 
+def backup_directory(dir: Path) -> None:
+    """Backup the directory to a new directory with the current timestamp."""
+    backup_dir = dir.with_name(f"{dir.name}_{datetime.now().isoformat()}")
+    shutil.copytree(dir, backup_dir)
+    print(f"Backed up {dir} to {backup_dir}")
+
+
 def main(
     data_file: Path,
     num_splits: int,
@@ -53,6 +62,9 @@ def main(
     seed: int,
     max_size: int | None,
 ) -> None:
+    backup_directory(data_output_dir)
+    shutil.rmtree(data_output_dir, ignore_errors=True)
+
     random.seed(seed)
     data_output_dir.mkdir(parents=True, exist_ok=True)
 
