@@ -1,10 +1,13 @@
 import json
+import logging
 from pathlib import Path
 
 import streamlit as st
 
 from annotation.components import get_annotation_path, get_username, logout_button
-from annotation.util import check_admin_password, get_config
+from annotation.util import backup_and_write, check_admin_password, get_config
+
+logger = logging.getLogger("annotation.admin")
 
 
 def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
@@ -71,6 +74,11 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
         return
 
     file_path.write_bytes(file.getvalue())
+    split_to_user = json.loads(split_to_user_file.read_text())
+    split_to_user[file_path.name] = None
+    backup_and_write(split_to_user_file, json.dumps(split_to_user, indent=2))
+
+    logger.info("Uploaded %s and updated the source-to-user file.", file_path)
     st.markdown(f"Uploaded {file_path}")
 
 
