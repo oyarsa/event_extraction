@@ -20,7 +20,8 @@ def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
         return "JSON file should be a list"
 
     valid = all(
-        isinstance(item, dict) and all(key in item for key in keys) for item in data
+        isinstance(item, dict) and all(key in item for key in keys)
+        for item in data  # pyright: ignore[reportUnknownVariableType]
     )
     if not valid:
         return f"Every item should be an object with keys {keys}"
@@ -62,7 +63,7 @@ def main() -> None:
         return
 
     file_path.write_bytes(file.getvalue())
-    st.write(f"Uploaded {file_path}")
+    st.markdown(f"Uploaded {file_path}")
 
 
 if __name__ == "__main__":

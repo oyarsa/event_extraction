@@ -11,9 +11,9 @@ import string
 from collections import Counter
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
-from evaluation.gpt_common import parse_instance as parse_instance_
+from evaluation.gpt_common import parse_instance as parse_instance_  # type: ignore
 
 
 def clean_str(s: str) -> str:
@@ -117,6 +117,7 @@ def load_and_reshape_data(input: Path) -> list[dict[str, Any]]:
     if not (isinstance(data, list) and isinstance(data[0], dict)):
         raise TypeError("Data file should be a list of objects")
 
+    data = cast(list[dict[str, Any]], data)
     return [
         {
             "text": item["input"],

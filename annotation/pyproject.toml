@@ -24,7 +24,7 @@ build-backend = "pdm.backend"
 distribution = true
 
 [tool.pyright]
-typeCheckingMode = "basic"
+typeCheckingMode = "strict"
 
 [tool.ruff]
 extend = "../pyproject.toml"

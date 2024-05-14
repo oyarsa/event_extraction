@@ -35,7 +35,7 @@ def answer_instance(
 ) -> Answer | None:
     """Renders the instance and returns True if the user has selected a valid answer."""
     st.subheader("Source Text")
-    st.write(escape(instance.data["text"]))
+    st.markdown(escape(instance.data["text"]))
 
     render_clauses("Cause", instance.annotation.cause, instance.model.cause)
     render_clauses("Effect", instance.annotation.effect, instance.model.effect)
@@ -64,7 +64,7 @@ def answer_instance(
     if answer is not None:
         return Answer[answer.upper()]
 
-    st.write("Please select an answer.")
+    st.markdown("Please select an answer.")
     return None
 
 

@@ -67,7 +67,8 @@ def get_prolific_id() -> str | None:
         st.query_params[_PROLIFIC_ID_KEY] = prolific_id
         return prolific_id
 
-    st.write("Please enter your Prolific ID")
+    st.markdown("Please enter your Prolific ID")
+
     if prolific_id := st.text_input("Prolific ID"):
         st.session_state[_PROLIFIC_ID_KEY] = prolific_id
         st.query_params[_PROLIFIC_ID_KEY] = prolific_id
@@ -97,7 +98,8 @@ def get_username() -> str | None:
         username = prolific_id
 
     if username is None:
-        st.write("Please enter your Prolific ID")
+        st.markdown("Please enter your Prolific ID")
+
         if prolific_id := st.text_input("Prolific ID"):
             st.session_state[_PROLIFIC_ID_KEY] = prolific_id
             st.query_params[_PROLIFIC_ID_KEY] = prolific_id
@@ -106,6 +108,6 @@ def get_username() -> str | None:
     if username is None:
         return None
 
-    st.write(f"**Your username is:** `{username}`")
+    st.markdown(f"**Your username is:** `{username}`")
 
     return username
