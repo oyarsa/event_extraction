@@ -49,6 +49,9 @@ def hash_data(data: list[dict[str, Any]]) -> str:
 
 def backup_directory(dir: Path) -> None:
     """Backup the directory to a new directory with the current timestamp."""
+    if not dir.exists():
+        return
+
     backup_dir = dir.with_name(f"{dir.name}_{datetime.now().isoformat()}")
     shutil.copytree(dir, backup_dir)
     print(f"Backed up {dir} to {backup_dir}")
