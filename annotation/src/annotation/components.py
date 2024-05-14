@@ -61,7 +61,7 @@ _PROLIFIC_ID_KEY = "prolific_id"
 
 def logout_button() -> None:
     if st.button("Logout"):
-        st.session_state.pop(_PROLIFIC_ID_KEY, None)
+        st.session_state.clear()
         st.query_params.clear()
         st.rerun()
 

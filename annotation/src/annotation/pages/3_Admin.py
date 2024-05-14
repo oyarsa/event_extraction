@@ -1,9 +1,10 @@
 import json
+from pathlib import Path
 
 import streamlit as st
 
-from annotation.components import get_username, logout_button
-from annotation.util import check_auth, get_config
+from annotation.components import get_annotation_path, get_username, logout_button
+from annotation.util import check_admin_password, get_config
 
 
 def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
@@ -28,22 +29,29 @@ def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
     return None
 
 
-def main() -> None:
+def main(annotation_dir: Path, split_to_user_file: Path) -> None:
+    st.header("Admin panel")
+
     username = get_username()
     if not username:
         return
 
-    password = st.text_input("Password", type="password")
+    admin_password_key = "admin_password"
+    password = st.session_state.get(admin_password_key) or st.text_input(
+        "Password", type="password"
+    )
     if not password:
-        st.error("Please enter a password")
+        st.warning("Please enter a password")
         return
-    if not check_auth(password):
+    if not check_admin_password(password):
         st.error("Incorrect password")
         return
 
+    st.session_state[admin_password_key] = password
     logout_button()
 
-    st.header("Admin panel")
+    if path := get_annotation_path(annotation_dir, split_to_user_file, username):
+        st.markdown(f"Your data file is `{path}`.")
 
     file = st.file_uploader("Choose a JSON data file")
     if not file:
@@ -67,4 +75,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    config = get_config()
+    main(config.annotation_dir, config.split_to_user_file)

@@ -19,7 +19,7 @@ def check_password(password: str, hashed: str) -> bool:
     return hash_password(password) == hashed
 
 
-def check_auth(password: str) -> bool:
+def check_admin_password(password: str) -> bool:
     admin_password = get_config().admin_password
     return check_password(password, admin_password)
 
