@@ -15,8 +15,6 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, cast
 
-from evaluation.gpt_common import parse_instance as parse_instance_
-
 
 def clean_str(s: str) -> str:
     """Remove punctuation, articles, repeated whitespace and convert to lowercase."""
@@ -95,12 +93,16 @@ def tag(reference: str, model: str, min_subseq_length: int) -> Tag:
     return Tag.NEEDS_ANNOTATION
 
 
-def parse_instance(text: str) -> tuple[str | None, str | None]:
-    inst, _ = parse_instance_(text)
-    cause, effect = inst["Cause"], inst["Effect"]
-    if not cause or not effect:
+def parse_instance(answer: str) -> tuple[str | None, str | None]:
+    matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
+    if not matches:
         return None, None
-    return clean_str(cause[0]), clean_str(effect[0])
+
+    causes, _, effects = matches[0]
+    causes = sorted(c.strip() for c in causes.split("|") if c.strip())
+    effects = sorted(e.strip() for e in effects.split("|") if e.strip())
+
+    return clean_str(causes[0]), clean_str(effects[0])
 
 
 def tag_data(
