@@ -51,11 +51,12 @@ def main(
     data_output_dir: Path,
     common_pct: float,
     seed: int,
+    max_size: int | None,
 ) -> None:
     random.seed(seed)
     data_output_dir.mkdir(parents=True, exist_ok=True)
 
-    data = json.loads(data_file.read_text())
+    data = json.loads(data_file.read_text())[:max_size]
 
     data_splits = split_data(data, num_splits, common_pct)
     split_ids = [hash_data(split) for split in data_splits]
@@ -97,6 +98,12 @@ if __name__ == "__main__":
         help="Seed for the random number generator",
         default=0,
     )
+    parser.add_argument(
+        "--max-size",
+        type=int,
+        help="Maximum size of the split files",
+        default=None,
+    )
     args = parser.parse_args()
     main(
         args.data_file,
@@ -104,4 +111,5 @@ if __name__ == "__main__":
         args.data_output_dir,
         args.common_pct,
         args.seed,
+        args.max_size,
     )
