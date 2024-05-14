@@ -88,10 +88,18 @@ def save_progress(
     )
 
 
-def get_user_path(answer_dir: Path, split_to_user_file: Path, username: str) -> Path:
+def get_user_path(dir: Path, split_to_user_file: Path, username: str) -> Path:
+    """Get the path to a user's file. Applicable to both annotation and answers file.
+
+    There is a mapping (see Config.split_to_user_file) that maps the data split name to
+    the Prolific ID. This function uses that mapping to get the correct file.
+
+    This applies to both the annotation and the answers file. Ensure that you're using
+    the correct `dir` to get what you need.
+    """
     split_to_user = json.loads(split_to_user_file.read_text())
     user_to_split = {v: k for k, v in split_to_user.items()}
-    return answer_dir / user_to_split[username]
+    return dir / f"{user_to_split[username]}.json"
 
 
 def load_user_progress(

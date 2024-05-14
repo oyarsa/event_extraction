@@ -3,6 +3,8 @@ from typing import Literal, TypeAlias
 
 import streamlit as st
 
+from annotation.model import get_user_path
+
 
 def escape(text: str) -> str:
     """Escape characters that have special meaning in LaTeX."""
@@ -39,9 +41,11 @@ def colour(text: str, fg: Colour | None = None, bg: Colour | None = None) -> str
     return text
 
 
-def get_annotation_path(annotation_dir: Path, username: str) -> Path | None:
+def get_annotation_path(
+    annotation_dir: Path, split_to_user_file: Path, username: str
+) -> Path | None:
     """Data is divided in files, one per username."""
-    annotation_path = annotation_dir / f"{username}.json"
+    annotation_path = get_user_path(annotation_dir, split_to_user_file, username)
     if annotation_path.exists():
         return annotation_path
 

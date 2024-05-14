@@ -6,7 +6,7 @@ from annotation.components import colour, get_annotation_path, get_username
 from annotation.util import get_config
 
 
-def main(annotation_dir: Path) -> None:
+def main(annotation_dir: Path, split_to_user_file: Path) -> None:
     st.set_page_config(page_title="Event Extraction Annotation")
     st.title("Welcome to the Event Extraction Annotation tool")
 
@@ -23,10 +23,10 @@ def main(annotation_dir: Path) -> None:
         "pages/2_Annotation.py", label=colour("Annotation page", bg="green")
     )
 
-    if get_annotation_path(annotation_dir, username) is None:
+    if get_annotation_path(annotation_dir, split_to_user_file, username) is None:
         return
 
 
 if __name__ == "__main__":
     config = get_config()
-    main(config.annotation_dir)
+    main(config.annotation_dir, config.split_to_user_file)

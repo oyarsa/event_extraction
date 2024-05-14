@@ -91,7 +91,7 @@ def render_page(
     if not username:
         return
 
-    annotation_path = get_annotation_path(annotation_dir, username)
+    annotation_path = get_annotation_path(annotation_dir, split_to_user_file, username)
     if annotation_path is None:
         return
 
@@ -138,7 +138,7 @@ def main() -> None:
     config.answer_dir.mkdir(exist_ok=True, parents=True)
 
     setup_logger(logger, config.log_path)
-    render_page(config.annotation_dir, config.answer_dir, config.split_to_user)
+    render_page(config.annotation_dir, config.answer_dir, config.split_to_user_file)
 
 
 if __name__ == "__main__":
