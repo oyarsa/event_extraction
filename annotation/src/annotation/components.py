@@ -59,28 +59,6 @@ def get_annotation_path(
 _PROLIFIC_ID_KEY = "prolific_id"
 
 
-def get_prolific_id() -> str | None:
-    if prolific_id := st.query_params.get(_PROLIFIC_ID_KEY):
-        st.session_state[_PROLIFIC_ID_KEY] = prolific_id
-
-    if prolific_id := st.session_state.get(_PROLIFIC_ID_KEY):
-        st.query_params[_PROLIFIC_ID_KEY] = prolific_id
-        return prolific_id
-
-    st.markdown("Please enter your Prolific ID")
-
-    if prolific_id := st.text_input("Prolific ID"):
-        st.session_state[_PROLIFIC_ID_KEY] = prolific_id
-        st.query_params[_PROLIFIC_ID_KEY] = prolific_id
-        return prolific_id
-
-    return None
-
-
-def standardise_page_name(name: str) -> str:
-    return name.lower().replace("_", " ")
-
-
 def logout_button() -> None:
     if st.button("Logout"):
         st.session_state.pop(_PROLIFIC_ID_KEY, None)
