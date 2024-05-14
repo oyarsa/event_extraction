@@ -68,7 +68,7 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
         if not st.button("Overwrite", key=f"confirm_{file.name}"):
             return
 
-    keys = ["text", "annotation", "model"]
+    keys = ["text", "reference", "model"]
     if error := validate_file(file.getvalue(), keys):
         st.error(error)
         return
