@@ -15,7 +15,7 @@ from annotation.model import (
     load_data,
     save_progress,
 )
-from annotation.util import get_config, setup_logger
+from annotation.util import get_config
 
 logger = logging.getLogger("annotation.pages.3_Annotation")
 
@@ -137,7 +137,6 @@ def main() -> None:
     config = get_config()
     config.answer_dir.mkdir(exist_ok=True, parents=True)
 
-    setup_logger(logger, config.log_path)
     render_page(config.annotation_dir, config.answer_dir, config.split_to_user_file)
 
 

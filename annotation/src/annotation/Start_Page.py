@@ -1,9 +1,12 @@
+import logging
 from pathlib import Path
 
 import streamlit as st
 
 from annotation.components import colour, get_annotation_path, get_username
-from annotation.util import get_config
+from annotation.util import get_config, setup_logger
+
+logger = logging.getLogger("annotation.start_page")
 
 
 def main(annotation_dir: Path, split_to_user_file: Path) -> None:
@@ -29,4 +32,5 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
 
 if __name__ == "__main__":
     config = get_config()
+    setup_logger(logger, config.log_path)
     main(config.annotation_dir, config.split_to_user_file)
