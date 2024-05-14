@@ -1,0 +1,8 @@
+log_path: logs
+data:
+  input: data/inputs
+  answers: data/answers
+  split_to_user: data/inputs/split_to_user.json
+instructions: src/annotation/instructions.md
+admin_password: TODO
+completion_code: TODO
