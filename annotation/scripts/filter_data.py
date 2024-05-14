@@ -102,6 +102,9 @@ def parse_instance(answer: str) -> tuple[str | None, str | None]:
     causes = sorted(c.strip() for c in causes.split("|") if c.strip())
     effects = sorted(e.strip() for e in effects.split("|") if e.strip())
 
+    if not causes or not effects:
+        return None, None
+
     return clean_str(causes[0]), clean_str(effects[0])
 
 
@@ -192,7 +195,10 @@ if __name__ == "__main__":
     )
     parser.add_argument("input_files", type=Path, nargs="+", help="Input JSON files")
     parser.add_argument(
-        "--output-dir", type=Path, help="Output directory to save the split datasets"
+        "--output-dir",
+        type=Path,
+        help="Output directory to save the split datasets",
+        required=True,
     )
     parser.add_argument(
         "--seed",
