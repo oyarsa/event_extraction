@@ -13,7 +13,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, cast
 
-from evaluation.gpt_common import parse_instance as parse_instance_  # type: ignore
+from evaluation.gpt_common import parse_instance as parse_instance_
 
 
 def clean_str(s: str) -> str:
