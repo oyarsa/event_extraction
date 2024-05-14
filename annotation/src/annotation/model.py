@@ -1,10 +1,15 @@
 import hashlib
 import json
+import logging
 import re
 from dataclasses import asdict, dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any, NewType
+
+from annotation.util import backup_and_write
+
+logger = logging.getLogger("annotation.model")
 
 
 @dataclass
@@ -96,10 +101,34 @@ def get_user_path(dir: Path, split_to_user_file: Path, username: str) -> Path:
 
     This applies to both the annotation and the answers file. Ensure that you're using
     the correct `dir` to get what you need.
+
+    If the user is not found in the mapping, it will assign the user to the first free
+    slot and return that file path, updating the mapping file.
+
+    If there aren't any free slots, it will raise ValueError.
+    TODO: Return None instead of raising an error.
     """
     split_to_user = json.loads(split_to_user_file.read_text())
     user_to_split = {v: k for k, v in split_to_user.items()}
-    return dir / f"{user_to_split[username]}.json"
+
+    if filename := user_to_split.get(username):
+        return dir / f"{filename}.json"
+
+    free = next(
+        (k for k, v in split_to_user.items() if v is None),
+        None,
+    )
+    if free is None:
+        logging.error(
+            "No free slots available to assign data file. Username: %s", username
+        )
+        raise ValueError("No data file available")
+
+    split_to_user[free] = username
+    backup_and_write(split_to_user_file, json.dumps(split_to_user, indent=2))
+    logging.info("Assigned file %s to %s", free, username)
+
+    return dir / f"{free}.json"
 
 
 def load_user_progress(

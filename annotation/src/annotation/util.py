@@ -1,7 +1,9 @@
 import hashlib
 import logging
+import shutil
 import sys
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import ClassVar
 
@@ -91,3 +93,13 @@ def setup_logger(
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(fmt_cls(fmt=fmt, datefmt=datefmt))
     logger.addHandler(console_handler)
+
+
+def backup_and_write(file: Path, txt: str) -> None:
+    """Back up a text file with the timestamp, then overwrite the original."""
+    if file.exists():
+        ts = datetime.now().strftime("%Y%m%d%H%M%S")
+        backup_file = file.with_suffix(f".{ts}{file.suffix}")
+        shutil.copy(file, backup_file)
+        print(f"Backed up {file} to {backup_file}")
+    file.write_text(txt)
