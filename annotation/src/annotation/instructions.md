@@ -14,31 +14,21 @@ reference answer, even if the wording doesn't match exactly.**
 1. Read the source text carefully to understand the context and the cause and effect
    relationship being described.
 2. Examine the reference answer, which highlights the causes and effects extracted from
-   the source text.
-3. Compare the model answer to the reference answer, paying attention to the causes and
-   effects identified.
-4. Determine whether the model answer is "valid" or "invalid" based on the following
+   the source text. Compare the causes and effects.
+3. Determine whether the model answer is "valid" or "invalid" based on the following
 criteria:
   - The meaning of the causes and effects in the model answer should be the same as the
-reference answer, even if the wording differs.
-  - All words used in the model answer must be present in the source text, but they
-  don't necessarily have to appear in the reference answer.
+    reference answer, even if the wording differs.
   - The model answer might contain fewer words than the reference answer. If the meaning
     is maintained, it should still be considered valid. It's possible that the lost
     words are not essential to the cause and effect relationship.
   - The model might contain more words than the reference. If that's the case, make sure
     that the additional words don't change the meaning of the cause and effect
     relationship.
-5. It is important that the extractions match. Even if the model answers an otherwise
-   valid explanation, it should be considered invalid if it doesn't refer to the same
-  causes and effects as the reference answer.
-
-### Tips
-- Focus on the meaning and the cause and effect relationship, rather than the exact
-  wording.
-- If you're unsure about the validity of the model answer, re-read the source text and
-  reference answer to gain clarity.
-- If you're unsure, mark the example as "invalid".
+4. The model answer must refer to the same causes and effects as the reference answer.
+   If it doesn't, it should be considered invalid.
+5. Focus on the meaning of the cause and effect relationship, rather than the exact
+   wording.
 
 ### Example - Invalid
 
@@ -67,7 +57,9 @@ larger revenue base
 **Answer**: _Invalid_
 
 **Explanation**: The model answer includes additional information about spreading data
-solutions costs over a larger revenue base, which is not present in the reference.
+solutions costs over a larger revenue base, which is not present in the reference. This
+extra information adds a whole other cause to the event, which changes the meaning of the
+extraction.
 
 Note that the effect clauses are matches, as the words "there is" do not change the
 meaning of the extraction. However, since both the cause and effect clauses must match
