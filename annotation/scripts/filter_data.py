@@ -1,6 +1,8 @@
 """Filter data file to only include instances that need manual annotation.
 
 Cases that can be automatically annotated using rules are removed from the dataset.
+Also combines multiple files into one for easier annotation. Each entry is tagged
+with the name of the original file.
 """
 
 import argparse
@@ -155,7 +157,7 @@ def remove_auto_tagged(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def main(
-    input_file: Path,
+    input_files: list[Path],
     output_dir: Path,
     seed: int,
     min_subseq_length: int,
@@ -163,7 +165,11 @@ def main(
     random.seed(seed)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    data = load_and_reshape_data(input_file)
+    data = [
+        d | {"file": file.name}
+        for file in input_files
+        for d in load_and_reshape_data(file)
+    ]
     tagged_data = tag_data(data, min_subseq_length)
 
     tag_ratios = calc_tag_ratios(tagged_data)
@@ -182,9 +188,9 @@ if __name__ == "__main__":
         description=__doc__.splitlines()[0],
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("input_file", type=Path, help="Input JSON file")
+    parser.add_argument("input_files", type=Path, nargs="+", help="Input JSON files")
     parser.add_argument(
-        "output_dir", type=Path, help="Output directory to save the split datasets"
+        "--output-dir", type=Path, help="Output directory to save the split datasets"
     )
     parser.add_argument(
         "--seed",
@@ -201,7 +207,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(
-        args.input_file,
+        args.input_files,
         args.output_dir,
         args.seed,
         args.min_subseq_length,
