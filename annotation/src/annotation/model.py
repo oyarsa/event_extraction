@@ -165,6 +165,10 @@ def load_answer(
     split_to_user_file: Path,
     annotation_data: list[AnnotationInstance],
 ) -> Answer | None:
+    """Loads user progress and retrieves the answer from the given instance ID.
+
+    Returns None if a matching instance ID is not found.
+    """
     user_data = load_user_progress(
         username, answer_dir, split_to_user_file, annotation_data
     )
@@ -175,6 +179,11 @@ def load_answer(
 
 
 def hash_instance(instance: dict[str, Any], length: int = 8) -> str:
+    """Hashes the string JSON representation of the dict.
+
+    Length is because we don't need the entire hash to be unique, just enough to
+    differentiate between instances. Shorter hashes are easier to read and compare.
+    """
     return hashlib.sha256(json.dumps(instance).encode()).hexdigest()[:length]
 
 
