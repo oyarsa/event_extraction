@@ -56,11 +56,11 @@ class ColourFormatter(logging.Formatter):
     """
 
     formats: ClassVar[dict[int, str]] = {
-        logging.DEBUG: "\x1b[38;21m",  # grey
-        logging.INFO: "\x1b[37m",  # white
-        logging.WARNING: "\x1b[38;5;226m",  # yellow
-        logging.ERROR: "\x1b[38;5;196m",  # red
-        logging.CRITICAL: "\x1b[31;1m",  # bold red
+        logging.DEBUG: "\x1b[37m",  # grey
+        logging.INFO: "\x1b[0m",  # no colour
+        logging.WARNING: "\x1b[33m",  # yellow
+        logging.ERROR: "\x1b[35m",  # purple
+        logging.CRITICAL: "\x1b[4;31m",  # red underline
     }
     reset: ClassVar[str] = "\x1b[0m"
 
@@ -79,7 +79,7 @@ def setup_logger(
     file_name: str = "train.log",
     mode: str = "a",
     level: str = "info",
-    colour: bool = False,
+    colour: bool = True,
 ) -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.setLevel(logging.getLevelName(level.upper()))
