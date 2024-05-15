@@ -416,7 +416,7 @@ def infer(
         data,
         config,
         shuffle=False,
-        batch_size=config.per_device_train_batch_size,
+        batch_size=config.per_device_test_batch_size,
         desc=desc,
     )
 
