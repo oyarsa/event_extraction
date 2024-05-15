@@ -17,12 +17,12 @@ from typing import Any
 
 
 def split_data(
-    data: list[dict[str, Any]], num_subsets: int, common_pct: float
+    data: list[dict[str, Any]], num_subsets: int, overlap: int
 ) -> list[list[dict[str, Any]]]:
     data_ = data.copy()
     random.shuffle(data_)
 
-    common_size = int(len(data_) * common_pct)
+    common_size = min(overlap, len(data_))
     common, remaining = data_[:common_size], data_[common_size:]
     size = len(remaining) // num_subsets
 
@@ -30,15 +30,11 @@ def split_data(
 
 
 def report_splits(
-    all_data: list[dict[str, Any]],
-    common_pct: float,
+    overlap: int,
     num_subsets: int,
     splits: list[list[dict[str, Any]]],
 ) -> None:
-    print(
-        f"Split length: {len(splits[0])} x {num_subsets} ({common_pct:.0%} common ="
-        f" {int(len(all_data) * common_pct):.0f} items)"
-    )
+    print(f"Split length: {len(splits[0])} x {num_subsets} ({overlap} common)")
 
 
 def hash_data(data: list[dict[str, Any]]) -> str:
@@ -61,7 +57,7 @@ def main(
     data_file: Path,
     num_splits: int,
     data_output_dir: Path,
-    common_pct: float,
+    overlap: int,
     seed: int,
     max_size: int | None,
 ) -> None:
@@ -73,7 +69,7 @@ def main(
 
     data = json.loads(data_file.read_text())[:max_size]
 
-    data_splits = split_data(data, num_splits, common_pct)
+    data_splits = split_data(data, num_splits, overlap)
     split_ids = [hash_data(split) for split in data_splits]
     for split_id, split in zip(split_ids, data_splits):
         (data_output_dir / f"{split_id}.json").write_text(json.dumps(split, indent=2))
@@ -82,6 +78,8 @@ def main(
     (data_output_dir / "split_to_user.json").write_text(
         json.dumps(split_to_user, indent=2)
     )
+
+    report_splits(overlap, num_splits, data_splits)
 
 
 if __name__ == "__main__":
@@ -102,10 +100,10 @@ if __name__ == "__main__":
         default="data/inputs",
     )
     parser.add_argument(
-        "--common-pct",
-        type=float,
-        help="Percentage of common data between users",
-        default=0.2,
+        "--overlap",
+        type=int,
+        help="Number of common instances between users",
+        default=200,
     )
     parser.add_argument(
         "--seed",
@@ -124,7 +122,7 @@ if __name__ == "__main__":
         args.data_file,
         args.num_splits,
         args.data_output_dir,
-        args.common_pct,
+        args.overlap,
         args.seed,
         args.max_size,
     )
