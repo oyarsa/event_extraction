@@ -6,7 +6,7 @@
   "generation_num_beams": 1,
   "per_device_train_batch_size": 22,
   "per_device_eval_batch_size": 22,
-  "per_device_test_batch_size": 128,
+  "per_device_test_batch_size": 400,
   "device": "cuda:0",
   "num_train_epochs": 20,
   "learning_rate": 0.0001,
