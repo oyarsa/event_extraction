@@ -3,8 +3,8 @@ from pathlib import Path
 
 import streamlit as st
 
-from annotation.components import colour, get_annotation_path, get_username
-from annotation.util import get_config, setup_logger
+from annotation import components
+from annotation.util import colour, get_config, setup_logger
 
 logger = logging.getLogger("annotation")
 
@@ -13,7 +13,7 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
     st.set_page_config(page_title="Event Extraction Annotation")
     st.title("Welcome to the Event Extraction Annotation tool")
 
-    username = get_username()
+    username = components.get_username()
     if not username:
         return
 
@@ -26,7 +26,12 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
         "pages/2_Annotation.py", label=colour("Annotation page", bg="green")
     )
 
-    if get_annotation_path(annotation_dir, split_to_user_file, username) is None:
+    if (
+        components.get_or_allocate_annotation_path(
+            annotation_dir, split_to_user_file, username
+        )
+        is None
+    ):
         return
 
 

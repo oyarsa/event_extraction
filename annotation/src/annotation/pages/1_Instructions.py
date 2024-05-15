@@ -1,7 +1,7 @@
 import streamlit as st
 
-from annotation.components import colour, escape, get_username
-from annotation.util import get_config
+from annotation import components
+from annotation.util import colour, escape, get_config
 
 
 def annotation_link() -> None:
@@ -9,7 +9,7 @@ def annotation_link() -> None:
 
 
 def main() -> None:
-    username = get_username()
+    username = components.get_username()
     if not username:
         return
 

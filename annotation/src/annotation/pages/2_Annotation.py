@@ -5,17 +5,18 @@ from pathlib import Path
 
 import streamlit as st
 
-from annotation.components import escape, get_annotation_path, get_username
+from annotation import components
 from annotation.model import (
     AnnotationInstance,
     Answer,
     ItemIndex,
     find_last_entry_idx,
+    get_data_file,
     load_answer,
     load_data,
     save_progress,
 )
-from annotation.util import get_config
+from annotation.util import escape, get_config
 
 logger = logging.getLogger("annotation.pages.3_Annotation")
 
@@ -29,8 +30,7 @@ def render_clauses(header: str, reference: str, model: str) -> None:
 def answer_instance(
     instance: AnnotationInstance,
     username: str,
-    answer_dir: Path,
-    split_to_user_file: Path,
+    answer_path: Path,
     annotation_data: list[AnnotationInstance],
 ) -> Answer | None:
     """Renders the instance and returns True if the user has selected a valid answer."""
@@ -40,9 +40,7 @@ def answer_instance(
     render_clauses("Cause", instance.annotation.cause, instance.model.cause)
     render_clauses("Effect", instance.annotation.effect, instance.model.effect)
 
-    previous_answer = load_answer(
-        instance.id, username, answer_dir, split_to_user_file, annotation_data
-    )
+    previous_answer = load_answer(instance.id, username, answer_path, annotation_data)
     if instance.id not in st.session_state:
         st.session_state[answer_state_id(instance.id)] = previous_answer
 
@@ -90,12 +88,20 @@ def render_page(
     split_to_user_file: Path,
     completion_code: str,
 ) -> None:
-    username = get_username()
+    username = components.get_username()
     if not username:
         return
 
-    annotation_path = get_annotation_path(annotation_dir, split_to_user_file, username)
+    annotation_path = components.get_or_allocate_annotation_path(
+        annotation_dir, split_to_user_file, username
+    )
     if annotation_path is None:
+        return
+
+    answer_path = get_data_file(answer_dir, split_to_user_file, username)
+    if answer_path is None:
+        logger.error("[user %s] Could not find the answer file", username)
+        st.error("Internal error: contact the administrator.")
         return
 
     annotation_data = load_data(annotation_path)
@@ -114,18 +120,14 @@ def render_page(
     st.title(f"Annotate ({page_idx + 1} of {len(annotation_data)})")
 
     instance = annotation_data[page_idx]
-    answer = answer_instance(
-        instance, username, answer_dir, split_to_user_file, annotation_data
-    )
+    answer = answer_instance(instance, username, answer_path, annotation_data)
 
     prev_col, next_col, first_col, latest_col = st.columns([2, 2, 2, 5])
     if page_idx > 0 and prev_col.button("Previous"):
         goto_page(page_idx - 1)
 
     if answer is not None and next_col.button("Save & Next"):
-        save_progress(
-            username, answer_dir, split_to_user_file, page_idx, answer, annotation_data
-        )
+        save_progress(username, answer_path, page_idx, answer, annotation_data)
         goto_page(page_idx + 1)
 
     if page_idx > 0 and first_col.button("Go to first"):
@@ -134,9 +136,7 @@ def render_page(
     # Find the first unanswered question so the user can continue from they left off.
     # If there are no unanswered questions, start from the beginning.
     if latest_col.button("Go to next unanswered"):
-        page_idx = find_last_entry_idx(
-            username, answer_dir, split_to_user_file, annotation_data
-        )
+        page_idx = find_last_entry_idx(username, answer_path, annotation_data)
         goto_page(page_idx)
 
 

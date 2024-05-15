@@ -1,3 +1,5 @@
+"""Components encapsulating data behaviour that also interact with the user."""
+
 from pathlib import Path
 from typing import Literal, TypeAlias
 
