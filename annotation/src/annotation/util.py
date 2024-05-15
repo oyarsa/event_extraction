@@ -6,7 +6,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import ClassVar
+from typing import ClassVar, Literal, TypeAlias
 
 import yaml
 from typing_extensions import override
@@ -14,17 +14,10 @@ from typing_extensions import override
 logger = logging.getLogger("annotation.util")
 
 
-def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode("utf-8")).hexdigest()
-
-
-def check_password(password: str, hashed: str) -> bool:
-    return hash_password(password) == hashed
-
-
 def check_admin_password(password: str) -> bool:
-    admin_password = get_config().admin_password
-    return check_password(password, admin_password)
+    admin_password = get_config().admin_password  # admin password is saved hashed
+    hashed_password = hashlib.sha256(password.encode("utf-8")).hexdigest()
+    return hashed_password == admin_password
 
 
 @dataclass
@@ -50,6 +43,7 @@ def get_config() -> Config:
     config_path = os.environ.get("ANNOTATION_CONFIG_PATH", "config/config.yaml")
     with open(config_path) as f:
         config = yaml.safe_load(f)
+
     return Config(
         log_path=Path(config["log_path"]),
         annotation_dir=Path(config["data"]["input"]),
@@ -91,7 +85,6 @@ def setup_logger(
     file_name: str = "train.log",
     mode: str = "a",
     level: str = "info",
-    colour: bool = True,
 ) -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.setLevel(logging.getLevelName(level.upper()))
@@ -103,17 +96,55 @@ def setup_logger(
     file_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
     logger.addHandler(file_handler)
 
-    fmt_cls = ColourFormatter if colour else logging.Formatter
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(fmt_cls(fmt=fmt, datefmt=datefmt))
+    console_handler.setFormatter(ColourFormatter(fmt=fmt, datefmt=datefmt))
     logger.addHandler(console_handler)
 
 
 def backup_and_write(file: Path, txt: str) -> None:
     """Back up a text file with the timestamp, then overwrite the original."""
+    file.parent.mkdir(exist_ok=True, parents=True)
     if file.exists():
         ts = datetime.now().strftime("%Y%m%d%H%M%S")
         backup_file = file.with_suffix(f".{ts}{file.suffix}")
         shutil.copy(file, backup_file)
         logger.info(f"Backed up {file} to {backup_file}")
     file.write_text(txt)
+
+
+def escape(text: str) -> str:
+    """Escape characters that have special meaning in LaTeX."""
+    mapping = {
+        "$": r"\$",
+        "%": r"\%",
+        "&": r"\&",
+        "{": r"\{",
+        "}": r"\}",
+    }
+    for char, escaped in mapping.items():
+        text = text.replace(char, escaped)
+    return text
+
+
+Colour: TypeAlias = Literal[
+    "blue", "green", "orange", "red", "violet", "grey", "rainbow"
+]
+
+
+def colour(text: str, fg: Colour | None = None, bg: Colour | None = None) -> str:
+    """Supported colours: blue, green, orange, red, violet, grey, rainbow.
+
+    Only one of fg or bg can be specified at the same time.
+    """
+    if fg and bg:
+        logger.warning(
+            "colour: Only one of fg or bg can be specified at the same time."
+        )
+        return text
+
+    if fg is not None:
+        return f":{fg}[{text}]"
+    if bg is not None:
+        return f":{bg}-background[{text}]"
+
+    return text
