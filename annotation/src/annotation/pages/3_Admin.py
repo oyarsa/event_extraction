@@ -4,19 +4,19 @@ from pathlib import Path
 
 import streamlit as st
 
-from annotation.components import get_annotation_path, get_username, logout_button
+from annotation import components
 from annotation.util import backup_and_write, check_admin_password, get_config
 
-logger = logging.getLogger("annotation.admin")
+logger = logging.getLogger("annotation.pages.3_Admin")
 
 
-def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
+def validate_file_contents(contents: bytes, keys: list[str]) -> str | None:
     """Check if the file is a valid JSON with the correct format.
 
     Returns the error message if invalid, otherwise None.
     """
     try:
-        data = json.loads(file_bytes)
+        data = json.loads(contents)
     except json.JSONDecodeError:
         return "Invalid JSON file"
 
@@ -35,7 +35,7 @@ def validate_file(file_bytes: bytes, keys: list[str]) -> str | None:
 def main(annotation_dir: Path, split_to_user_file: Path) -> None:
     st.header("Admin panel")
 
-    username = get_username()
+    username = components.get_username()
     if not username:
         return
 
@@ -51,9 +51,14 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
         return
 
     st.session_state[admin_password_key] = password
-    logout_button()
+    if st.button("Logout"):
+        st.session_state.clear()
+        st.query_params.clear()
+        st.rerun()
 
-    if path := get_annotation_path(annotation_dir, split_to_user_file, username):
+    if path := components.get_or_allocate_annotation_path(
+        annotation_dir, split_to_user_file, username
+    ):
         st.markdown(f"Your data file is `{path}`.")
 
     file = st.file_uploader("Choose a JSON data file")
@@ -69,11 +74,12 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
             return
 
     keys = ["text", "reference", "model"]
-    if error := validate_file(file.getvalue(), keys):
+    contents = file.getvalue()
+    if error := validate_file_contents(contents, keys):
         st.error(error)
         return
 
-    file_path.write_bytes(file.getvalue())
+    file_path.write_bytes(contents)
     split_to_user = json.loads(split_to_user_file.read_text())
 
     name = file_path.stem
@@ -87,7 +93,9 @@ def main(annotation_dir: Path, split_to_user_file: Path) -> None:
     split_to_user[file_path.stem] = user
     backup_and_write(split_to_user_file, json.dumps(split_to_user, indent=2))
 
-    logger.info("Uploaded %s and updated the source-to-user file.", file_path)
+    logger.info(
+        "[user %s] Uploaded %s and updated the source-to-user file.", user, file_path
+    )
     st.markdown(f"Uploaded {file_path}")
 
 
