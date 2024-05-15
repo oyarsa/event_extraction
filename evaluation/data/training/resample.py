@@ -1,3 +1,6 @@
+"""Resample tagged data file with N examples per tag."""
+
+import argparse
 import json
 import random
 from pathlib import Path
@@ -8,12 +11,8 @@ def read_json(path: Path) -> list[dict[str, Any]]:
     return json.loads(path.read_text())
 
 
-def tag(data: list[dict[str, Any]], tag: str) -> list[dict[str, Any]]:
-    return [{"tag": tag, **d} for d in data]
-
-
-def main() -> None:
-    random.seed(0)
+def main(n: int, seed: int) -> None:
+    random.seed(seed)
 
     hand_path = Path("./hand_labelled.json")
     predicted_path = Path("./predicted.json")
@@ -32,20 +31,19 @@ def main() -> None:
 
     substr_invalid = hand_invalid + predicted_invalid
 
-    n = 1700
     substr_valid_s = random.sample(hand_valid, n)
     substr_invalid_s = random.sample(substr_invalid, n)
     em_s = random.sample(em, n)
     nonsubstr_s = random.sample(nonsubstr, n)
 
     tagged = [
-        tag(d, t)
-        for d, t in zip(
+        [{"tag": tag, **d} for d in data]
+        for data, tag in zip(
             [substr_valid_s, substr_invalid_s, em_s, nonsubstr_s],
             ["substr_valid", "substr_invalid", "em", "nonsubstr"],
         )
     ]
-    result = sum(tagged, [])
+    result = [d for data in tagged for d in data]
     random.shuffle(result)
 
     assert len(result) == 4 * 1700
@@ -53,4 +51,13 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description=__doc__.splitlines()[0],
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "-n", type=int, default=1700, help="Number of examples per tag."
+    )
+    parser.add_argument("--seed", type=int, default=0, help="Random seed.")
+    args = parser.parse_args()
+    main(args.n, args.seed)
