@@ -1,0 +1,121 @@
+[
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "We further project that recessionary conditions will follow into 2021, which translates into a gradual recovery from 2021 through 2023.",
+    "output": "[Cause] recessionary conditions will follow into 2021 [Relation] cause [Effect] a gradual recovery from 2021 through 2023",
+    "annotation": "[Cause] We further project that recessionary conditions will follow into 2021 [Relation] cause [Effect] a gradual recovery from 2021 through 2023"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "Possibly the pieces of data are not stitched together properly to enable a holistic view as organizations typically deploy siloed approaches among divisions, or various data formats and security protocols preclude a unified data platform.",
+    "output": "[Cause] organizations typically deploy siloed approaches among divisions, or various data formats and security protocols preclude a unified data platform [Relation] cause [Effect] the pieces of data are not stitched together properly to enable a holistic view",
+    "annotation": "[Cause] organizations typically deploy siloed approaches among divisions, or various data formats and security protocols preclude a unified data platform [Relation] enable [Effect] Possibly the pieces of data are not stitched together properly to enable a holistic view"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "We assume earned premiums increase at a fairly modest 2% organic compound annual growth rate over our projection period, as we expect recent price increases to fade and potentially reverse.",
+    "output": "[Cause] recent price increases to fade and potentially reverse [Relation] cause [Effect] earned premiums increase at a fairly modest 2% organic compound annual growth rate over our projection period",
+    "annotation": "[Cause] we expect recent price increases to fade and potentially reverse [Relation] cause [Effect] earned premiums increase at a fairly modest 2% organic compound annual growth rate over our projection period"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "Ball's acquisition of Rexam highlights management's focus on investment in emerging markets, where discretionary income growth ought to drive higher consumption of processed foods, including beer and soft drinks.",
+    "output": "[Cause] discretionary income growth [Relation] enable [Effect] higher consumption of processed foods, including beer and soft drinks",
+    "annotation": "[Cause] discretionary income growth [Relation] enable [Effect] higher consumption of processed foods"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "Our near-term earnings forecast is depressed due to the incorporation of poor crack spread futures curves despite a recent uptick.",
+    "output": "[Cause] the incorporation of poor crack spread futures curves [Relation] cause [Effect] Our near-term earnings forecast is depressed",
+    "annotation": "[Cause] the incorporation of poor crack spread futures curves despite a recent uptick [Relation] cause [Effect] Our near-term earnings forecast is depressed"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "The bankruptcy of the firm's largest franchisee, NPC International, also points to deteriorating unit economics, as Pizza Hut represented 75% of the firm's restaurant portfolio.",
+    "output": "[Cause] Pizza Hut represented 75% of the firm's restaurant portfolio [Relation] cause [Effect] The bankruptcy of the firm's largest franchisee, NPC International, also points to deteriorating unit economics",
+    "annotation": "[Cause] Pizza Hut represented 75% of the firm's restaurant portfolio [Relation] cause [Effect] The bankruptcy of the firm's largest franchisee"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "We project operating margins to reach 13% before moderating to our nearly 12% midcycle assumption, as we assume customers will increasingly adopt higher-margin fuel-efficient engines.",
+    "output": "[Cause] customers will increasingly adopt higher-margin fuel-efficient engines [Relation] cause [Effect] operating margins to reach 13% before moderating to our nearly 12% midcycle assumption",
+    "annotation": "[Cause] we assume customers will increasingly adopt higher-margin fuel-efficient engines [Relation] cause [Effect] We project operating margins to reach 13% before moderating to our nearly 12% midcycle assumption"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "The $3 billion of cash proceeds from its renewable energy, NRG Yield, and South Central business sales helped NRG finance the Direct Energy acquisition with no new equity.",
+    "output": "[Cause] The $3 billion of cash proceeds from its renewable energy, NRG Yield, and South Central business sales [Relation] enable [Effect] NRG finance the Direct Energy acquisition with no new equity",
+    "annotation": "[Cause] The $3 billion of cash proceeds from its renewable energy, NRG Yield, and South Central business sales [Relation] enable [Effect] helped NRG finance the Direct Energy acquisition with no new equity"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "A recovery more mild than we have anticipated would provide a near-term softness in Hardie's sales growth relative to expectations, and thus a challenge to valuation.",
+    "output": "[Cause] A recovery more mild than we have anticipated [Relation] cause [Effect] provide a near-term softness in Hardie's sales growth relative to expectations",
+    "annotation": "[Cause] A recovery more mild than we have anticipated [Relation] cause [Effect] a near-term softness in Hardie's sales growth relative to expectations"
+  },
+  {
+    "gold": 1,
+    "pred": 0,
+    "passage": "Even under the same roof, mass production possibilities are limited, as many craft offerings boast some unique element to their brewing or fermentation processes that is not transferrable across products.",
+    "output": "[Cause] many craft offerings boast some unique element to their brewing or fermentation processes that is not transferrable across products [Relation] cause [Effect] Even under the same roof, mass production possibilities are limited",
+    "annotation": "[Cause] many craft offerings boast some unique element to their brewing or fermentation processes that is not transferrable across products [Relation] prevent [Effect] mass production possibilities are limited"
+  },
+  {
+    "gold": 0,
+    "pred": 1,
+    "passage": "Exxon's upstream greenhouse gas intensity is rather high for its peer group at 38 kg CO2e/boe (2019) by our estimates due to its oil sands operations, making it a higher-cost producer.",
+    "output": "[Cause] its oil sands operations [Relation] cause [Effect] Exxon's upstream greenhouse gas intensity is rather high for its peer group at 38 kg CO2e/boe (2019) by our estimates",
+    "annotation": "[Cause] its oil sands operations, making it a higher-cost producer [Relation] cause [Effect] Exxon's upstream greenhouse gas intensity is rather high for its peer group at 38 kg CO2e/boe (2019) by our estimates"
+  },
+  {
+    "gold": 0,
+    "pred": 1,
+    "passage": "Retailers will want to keep their stores in the top retail locations as the strong demographic trends produce high foot traffic and strong sales growth, but even these assets will slow in the future.",
+    "output": "[Cause] the strong demographic trends produce high foot traffic and strong sales growth [Relation] cause [Effect] Retailers will want to keep their stores in the top retail locations",
+    "annotation": "[Cause] the strong demographic trends produce high foot traffic and strong sales growth, but even these assets will slow in the future [Relation] cause [Effect] Retailers will want to keep their stores in the top retail locations"
+  },
+  {
+    "gold": 0,
+    "pred": 1,
+    "passage": "Intel's manufacturing struggles have also led to major customers such as Apple, Amazon, and Microsoft developing their own ARM-based CPUs for PCs and servers, which is likely to curb overall growth for Intel's core CPU business as these chips are likely made at TSMC.",
+    "output": "[Cause] Intel's manufacturing struggles have also led to major customers such as Apple, Amazon, and Microsoft developing their own ARM-based CPUs for PCs and servers [Relation] cause [Effect] curb overall growth for Intel's core CPU business",
+    "annotation": "[Cause] these chips are likely made at TSMC [Relation] prevent [Effect] overall growth for Intel's core CPU business"
+  },
+  {
+    "gold": 0,
+    "pred": 1,
+    "passage": "Oil accounts for a smaller proportion of global energy production each year, and a structural shift toward cleaner energy may lead to long-term demand erosion, and thus value destruction for Patterson.",
+    "output": "[Cause] a structural shift toward cleaner energy [Relation] cause [Effect] long-term demand erosion, and thus value destruction for Patterson",
+    "annotation": "[Cause] a structural shift toward cleaner energy [Relation] cause [Effect] long-term demand erosion | value destruction for Patterson"
+  },
+  {
+    "gold": 0,
+    "pred": 1,
+    "passage": "Years of government efforts have done little to stem illegal cannabis, but a change to the ease of accessing black market supplies could have a significant impact on the pricing power, and thus the profitability of legal cannabis companies.",
+    "output": "[Cause] a change to the ease of accessing black market supplies [Relation] cause [Effect] have a significant impact on the pricing power, and thus the profitability of legal cannabis companies",
+    "annotation": "[Cause] a change to the ease of accessing black market supplies [Relation] prevent [Effect] the profitability of legal cannabis companies"
+  },
+  {
+    "gold": 0,
+    "pred": 1,
+    "passage": "Also, foreign exchange exposure could prove unpredictable as the firm grows internationally, making sales uncertain, although this risk has partially subsided with the exit of the Mexico business.",
+    "output": "[Cause] foreign exchange exposure could prove unpredictable as the firm grows internationally [Relation] cause [Effect] sales uncertain",
+    "annotation": "[Cause]  the firm grows internationally, making sales uncertain [Relation] cause [Effect] foreign exchange exposure could prove unpredictable"
+  },
+  {
+    "gold": 0,
+    "pred": 1,
+    "passage": "We believe having these additional offerings leads to an improved breadth of products, enabling more cross-selling, higher margins, lower distribution costs, and higher switching costs.",
+    "output": "[Cause] having these additional offerings [Relation] enable [Effect] an improved breadth of products, enabling more cross-selling, higher margins, lower distribution costs, and higher switching costs",
+    "annotation": "[Cause]  these additional offerings leads to an improved breadth of products [Relation] cause [Effect] more cross-selling, higher margins, lower distribution costs, and higher switching costs"
+  }
+]
