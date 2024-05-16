@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Filter data file to only include instances that need manual annotation.
 
 Cases that can be automatically annotated using rules are removed from the dataset.

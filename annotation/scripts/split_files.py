@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Split the input data into multiple files for different users.
 
 The input data file should only include data that needs to be annotated. For example,
