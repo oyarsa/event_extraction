@@ -15,6 +15,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, cast
 
+from annotation import eval
+
 
 def clean_str(s: str) -> str:
     """Remove punctuation, articles, repeated whitespace and convert to lowercase."""
@@ -71,6 +73,13 @@ class Tag(str, Enum):
     NO_INTERSECTION = "no_intersection"
 
 
+def get_macro_em(reference: str, model: str) -> float:
+    """Calculate the exact match score between the reference and model outputs."""
+    refer: eval.Reference = {"id": "", "answers": reference}
+    pred: eval.Prediction = {"id": "", "prediction_text": model}
+    return eval.calc_macro_em([pred], [refer])
+
+
 def tag(reference: str, model: str, min_subseq_length: int) -> Tag:
     """Check if the output needs manual annotation or can be done by rules alone."""
     cause_gold, effect_gold = parse_instance(reference)
@@ -94,11 +103,11 @@ def tag(reference: str, model: str, min_subseq_length: int) -> Tag:
 
 
 def parse_instance(answer: str) -> tuple[str | None, str | None]:
-    matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
+    matches = re.findall(r"\[Cause\](.*?)\[Relation\].*?\[Effect\](.*?)$", answer)
     if not matches:
         return None, None
 
-    causes, _, effects = matches[0]
+    causes, effects = matches[0]
     causes = sorted(c.strip() for c in causes.split("|") if c.strip())
     effects = sorted(e.strip() for e in effects.split("|") if e.strip())
 
@@ -112,7 +121,11 @@ def tag_data(
     data: list[dict[str, Any]], min_subseq_length: int
 ) -> list[dict[str, Any]]:
     return [
-        item | {"tag": tag(item["reference"], item["model"], min_subseq_length)}
+        item
+        | {
+            "tag": tag(item["reference"], item["model"], min_subseq_length),
+            "em": get_macro_em(item["reference"], item["model"]),
+        }
         for item in data
     ]
 
