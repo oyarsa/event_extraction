@@ -9,6 +9,7 @@ Use `scripts/filter_data.py` to generate the input data.
 import argparse
 import hashlib
 import json
+import math
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -16,22 +17,26 @@ from typing import Any
 
 
 def split_data(
-    data: list[dict[str, Any]], num_subsets: int, overlap: int
+    data: list[dict[str, Any]], num_splits: int, overlap: int
 ) -> list[list[dict[str, Any]]]:
+    overlap = min(overlap, len(data))
+    common, remaining = data[:overlap], data[overlap:]
+    split_len = math.ceil(len(remaining) / num_splits)
 
-    common_size = min(overlap, len(data_))
-    common, remaining = data_[:common_size], data_[common_size:]
-    size = len(remaining) // num_subsets
-
-    return [common + remaining[i * size : (i + 1) * size] for i in range(num_subsets)]
+    splits = [
+        common + remaining[i : i + split_len]
+        for i in range(0, len(remaining), split_len)
+    ]
+    assert len(splits) == num_splits
+    return splits
 
 
 def report_splits(
     overlap: int,
-    num_subsets: int,
     splits: list[list[dict[str, Any]]],
 ) -> None:
-    print(f"Split length: {len(splits[0])} x {num_subsets} ({overlap} common)")
+    split_lens = ", ".join(str(len(split)) for split in splits)
+    print(f"Split lengths: {split_lens} ({overlap} common)")
 
 
 def hash_data(data: list[dict[str, Any]]) -> str:
@@ -53,7 +58,7 @@ def backup_directory(dir: Path) -> None:
 def main(
     data_file: Path,
     num_splits: int,
-    data_output_dir: Path,
+    output_dir: Path,
     overlap: int,
     max_size: int | None,
     backup: bool,
@@ -62,21 +67,19 @@ def main(
         backup_directory(output_dir)
     shutil.rmtree(output_dir, ignore_errors=True)
 
-    data_output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     data = json.loads(data_file.read_text())[:max_size]
 
     data_splits = split_data(data, num_splits, overlap)
     split_ids = [hash_data(split) for split in data_splits]
     for split_id, split in zip(split_ids, data_splits):
-        (data_output_dir / f"{split_id}.json").write_text(json.dumps(split, indent=2))
+        (output_dir / f"{split_id}.json").write_text(json.dumps(split, indent=2))
 
     split_to_user = {split_id: None for split_id in split_ids}
-    (data_output_dir / "split_to_user.json").write_text(
-        json.dumps(split_to_user, indent=2)
-    )
+    (output_dir / "split_to_user.json").write_text(json.dumps(split_to_user, indent=2))
 
-    report_splits(overlap, num_splits, data_splits)
+    report_splits(overlap, data_splits)
 
 
 if __name__ == "__main__":
@@ -91,10 +94,9 @@ if __name__ == "__main__":
         help="Number of splits to create",
     )
     parser.add_argument(
-        "--data-output-dir",
+        "output_dir",
         type=Path,
         help="Path to the output dir for the split data files",
-        default="data/inputs",
     )
     parser.add_argument(
         "--overlap",
@@ -118,7 +120,7 @@ if __name__ == "__main__":
     main(
         args.data_file,
         args.num_splits,
-        args.data_output_dir,
+        args.output_dir,
         args.overlap,
         args.max_size,
         args.backup,
