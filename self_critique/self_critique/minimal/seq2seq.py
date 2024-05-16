@@ -466,8 +466,12 @@ def load_model(
 def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
     desc = desc.lower()
     logger.info("Saving %s results to: %s", desc, output_dir.resolve())
-    (output_dir / f"{desc}_output.json").write_text(json.dumps(result.predictions))
-    (output_dir / f"{desc}_metrics.json").write_text(json.dumps(result.metrics))
+    (output_dir / f"{desc}_output.json").write_text(
+        json.dumps(result.predictions, indent=2)
+    )
+    (output_dir / f"{desc}_metrics.json").write_text(
+        json.dumps(result.metrics, indent=2)
+    )
 
 
 def main() -> None:
