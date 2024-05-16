@@ -9,7 +9,6 @@ Use `scripts/filter_data.py` to generate the input data.
 import argparse
 import hashlib
 import json
-import random
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -19,8 +18,6 @@ from typing import Any
 def split_data(
     data: list[dict[str, Any]], num_subsets: int, overlap: int
 ) -> list[list[dict[str, Any]]]:
-    data_ = data.copy()
-    random.shuffle(data_)
 
     common_size = min(overlap, len(data_))
     common, remaining = data_[:common_size], data_[common_size:]
@@ -58,13 +55,11 @@ def main(
     num_splits: int,
     data_output_dir: Path,
     overlap: int,
-    seed: int,
     max_size: int | None,
 ) -> None:
     backup_directory(data_output_dir)
     shutil.rmtree(data_output_dir, ignore_errors=True)
 
-    random.seed(seed)
     data_output_dir.mkdir(parents=True, exist_ok=True)
 
     data = json.loads(data_file.read_text())[:max_size]
@@ -106,12 +101,6 @@ if __name__ == "__main__":
         default=200,
     )
     parser.add_argument(
-        "--seed",
-        type=int,
-        help="Seed for the random number generator",
-        default=0,
-    )
-    parser.add_argument(
         "--max-size",
         type=int,
         help="Maximum size of the split files",
@@ -123,6 +112,5 @@ if __name__ == "__main__":
         args.num_splits,
         args.data_output_dir,
         args.overlap,
-        args.seed,
         args.max_size,
     )
