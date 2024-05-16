@@ -7,7 +7,6 @@ with the name of the original file.
 
 import argparse
 import json
-import random
 import re
 import string
 from collections import Counter
@@ -164,10 +163,8 @@ def remove_auto_tagged(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def main(
     input_files: list[Path],
     output_dir: Path,
-    seed: int,
     min_subseq_length: int,
 ) -> None:
-    random.seed(seed)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     data = [
@@ -200,12 +197,6 @@ if __name__ == "__main__":
         help="Output directory to save the tagged and to-annotate files",
     )
     parser.add_argument(
-        "--seed",
-        type=int,
-        default=0,
-        help="Random seed for reproducibility",
-    )
-    parser.add_argument(
         "--min-subseq-length",
         type=int,
         default=1,
@@ -216,6 +207,5 @@ if __name__ == "__main__":
     main(
         args.input_files,
         args.output_dir,
-        args.seed,
         args.min_subseq_length,
     )
