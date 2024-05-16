@@ -195,10 +195,9 @@ if __name__ == "__main__":
     )
     parser.add_argument("input_files", type=Path, nargs="+", help="Input JSON files")
     parser.add_argument(
-        "--output-dir",
+        "output_dir",
         type=Path,
-        help="Output directory to save the split datasets",
-        required=True,
+        help="Output directory to save the tagged and to-annotate files",
     )
     parser.add_argument(
         "--seed",
