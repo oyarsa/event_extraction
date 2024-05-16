@@ -56,9 +56,11 @@ def main(
     data_output_dir: Path,
     overlap: int,
     max_size: int | None,
+    backup: bool,
 ) -> None:
-    backup_directory(data_output_dir)
-    shutil.rmtree(data_output_dir, ignore_errors=True)
+    if backup:
+        backup_directory(output_dir)
+    shutil.rmtree(output_dir, ignore_errors=True)
 
     data_output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -106,6 +108,12 @@ if __name__ == "__main__":
         help="Maximum size of the split files",
         default=None,
     )
+    parser.add_argument(
+        "--backup",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Backup the output directory before creating the splits",
+    )
     args = parser.parse_args()
     main(
         args.data_file,
@@ -113,4 +121,5 @@ if __name__ == "__main__":
         args.data_output_dir,
         args.overlap,
         args.max_size,
+        args.backup,
     )
