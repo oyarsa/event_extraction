@@ -23,6 +23,9 @@ def split_data(
     overlap = min(overlap, len(data))
     common, remaining = data[:overlap], data[overlap:]
     if not remaining:
+        print("No remaining data to split")
+        print(f"{len(common)=}")
+        print(f"{num_splits=}")
         return [common] * num_splits
 
     split_len = math.ceil(len(remaining) / num_splits)
@@ -44,10 +47,15 @@ def report_splits(
     print(f"Split lengths: {split_lens} ({overlap} common)")
 
 
-def hash_data(data: list[dict[str, Any]]) -> str:
-    """Generate a hash from the data."""
-    data_txt = json.dumps(data, sort_keys=True).encode("utf-8")
-    return hashlib.sha256(data_txt).hexdigest()[:8]
+def hash_data(i: int, data: list[dict[str, Any]]) -> str:
+    """Generate a hash from the data.
+
+    We need to include the index `i` to ensure that the hash is unique for each split,
+    even if they have same data. That happens when we're generating splits that
+    have the same data, like when we're testing the annotation tool.
+    """
+    data_txt = str(i) + json.dumps(data, sort_keys=True)
+    return hashlib.sha256(data_txt.encode("utf-8")).hexdigest()[:8]
 
 
 def backup_directory(dir: Path) -> None:
@@ -77,8 +85,11 @@ def main(
     data = json.loads(data_file.read_text())[:max_size]
 
     data_splits = split_data(data, num_splits, overlap)
-    split_ids = [hash_data(split) for split in data_splits]
+    print(f"{len(data_splits)=}")
+    split_ids = [hash_data(i, split) for i, split in enumerate(data_splits)]
+    print(f"{len(split_ids)=}")
     for split_id, split in zip(split_ids, data_splits):
+        print(f"{split_id=}")
         (output_dir / f"{split_id}.json").write_text(json.dumps(split, indent=2))
 
     split_to_user = {split_id: None for split_id in split_ids}
