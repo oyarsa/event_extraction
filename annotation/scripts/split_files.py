@@ -22,6 +22,9 @@ def split_data(
 ) -> list[list[dict[str, Any]]]:
     overlap = min(overlap, len(data))
     common, remaining = data[:overlap], data[overlap:]
+    if not remaining:
+        return [common] * num_splits
+
     split_len = math.ceil(len(remaining) / num_splits)
 
     splits = [
@@ -37,6 +40,7 @@ def report_splits(
     splits: list[list[dict[str, Any]]],
 ) -> None:
     split_lens = ", ".join(str(len(split)) for split in splits)
+    overlap = min(overlap, *(len(split) for split in splits))
     print(f"Split lengths: {split_lens} ({overlap} common)")
 
 
