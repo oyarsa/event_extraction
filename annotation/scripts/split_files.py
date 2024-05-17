@@ -108,7 +108,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--max-size",
         type=int,
-        help="Maximum size of the split files",
+        help="Maximum number of examples before splitting",
         default=None,
     )
     parser.add_argument(
