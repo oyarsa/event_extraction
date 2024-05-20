@@ -1,0 +1,8 @@
+log_path: logs
+data:
+  input: /mnt/volume_ams3_01/files/data/inputs
+  answers: /mnt/volume_ams3_01/files/data/answers
+  split_to_user: /mnt/volume_ams3_01/files/data/inputs/split_to_user.json
+instructions: src/annotation/instructions.md
+admin_password: '3790d613ff80b4a579a97015a85632b078039f7831c18ffb7468b91d82b3a66b'
+completion_code: CRMOTHSQ
