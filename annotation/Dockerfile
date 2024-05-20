@@ -15,4 +15,4 @@ COPY . /app
 
 RUN pip install --no-cache-dir .
 
-CMD [ "streamlit", "run", "src/annotation/Start_Page.py" ]
+CMD [ "streamlit", "run", "src/annotation/Start_Page.py", "--server.baseUrlPath", "/annotation"]
