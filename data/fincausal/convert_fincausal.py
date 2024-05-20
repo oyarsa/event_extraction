@@ -9,7 +9,7 @@ from typing import Any
 import pandas as pd
 
 
-def process(template: str, data: Any) -> dict[str, str]:
+def process(template: str, data: Any) -> dict[str, Any]:
     context = data.text.strip()
     out = {
         "context": context,
@@ -33,6 +33,12 @@ def main(input_file: Path, output_file: Path) -> None:
 
     answer_template = """[Cause] {cause} [Relation] cause [Effect] {effect}"""
     examples = [process(answer_template, d) for d in input_data.itertuples()]
+
+    # If the input file is a test file, we do not have the answers. However, if the
+    # file is train or dev, we must have all the answers, so we remove exceptinoal cases
+    # that don't.
+    if "test" not in str(input_file):
+        examples = [d for d in examples if d["answers"] is not None]
 
     print(f"There are {len(examples)} data in the input file.")
 
