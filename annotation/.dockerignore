@@ -1,0 +1,14 @@
+.dockerignore
+.git
+.gitignore
+.pdm-build
+Dockerfile
+__pycache__
+auth
+config
+config.yaml.example
+data
+logs
+tmp
+venv
+.venv
