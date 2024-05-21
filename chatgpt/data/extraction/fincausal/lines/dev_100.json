@@ -1,0 +1,705 @@
+{
+  "version": "v1.0",
+  "data": [
+    {
+      "context": "It found that total U.S. health care spending would be about $3.9 trillion under Medicare for All in 2019, compared with about $3.8 trillion under the status quo. Part of the reason is that Medicare for All would offer generous benefits with no copays and deductibles, except limited cost-sharing for certain medications.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Part of the reason is that Medicare for All would offer generous benefits with no copays and deductibles, except limited cost-sharing for certain medications.\nEffect: It found that total U.S. health care spending would be about $3.9 trillion under Medicare for All in 2019, compared with about $3.8 trillion under the status quo.",
+      "id": "-1958300649336387103"
+    },
+    {
+      "context": "Transat loss more than doubles as it works to complete Air Canada deal",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: it works to complete Air Canada deal\nEffect: Transat loss more than doubles",
+      "id": "2030343121476507163"
+    },
+    {
+      "context": "MONTREAL  -  Transat AT Inc.'s third-quarter net loss more than doubled from the same time last year as the tour operator worked to complete its takeover by Air Canada.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: the tour operator worked to complete its takeover by Air Canada.\nEffect: Transat AT Inc.'s third-quarter net loss more than doubled from the same time last year",
+      "id": "2706291083865243219"
+    },
+    {
+      "context": "The Montreal-based company lost $11.0 million in the quarter ended July 31 versus its $5.0-million net loss the year prior. The push to close Transat's sale to Air Canada heaped on an extra $14 million in costs in its third quarter, including $6 million in professional fees and $7.7 million in stock-based compensation for executives.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The push to close Transat's sale to Air Canada heaped on an extra $14 million in costs in its third quarter, including $6 million in professional fees and $7.7 million in stock-based compensation for executives.\nEffect: The Montreal-based company lost $11.0 million in the quarter ended July 31 versus its $5.0-million net loss the year prior.",
+      "id": "-1607036550849804302"
+    },
+    {
+      "context": "Transatlantic passenger traffic  -  key in the late-spring and summer months when sun-destination trips drop off  -  rose more than four per cent year over year last quarter to help boost revenue to $698.9 million, up from $664.6 million a year earlier.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: help boost revenue to $698.9 million, up from $664.6 million a year earlier.\nEffect: Transatlantic passenger traffic  -  key in the late-spring and summer months when sun-destination trips drop off  -  rose more than four per cent year over year last quarter",
+      "id": "-6553495346943034511"
+    },
+    {
+      "context": "Let's begin with a story: At the end of 2017, with new technology such as bitcoin, Ethereum, cryptocurrency and blockchain at their very buzziest, a small, publicly traded beverage company, Long Island Iced Tea, announced it was changing its name to Long Blockchain Corp. Literally overnight, shares skyrocketed 200% at the opening of the next trading day. Nothing had really changed except for the company's name, but the signal that the business was now tech-integrated attracted attention, press and real market value for the company and many new shareholders.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Let's begin with a story: At the end of 2017, with new technology such as bitcoin, Ethereum, cryptocurrency and blockchain at their very buzziest, a small, publicly traded beverage company, Long Island Iced Tea, announced it was changing its name to Long Blockchain Corp.\nEffect: Literally overnight, shares skyrocketed 200% at the opening of the next trading day.",
+      "id": "-8922235220757172760"
+    },
+    {
+      "context": "Let's begin with a story: At the end of 2017, with new technology such as bitcoin, Ethereum, cryptocurrency and blockchain at their very buzziest, a small, publicly traded beverage company, Long Island Iced Tea, announced it was changing its name to Long Blockchain Corp. Literally overnight, shares skyrocketed 200% at the opening of the next trading day. Nothing had really changed except for the company's name, but the signal that the business was now tech-integrated attracted attention, press and real market value for the company and many new shareholders.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Nothing had really changed except for the company's name, but the signal that the business was now tech-integrated attracted attention, press and real market value for the company and many new shareholders.\nEffect: Literally overnight, shares skyrocketed 200% at the opening of the next trading day.",
+      "id": "4806997765197661140"
+    },
+    {
+      "context": "Largest Tencent Shareholder Leads $15M Round in Blockchain Game Developer by Cryptocurrency News Daily | Sep 23, 2019 | Cryptocurrency News | 0 comments  Naspers, the largest shareholder of Chinese Internet giant Tencent, participated in a $15 million investment in blockchain game developer Immutable. Immutable, a Sydney-based blockchain gaming startup, completed a new funding round led by Naspers and Mike Novogratz's crypto investment bank Galaxy Digital, the company announced in a blog post on Sept. 23.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Immutable, a Sydney-based blockchain gaming startup, completed a new funding round led by Naspers and Mike Novogratz's crypto investment bank Galaxy Digital, the company announced in a blog post on Sept. 23.\nEffect: 0 comments  Naspers, the largest shareholder of Chinese Internet giant Tencent, participated in a $15 million investment in blockchain game developer Immutable.| Cryptocurrency News| Largest Tencent Shareholder Leads $15M Round in Blockchain Game Developer by Cryptocurrency News Daily| Sep 23, 2019",
+      "id": "-7304390706235909825"
+    },
+    {
+      "context": "Scaling from 13,000 to 1 million gamers projected According to the report, Immutable's flagship game Gods Unchained has made over $4.5 million in revenue in just over a year, despite it is being played by a closed group of 13,000 gamers. Founded by brothers Robbie and James Ferguson in July 2018, Immutable reportedly expects to grow Gods Unchained from the current 13,000 to 1 million players with the new investment, James stated in an interview with AFR. Based on the Ethereum blockchain, Gods Unchained is a trading card game that has reportedly overtaken other popular TCGs such as Artifact, Faeria and Kards, Immutable stated.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Based on the Ethereum blockchain, Gods Unchained is a trading card game that has reportedly overtaken other popular TCGs such as Artifact, Faeria and Kards, Immutable stated.\nEffect: Scaling from 13,000 to 1 million gamers projected According to the report, Immutable's flagship game Gods Unchained has made over $4.5 million in revenue in just over a year, despite it is being played by a closed group of 13,000 gamers.",
+      "id": "-2346523193797837619"
+    },
+    {
+      "context": "Scaling from 13,000 to 1 million gamers projected According to the report, Immutable's flagship game Gods Unchained has made over $4.5 million in revenue in just over a year, despite it is being played by a closed group of 13,000 gamers. Founded by brothers Robbie and James Ferguson in July 2018, Immutable reportedly expects to grow Gods Unchained from the current 13,000 to 1 million players with the new investment, James stated in an interview with AFR. Based on the Ethereum blockchain, Gods Unchained is a trading card game that has reportedly overtaken other popular TCGs such as Artifact, Faeria and Kards, Immutable stated.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: the new investment\nEffect: Founded by brothers Robbie and James Ferguson in July 2018, Immutable reportedly expects to grow Gods Unchained from the current 13,000 to 1 million players",
+      "id": "-1436615374212141271"
+    },
+    {
+      "context": "Through financial engineering, TII is able to obtain equity-like returns (IRRs >20%) while being exposed to debt-like risks through senior loan and private syndication and transaction fees.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Through financial engineering\nEffect: TII is able to obtain equity-like returns (IRRs >20%) while being exposed to debt-like risks through senior loan and private syndication and transaction fees.",
+      "id": "7384757863604362434"
+    },
+    {
+      "context": "I believe TII is a compelling investment due to its ability to leverage its existing equity which has increased BV/share at a 21% CAGR since 2013.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: I believe TII is a compelling investment due to its ability to leverage its existing equity\nEffect: has increased BV/share at a 21% CAGR since 2013.",
+      "id": "-894827473788686259"
+    },
+    {
+      "context": "Through financial engineering, TII is able to obtain equity-like returns while being exposed to debt-like risks. Compared to regular mezzanine debt lenders which usually lend only up to 75% LTV, the Company has a slightly higher threshold of risk up to 80% LTV.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Through financial engineering, TII is able to obtain equity-like returns while being exposed to debt-like risks.\nEffect: Compared to regular mezzanine debt lenders which usually lend only up to 75% LTV, the Company has a slightly higher threshold of risk up to 80% LTV.",
+      "id": "-6967084601069411055"
+    },
+    {
+      "context": "The Company has three primary levers to increase its project IRR:  1. Senior Loan Syndications  -  the company would originate a loan up to 80% LTV and create a senior A tranche (typically 50-60% LTV) as well as a junior B tranche.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The Company has three primary levers to increase its project IRR:  1. Senior Loan Syndications\nEffect: the company would originate a loan up to 80% LTV and create a senior A tranche (typically 50-60% LTV) as well as a junior B tranche.",
+      "id": "-8175528382690279852"
+    },
+    {
+      "context": "Private Syndications  -  the company would syndicate up to 80% of a loan and mortgage investment to accredited investors, with terms of the syndicate generally mirroring the terms of the loan except for interest rates paid to syndicated investors, which are typically 300bps less.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Private Syndications\nEffect: the company would syndicate up to 80% of a loan and mortgage investment to accredited investors, with terms of the syndicate generally mirroring the terms of the loan except for interest rates paid to syndicated investors, which are typically 300bps less.",
+      "id": "-3371403361083241304"
+    },
+    {
+      "context": "Source: Google Public Data  Source: Rate Hub  Since mortgage rates hit their peak of 8.5% in May of 2000, mortgage rates have declined to trough levels of 5.3% in July 2005 and 3.7% in July 2015. Credit became more widely available with the introduction of the Canada Mortgage Bond (CMB) in 2001.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Credit became more widely available with the introduction of the Canada Mortgage Bond (CMB) in 2001.\nEffect: Source: Google Public Data  Source: Rate Hub  Since mortgage rates hit their peak of 8.5% in May of 2000, mortgage rates have declined to trough levels of 5.3% in July 2005 and 3.7% in July 2015.",
+      "id": "7830820886689334649"
+    },
+    {
+      "context": "Post 2008 financial crisis, lending policies were tightened with interest-only mortgages no longer able to be insured, a reduction of maximum insurable amortization terms from 40 to 35 years, and the minimum down payment raised from 0% to 5%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Post 2008 financial crisis\nEffect: lending policies were tightened with interest-only mortgages no longer able to be insured, a reduction of maximum insurable amortization terms from 40 to 35 years, and the minimum down payment raised from 0% to 5%.",
+      "id": "-2932770516829819187"
+    },
+    {
+      "context": "Wilmington sees 10% drop in FY Ebitda but 'promising' sales in new year StockMarketWire.com - Information and education provider Wilmington reported a 9.7% drop in full-year earnings, reflecting previously announced cost increases to support its growth, even as it saw a 1% increase in revenues. Adjusted Ebitda fell 9.7% to £21.5m with Ebita margins at 17.6% while adjusted pre-tax profit fell 11.5% to £19.3m for the 12 months to 30 June 2019.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Adjusted Ebitda fell 9.7% to £21.5m with Ebita margins at 17.6% while adjusted pre-tax profit fell 11.5% to £19.3m for the 12 months to 30 June 2019.\nEffect: Wilmington sees 10% drop in FY Ebitda but 'promising' sales in new year StockMarketWire.com - Information and education provider Wilmington reported a 9.7% drop in full-year earnings, reflecting previously announced cost increases to support its growth, even as it saw a 1% increase in revenues.",
+      "id": "5242836780645564938"
+    },
+    {
+      "context": "However, revenue rose 1% to £122.5m. This was driven by double-digit growth in the firm's compliance business, while the healthcare division recovered from a 'challenging' year to achieve 1% growth.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: This was driven by double-digit growth in the firm's compliance business, while the healthcare division recovered from a 'challenging' year to achieve 1% growth.\nEffect: However, revenue rose 1% to £122.5m.",
+      "id": "-7810542158478877629"
+    },
+    {
+      "context": "We built momentum despite having to deal with the current uncertainties in the political and economic climate. The board maintains its view that the group is well positioned to build on this and deliver improved performance and increased shareholder value,' said non-executive chairman Martin Morgan. Wilmington said it would pay a final dividend of 5p, up 4% on the previous year, with total dividends of 9.1p (up 3% year on year).",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: We built momentum despite having to deal with the current uncertainties in the political and economic climate.\nEffect: Wilmington said it would pay a final dividend of 5p, up 4% on the previous year, with total dividends of 9.1p (up 3% year on year).",
+      "id": "-5070364760942623000"
+    },
+    {
+      "context": "Things got worse when the Wall came down. GDP fell 20% between 1988 and 1993. There were suddenly hundreds of thousands of unemployed in a country that, under Communism, had had full employment.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Things got worse when the Wall came down.\nEffect: GDP fell 20% between 1988 and 1993.",
+      "id": "-4810234616506621518"
+    },
+    {
+      "context": "Things got worse when the Wall came down. GDP fell 20% between 1988 and 1993. There were suddenly hundreds of thousands of unemployed in a country that, under Communism, had had full employment.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Things got worse when the Wall came down.\nEffect: There were suddenly hundreds of thousands of unemployed in a country that, under Communism, had had full employment.",
+      "id": "1089376101482837278"
+    },
+    {
+      "context": "Instead, working with his bold economics minister György Matolcsy, he pursued policies decried at the time as radical and irresponsible. He raised the minimum wage. He cut personal income tax rates sharply, from 30% to a flat rate of 16% (they would fall further, and corporate rates would bottom out at 9%, the lowest in Europe).",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Instead, working with his bold economics minister György Matolcsy, he pursued policies decried at the time as radical and irresponsible.\nEffect: He cut personal income tax rates sharply, from 30% to a flat rate of 16% (they would fall further, and corporate rates would bottom out at 9%, the lowest in Europe).",
+      "id": "3573178468492768104"
+    },
+    {
+      "context": "He began reclaiming some of the industrial enterprises so gullibly surrendered after the fall of Communism, buying back 21% of the energy giant MOL from Russia in 2011.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: He began reclaiming some of the industrial enterprises so gullibly surrendered after the fall of Communism\nEffect: buying back 21% of the energy giant MOL from Russia in 2011.",
+      "id": "2251028213731719294"
+    },
+    {
+      "context": "But all in all, Orbán's program, universally denounced as a gamble, was a staggering success. Hungary had repaid its IMF loans in full by 2013. The country now has 4% growth and an unemployment rate of about 3%. Debt has fallen from 85% to 71% of GDP, and labor force participation risen from 55% to around 70%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: But all in all, Orbán's program, universally denounced as a gamble, was a staggering success.\nEffect: Debt has fallen from 85% to 71% of GDP, and labor force participation risen from 55% to around 70%.",
+      "id": "1501157457280566985"
+    },
+    {
+      "context": "But all in all, Orbán's program, universally denounced as a gamble, was a staggering success. Hungary had repaid its IMF loans in full by 2013. The country now has 4% growth and an unemployment rate of about 3%. Debt has fallen from 85% to 71% of GDP, and labor force participation risen from 55% to around 70%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: But all in all, Orbán's program, universally denounced as a gamble, was a staggering success.\nEffect: The country now has 4% growth and an unemployment rate of about 3%.",
+      "id": "8224637829135658143"
+    },
+    {
+      "context": "So short of labor is Hungary that two strikes in January 2019 - one in the 4,000-strong Mercedes plant in Kecskemét, one at the vast Audi plant in Györ, with 13,000 employees - ended with 20% and 18% raises for workers, respectively.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: So short of labor is Hungary\nEffect: two strikes in January 2019 - one in the 4,000-strong Mercedes plant in Kecskemét, one at the vast Audi plant in Györ, with 13,000 employees - ended with 20% and 18% raises for workers, respectively.",
+      "id": "5260266607117459671"
+    },
+    {
+      "context": "And Orbán has drawn up a plan offering a $30,000 loan to first-time mothers that gets written off when the mother bears a third child, and grants every woman who raises four children an exemption from income tax for the rest of her life.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: And Orbán has drawn up a plan\nEffect: offering a $30,000 loan to first-time mothers that gets written off when the mother bears a third child, and grants every woman who raises four children an exemption from income tax for the rest of her life.",
+      "id": "-2822152569690096399"
+    },
+    {
+      "context": "In the wake of Merkel's invitation to migrants in 2015 Soros published a plan to bring a million refugees a year to Europe and distribute them rapidly among neighboring countries for settlement. The plan would, Soros wrote, mobilize the private sector, but only to run the project, not to pay for it. The funding of it would be done at taxpayer expense, through a €20 billion E.U. bond issue.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: In the wake of Merkel's invitation to migrants in 2015 Soros published a plan to bring a million refugees a year to Europe and distribute them rapidly among neighboring countries for settlement.\nEffect: The funding of it would be done at taxpayer expense, through a €20 billion E.U. bond issue.",
+      "id": "1631992157728077487"
+    },
+    {
+      "context": "They don't know what the parliament does (its legislative powers are narrowly circumscribed, and its votes can be legally disregarded in many cases). Turnout for its elections is low, as low as 13% in Slovakia.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: They don't know what the parliament does (its legislative powers are narrowly circumscribed, and its votes can be legally disregarded in many cases).\nEffect: Turnout for its elections is low, as low as 13% in Slovakia.",
+      "id": "4005600638945631724"
+    },
+    {
+      "context": "As Nvidia Com (NVDA) Stock Value Declined, Shareholder Assetmark Has Cut Stake by $15.67 … Sep 14, 2019 | News Stories  Some Historical NVDA News: 27/03/2018  -  NVIDIA Boosts World's Leading Deep Learning Computing Platform, Bringing 10x Performance Gain in …  Link to Full Article: Read Here  Welcome to the home of information resources for AI and ML.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: As Nvidia Com (NVDA) Stock Value Declined\nEffect: Shareholder Assetmark Has Cut Stake by $15.67",
+      "id": "9068455671762225428"
+    },
+    {
+      "context": "As Nvidia Com (NVDA) Stock Value Declined, Shareholder Assetmark Has Cut Stake by $15.67 … Sep 14, 2019 | News Stories  Some Historical NVDA News: 27/03/2018  -  NVIDIA Boosts World's Leading Deep Learning Computing Platform, Bringing 10x Performance Gain in …  Link to Full Article: Read Here  Welcome to the home of information resources for AI and ML.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: NVIDIA Boosts World's Leading Deep Learning Computing Platform\nEffect: Bringing 10x Performance Gain in …  Link to Full Article: Read Here  Welcome to the home of information resources for AI and ML.",
+      "id": "-4426112907635318658"
+    },
+    {
+      "context": "On the other hand, Articles 50, 51 and 52 of Law 1676 of 2013 provide, in short, that secured creditors, in the context of reorganization and liquidation procedures, have special privileges under which they can collect unpaid amounts in more favorable conditions than other creditors whose claims have not been dismissed, thereby reducing their risk almost to zero.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: On the other hand, Articles 50, 51 and 52 of Law 1676 of 2013 provide, in short, that secured creditors, in the context of reorganization and liquidation procedures, have special privileges under which they can collect unpaid amounts in more favorable conditions than other creditors whose claims have not been dismissed\nEffect: reducing their risk almost to zero.",
+      "id": "704153360830465396"
+    },
+    {
+      "context": "Montreal-based digital asset custodian Knøx has secured $8.25 million in a seed round to support its crypto custody service for institutional customers and fiduciaries. The funding round was led by San Francisco-based venture capital firm Initialized Capital, with the participation of financial services giant Fidelity and venture firm iNovia, Canadian technology-focused news outlet BetaKit reported on Sept. 24.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The funding round was led by San Francisco-based venture capital firm Initialized Capital, with the participation of financial services giant Fidelity and venture firm iNovia, Canadian technology-focused news outlet BetaKit reported on Sept. 24.\nEffect: Montreal-based digital asset custodian Knøx has secured $8.25 million in a seed round to support its crypto custody service for institutional customers and fiduciaries.",
+      "id": "4212451296189182236"
+    },
+    {
+      "context": "Blackstone Group Inc. is buying Dream Global REIT for $3.3-billion in cash, and as part of the deal the private equity giant is paying $395-million to end Dream Global's asset management contract with Mr. Cooper's holding company, Dream Unlimited Corp. That additional payment will flow to the holding company, whose shares jumped almost 17 per cent on Monday.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Blackstone Group Inc. is buying Dream Global REIT for $3.3-billion in cash, and as part of the deal the private equity giant is paying $395-million to end Dream Global's asset management contract with Mr. Cooper's holding company, Dream Unlimited Corp.\nEffect: That additional payment will flow to the holding company, whose shares jumped almost 17 per cent on Monday.",
+      "id": "-7233458477538389534"
+    },
+    {
+      "context": "We think that, right now, private money is beating public money in terms of its competitiveness, he said. Pension funds, private equity investors, high-net-worth investors, a lot of them have a much better opportunity to buy properties than public companies can. Blackstone, for example, took Pure Industrial Real Estate Trust private in 2018 for $2.5-billion in cash, plus assumed debt, and now it is buying Dream Global.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: We think that, right now, private money is beating public money in terms of its competitiveness, he said.\nEffect: Blackstone, for example, took Pure Industrial Real Estate Trust private in 2018 for $2.5-billion in cash, plus assumed debt, and now it is buying Dream Global.",
+      "id": "5648963592795800700"
+    },
+    {
+      "context": "We think that, right now, private money is beating public money in terms of its competitiveness, he said. Pension funds, private equity investors, high-net-worth investors, a lot of them have a much better opportunity to buy properties than public companies can. Blackstone, for example, took Pure Industrial Real Estate Trust private in 2018 for $2.5-billion in cash, plus assumed debt, and now it is buying Dream Global.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Pension funds, private equity investors, high-net-worth investors, a lot of them have a much better opportunity to buy properties than public companies can.\nEffect: Blackstone, for example, took Pure Industrial Real Estate Trust private in 2018 for $2.5-billion in cash, plus assumed debt, and now it is buying Dream Global.",
+      "id": "-6742156369224792999"
+    },
+    {
+      "context": "Public companies are not trading well enough to issue equity to buy assets at today's market prices, Mr. Cooper said. BMO Nesbitt Burns analyst Jenny Ma calculated that Blackstone's $3.3-billion purchase price, at $16.79 a share, equates to a 18.5-per-cent premium to Dream Global's closing price on Friday, but it amounted to a 6.6-per-cent discount to the REIT's net asset value.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Public companies are not trading well enough to issue equity to buy assets at today's market prices, Mr. Cooper said.\nEffect: BMO Nesbitt Burns analyst Jenny Ma calculated that Blackstone's $3.3-billion purchase price, at $16.79 a share, equates to a 18.5-per-cent premium to Dream Global's closing price on Friday, but it amounted to a 6.6-per-cent discount to the REIT's net asset value.",
+      "id": "-5511540593767215013"
+    },
+    {
+      "context": "Citing an increased interest in cryptocurrency, the company will pay a benefit of 500-yen equivalent cryptocurrency BTC … to all shareholders regardless of the number of shares they are holding.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Citing an increased interest in cryptocurrency\nEffect: the company will pay a benefit of 500-yen equivalent cryptocurrency BTC … to all shareholders regardless of the number of shares they are holding.",
+      "id": "-7087862923745678012"
+    },
+    {
+      "context": "Shareholders of record on Wednesday, September 4th will be paid a dividend of 0.12 per share on Friday, September 13th. This represents a $0.48 dividend on an annualized basis and a yield of 5.13%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Shareholders of record on Wednesday, September 4th will be paid a dividend of 0.12 per share on Friday, September 13th.\nEffect: This represents a $0.48 dividend on an annualized basis and a yield of 5.13%.",
+      "id": "-4919230218460920403"
+    },
+    {
+      "context": "Animalcare Group Plc (LON:ANCR) Announces Dividend of GBX 2 Tweet  Animalcare Group Plc (LON:ANCR) announced a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports. Stockholders of record on Thursday, October 24th will be paid a dividend of GBX 2 ($0.03) per share on Friday, November 22nd. This represents a dividend yield of 1.44%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Animalcare Group Plc (LON:ANCR) Announces Dividend of GBX 2 Tweet  Animalcare Group Plc (LON:ANCR) announced a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports.\nEffect: Stockholders of record on Thursday, October 24th will be paid a dividend of GBX 2 ($0.03) per share on Friday, November 22nd.",
+      "id": "-6700921445300511783"
+    },
+    {
+      "context": "Animalcare Group Plc (LON:ANCR) Announces Dividend of GBX 2 Tweet  Animalcare Group Plc (LON:ANCR) announced a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports. Stockholders of record on Thursday, October 24th will be paid a dividend of GBX 2 ($0.03) per share on Friday, November 22nd. This represents a dividend yield of 1.44%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Animalcare Group Plc (LON:ANCR) Announces Dividend of GBX 2 Tweet  Animalcare Group Plc (LON:ANCR) announced a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports.\nEffect: This represents a dividend yield of 1.44%.",
+      "id": "1564673272624309914"
+    },
+    {
+      "context": "Shares of LON ANCR traded up GBX 4.50 ($0.06) during mid-day trading on Tuesday, hitting GBX 138.50 ($1.81). 18,080 shares of the company's stock traded hands, compared to its average volume of 35,341.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Shares of LON ANCR traded up GBX 4.50 ($0.06) during mid-day trading on Tuesday\nEffect: hitting GBX 138.50 ($1.81).",
+      "id": "-4541744464838036119"
+    },
+    {
+      "context": "We are already paying an extra 12 cents a gallon on our gasoline purchases, and a $10 surcharge on our vehicle registration, ostensibly for road improvements.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: road improvements.\nEffect: We are already paying an extra 12 cents a gallon on our gasoline purchases, and a $10 surcharge on our vehicle registration",
+      "id": "-4823138977130241877"
+    },
+    {
+      "context": "There are two reasons why they pay you big dividends, like the 7%+ cash streams we'll dive into shortly:  REITs are exempt from tax at the corporate level, but … To keep that tax exemption, they must pay 90% of their taxable income to shareholders as dividends.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: To keep that tax exemption, they must pay 90% of their taxable income to shareholders as dividends.\nEffect: There are two reasons why they pay you big dividends, like the 7%+ cash streams",
+      "id": "7547941231858978606"
+    },
+    {
+      "context": "What's more, its revenues are still rising, and earnings results (based on FFO) have beaten expectations in 11 out of the last 12 quarters (and met expectations in that 12th quarter). The REIT's dividend now yields 9.4% and is still growing, with the latest hike just this past April.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: What's more, its revenues are still rising, and earnings results (based on FFO) have beaten expectations in 11 out of the last 12 quarters (and met expectations in that 12th quarter).\nEffect: The REIT's dividend now yields 9.4% and is still growing, with the latest hike just this past April.",
+      "id": "-3339853268760772665"
+    },
+    {
+      "context": "GNL has geographic diversification in spades, with properties in both the US and Europe. That diversification is in part behind GNL's reliable dividend growth from 2015 to now, which is a gift for income investors: the REIT's yield is now 11%, making it one of the biggest-yielding property REITs in the world.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: GNL has geographic diversification in spades, with properties in both the US and Europe.\nEffect: That diversification is in part behind GNL's reliable dividend growth from 2015 to now, which is a gift for income investors: the REIT's yield is now 11%, making it one of the biggest-yielding property REITs in the world.",
+      "id": "-4284645580131236724"
+    },
+    {
+      "context": "Put all three of these REITs together and you have a diversified real-estate portfolio covering thousands of properties internationally, with a big average yield of 9.3%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Put all three of these REITs together\nEffect: you have a diversified real-estate portfolio covering thousands of properties internationally, with a big average yield of 9.3%.",
+      "id": "3201979313032492486"
+    },
+    {
+      "context": "ET had reported in August about Tamil Nadu planning a raft of incentives and exemptions for consumers and manufacturers with a 3-5 year validity period to encourage EV adoption in the state. For private electric car owners, the current road tax exemption will be enhanced from 50% to 100%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: ET had reported in August about Tamil Nadu planning a raft of incentives and exemptions for consumers and manufacturers with a 3-5 year validity period to encourage EV adoption in the state.\nEffect: For private electric car owners, the current road tax exemption will be enhanced from 50% to 100%.",
+      "id": "3519369369326830389"
+    },
+    {
+      "context": "In case where SGST refund is not applicable, the state is offering a 15% capital subsidy on investments made in Tamil Nadu till end of 2025.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: In case where SGST refund is not applicable\nEffect: the state is offering a 15% capital subsidy on investments made in Tamil Nadu till end of 2025.",
+      "id": "-3803447111613973286"
+    },
+    {
+      "context": "The policy also envisages electricity tax, stamp duty exemptions and subsidies on land for factories - the subsidy is as high as 50% should the manufacturer go for a plant in the southern districts, said the policy.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: should the manufacturer go for a plant in the southern districts, said the policy.\nEffect: The policy also envisages electricity tax, stamp duty exemptions and subsidies on land for factories - the subsidy is as high as 50%",
+      "id": "6525149880677415831"
+    },
+    {
+      "context": "DOWG THRE/PAR VTG FPD 0.001 Declares Dividend of GBX 5 (LON:DP3H) Tweet  DOWG THRE/PAR VTG FPD 0.001 (LON:DP3H) declared a dividend on Friday, September 6th, Upcoming.Co.Uk reports. Investors of record on Thursday, October 17th will be paid a dividend of GBX 5 ($0.07) per share on Friday, November 8th. This represents a dividend yield of 12.66%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: DOWG THRE/PAR VTG FPD 0.001 Declares Dividend of GBX 5 (LON:DP3H) Tweet  DOWG THRE/PAR VTG FPD 0.001 (LON:DP3H) declared a dividend on Friday, September 6th, Upcoming.Co.Uk reports.\nEffect: Investors of record on Thursday, October 17th will be paid a dividend of GBX 5 ($0.07) per share on Friday, November 8th.",
+      "id": "5513589906383083617"
+    },
+    {
+      "context": "DOWG THRE/PAR VTG FPD 0.001 Declares Dividend of GBX 5 (LON:DP3H) Tweet  DOWG THRE/PAR VTG FPD 0.001 (LON:DP3H) declared a dividend on Friday, September 6th, Upcoming.Co.Uk reports. Investors of record on Thursday, October 17th will be paid a dividend of GBX 5 ($0.07) per share on Friday, November 8th. This represents a dividend yield of 12.66%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: DOWG THRE/PAR VTG FPD 0.001 Declares Dividend of GBX 5 (LON:DP3H) Tweet  DOWG THRE/PAR VTG FPD 0.001 (LON:DP3H) declared a dividend on Friday, September 6th, Upcoming.Co.Uk reports.\nEffect: This represents a dividend yield of 12.66%.",
+      "id": "-5073263999147060952"
+    },
+    {
+      "context": "- - Net Margins - Return on Equity - Return on Assets  - Santa Fe Financial - 5.41% - -4.65% - 4.78%  - Ellington Financial - 21.99% - 8.70% - 1.52%  Analyst Ratings  This is a breakdown of current ratings for Santa Fe Financial and Ellington Financial, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Santa Fe Financial - 0 - 0 - 0 - 0 - N/A  - Ellington Financial - 0 - 1 - 1 - 0 - 2.50  Ellington Financial has a consensus price target of $19.00, indicating a potential upside of 5.50%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Ellington Financial has a consensus price target of $19.00\nEffect: a potential upside of 5.50%.",
+      "id": "-591921592256178007"
+    },
+    {
+      "context": "In fact, as you're about to see, the 20 wealthiest men and women in America today made their fortunes thanks largely to a single stock.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: a single stock.\nEffect: In fact, as you're about to see, the 20 wealthiest men and women in America today made their fortunes",
+      "id": "4146548183891895166"
+    },
+    {
+      "context": "So far In 2019 EVERY single month the company has continued to post NEW RECORD REVENUES  On June 1st 2019 the company doubled its NET revenues to over $40 million with TWO more successful acquisitions in Florida.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: TWO more successful acquisitions in Florida.\nEffect: So far In 2019 EVERY single month the company has continued to post NEW RECORD REVENUES  On June 1st 2019 the company doubled its NET revenues to over $40 million",
+      "id": "4972504132362618305"
+    },
+    {
+      "context": "The New York Times estimates that at least 10,000 people became millionaires just from plunking a few dollars in the wildly profitable stock.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: plunking a few dollars in the wildly profitable stock.\nEffect: The New York Times estimates that at least 10,000 people became millionaires",
+      "id": "3145199690508801854"
+    },
+    {
+      "context": "Andrea Lewis, estimated to be worth $2 million, who started Hugo House, a center for writers in Seattle, with her profits. Jim Allchin, who retired and became a renowned blues guitarist  Chris Peters, a bowling enthusiast, who cashed out and bought the Professional Bowlers Association for an estimated $5 million (and then promptly set it on track to turn profitable and double its revenue). For them, one stock did it all.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: For them, one stock did it all.\nEffect: Andrea Lewis, estimated to be worth $2 million, who started Hugo House, a center for writers in Seattle, with her profits.",
+      "id": "4722760553981616564"
+    },
+    {
+      "context": "Andrea Lewis, estimated to be worth $2 million, who started Hugo House, a center for writers in Seattle, with her profits. Jim Allchin, who retired and became a renowned blues guitarist  Chris Peters, a bowling enthusiast, who cashed out and bought the Professional Bowlers Association for an estimated $5 million (and then promptly set it on track to turn profitable and double its revenue). For them, one stock did it all.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: For them, one stock did it all.\nEffect: Jim Allchin, who retired and became a renowned blues guitarist  Chris Peters, a bowling enthusiast, who cashed out and bought the Professional Bowlers Association for an estimated $5 million (and then promptly set it on track to turn profitable and double its revenue).",
+      "id": "4295658669209424156"
+    },
+    {
+      "context": "It's risen 106,500% since it came on the scene a split-adjusted $1.50 a share.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: it came on the scene a split-adjusted $1.50 a share.\nEffect: It's risen 106,500%",
+      "id": "7797451142683406625"
+    },
+    {
+      "context": "Amazon employees alone collect $1.5 BILLION in new wealth each year just because they own company stock.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: they own company stock.\nEffect: Amazon employees alone collect $1.5 BILLION in new wealth each year",
+      "id": "-8833335512471207267"
+    },
+    {
+      "context": "Two grandparents, Joanie and Bill Miller from Buffalo, New York, decided to make Apple their Single-Stock Retirement Plan back in 1997. They put $16,000 into Apple stock. And since then, they've made $2 million.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Two grandparents, Joanie and Bill Miller from Buffalo, New York, decided to make Apple their Single-Stock Retirement Plan back in 1997.\nEffect: And since then, they've made $2 million.",
+      "id": "5436192156565869818"
+    },
+    {
+      "context": "Two grandparents, Joanie and Bill Miller from Buffalo, New York, decided to make Apple their Single-Stock Retirement Plan back in 1997. They put $16,000 into Apple stock. And since then, they've made $2 million.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Two grandparents, Joanie and Bill Miller from Buffalo, New York, decided to make Apple their Single-Stock Retirement Plan back in 1997.\nEffect: They put $16,000 into Apple stock.",
+      "id": "8975097449423386657"
+    },
+    {
+      "context": "Two grandparents, Joanie and Bill Miller from Buffalo, New York, decided to make Apple their Single-Stock Retirement Plan back in 1997. They put $16,000 into Apple stock. And since then, they've made $2 million.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: They put $16,000 into Apple stock.\nEffect: And since then, they've made $2 million.",
+      "id": "-4990000791756806546"
+    },
+    {
+      "context": "In the few years they will likely be filling close to a MILLION prescriptions per year as they expand into population dense areas up the Eastern Seaboard. Thats over 80,000 prescriptions per month...with no end in sight as expansion continues.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: In the few years they will likely be filling close to a MILLION prescriptions per year as they expand into population dense areas up the Eastern Seaboard.\nEffect: Thats over 80,000 prescriptions per month...with no end in sight as expansion continues.",
+      "id": "-1695629258774393275"
+    },
+    {
+      "context": "Renishaw plc (LON:RSW) declared a dividend on Thursday, August 1st, Upcoming.Co.Uk reports. Shareholders of record on Thursday, September 26th will be given a dividend of GBX 46 ($0.60) per share on Thursday, October 31st. This represents a yield of 1.26%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Renishaw plc (LON:RSW) declared a dividend on Thursday, August 1st, Upcoming.Co.Uk reports.\nEffect: Shareholders of record on Thursday, September 26th will be given a dividend of GBX 46 ($0.60) per share on Thursday, October 31st.",
+      "id": "1170197530624208372"
+    },
+    {
+      "context": "Renishaw plc (LON:RSW) declared a dividend on Thursday, August 1st, Upcoming.Co.Uk reports. Shareholders of record on Thursday, September 26th will be given a dividend of GBX 46 ($0.60) per share on Thursday, October 31st. This represents a yield of 1.26%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Renishaw plc (LON:RSW) declared a dividend on Thursday, August 1st, Upcoming.Co.Uk reports.\nEffect: This represents a yield of 1.26%.",
+      "id": "419890192931017540"
+    },
+    {
+      "context": "Finally, Deutsche Bank reaffirmed a sell rating on shares of Renishaw in a research note on Friday, July 12th. Five equities research analysts have rated the stock with a sell rating and three have issued a hold rating to the stock. The company currently has a consensus rating of Sell and a consensus price target of GBX 3,693.57 ($48.26).",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Finally, Deutsche Bank reaffirmed a sell rating on shares of Renishaw in a research note on Friday, July 12th.\nEffect: The company currently has a consensus rating of Sell and a consensus price target of GBX 3,693.57 ($48.26).",
+      "id": "638388590379018640"
+    },
+    {
+      "context": "Finally, Deutsche Bank reaffirmed a sell rating on shares of Renishaw in a research note on Friday, July 12th. Five equities research analysts have rated the stock with a sell rating and three have issued a hold rating to the stock. The company currently has a consensus rating of Sell and a consensus price target of GBX 3,693.57 ($48.26).",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Five equities research analysts have rated the stock with a sell rating and three have issued a hold rating to the stock.\nEffect: The company currently has a consensus rating of Sell and a consensus price target of GBX 3,693.57 ($48.26).",
+      "id": "-4044452054744490844"
+    },
+    {
+      "context": "Scotland awoke on a damp, drizzly autumn morning in 2014 to a decisive, if not overwhelming, endorsement of the Union: 44.7% had said yes to independence, 55.3% had said no. Why? A feeling has taken hold among some of the 45, as the losers quickly became styled, that Scotland was cheated that a powerful cabal of business, media and even the security apparatus of the British state combined to bully and frighten folk into voting no.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: A feeling has taken hold among some of the 45, as the losers quickly became styled, that Scotland was cheated that a powerful cabal of business, media and even the security apparatus of the British state combined to bully and frighten folk into voting no.\nEffect: Scotland awoke on a damp, drizzly autumn morning in 2014 to a decisive, if not overwhelming, endorsement of the Union: 44.7% had said yes to independence, 55.3% had said no.",
+      "id": "-5660513270174940555"
+    },
+    {
+      "context": "But with £400 more per head in contributions, Scots received £1,200 more per head than the UK average in spending.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: But with £400 more per head in contributions\nEffect: Scots received £1,200 more per head than the UK average in spending.",
+      "id": "-7470143333072468381"
+    },
+    {
+      "context": "In 2016, Liautaud sold an estimated 65% of the business to Inspire's parent company, the Atlanta-based private equity firm Roark Capital, in a deal that valued Jimmy John's at around $3 billion. The sale helped make Liautaud a billionaire. Forbes estimates his current net worth at about $1.7 billion.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: In 2016, Liautaud sold an estimated 65% of the business to Inspire's parent company, the Atlanta-based private equity firm Roark Capital, in a deal that valued Jimmy John's at around $3 billion.\nEffect: Forbes estimates his current net worth at about $1.7 billion.",
+      "id": "3612020116098819963"
+    },
+    {
+      "context": "The Jimmy John's deal is expected to close by the end of this month. When it's completed, Inspire will be the fourth-largest restaurant company in the U.S. with more than $14 billion in annual sales, according to Inspire's press release.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The Jimmy John's deal is expected to close by the end of this month.\nEffect: When it's completed, Inspire will be the fourth-largest restaurant company in the U.S. with more than $14 billion in annual sales, according to Inspire's press release.",
+      "id": "3369765866514642241"
+    },
+    {
+      "context": "The value of announced transactions jumped 137% in 2018, to US$30 billion, driven by a flurry of activity in the gold sector, rising demand for energy metal projects and a push by miners to optimize their portfolios.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: a flurry of activity in the gold sector, rising demand for energy metal projects and a push by miners to optimize their portfolios.\nEffect: The value of announced transactions jumped 137% in 2018, to US$30 billion",
+      "id": "-6431153670457392712"
+    },
+    {
+      "context": "Fidelity MSCI Financials Index ETF (NYSEARCA:FNCL) declared a  -  dividend on Friday, September 20th, Wall Street Journal reports. Shareholders of record on Monday, September 23rd will be given a dividend of 0.265 per share on Wednesday, September 25th. This represents a yield of 2.2%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Fidelity MSCI Financials Index ETF (NYSEARCA:FNCL) declared a  -  dividend on Friday, September 20th, Wall Street Journal reports.\nEffect: Shareholders of record on Monday, September 23rd will be given a dividend of 0.265 per share on Wednesday, September 25th.",
+      "id": "6453128223427567684"
+    },
+    {
+      "context": "Fidelity MSCI Financials Index ETF (NYSEARCA:FNCL) declared a  -  dividend on Friday, September 20th, Wall Street Journal reports. Shareholders of record on Monday, September 23rd will be given a dividend of 0.265 per share on Wednesday, September 25th. This represents a yield of 2.2%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Fidelity MSCI Financials Index ETF (NYSEARCA:FNCL) declared a  -  dividend on Friday, September 20th, Wall Street Journal reports.\nEffect: This represents a yield of 2.2%.",
+      "id": "-9146975669363728908"
+    },
+    {
+      "context": "NYSEARCA FNCL traded down $0.49 on Friday, reaching $40.83.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: NYSEARCA FNCL traded down $0.49 on Friday\nEffect: reaching $40.83.",
+      "id": "4905541239778795889"
+    },
+    {
+      "context": "Analyst Ratings  This is a breakdown of recent ratings and recommmendations for Auris Medical and Elite Pharmaceuticals, as provided by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Auris Medical - 0 - 0 - 2 - 0 - 3.00  - Elite Pharmaceuticals - 0 - 0 - 0 - 0 - N/A  Auris Medical currently has a consensus price target of $75.00, indicating a potential upside of 2,383.44%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Auris Medical currently has a consensus price target of $75.00\nEffect: a potential upside of 2,383.44%.",
+      "id": "-6028653080342312366"
+    },
+    {
+      "context": "Sirius Minerals plc Ordinary GBP 0.0025 Sell: 4.63 | Buy: 4.71 | -5.33 (-53.34%)  View factsheet  Market closed | Prices delayed by at least 15 minutes | Switch to live prices  Shares in Sirius Minerals fell 62.3% following its half year results and financing update. The fall comes after the group said it won't be able to issue a $500m bond offering, citing poor bond market conditions - money it needed to continue its projects.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The fall comes after the group said it won't be able to issue a $500m bond offering, citing poor bond market conditions - money it needed to continue its projects.\nEffect: -5.33 (-53.34%)  View factsheet  Market closed| Buy: 4.71| Prices delayed by at least 15 minutes| Sirius Minerals plc Ordinary GBP 0.0025 Sell: 4.63| Switch to live prices  Shares in Sirius Minerals fell 62.3% following its half year results and financing update.",
+      "id": "-3143318505190506576"
+    },
+    {
+      "context": "Future sales agreements with suppliers increased during the period, and aggregate contracted sales volumes are now 11.7m tonnes per annum, following new European supply agreements.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: new European supply agreements.\nEffect: Future sales agreements with suppliers increased during the period, and aggregate contracted sales volumes are now 11.7m tonnes per annum",
+      "id": "8728474115272786376"
+    },
+    {
+      "context": "The Agronomy programme, which looks to find the strengths of Polyhalite versus established fertilisers - has continued to expand. There are 49 new trials, making a total of 430 on 48 crops in 30 countries.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The Agronomy programme, which looks to find the strengths of Polyhalite versus established fertilisers - has continued to expand.\nEffect: There are 49 new trials, making a total of 430 on 48 crops in 30 countries.",
+      "id": "-6346612492277267839"
+    },
+    {
+      "context": "Last year, PetroVietnam ordered Spain's Repsol SA to halt work on a project off Vietnam's southern coast, costing the company and its partners as much as $200 million.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Last year, PetroVietnam ordered Spain's Repsol SA to halt work on a project off Vietnam's southern coast\nEffect: costing the company and its partners as much as $200 million.",
+      "id": "-8992866988705692479"
+    },
+    {
+      "context": "The company is currently in the midst of a global US$15 billion divestment plan in a bid to raise cash to fund a suite of higher-growth projects from Papua New Guinea to Texas and Brazil.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: raise cash to fund a suite of higher-growth projects from Papua New Guinea to Texas and Brazil.\nEffect: The company is currently in the midst of a global US$15 billion divestment plan",
+      "id": "2351679050323790844"
+    },
+    {
+      "context": "PetroVietnam has meanwhile said international companies have spent almost US$10 billion searching for crude oil with little success.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: searching for crude oil with little success.\nEffect: PetroVietnam has meanwhile said international companies have spent almost US$10 billion",
+      "id": "6876472849684904344"
+    },
+    {
+      "context": "For example, the Law on Water Resources mandates each exploration lot to pay US$10 million to US$15 million in taxes.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: For example, the Law on Water Resources\nEffect: each exploration lot to pay US$10 million to US$15 million in taxes.",
+      "id": "-1497976114809308371"
+    },
+    {
+      "context": "Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL) . (NASDAQ:MRVL) announced a quarterly dividend on Friday, September 20th, RTT News reports. Shareholders of record on Thursday, October 10th will be given a dividend of 0.06 per share by the semiconductor company on Wednesday, October 30th. This represents a $0.24 dividend on an annualized basis and a yield of 0.94%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL) . (NASDAQ:MRVL) announced a quarterly dividend on Friday, September 20th, RTT News reports.\nEffect: Shareholders of record on Thursday, October 10th will be given a dividend of 0.06 per share by the semiconductor company on Wednesday, October 30th.",
+      "id": "5636780174126818901"
+    },
+    {
+      "context": "Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL) . (NASDAQ:MRVL) announced a quarterly dividend on Friday, September 20th, RTT News reports. Shareholders of record on Thursday, October 10th will be given a dividend of 0.06 per share by the semiconductor company on Wednesday, October 30th. This represents a $0.24 dividend on an annualized basis and a yield of 0.94%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL) . (NASDAQ:MRVL) announced a quarterly dividend on Friday, September 20th, RTT News reports.\nEffect: This represents a $0.24 dividend on an annualized basis and a yield of 0.94%.",
+      "id": "-4737134078462268921"
+    },
+    {
+      "context": "Equities analysts expect Marvell Technology Group to earn $0.76 per share next year, which means the company should continue to be able to cover its $0.24 annual dividend with an expected future payout ratio of 31.6%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Equities analysts expect Marvell Technology Group to earn $0.76 per share next year\nEffect: the company should continue to be able to cover its $0.24 annual dividend with an expected future payout ratio of 31.6%.",
+      "id": "-5698932389235915251"
+    },
+    {
+      "context": "MRVL traded down $0.18 during trading on Friday, reaching $25.43. 66,055 shares of the stock were exchanged, compared to its average volume of 8,053,266.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: MRVL traded down $0.18 during trading on Friday\nEffect: reaching $25.43.",
+      "id": "1123406381022742698"
+    },
+    {
+      "context": "The semiconductor company reported $0.16 earnings per share for the quarter, topping the Zacks' consensus estimate of $0.05 by $0.11.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The semiconductor company reported $0.16 earnings per share for the quarter\nEffect: topping the Zacks' consensus estimate of $0.05 by $0.11.",
+      "id": "2802512234758822735"
+    },
+    {
+      "context": "In other Marvell Technology Group news, CEO Matthew J. Murphy sold 15,000 shares of the company's stock in a transaction dated Monday, August 5th. The stock was sold at an average price of $23.98, for a total transaction of $359,700.00. Following the completion of the sale, the chief executive officer now directly owns 1,755 shares in the company, valued at $42,084.90.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: In other Marvell Technology Group news, CEO Matthew J. Murphy sold 15,000 shares of the company's stock in a transaction dated Monday, August 5th.\nEffect: Following the completion of the sale, the chief executive officer now directly owns 1,755 shares in the company, valued at $42,084.90.",
+      "id": "-7249998060748807134"
+    },
+    {
+      "context": "Also, COO Andrew Micallef sold 40,000 shares of the company's stock in a transaction dated Wednesday, September 4th. The stock was sold at an average price of $24.00, for a total value of $960,000.00. Following the sale, the chief operating officer now owns 85,048 shares of the company's stock, valued at $2,041,152.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Also, COO Andrew Micallef sold 40,000 shares of the company's stock in a transaction dated Wednesday, September 4th.\nEffect: Following the sale, the chief operating officer now owns 85,048 shares of the company's stock, valued at $2,041,152.",
+      "id": "-5340828604450878010"
+    },
+    {
+      "context": "Insiders have sold 490,933 shares of company stock valued at $12,546,682 over the last 90 days. 1.10% of the stock is currently owned by insiders.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Insiders have sold 490,933 shares of company stock valued at $12,546,682 over the last 90 days.\nEffect: 1.10% of the stock is currently owned by insiders.",
+      "id": "-4975819924136520157"
+    },
+    {
+      "context": "Finally, BMO Capital Markets set a $28.00 price target on Marvell Technology Group and gave the stock a buy rating in a report on Monday, August 26th. One research analyst has rated the stock with a sell rating, five have given a hold rating and twenty-two have assigned a buy rating to the stock. The company presently has a consensus rating of Buy and a consensus price target of $26.96.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Finally, BMO Capital Markets set a $28.00 price target on Marvell Technology Group and gave the stock a buy rating in a report on Monday, August 26th.\nEffect: The company presently has a consensus rating of Buy and a consensus price target of $26.96.",
+      "id": "-1227536789942466789"
+    },
+    {
+      "context": "Finally, BMO Capital Markets set a $28.00 price target on Marvell Technology Group and gave the stock a buy rating in a report on Monday, August 26th. One research analyst has rated the stock with a sell rating, five have given a hold rating and twenty-two have assigned a buy rating to the stock. The company presently has a consensus rating of Buy and a consensus price target of $26.96.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: One research analyst has rated the stock with a sell rating, five have given a hold rating and twenty-two have assigned a buy rating to the stock.\nEffect: The company presently has a consensus rating of Buy and a consensus price target of $26.96.",
+      "id": "6963084621692730425"
+    },
+    {
+      "context": "This is especially visible for manufacturing PMIs, which declined on average 0.22 points over a month whenever the trade-weighted exchange rate of the US dollar (broad dollar index) appreciated by 1% (right-hand panel).",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: the trade-weighted exchange rate of the US dollar (broad dollar index) appreciated by 1% (right-hand panel).\nEffect: This is especially visible for manufacturing PMIs, which declined on average 0.22 points over a month",
+      "id": "-4654850463401561131"
+    },
+    {
+      "context": "It is also remarkable that, if one replaces global GDP growth with the growth of global trade in goods, the results are broadly similar: the dollar still accounts for around 15% of the variance in trade, as compared with equities, which explain about 60%.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: It is also remarkable that, if one replaces global GDP growth with the growth of global trade in goods\nEffect: the dollar still accounts for around 15% of the variance in trade, as compared with equities, which explain about 60%.",
+      "id": "-2812653944128733334"
+    },
+    {
+      "context": "The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device. The iPhone 11 Pro (64 GB) is priced at S$1,649 upon release. -  Advertisement  -   According to the Ministry of Manpower, the average monthly earning in Singapore is S$5,410 before deducting Central Provident Fund (CPF) contributions and personal income tax.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: -  Advertisement  -   According to the Ministry of Manpower, the average monthly earning in Singapore is S$5,410 before deducting Central Provident Fund (CPF) contributions and personal income tax.\nEffect: The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device.",
+      "id": "-5280665667755276111"
+    },
+    {
+      "context": "The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device. The iPhone 11 Pro (64 GB) is priced at S$1,649 upon release. -  Advertisement  -   According to the Ministry of Manpower, the average monthly earning in Singapore is S$5,410 before deducting Central Provident Fund (CPF) contributions and personal income tax.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The iPhone 11 Pro (64 GB) is priced at S$1,649 upon release.\nEffect: The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device.",
+      "id": "6320583419877328597"
+    },
+    {
+      "context": "In contrast, average income Malaysian and Chinese workers need to work an entire month in order to afford the iPhone 11 Pro.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: afford the iPhone 11 Pro.\nEffect: In contrast, average income Malaysian and Chinese workers need to work an entire month",
+      "id": "-6347269285249972421"
+    }
+  ]
+}
