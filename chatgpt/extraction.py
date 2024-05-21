@@ -76,6 +76,15 @@ around the extractions.
 What are the causes, effects and relations in the following text? \
 The relation must be one of "cause", "enable", or "prevent".
 """,
+    # 5
+    """\
+What are the causes and effects in the following text?
+The causes and effects must be spans of the text.
+
+The response should be formatted as this:
+Cause: <text>
+Effect: <text>
+""",
 ]
 SYSTEM_PROMPTS = [
     # 0
@@ -88,6 +97,8 @@ SYSTEM_PROMPTS = [
     # 2
     "You are a helpful assistant that extract causes, effects, and a relation from"
     " text. The relation must be one of 'cause', 'enable', or 'prevent'.",
+    # 3
+    "You are a helpful assistant that extract causes and effects from text.",
 ]
 
 
