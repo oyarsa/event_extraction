@@ -2,3 +2,4 @@ keys.json
 .vscode/
 output/*
 !output/main-results/
+chat_log.jsonl
