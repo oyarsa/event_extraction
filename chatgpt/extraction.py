@@ -79,7 +79,7 @@ The relation must be one of "cause", "enable", or "prevent".
     # 5
     """\
 What are the causes and effects in the following text?
-The causes and effects must be spans of the text.
+The causes and effects must be substrings of the text with no external words.
 
 The response should be formatted as this:
 Cause: <text>
@@ -226,6 +226,8 @@ def replace_relation(result: str, relation: str, mode: StructureFormat) -> str:
             return construct_instance_tags(entities, relation)
         case StructureFormat.LINES:
             return construct_instance_lines(entities, relation)
+        case StructureFormat.LINES_NO_RELATION:
+            return result
 
 
 def extract_clauses(
@@ -372,7 +374,7 @@ def main() -> None:
     parser.add_argument(
         "--mode",
         default="tags",
-        choices=["tags", "lines"],
+        choices=["tags", "lines", "lines_no_relation"],
         type=StructureFormat,
         help="The format of the structured output.",
     )

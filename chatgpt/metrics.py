@@ -32,12 +32,13 @@ class MetricReference(TypedDict):
 class StructureFormat(str, Enum):
     TAGS = "tags"
     LINES = "lines"
+    LINES_NO_RELATION = "lines_no_relation"
 
 
 def calculate_metrics(
     predictions: list[MetricPrediction],
     references: list[MetricReference],
-    mode: StructureFormat = StructureFormat.TAGS,
+    mode: StructureFormat,
 ) -> dict[str, float]:
     instances: list[Instance] = []
     for pred, refer in zip(predictions, references):
@@ -89,7 +90,7 @@ def get_tokens(s: str) -> list[str]:
 def compute_metrics(instances: list[Instance]) -> dict[str, float]:
     extraction = compute_extraction_metrics(instances)
     classification = compute_classification_metrics(instances)
-    return {**extraction, **classification}
+    return extraction | classification
 
 
 def compute_classification_metrics(instances: list[Instance]) -> dict[str, float]:
@@ -141,7 +142,10 @@ def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
         else:
             precision = 0
 
-        recall = commons[kind] / gold_lens[kind]
+        if gold_lens[kind] != 0:
+            recall = commons[kind] / gold_lens[kind]
+        else:
+            recall = 0
 
         if precision + recall != 0:
             f1 = (2 * precision * recall) / (precision + recall)
@@ -162,10 +166,13 @@ def compute_extraction_metrics(instances: list[Instance]) -> dict[str, float]:
 def parse_instance(
     answer: str, mode: StructureFormat
 ) -> tuple[dict[str, list[str]], str]:
-    if mode == StructureFormat.TAGS:
-        return parse_instance_tags(answer)
-    else:
-        return parse_instance_lines(answer)
+    match mode:
+        case StructureFormat.TAGS:
+            return parse_instance_tags(answer)
+        case StructureFormat.LINES:
+            return parse_instance_lines(answer)
+        case StructureFormat.LINES_NO_RELATION:
+            return parse_instance_lines_no_relation(answer)
 
 
 def clean(s: str) -> str:
@@ -183,6 +190,19 @@ def parse_spans(
     causes = sorted(s for c in match["cause"].split("|") if (s := clean(c)))
     effects = sorted(s for e in match["effect"].split("|") if (s := clean(e)))
     relation = match["relation"].strip().lower()
+
+    return {"Cause": causes, "Effect": effects}, relation
+
+
+def parse_instance_lines_no_relation(answer: str) -> tuple[dict[str, list[str]], str]:
+    pattern = r"Cause:(?P<cause>.*)Effect:(?P<effect>.*)"
+    match = re.search(pattern, answer, re.DOTALL)
+    if not match:
+        return {"Cause": [], "Effect": []}, "cause"
+
+    causes = sorted(s for c in match["cause"].split("|") if (s := clean(c)))
+    effects = sorted(s for e in match["effect"].split("|") if (s := clean(e)))
+    relation = "cause"
 
     return {"Cause": causes, "Effect": effects}, relation
 
