@@ -1,0 +1,75 @@
+{
+  "version": "v1.0",
+  "data": [
+    {
+      "context": "It found that total U.S. health care spending would be about $3.9 trillion under Medicare for All in 2019, compared with about $3.8 trillion under the status quo. Part of the reason is that Medicare for All would offer generous benefits with no copays and deductibles, except limited cost-sharing for certain medications.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Part of the reason is that Medicare for All would offer generous benefits with no copays and deductibles, except limited cost-sharing for certain medications.\nEffect: It found that total U.S. health care spending would be about $3.9 trillion under Medicare for All in 2019, compared with about $3.8 trillion under the status quo.",
+      "id": "-1958300649336387103"
+    },
+    {
+      "context": "Transat loss more than doubles as it works to complete Air Canada deal",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: it works to complete Air Canada deal\nEffect: Transat loss more than doubles",
+      "id": "2030343121476507163"
+    },
+    {
+      "context": "MONTREAL  -  Transat AT Inc.'s third-quarter net loss more than doubled from the same time last year as the tour operator worked to complete its takeover by Air Canada.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: the tour operator worked to complete its takeover by Air Canada.\nEffect: Transat AT Inc.'s third-quarter net loss more than doubled from the same time last year",
+      "id": "2706291083865243219"
+    },
+    {
+      "context": "The Montreal-based company lost $11.0 million in the quarter ended July 31 versus its $5.0-million net loss the year prior. The push to close Transat's sale to Air Canada heaped on an extra $14 million in costs in its third quarter, including $6 million in professional fees and $7.7 million in stock-based compensation for executives.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: The push to close Transat's sale to Air Canada heaped on an extra $14 million in costs in its third quarter, including $6 million in professional fees and $7.7 million in stock-based compensation for executives.\nEffect: The Montreal-based company lost $11.0 million in the quarter ended July 31 versus its $5.0-million net loss the year prior.",
+      "id": "-1607036550849804302"
+    },
+    {
+      "context": "Transatlantic passenger traffic  -  key in the late-spring and summer months when sun-destination trips drop off  -  rose more than four per cent year over year last quarter to help boost revenue to $698.9 million, up from $664.6 million a year earlier.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: help boost revenue to $698.9 million, up from $664.6 million a year earlier.\nEffect: Transatlantic passenger traffic  -  key in the late-spring and summer months when sun-destination trips drop off  -  rose more than four per cent year over year last quarter",
+      "id": "-6553495346943034511"
+    },
+    {
+      "context": "Let's begin with a story: At the end of 2017, with new technology such as bitcoin, Ethereum, cryptocurrency and blockchain at their very buzziest, a small, publicly traded beverage company, Long Island Iced Tea, announced it was changing its name to Long Blockchain Corp. Literally overnight, shares skyrocketed 200% at the opening of the next trading day. Nothing had really changed except for the company's name, but the signal that the business was now tech-integrated attracted attention, press and real market value for the company and many new shareholders.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Let's begin with a story: At the end of 2017, with new technology such as bitcoin, Ethereum, cryptocurrency and blockchain at their very buzziest, a small, publicly traded beverage company, Long Island Iced Tea, announced it was changing its name to Long Blockchain Corp.\nEffect: Literally overnight, shares skyrocketed 200% at the opening of the next trading day.",
+      "id": "-8922235220757172760"
+    },
+    {
+      "context": "Let's begin with a story: At the end of 2017, with new technology such as bitcoin, Ethereum, cryptocurrency and blockchain at their very buzziest, a small, publicly traded beverage company, Long Island Iced Tea, announced it was changing its name to Long Blockchain Corp. Literally overnight, shares skyrocketed 200% at the opening of the next trading day. Nothing had really changed except for the company's name, but the signal that the business was now tech-integrated attracted attention, press and real market value for the company and many new shareholders.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Nothing had really changed except for the company's name, but the signal that the business was now tech-integrated attracted attention, press and real market value for the company and many new shareholders.\nEffect: Literally overnight, shares skyrocketed 200% at the opening of the next trading day.",
+      "id": "4806997765197661140"
+    },
+    {
+      "context": "Largest Tencent Shareholder Leads $15M Round in Blockchain Game Developer by Cryptocurrency News Daily | Sep 23, 2019 | Cryptocurrency News | 0 comments  Naspers, the largest shareholder of Chinese Internet giant Tencent, participated in a $15 million investment in blockchain game developer Immutable. Immutable, a Sydney-based blockchain gaming startup, completed a new funding round led by Naspers and Mike Novogratz's crypto investment bank Galaxy Digital, the company announced in a blog post on Sept. 23.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Immutable, a Sydney-based blockchain gaming startup, completed a new funding round led by Naspers and Mike Novogratz's crypto investment bank Galaxy Digital, the company announced in a blog post on Sept. 23.\nEffect: 0 comments  Naspers, the largest shareholder of Chinese Internet giant Tencent, participated in a $15 million investment in blockchain game developer Immutable.| Cryptocurrency News| Largest Tencent Shareholder Leads $15M Round in Blockchain Game Developer by Cryptocurrency News Daily| Sep 23, 2019",
+      "id": "-7304390706235909825"
+    },
+    {
+      "context": "Scaling from 13,000 to 1 million gamers projected According to the report, Immutable's flagship game Gods Unchained has made over $4.5 million in revenue in just over a year, despite it is being played by a closed group of 13,000 gamers. Founded by brothers Robbie and James Ferguson in July 2018, Immutable reportedly expects to grow Gods Unchained from the current 13,000 to 1 million players with the new investment, James stated in an interview with AFR. Based on the Ethereum blockchain, Gods Unchained is a trading card game that has reportedly overtaken other popular TCGs such as Artifact, Faeria and Kards, Immutable stated.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: Based on the Ethereum blockchain, Gods Unchained is a trading card game that has reportedly overtaken other popular TCGs such as Artifact, Faeria and Kards, Immutable stated.\nEffect: Scaling from 13,000 to 1 million gamers projected According to the report, Immutable's flagship game Gods Unchained has made over $4.5 million in revenue in just over a year, despite it is being played by a closed group of 13,000 gamers.",
+      "id": "-2346523193797837619"
+    },
+    {
+      "context": "Scaling from 13,000 to 1 million gamers projected According to the report, Immutable's flagship game Gods Unchained has made over $4.5 million in revenue in just over a year, despite it is being played by a closed group of 13,000 gamers. Founded by brothers Robbie and James Ferguson in July 2018, Immutable reportedly expects to grow Gods Unchained from the current 13,000 to 1 million players with the new investment, James stated in an interview with AFR. Based on the Ethereum blockchain, Gods Unchained is a trading card game that has reportedly overtaken other popular TCGs such as Artifact, Faeria and Kards, Immutable stated.",
+      "question": "What are the events?",
+      "question_type": "cause",
+      "answers": "Cause: the new investment\nEffect: Founded by brothers Robbie and James Ferguson in July 2018, Immutable reportedly expects to grow Gods Unchained from the current 13,000 to 1 million players",
+      "id": "-1436615374212141271"
+    }
+  ]
+}

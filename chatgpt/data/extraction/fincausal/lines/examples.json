@@ -1,0 +1,72 @@
+[
+  {
+    "context": "The restructuring costs for 2011 relate to Project Renewal and the European Transformation Plan and consisted of $8.4 million of facility and other exit and impairment costs, $33.2 million of employee severance, termination benefits and employee relocation costs, and $8.5 million of exited contractual commitments and other restructuring costs.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: Project Renewal and the European Transformation Plan and consisted of $8.4 million of facility and other exit and impairment costs, $33.2 million of employee severance, termination benefits and employee relocation costs, and $8.5 million of exited contractual commitments and other restructuring costs.\nEffect: The restructuring costs for 2011",
+    "id": "-4078733172233831061"
+  },
+  {
+    "context": "Analyst Ratings  This is a summary of current recommendations for Jerash Holdings (US) and its peers, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Jerash Holdings (US) - 0 - 0 - 3 - 0 - 3.00  - Jerash Holdings (US) Competitors - 247 - 1111 - 1567 - 66 - 2.49  Jerash Holdings (US) currently has a consensus price target of $9.50, indicating a potential upside of 23.38%.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: Jerash Holdings (US) currently has a consensus price target of $9.50\nEffect: a potential upside of 23.38%.",
+    "id": "5613011291699953301"
+  },
+  {
+    "context": "Losses related to extinguishments of debt were $4.8 million for 2011 compared to $218.6 million in 2010. The losses related to extinguishments of debt of $218.6 million recognized in 2010 relate to the retirement of $279.3 million of the $300.0 million aggregate principal amount of 10.60% senior unsecured notes due April 2019 and $324.7 million principal amount of the $345.0 million 5.50% convertible senior notes due 2014 pursuant to the Capital Structure Optimization Plan.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: The losses related to extinguishments of debt of $218.6 million recognized in 2010 relate to the retirement of $279.3 million of the $300.0 million aggregate principal amount of 10.60% senior unsecured notes due April 2019 and $324.7 million principal amount of the $345.0 million 5.50% convertible senior notes due 2014 pursuant to the Capital Structure Optimization Plan.\nEffect: Losses related to extinguishments of debt were $4.8 million for 2011 compared to $218.6 million in 2010.",
+    "id": "166171962287970118"
+  },
+  {
+    "context": "The judge awarded County Supervisor Thomas H. Sayre (R-Shenandoah) $20,000 in damages for being implicated in those phony crimes.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: being implicated in those phony crimes.\nEffect: The judge awarded County Supervisor Thomas H. Sayre (R-Shenandoah) $20,000 in damages",
+    "id": "800600039714370483"
+  },
+  {
+    "context": "Interest expense for 2011 was $86.2 million, a decrease of $32.2 million from $118.4 million for 2010, due to lower overall borrowing costs resulting from the Capital Structure Optimization Plan, a more favorable interest rate environment and a higher mix of short-term borrowings.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: lower overall borrowing costs resulting from the Capital Structure Optimization Plan, a more favorable interest rate environment and a higher mix of short-term borrowings.\nEffect: Interest expense for 2011 was $86.2 million, a decrease of $32.2 million from $118.4 million for 2010",
+    "id": "-259452559050336097"
+  },
+  {
+    "context": "South Sudan-registered companies owned by Gebre received 21 of the letters of credit identified in the audit report, worth a combined total of $30 million (Sh3 billion).",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: South Sudan-registered companies owned by Gebre received 21 of the letters of credit identified in the audit report\nEffect: worth a combined total of $30 million (Sh3 billion).",
+    "id": "3867454626178130570"
+  },
+  {
+    "context": "The Finance Minister addressed a press conference on Friday (20/09/2019), announcing a series of measures to boost the economy. One of the major announcements was the slashing of corporate tax rates to 22% from the existing 30% for domestic companies. This means that a domestic company can pay tax at 22% without exemptions.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: The Finance Minister addressed a press conference on Friday (20/09/2019), announcing a series of measures to boost the economy.\nEffect: This means that a domestic company can pay tax at 22% without exemptions.",
+    "id": "-5043212831904097093"
+  },
+  {
+    "context": "But investor skepticism led to the start-up considering a potential IPO valuation earlier this month of as low as $10 billion, Reuters reported.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: But investor skepticism\nEffect: the start-up considering a potential IPO valuation earlier this month of as low as $10 billion, Reuters reported.",
+    "id": "2757406824136155039"
+  },
+  {
+    "context": "The Department for Transport and Civil Aviation Authority were on standby with a repatriation contingency plan called Operation Matterhorn, with a potential cost of about £600million.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: The Department for Transport and Civil Aviation Authority were on standby with a repatriation contingency plan called Operation Matterhorn\nEffect: a potential cost of about £600million.",
+    "id": "6831199231716831469"
+  },
+  {
+    "context": "September 11, 2019 Europe, Featured News, Switzerland  Share  Tweet  Share  Reddit  WhatsApp  By Davide Anghileri, University of Lausanne On 1 September, the voters of Switzerland's canton of Zurich endorsed a cantonal tax reform bill with a 56% majority as a consequence of the approval of the Swiss corporate tax reform in May.",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "answers": "Cause: the approval of the Swiss corporate tax reform in May.\nEffect: September 11, 2019 Europe, Featured News, Switzerland  Share  Tweet  Share  Reddit  WhatsApp  By Davide Anghileri, University of Lausanne On 1 September, the voters of Switzerland's canton of Zurich endorsed a cantonal tax reform bill with a 56% majority",
+    "id": "-1739333180673551232"
+  }
+]
