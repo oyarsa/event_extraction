@@ -165,3 +165,4 @@ data/
 config/
 auth/
 tmp/
+.streamlit

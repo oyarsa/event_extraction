@@ -1,7 +1,0 @@
-[browser]
-serverPort = 443
-serverAddress = "maleldil.com"
-gatherUsageStats = false
-
-[server]
-baseUrlPath = "/annotation"
