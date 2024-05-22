@@ -29,6 +29,8 @@ criteria:
    If it doesn't, it should be considered invalid.
 5. Focus on the meaning of the cause and effect relationship, rather than the exact
    wording.
+6. In the rare cases where the reference is obviously incorrect, ignore it and analyse
+   the model answer with relation to the source text only.
 
 ### Example - Invalid
 
