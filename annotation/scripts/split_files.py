@@ -24,8 +24,6 @@ def split_data(
     common, remaining = data[:overlap], data[overlap:]
     if not remaining:
         print("No remaining data to split")
-        print(f"{len(common)=}")
-        print(f"{num_splits=}")
         return [common] * num_splits
 
     split_len = math.ceil(len(remaining) / num_splits)
@@ -85,11 +83,8 @@ def main(
     data = json.loads(data_file.read_text())[:max_size]
 
     data_splits = split_data(data, num_splits, overlap)
-    print(f"{len(data_splits)=}")
     split_ids = [hash_data(i, split) for i, split in enumerate(data_splits)]
-    print(f"{len(split_ids)=}")
     for split_id, split in zip(split_ids, data_splits):
-        print(f"{split_id=}")
         (output_dir / f"{split_id}.json").write_text(json.dumps(split, indent=2))
 
     split_to_user = {split_id: None for split_id in split_ids}
