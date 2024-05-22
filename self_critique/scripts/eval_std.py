@@ -7,7 +7,6 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Optional, TypedDict
 
-# ruff: noqa: E402
 import typer
 from sklearn.metrics import precision_recall_fscore_support
 
