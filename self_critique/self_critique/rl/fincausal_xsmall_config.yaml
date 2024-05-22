@@ -3,10 +3,8 @@ eval_batches: 20
 
 train_file: ../data/fincausal/processed/train.json
 eval_file: ../data/fincausal/processed/dev.json
-max_train_samples: 100
-max_eval_samples: 100
-# max_train_samples: null
-# max_eval_samples: null
+max_train_samples: null
+max_eval_samples: null
 
 reward_model: ../evaluation/output/classifier/fcr-deberta-v3-xsmall-combined/
 reward_type: valid
