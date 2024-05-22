@@ -1,21 +1,21 @@
 from collections.abc import Iterable
-from typing import SupportsInt
+from typing import SupportsFloat
 
 import krippendorff
-from scipy.stats import spearmanr
+from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import cohen_kappa_score
 
-AVAILABLE_METRICS = ["agreement", "krippendorff", "spearman", "cohen"]
+AVAILABLE_METRICS = ["agreement", "krippendorff", "spearman", "cohen", "pearson"]
 
 
 def calculate_metric(
-    metric: str, xs: Iterable[SupportsInt], ys: Iterable[SupportsInt]
+    metric: str, xs: Iterable[SupportsFloat], ys: Iterable[SupportsFloat]
 ) -> float:
     if metric not in AVAILABLE_METRICS:
         raise ValueError(f"Unknown metric: {metric}")
 
-    x = [int(value) for value in xs]
-    y = [int(value) for value in ys]
+    x = [float(value) for value in xs]
+    y = [float(value) for value in ys]
 
     match metric:
         case "agreement":
@@ -24,6 +24,8 @@ def calculate_metric(
             return krippendorff.alpha([x, y], level_of_measurement="nominal")
         case "spearman":
             return spearmanr(x, y)[0]
+        case "pearson":
+            return pearsonr(x, y)[0]
         case "cohen":
             return cohen_kappa_score(x, y)
         case _:
