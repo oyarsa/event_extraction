@@ -48,7 +48,7 @@ def classify(
 
 def main(
     input_file: TextIO,
-    output_file: Path,
+    output_file: Path | None,
     model_name: str,
     num_samples: int | None,
 ) -> None:
@@ -73,8 +73,11 @@ def main(
         d | {"cosine": c, "sentence_valid": r} for d, c, r in zip(data, cosine, result)
     ]
 
-    output_file.parent.mkdir(parents=True, exist_ok=True)
-    output_file.write_text(json.dumps(data, indent=2))
+    if output_file is not None:
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        output_file.write_text(json.dumps(data, indent=2))
+    else:
+        print(json.dumps(data, indent=2))
 
 
 if __name__ == "__main__":
@@ -90,7 +93,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "output_file",
         type=Path,
-        help="Output JSON file containing cosine similarity and validity.",
+        nargs="?",
+        help="Output JSON file containing cosine similarity and validity. If not given,"
+        " will write to stdout",
     )
     parser.add_argument(
         "--model",
