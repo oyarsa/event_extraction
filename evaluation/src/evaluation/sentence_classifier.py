@@ -84,12 +84,14 @@ def main(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0],
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="\n".join(__doc__.splitlines()[1:]),
     )
     parser.add_argument(
         "input_file",
         type=argparse.FileType("r"),
-        help="Input JSON file containing gold and predicted answers.",
+        help="Input JSON file containing gold and predicted answers. If '-' is given,"
+        " read from stdin.",
     )
     parser.add_argument(
         "output_file",
@@ -102,13 +104,13 @@ if __name__ == "__main__":
         "--model",
         type=str,
         default="all-MiniLM-L6-v2",
-        help="Name of the SentenceTransformer model to use.",
+        help="Name of the SentenceTransformer model to use. Default: %(default)s.",
     )
     parser.add_argument(
         "--num-samples",
         type=int,
         default=None,
-        help="Number of samples to print.",
+        help="Number of samples to print. Default: all.",
     )
     args = parser.parse_args()
     main(args.input_file, args.output_file, args.model, args.num_samples)
