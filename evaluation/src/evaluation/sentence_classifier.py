@@ -70,7 +70,8 @@ def main(
     )
 
     data = [
-        d | {"cosine": c, "sentence_valid": r} for d, c, r in zip(data, cosine, result)
+        d | {"cosine": c, "pred": int(r), "gold": int(d["valid"])}
+        for d, c, r in zip(data, cosine, result)
     ]
 
     if output_file is not None:
