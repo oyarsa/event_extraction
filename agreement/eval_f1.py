@@ -11,7 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Hugginface Metric for FGCR"""
+"""Evaluate element-wise F1 score.
+
+The F1 score is average of the F1 scores for Cause and Effect clauses.
+
+The input data is a JSON file with a list of objects with the following shape:
+- input: str = The input text passage
+- output: str = The extracted relation in tag form
+- gold: str = The gold relation in tag form
+- valid: bool = True if the output is valid, False otherwise
+"""
 
 import argparse
 import json
@@ -113,7 +122,8 @@ def main(input_file: Path, output_file: Path) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0],
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        epilog="\n".join(__doc__.splitlines()[1:]),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("input_file", type=Path, help="Path to the input file")
     parser.add_argument("output_file", type=Path, help="Path to the output file")
