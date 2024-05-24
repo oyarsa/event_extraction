@@ -5,3 +5,4 @@
 -e ./annotation
 
 ruff>=0.4
+jupyterlab>=4
