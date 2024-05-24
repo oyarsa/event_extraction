@@ -48,7 +48,7 @@ def get_longest_tokens_sequence(
             continue
 
         # Special case when '.' is not tokenized properly
-        alt_token = token + "."
+        alt_token = f"{token}."
         if pos := token_index.get(alt_token):
             logging.debug(f'tokenize fix ".": {alt_token}')
             positions.append(pos)
@@ -98,7 +98,7 @@ def _get_sequences(
     result = []
     for x in args[0]:
         # <Debug> keep track of current explored sequence
-        p = [x] if path is None else list([*path, x])
+        p = [x] if path is None else [*path, x]
         # </Debug>
 
         if value is None or (x > value and (x < value + 3)):
@@ -173,7 +173,7 @@ def evaluate(
     # First pass - process text sections with single causal relations and store others in `multi` dict()
     for t, p in zip(truth, predict):
         # Process Exact Match
-        exact_match += all([x == y for x, y in zip(t.labels, p.labels)])
+        exact_match += all(x == y for x, y in zip(t.labels, p.labels))
 
         # PRF: Text section with multiple causal relationship ?
         if t.index.count(".") == 2:
@@ -267,9 +267,7 @@ def evaluate_files(
     assert len(y_true) == len(
         y_pred
     ), "Different number of lines in reference and submission"
-    assert all(
-        [x.text == y.text for x, y in zip(y_true, y_pred)]
-    ), "Input text mismatch"
+    assert all(x.text == y.text for x, y in zip(y_true, y_pred)), "Input text mismatch"
 
     logging.debug("Discarded tokens: %d" % _discarded)
 
