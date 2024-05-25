@@ -34,10 +34,9 @@ class Instance(TypedDict):
     golds: list[str]
 
 
-# sourcery skip: snake-case-variable-declarations
 class ParsedInstance(TypedDict):
-    Cause: list[str]
-    Effect: list[str]
+    cause: list[str]
+    effect: list[str]
 
 
 def calc_macro_em(predictions: list[Prediction], references: list[Reference]) -> float:
@@ -86,8 +85,8 @@ def compute_macro_em(instances: list[Instance]) -> float:
     clauses. The EM is calculated for each separate clause (twice per instance) and then
     averaged.
     """
-    equal = {"Cause": 0, "Effect": 0}
-    num_instances = {"Cause": 0, "Effect": 0}
+    equal = {"cause": 0, "effect": 0}
+    num_instances = {"cause": 0, "effect": 0}
 
     for instance in instances:
         clause = instance["clause"]
@@ -118,8 +117,8 @@ def parse_instance(answer: str) -> ParsedInstance:
     matches = re.findall(r"\[Cause\](.*?)\[Relation\].*?\[Effect\](.*?)$", answer)
     if not matches:
         return {
-            "Cause": [],
-            "Effect": [],
+            "cause": [],
+            "effect": [],
         }
 
     causes, effects = matches[0]
@@ -127,6 +126,6 @@ def parse_instance(answer: str) -> ParsedInstance:
     effects = sorted(e.strip() for e in effects.split("|") if e.strip())
 
     return {
-        "Cause": causes,
-        "Effect": effects,
+        "cause": causes,
+        "effect": effects,
     }
