@@ -58,14 +58,14 @@ def _generate_non_overlapping_spans(
     return (i, j), (n, m)
 
 
-# Span generation can fail, so we retry. 100 times is way too high, so if this happens,
-# it's likely a bug.
-_MAX_SPAN_ATTEMPTS = 100
+# Span generation can fail, so we retry. If this is exceeded, we give up on generating
+# an etry from this context.
+_MAX_SPAN_ATTEMPTS = 1000
 
 
 def generate_non_overlapping_spans(
     text_length: int, min_length: int, max_length: int
-) -> tuple[tuple[int, int], tuple[int, int]]:
+) -> tuple[tuple[int, int], tuple[int, int]] | None:
     """Generate two non-overlapping spans of text from the context.
 
     Retry span generation until we get two valid non-overlapping spans.
@@ -77,23 +77,28 @@ def generate_non_overlapping_spans(
     while True:
         try:
             return _generate_non_overlapping_spans(text_length, min_length, max_length)
-        except ValueError as e:
+        except ValueError:
             count += 1
             if count > _MAX_SPAN_ATTEMPTS:
-                raise ValueError(
-                    f"Couldn't generate non-overlapping spans after {count} attempts."
-                ) from e
+                print(
+                    f"WARNING: Couldn't generate non-overlapping spans after"
+                    f" {_MAX_SPAN_ATTEMPTS} attempts. Skipping entry."
+                )
+                return None
 
 
-def make_unlabelled(entry: dict[str, str]) -> dict[str, str]:
+def make_unlabelled(entry: dict[str, str]) -> dict[str, str] | None:
     context_toks = entry["context"].split()
 
     min_length = 5
     max_length = int(0.5 * len(context_toks))
 
-    (cause_start, cause_end), (effect_start, effect_end) = (
-        generate_non_overlapping_spans(len(context_toks), min_length, max_length)
-    )
+    spans = generate_non_overlapping_spans(len(context_toks), min_length, max_length)
+    if spans is None:
+        print(entry["context"], end="\n\n")
+        return None
+
+    (cause_start, cause_end), (effect_start, effect_end) = spans
 
     cause = " ".join(context_toks[cause_start:cause_end])
     effect = " ".join(context_toks[effect_start:effect_end])
@@ -113,7 +118,10 @@ def main(input: TextIO, output: TextIO, seed: int) -> None:
     random.seed(seed)
 
     data = json.load(input)["data"]
-    new_data = [make_unlabelled(entry) for entry in data]
+    new_data = [new_entry for entry in data if (new_entry := make_unlabelled(entry))]
+
+    print("Original data:", len(data))
+    print("New data:", len(new_data))
 
     json.dump({"data": new_data}, output, indent=2)
 
