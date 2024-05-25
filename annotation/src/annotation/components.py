@@ -29,6 +29,7 @@ def get_or_allocate_annotation_path(
     return path
 
 
+# TODO: Use "username" instead of "prolific_id" to be platform-agnostic
 _PROLIFIC_ID_KEY = "prolific_id"
 
 

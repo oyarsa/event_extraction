@@ -86,7 +86,7 @@ def render_page(
     annotation_dir: Path,
     answer_dir: Path,
     split_to_user_file: Path,
-    completion_code: str,
+    completion_code: str | None,
 ) -> None:
     username = components.get_username()
     if not username:
@@ -110,8 +110,9 @@ def render_page(
     if page_idx >= len(annotation_data):
         st.subheader("You have answered all questions.")
 
-        url = f"https://app.prolific.com/submissions/complete?cc={completion_code}"
-        st.markdown(f"[Complete the task]({url})")
+        if completion_code is not None:
+            url = f"https://app.prolific.com/submissions/complete?cc={completion_code}"
+            st.markdown(f"[Complete the task]({url})")
 
         if st.button("Go to start"):
             goto_page(0)
