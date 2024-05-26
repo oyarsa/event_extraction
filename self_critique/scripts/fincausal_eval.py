@@ -1,11 +1,27 @@
 #!/usr/bin/env python
-"""Scoring program for Fincausal 2020 Task 2."""
+"""Scoring program for Fincausal 2020 Task 2.
+
+Expects a JSON file with the following format:
+[
+    {
+        "input": "text of the input document",
+        "gold": "text of the gold causal relation",
+        "output": "text of the predicted causal relation"
+    },
+    ...
+]
+
+Both "input" and "output" are expected to be in the format:
+"[Cause] <cause text> [Relation] <relation text> [Effect] <effect text>"
+"""
 
 import argparse
 import json
 import logging
+import re
 from collections import defaultdict
 from dataclasses import dataclass
+from typing import Literal
 
 import nltk
 from sklearn import metrics
@@ -198,7 +214,11 @@ def evaluate(
             best = None
             for p in candidates:
                 f1 = metrics.f1_score(
-                    t, p, labels=classes, average="weighted", zero_division=0
+                    t,
+                    p,
+                    labels=classes,
+                    average="weighted",
+                    zero_division=0,  # type: ignore
                 )
                 if best is None or f1 > best[1]:
                     best = (p, f1)
@@ -215,37 +235,50 @@ def evaluate(
         assert not candidates
 
     precision, recall, f1, _ = metrics.precision_recall_fscore_support(
-        y_truth, y_predict, labels=classes, average="weighted", zero_division=0
+        y_truth,
+        y_predict,
+        labels=classes,
+        average="weighted",
+        zero_division=0,  # type: ignore
     )
     return precision, recall, f1, exact_match / len(truth)
 
 
-def get_data(csv_lines: list[str]) -> list[Task2Data]:
-    """Load data from CSV with separator ';'.
+def clean(s: str) -> str:
+    s = s.strip()
+    s = re.sub(r"\s+", " ", s)
+    return re.sub(r'""+"', '"', s)
 
-    This should not contain the header line. Each line comprises 4 text fields: index,
-    text, cause and effect.
 
-    :param csv_lines: ;-separator lines, each line contains 4 fields, without header
-    :return: each line converted to Task2Data
-    """
-    result: list[Task2Data] = []
-    for line in csv_lines:
-        index, text, cause, effect = line.strip().split(";")[:4]
+def parse_instance(answer: str) -> tuple[str, str]:
+    matches = re.findall(r"\[Cause\](.*?)\[Relation\].*?\[Effect\](.*?)$", answer)
+    if not matches:
+        return "", ""
 
-        text = text.strip()
-        cause = cause.strip()
-        effect = effect.strip()
+    causes, effects = matches[0]
+    causes = sorted(s for c in causes.split("|") if (s := clean(c)))
+    effects = sorted(s for e in effects.split("|") if (s := clean(e)))
+
+    return causes[0], effects[0]
+
+
+def parse_data(
+    data: list[dict[str, str]], key: Literal["gold", "output"]
+) -> list[Task2Data]:
+    output: list[Task2Data] = []
+
+    for i, item in enumerate(data):
+        index = str(i)
+        text = item["input"]
+        cause, effect = parse_instance(item[key])
         labels = encode_causal_tokens(text, cause, effect)
 
-        result.append(Task2Data(index, text, cause, effect, labels))
+        output.append(Task2Data(index, text, cause, effect, labels))
 
-    return result
+    return output
 
 
-def evaluate_files(
-    gold_file: str, submission_file: str, output_file: str | None = None
-) -> None:
+def evaluate_files(data: list[dict[str, str]]) -> dict[str, float]:
     """
     Evaluate Precision, Recall, F1 scores between gold_file and submission_file
     If output_file is provided, scores are saved in this file and printed to std output.
@@ -255,39 +288,19 @@ def evaluate_files(
     :param output_file: path to output file as expected by Codalab competition framework
     :return:
     """
-    with open(gold_file, encoding="utf-8") as fp:
-        ref_csv = fp.readlines()
-    with open(submission_file, encoding="utf-8") as fp:
-        sub_csv = fp.readlines()
 
-    # Get data (skipping headers)
-    y_true = get_data(ref_csv[1:])
-    y_pred = get_data(sub_csv[1:])
-
-    assert len(y_true) == len(
-        y_pred
-    ), "Different number of lines in reference and submission"
-    assert all(x.text == y.text for x, y in zip(y_true, y_pred)), "Input text mismatch"
-
-    logging.debug("Discarded tokens: %d" % _discarded)
+    y_true = parse_data(data, "gold")
+    y_pred = parse_data(data, "output")
 
     # Process data using classes: -, C & E
     precision, recall, f1, exact_match = evaluate(y_true, y_pred, ["-", "C", "E"])
 
-    scores = {
+    return {
         "F1": f1,
         "Recall": recall,
         "Precision": precision,
         "ExactMatch": exact_match,
     }
-    logging.info(
-        "Evaluation metrics\n"
-        + "\n".join([f"{k:<12} : {v}" for k, v in scores.items()])
-    )
-
-    if output_file:
-        with open(output_file, "w") as fp:
-            json.dump(scores, fp, indent=2)
 
 
 def main() -> None:
@@ -295,17 +308,31 @@ def main() -> None:
         level=logging.INFO, filename=None, format="%(levelname)-7s| %(message)s"
     )
 
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("ref_file", help="reference file")
-    parser.add_argument("pred_file", help="prediction file to evaluate")
+    parser = argparse.ArgumentParser(
+        description=__doc__.splitlines()[0],
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="\n".join(__doc__.splitlines()[1:]),
+    )
     parser.add_argument(
-        "--score-file",
+        "input", type=argparse.FileType("r"), help="JSON input file to evaluate"
+    )
+    parser.add_argument(
+        "--output",
         type=str,
         help="path to output score file (or stdout if not provided)",
     )
 
     args = parser.parse_args()
-    evaluate_files(args.ref_file, args.pred_file, args.score_file)
+
+    data = json.load(args.input)
+    metrics = evaluate_files(data)
+
+    for key, value in metrics.items():
+        print(f"{key}: {value:.4f}")
+
+    if args.output:
+        with open(args.output, "w") as f:
+            json.dump(metrics, f, indent=2)
 
 
 if __name__ == "__main__":
