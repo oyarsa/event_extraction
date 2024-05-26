@@ -259,6 +259,8 @@ def parse_instance(answer: str) -> tuple[str, str]:
     causes = sorted(s for c in causes.split("|") if (s := clean(c)))
     effects = sorted(s for e in effects.split("|") if (s := clean(e)))
 
+    if not causes or not effects:
+        return "", ""
     return causes[0], effects[0]
 
 
