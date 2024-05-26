@@ -1,0 +1,172 @@
+[
+  {
+    "id": "f916",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Slack offers a freemium model and caters to companies of all sizes, which means revenue is concentrated among the largest customers.\n \n Cause\n Reference: Slack offers a freemium model and caters to companies of all sizes\n Model: Slack offers a freemium model and caters to companies of all sizes\n \n Effect\n Reference: revenue is concentrated among the largest customers\n Model: revenue is concentrated among the largest customers"
+  },
+  {
+    "id": "d36f",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Because of lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates, adjusted 2020 EBIT margin fell 110 basis points to 3.4%.\n \n Cause\n Reference: lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates\n Model: lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates\n \n Effect\n Reference: adjusted 2020 EBIT margin fell 110 basis points to 3.4%\n Model: adjusted 2020 EBIT margin fell 110 basis points to 3.4%"
+  },
+  {
+    "id": "2dea",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Following significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic, we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025.\n \n Cause\n Reference: Following significant core sales declines across all three segments in 2020\n Model: significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic\n \n Effect\n Reference: an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025\n Model: we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025"
+  },
+  {
+    "id": "5145",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n Due to decreasing reliance on its personnel base, we assume Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025.\n \n Cause\n Reference: Accenture will benefit from some operating leverage on the SG&A line\n Model: decreasing reliance on its personnel base\n \n Effect\n Reference: operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025\n Model: Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025"
+  },
+  {
+    "id": "5cd8",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk, all of which allow the banks to achieve greater risk-adjusted returns.\n \n Cause\n Reference: These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk\n Model: lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk\n \n Effect\n Reference: the banks to achieve greater risk-adjusted returns\n Model: allow the banks to achieve greater risk-adjusted returns"
+  },
+  {
+    "id": "f789",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n If Grifols is unable to bring an IG product to market with higher pricing power (like Takeda's HyQvia or CSL's Hizentra), it could lose market share.\n \n Cause\n Reference: Grifols is unable to bring an IG product to market with higher pricing power\n Model: Grifols is unable to bring an IG product to market with higher pricing power\n \n Effect\n Reference: it could lose market share\n Model: it could lose market share"
+  },
+  {
+    "id": "0327",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n Thanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.\n \n Cause\n Reference: accelerating digital commerce trends\n Model: external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions)\n \n Effect\n Reference: capitalize\n Model: we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility"
+  },
+  {
+    "id": "d3ab",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n We see upside in margins for the F-35, as more sustainment enters the business mix as well and the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program.\n \n Cause\n Reference: the aircraft becomes a major defense acquisition program\n Model: more sustainment enters the business mix\n \n Effect\n Reference: the potential to move to a more fixed-price contract\n Model: We see upside in margins for the F-35"
+  },
+  {
+    "id": "edd2",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction, we do not foresee any immediate credit issues.\n \n Cause\n Reference: With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction\n Model: With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction\n \n Effect\n Reference: do not foresee any immediate credit issues\n Model: we do not foresee any immediate credit issues"
+  },
+  {
+    "id": "fb0d",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Snap's revenue growth will be driven primarily by growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads.\n \n Cause\n Reference: growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads\n Model: growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads\n \n Effect\n Reference: Snap's revenue growth\n Model: Snap's revenue growth"
+  },
+  {
+    "id": "dfe6",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021, with some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022.\n \n Cause\n Reference: some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022\n Model: The new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting\n \n Effect\n Reference: We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021\n Model: will have greater impact in 2020 and 2021, with some easing in 2022"
+  },
+  {
+    "id": "889a",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n While the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline, as the projects have yielded high returns and supported continued distribution growth.\n \n Cause\n Reference: the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline\n Model: Magellan's capital discipline\n \n Effect\n Reference: the projects have yielded high returns and supported continued distribution growth\n Model: The projects have yielded high returns and supported continued distribution growth"
+  },
+  {
+    "id": "63b8",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Risks surrounding additional waves of COVID-19 cases remain, leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels.\n \n Cause\n Reference: Risks surrounding additional waves of COVID-19 cases remain\n Model: Risks surrounding additional waves of COVID-19 cases remain\n \n Effect\n Reference: potential needs for incremental liquidity\n Model: leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels"
+  },
+  {
+    "id": "7b6b",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n The firm has been a leader in deploying the latest network technologies, which we think will insulate it from unexpected changes in the future.\n \n Cause\n Reference: The firm has been a leader in deploying the latest network technologies\n Model: The firm has been a leader in deploying the latest network technologies\n \n Effect\n Reference: unexpected changes in the future\n Model: will insulate it from unexpected changes in the future"
+  },
+  {
+    "id": "5ad6",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020, and while volumes have recovered in late 2020, the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok.\n \n Cause\n Reference: Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020\n Model: Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020\n \n Effect\n Reference: the challenging basin economics for producers and thus volume security for Oneok\n Model: the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok"
+  },
+  {
+    "id": "24fa",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets, we rate Medtronic's uncertainty as medium.\n \n Cause\n Reference: Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic market\n Model: The average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets\n \n Effect\n Reference: we rate Medtronic's uncertainty as medium\n Model: We rate Medtronic's uncertainty as medium"
+  },
+  {
+    "id": "9b55",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n We think the runaway cost of living in West Coast metros is an area of concern, given that this has the potential to push the tech industry's center of gravity away from these high-cost regions.\n \n Cause\n Reference: this has the potential to push the tech industry's center of gravity away from these high-cost regions\n Model: the runaway cost of living in West Coast metros\n \n Effect\n Reference: the runaway cost of living in West Coast metros is an area of concern\n Model: this has the potential to push the tech industry's center of gravity away from these high-cost regions"
+  },
+  {
+    "id": "f716",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n In this regard, the company's success can be attributed to its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.\n \n Cause\n Reference: aggressive approach at building a recognizable brand\n Model: the company's aggressive approach at building a recognizable brand to attract consumers\n \n Effect\n Reference: attract consumers and consequently the agents seeking their business\n Model: the agents seeking their business"
+  },
+  {
+    "id": "b807",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Due to the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures, 2020 revenue declined 28%, but we forecast a 30% rebound in 2021 as backlog starts to ramp-up, with a return to normalized light vehicle demand in 2023.\n \n Cause\n Reference: the sale of most of its brake control business\n Model: the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures\n \n Effect\n Reference: 2020 revenue declined 28%\n Model: 2020 revenue declined 28%"
+  },
+  {
+    "id": "6d3e",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n Despite having a model that requires franchisees to shoulder significant risk, Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation.\n \n Cause\n Reference: exclusive routes and its premium brand reputation\n Model: Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation.\n \n Effect\n Reference: Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes\n Model: Despite having a model that requires franchisees to shoulder significant risk"
+  },
+  {
+    "id": "71b0",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n We expect fairly consistent results in soybean processing over the long run despite quarterly fluctuations caused by changes in crush margin and capacity utilization.\n \n Cause\n Reference: changes in crush margin and capacity utilization\n Model: changes in crush margin and capacity utilization\n \n Effect\n Reference: quarterly fluctuations\n Model: fairly consistent results in soybean processing over the long run despite quarterly fluctuations"
+  },
+  {
+    "id": "eb72",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n A decade of consolidation in the corrugated packaging industry has allowed WestRock and its peers to push more aggressively on prices, resulting in a period of higher margins.\n \n Cause\n Reference: WestRock and its peers to push more aggressively on prices\n Model: A decade of consolidation in the corrugated packaging industry has allowed WestRock and its peers to push more aggressively on prices\n \n Effect\n Reference: a period of higher margins\n Model: resulting in a period of higher margins"
+  },
+  {
+    "id": "d0ed",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n Our volume forecast is muted by the emergence of cheaper suppliers in lower-cost labor countries; however, Canopy's production expansion into Colombia and Lesotho helps protect its share.\n \n Cause\n Reference: Canopy's production expansion into Colombia and Lesotho\n Model: Canopy's production expansion into Colombia and Lesotho\n \n Effect\n Reference: helps protect its share\n Model: Our volume forecast is muted"
+  },
+  {
+    "id": "3e25",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n To continue winning contracts, the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets.\n \n Cause\n Reference: To continue winning contracts\n Model: suppliers that cannot meet the targets\n \n Effect\n Reference: the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets\n Model: will outsource suppliers that cannot meet the targets"
+  },
+  {
+    "id": "2d3a",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n After a very strong 2020, we expect some constraints on its margins going forward, as business operations normalize following the pandemic.\n \n Cause\n Reference: business operations normalize following the pandemic\n Model: After a very strong 2020\n \n Effect\n Reference: some constraints on its margins going forward\n Model: we expect some constraints on its margins going forward"
+  },
+  {
+    "id": "41d7",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n It is much more efficient for customers to trade two different equity index futures on the same exchange as this allows futures traders to net their positions out when posting collateral.\n \n Cause\n Reference: this allows futures traders to net their positions out when posting collateral\n Model: It is much more efficient for customers to trade two different equity index futures on the same exchange\n \n Effect\n Reference: It is much more efficient for customers to trade two different equity index futures on the same exchange\n Model: this allows futures traders to net their positions out when posting collateral"
+  },
+  {
+    "id": "d3ac",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n In 2021, we expect a rebound in refined products demand and weaker crude volumes, to be somewhat offset by expense savings and storage benefits to result in distributable cash flow of about $1.03 billion, similar to 2020 levels.\n \n Cause\n Reference: a rebound in refined products demand and weaker crude volumes\n Model: a rebound in refined products demand and weaker crude volumes\n \n Effect\n Reference: distributable cash flow of about $1.03 billion\n Model: result in distributable cash flow of about $1.03 billion, similar to 2020 levels"
+  },
+  {
+    "id": "77b5",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n During our 2021-25 forecast period, we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes.\n \n Cause\n Reference: revenue to grow at about a 9% CAGR\n Model: During our 2021-25 forecast period\n \n Effect\n Reference: strong growth in ESG and indexes\n Model: we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes"
+  },
+  {
+    "id": "92b9",
+    "Valid? Yes/no": false,
+    "instance": "Source Text\n The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft because there are not material aftermarket servicing opportunities for aerostructures.\n \n Cause\n Reference: there are not material aftermarket servicing opportunities for aerostructures\n Model: The firm is a large aerostructure provider for both Boeing and Airbus\n \n Effect\n Reference: The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft\n Model: The firm makes nearly all of its revenue on the original production of aircraft"
+  },
+  {
+    "id": "313c",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n As the company has yet to generate positive free cash flow, it will continue to rely on outside capital raises, especially as it expands production to meet growing demand.\n \n Cause\n Reference: the company has yet to generate positive free cash flow\n Model: The company has yet to generate positive free cash flow\n \n Effect\n Reference: it will continue to rely on outside capital raises\n Model: it will continue to rely on outside capital raises"
+  },
+  {
+    "id": "df31",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Our fair value uncertainty rating for Facebook is high, based on uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data, both of which drive growth in the firm's source of revenue.\n \n Cause\n Reference: uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data\n Model: uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data\n \n Effect\n Reference: Our fair value uncertainty rating for Facebook is high\n Model: fair value uncertainty rating for Facebook is high"
+  },
+  {
+    "id": "6793",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n But we expect the gross margin to improve as more consumers consume JD's goods and services and JD's bargaining power against suppliers increases.\n \n Cause\n Reference: more consumers consume JD's goods and services and JD's bargaining power against suppliers increases\n Model: more consumers consume JD's goods and services\n \n Effect\n Reference: the gross margin to improve\n Model: the gross margin to improve"
+  },
+  {
+    "id": "452d",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n Carrier primarily used acquisitions to build its commercial and industrial fire and security business, which now accounts for approximately 25% of consolidated sales.\n \n Cause\n Reference: acquisitions\n Model: Carrier primarily used acquisitions to build its commercial and industrial fire and security business\n \n Effect\n Reference: build its commercial and industrial fire and security business\n Model: now accounts for approximately 25% of consolidated sales"
+  },
+  {
+    "id": "b5bc",
+    "Valid? Yes/no": true,
+    "instance": "Source Text\n PG&E needs well-functioning and cost-effective capital markets to fund its planned $8 billion of investment every year.\n \n Cause\n Reference: fund its planned $8 billion of investment every year\n Model: PG&E needs well-functioning and cost-effective capital markets\n \n Effect\n Reference: needs well-functioning and cost-effective capital markets\n Model: fund its planned $8 billion of investment every year"
+  }
+]

@@ -1,0 +1,512 @@
+[
+  {
+    "id": "f916",
+    "valid": true,
+    "instance": "Source Text\n Slack offers a freemium model and caters to companies of all sizes, which means revenue is concentrated among the largest customers.\n \n Cause\n Reference: Slack offers a freemium model and caters to companies of all sizes\n Model: Slack offers a freemium model and caters to companies of all sizes\n \n Effect\n Reference: revenue is concentrated among the largest customers\n Model: revenue is concentrated among the largest customers",
+    "filename": "hanqi"
+  },
+  {
+    "id": "d36f",
+    "valid": true,
+    "instance": "Source Text\n Because of lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates, adjusted 2020 EBIT margin fell 110 basis points to 3.4%.\n \n Cause\n Reference: lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates\n Model: lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates\n \n Effect\n Reference: adjusted 2020 EBIT margin fell 110 basis points to 3.4%\n Model: adjusted 2020 EBIT margin fell 110 basis points to 3.4%",
+    "filename": "hanqi"
+  },
+  {
+    "id": "2dea",
+    "valid": true,
+    "instance": "Source Text\n Following significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic, we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025.\n \n Cause\n Reference: Following significant core sales declines across all three segments in 2020\n Model: significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic\n \n Effect\n Reference: an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025\n Model: we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+    "filename": "hanqi"
+  },
+  {
+    "id": "5145",
+    "valid": false,
+    "instance": "Source Text\n Due to decreasing reliance on its personnel base, we assume Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025.\n \n Cause\n Reference: Accenture will benefit from some operating leverage on the SG&A line\n Model: decreasing reliance on its personnel base\n \n Effect\n Reference: operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025\n Model: Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025",
+    "filename": "hanqi"
+  },
+  {
+    "id": "5cd8",
+    "valid": true,
+    "instance": "Source Text\n These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk, all of which allow the banks to achieve greater risk-adjusted returns.\n \n Cause\n Reference: These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk\n Model: lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk\n \n Effect\n Reference: the banks to achieve greater risk-adjusted returns\n Model: allow the banks to achieve greater risk-adjusted returns",
+    "filename": "hanqi"
+  },
+  {
+    "id": "f789",
+    "valid": true,
+    "instance": "Source Text\n If Grifols is unable to bring an IG product to market with higher pricing power (like Takeda's HyQvia or CSL's Hizentra), it could lose market share.\n \n Cause\n Reference: Grifols is unable to bring an IG product to market with higher pricing power\n Model: Grifols is unable to bring an IG product to market with higher pricing power\n \n Effect\n Reference: it could lose market share\n Model: it could lose market share",
+    "filename": "hanqi"
+  },
+  {
+    "id": "0327",
+    "valid": false,
+    "instance": "Source Text\n Thanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.\n \n Cause\n Reference: accelerating digital commerce trends\n Model: external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions)\n \n Effect\n Reference: capitalize\n Model: we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility",
+    "filename": "hanqi"
+  },
+  {
+    "id": "d3ab",
+    "valid": false,
+    "instance": "Source Text\n We see upside in margins for the F-35, as more sustainment enters the business mix as well and the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program.\n \n Cause\n Reference: the aircraft becomes a major defense acquisition program\n Model: more sustainment enters the business mix\n \n Effect\n Reference: the potential to move to a more fixed-price contract\n Model: We see upside in margins for the F-35",
+    "filename": "hanqi"
+  },
+  {
+    "id": "edd2",
+    "valid": true,
+    "instance": "Source Text\n With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction, we do not foresee any immediate credit issues.\n \n Cause\n Reference: With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction\n Model: With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction\n \n Effect\n Reference: do not foresee any immediate credit issues\n Model: we do not foresee any immediate credit issues",
+    "filename": "hanqi"
+  },
+  {
+    "id": "fb0d",
+    "valid": true,
+    "instance": "Source Text\n Snap's revenue growth will be driven primarily by growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads.\n \n Cause\n Reference: growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads\n Model: growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads\n \n Effect\n Reference: Snap's revenue growth\n Model: Snap's revenue growth",
+    "filename": "hanqi"
+  },
+  {
+    "id": "dfe6",
+    "valid": false,
+    "instance": "Source Text\n We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021, with some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022.\n \n Cause\n Reference: some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022\n Model: The new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting\n \n Effect\n Reference: We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021\n Model: will have greater impact in 2020 and 2021, with some easing in 2022",
+    "filename": "hanqi"
+  },
+  {
+    "id": "889a",
+    "valid": true,
+    "instance": "Source Text\n While the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline, as the projects have yielded high returns and supported continued distribution growth.\n \n Cause\n Reference: the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline\n Model: Magellan's capital discipline\n \n Effect\n Reference: the projects have yielded high returns and supported continued distribution growth\n Model: The projects have yielded high returns and supported continued distribution growth",
+    "filename": "hanqi"
+  },
+  {
+    "id": "63b8",
+    "valid": true,
+    "instance": "Source Text\n Risks surrounding additional waves of COVID-19 cases remain, leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels.\n \n Cause\n Reference: Risks surrounding additional waves of COVID-19 cases remain\n Model: Risks surrounding additional waves of COVID-19 cases remain\n \n Effect\n Reference: potential needs for incremental liquidity\n Model: leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels",
+    "filename": "hanqi"
+  },
+  {
+    "id": "7b6b",
+    "valid": true,
+    "instance": "Source Text\n The firm has been a leader in deploying the latest network technologies, which we think will insulate it from unexpected changes in the future.\n \n Cause\n Reference: The firm has been a leader in deploying the latest network technologies\n Model: The firm has been a leader in deploying the latest network technologies\n \n Effect\n Reference: unexpected changes in the future\n Model: will insulate it from unexpected changes in the future",
+    "filename": "hanqi"
+  },
+  {
+    "id": "5ad6",
+    "valid": true,
+    "instance": "Source Text\n Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020, and while volumes have recovered in late 2020, the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok.\n \n Cause\n Reference: Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020\n Model: Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020\n \n Effect\n Reference: the challenging basin economics for producers and thus volume security for Oneok\n Model: the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok",
+    "filename": "hanqi"
+  },
+  {
+    "id": "24fa",
+    "valid": true,
+    "instance": "Source Text\n Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets, we rate Medtronic's uncertainty as medium.\n \n Cause\n Reference: Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic market\n Model: The average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets\n \n Effect\n Reference: we rate Medtronic's uncertainty as medium\n Model: We rate Medtronic's uncertainty as medium",
+    "filename": "hanqi"
+  },
+  {
+    "id": "9b55",
+    "valid": false,
+    "instance": "Source Text\n We think the runaway cost of living in West Coast metros is an area of concern, given that this has the potential to push the tech industry's center of gravity away from these high-cost regions.\n \n Cause\n Reference: this has the potential to push the tech industry's center of gravity away from these high-cost regions\n Model: the runaway cost of living in West Coast metros\n \n Effect\n Reference: the runaway cost of living in West Coast metros is an area of concern\n Model: this has the potential to push the tech industry's center of gravity away from these high-cost regions",
+    "filename": "hanqi"
+  },
+  {
+    "id": "f716",
+    "valid": true,
+    "instance": "Source Text\n In this regard, the company's success can be attributed to its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.\n \n Cause\n Reference: aggressive approach at building a recognizable brand\n Model: the company's aggressive approach at building a recognizable brand to attract consumers\n \n Effect\n Reference: attract consumers and consequently the agents seeking their business\n Model: the agents seeking their business",
+    "filename": "hanqi"
+  },
+  {
+    "id": "b807",
+    "valid": true,
+    "instance": "Source Text\n Due to the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures, 2020 revenue declined 28%, but we forecast a 30% rebound in 2021 as backlog starts to ramp-up, with a return to normalized light vehicle demand in 2023.\n \n Cause\n Reference: the sale of most of its brake control business\n Model: the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures\n \n Effect\n Reference: 2020 revenue declined 28%\n Model: 2020 revenue declined 28%",
+    "filename": "hanqi"
+  },
+  {
+    "id": "6d3e",
+    "valid": false,
+    "instance": "Source Text\n Despite having a model that requires franchisees to shoulder significant risk, Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation.\n \n Cause\n Reference: exclusive routes and its premium brand reputation\n Model: Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation.\n \n Effect\n Reference: Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes\n Model: Despite having a model that requires franchisees to shoulder significant risk",
+    "filename": "hanqi"
+  },
+  {
+    "id": "71b0",
+    "valid": true,
+    "instance": "Source Text\n We expect fairly consistent results in soybean processing over the long run despite quarterly fluctuations caused by changes in crush margin and capacity utilization.\n \n Cause\n Reference: changes in crush margin and capacity utilization\n Model: changes in crush margin and capacity utilization\n \n Effect\n Reference: quarterly fluctuations\n Model: fairly consistent results in soybean processing over the long run despite quarterly fluctuations",
+    "filename": "hanqi"
+  },
+  {
+    "id": "eb72",
+    "valid": true,
+    "instance": "Source Text\n A decade of consolidation in the corrugated packaging industry has allowed WestRock and its peers to push more aggressively on prices, resulting in a period of higher margins.\n \n Cause\n Reference: WestRock and its peers to push more aggressively on prices\n Model: A decade of consolidation in the corrugated packaging industry has allowed WestRock and its peers to push more aggressively on prices\n \n Effect\n Reference: a period of higher margins\n Model: resulting in a period of higher margins",
+    "filename": "hanqi"
+  },
+  {
+    "id": "d0ed",
+    "valid": false,
+    "instance": "Source Text\n Our volume forecast is muted by the emergence of cheaper suppliers in lower-cost labor countries; however, Canopy's production expansion into Colombia and Lesotho helps protect its share.\n \n Cause\n Reference: Canopy's production expansion into Colombia and Lesotho\n Model: Canopy's production expansion into Colombia and Lesotho\n \n Effect\n Reference: helps protect its share\n Model: Our volume forecast is muted",
+    "filename": "hanqi"
+  },
+  {
+    "id": "3e25",
+    "valid": false,
+    "instance": "Source Text\n To continue winning contracts, the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets.\n \n Cause\n Reference: To continue winning contracts\n Model: suppliers that cannot meet the targets\n \n Effect\n Reference: the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets\n Model: will outsource suppliers that cannot meet the targets",
+    "filename": "hanqi"
+  },
+  {
+    "id": "2d3a",
+    "valid": false,
+    "instance": "Source Text\n After a very strong 2020, we expect some constraints on its margins going forward, as business operations normalize following the pandemic.\n \n Cause\n Reference: business operations normalize following the pandemic\n Model: After a very strong 2020\n \n Effect\n Reference: some constraints on its margins going forward\n Model: we expect some constraints on its margins going forward",
+    "filename": "hanqi"
+  },
+  {
+    "id": "41d7",
+    "valid": false,
+    "instance": "Source Text\n It is much more efficient for customers to trade two different equity index futures on the same exchange as this allows futures traders to net their positions out when posting collateral.\n \n Cause\n Reference: this allows futures traders to net their positions out when posting collateral\n Model: It is much more efficient for customers to trade two different equity index futures on the same exchange\n \n Effect\n Reference: It is much more efficient for customers to trade two different equity index futures on the same exchange\n Model: this allows futures traders to net their positions out when posting collateral",
+    "filename": "hanqi"
+  },
+  {
+    "id": "d3ac",
+    "valid": true,
+    "instance": "Source Text\n In 2021, we expect a rebound in refined products demand and weaker crude volumes, to be somewhat offset by expense savings and storage benefits to result in distributable cash flow of about $1.03 billion, similar to 2020 levels.\n \n Cause\n Reference: a rebound in refined products demand and weaker crude volumes\n Model: a rebound in refined products demand and weaker crude volumes\n \n Effect\n Reference: distributable cash flow of about $1.03 billion\n Model: result in distributable cash flow of about $1.03 billion, similar to 2020 levels",
+    "filename": "hanqi"
+  },
+  {
+    "id": "77b5",
+    "valid": false,
+    "instance": "Source Text\n During our 2021-25 forecast period, we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes.\n \n Cause\n Reference: revenue to grow at about a 9% CAGR\n Model: During our 2021-25 forecast period\n \n Effect\n Reference: strong growth in ESG and indexes\n Model: we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes",
+    "filename": "hanqi"
+  },
+  {
+    "id": "92b9",
+    "valid": false,
+    "instance": "Source Text\n The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft because there are not material aftermarket servicing opportunities for aerostructures.\n \n Cause\n Reference: there are not material aftermarket servicing opportunities for aerostructures\n Model: The firm is a large aerostructure provider for both Boeing and Airbus\n \n Effect\n Reference: The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft\n Model: The firm makes nearly all of its revenue on the original production of aircraft",
+    "filename": "hanqi"
+  },
+  {
+    "id": "313c",
+    "valid": true,
+    "instance": "Source Text\n As the company has yet to generate positive free cash flow, it will continue to rely on outside capital raises, especially as it expands production to meet growing demand.\n \n Cause\n Reference: the company has yet to generate positive free cash flow\n Model: The company has yet to generate positive free cash flow\n \n Effect\n Reference: it will continue to rely on outside capital raises\n Model: it will continue to rely on outside capital raises",
+    "filename": "hanqi"
+  },
+  {
+    "id": "df31",
+    "valid": true,
+    "instance": "Source Text\n Our fair value uncertainty rating for Facebook is high, based on uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data, both of which drive growth in the firm's source of revenue.\n \n Cause\n Reference: uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data\n Model: uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data\n \n Effect\n Reference: Our fair value uncertainty rating for Facebook is high\n Model: fair value uncertainty rating for Facebook is high",
+    "filename": "hanqi"
+  },
+  {
+    "id": "6793",
+    "valid": true,
+    "instance": "Source Text\n But we expect the gross margin to improve as more consumers consume JD's goods and services and JD's bargaining power against suppliers increases.\n \n Cause\n Reference: more consumers consume JD's goods and services and JD's bargaining power against suppliers increases\n Model: more consumers consume JD's goods and services\n \n Effect\n Reference: the gross margin to improve\n Model: the gross margin to improve",
+    "filename": "hanqi"
+  },
+  {
+    "id": "452d",
+    "valid": true,
+    "instance": "Source Text\n Carrier primarily used acquisitions to build its commercial and industrial fire and security business, which now accounts for approximately 25% of consolidated sales.\n \n Cause\n Reference: acquisitions\n Model: Carrier primarily used acquisitions to build its commercial and industrial fire and security business\n \n Effect\n Reference: build its commercial and industrial fire and security business\n Model: now accounts for approximately 25% of consolidated sales",
+    "filename": "hanqi"
+  },
+  {
+    "id": "b5bc",
+    "valid": true,
+    "instance": "Source Text\n PG&E needs well-functioning and cost-effective capital markets to fund its planned $8 billion of investment every year.\n \n Cause\n Reference: fund its planned $8 billion of investment every year\n Model: PG&E needs well-functioning and cost-effective capital markets\n \n Effect\n Reference: needs well-functioning and cost-effective capital markets\n Model: fund its planned $8 billion of investment every year",
+    "filename": "hanqi"
+  },
+  {
+    "id": "f916",
+    "valid": true,
+    "instance": "Source Text\nSlack offers a freemium model and caters to companies of all sizes, which means revenue is concentrated among the largest customers.\n\nCause\nReference: Slack offers a freemium model and caters to companies of all sizes\nModel: Slack offers a freemium model and caters to companies of all sizes\n\nEffect\nReference: revenue is concentrated among the largest customers\nModel: revenue is concentrated among the largest customers",
+    "filename": "siying"
+  },
+  {
+    "id": "d36f",
+    "valid": true,
+    "instance": "Source Text\nBecause of lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates, adjusted 2020 EBIT margin fell 110 basis points to 3.4%.\n\nCause\nReference: lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates\nModel: lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates\n\nEffect\nReference: adjusted 2020 EBIT margin fell 110 basis points to 3.4%\nModel: adjusted 2020 EBIT margin fell 110 basis points to 3.4%",
+    "filename": "siying"
+  },
+  {
+    "id": "2dea",
+    "valid": true,
+    "instance": "Source Text\nFollowing significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic, we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025.\n\nCause\nReference: Following significant core sales declines across all three segments in 2020\nModel: significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic\n\nEffect\nReference: an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025\nModel: we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+    "filename": "siying"
+  },
+  {
+    "id": "5145",
+    "valid": false,
+    "instance": "Source Text\nDue to decreasing reliance on its personnel base, we assume Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025.\n\nCause\nReference: Accenture will benefit from some operating leverage on the SG&A line\nModel: decreasing reliance on its personnel base\n\nEffect\nReference: operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025\nModel: Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025",
+    "filename": "siying"
+  },
+  {
+    "id": "5cd8",
+    "valid": true,
+    "instance": "Source Text\nThese advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk, all of which allow the banks to achieve greater risk-adjusted returns.\n\nCause\nReference: These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk\nModel: lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk\n\nEffect\nReference: the banks to achieve greater risk-adjusted returns\nModel: allow the banks to achieve greater risk-adjusted returns",
+    "filename": "siying"
+  },
+  {
+    "id": "f789",
+    "valid": true,
+    "instance": "Source Text\nIf Grifols is unable to bring an IG product to market with higher pricing power (like Takeda's HyQvia or CSL's Hizentra), it could lose market share.\n\nCause\nReference: Grifols is unable to bring an IG product to market with higher pricing power\nModel: Grifols is unable to bring an IG product to market with higher pricing power\n\nEffect\nReference: it could lose market share\nModel: it could lose market share",
+    "filename": "siying"
+  },
+  {
+    "id": "0327",
+    "valid": false,
+    "instance": "Source Text\nThanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.\n\nCause\nReference: accelerating digital commerce trends\nModel: external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions)\n\nEffect\nReference: capitalize\nModel: we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility",
+    "filename": "siying"
+  },
+  {
+    "id": "d3ab",
+    "valid": false,
+    "instance": "Source Text\nWe see upside in margins for the F-35, as more sustainment enters the business mix as well and the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program.\n\nCause\nReference: the aircraft becomes a major defense acquisition program\nModel: more sustainment enters the business mix\n\nEffect\nReference: the potential to move to a more fixed-price contract\nModel: We see upside in margins for the F-35",
+    "filename": "siying"
+  },
+  {
+    "id": "edd2",
+    "valid": true,
+    "instance": "Source Text\nWith the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction, we do not foresee any immediate credit issues.\n\nCause\nReference: With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction\nModel: With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction\n\nEffect\nReference: do not foresee any immediate credit issues\nModel: we do not foresee any immediate credit issues",
+    "filename": "siying"
+  },
+  {
+    "id": "fb0d",
+    "valid": true,
+    "instance": "Source Text\nSnap's revenue growth will be driven primarily by growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads.\n\nCause\nReference: growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads\nModel: growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads\n\nEffect\nReference: Snap's revenue growth\nModel: Snap's revenue growth",
+    "filename": "siying"
+  },
+  {
+    "id": "dfe6",
+    "valid": false,
+    "instance": "Source Text\nWe assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021, with some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022.\n\nCause\nReference: some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022\nModel: The new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting\n\nEffect\nReference: We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021\nModel: will have greater impact in 2020 and 2021, with some easing in 2022",
+    "filename": "siying"
+  },
+  {
+    "id": "889a",
+    "valid": true,
+    "instance": "Source Text\nWhile the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline, as the projects have yielded high returns and supported continued distribution growth.\n\nCause\nReference: the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline\nModel: Magellan's capital discipline\n\nEffect\nReference: the projects have yielded high returns and supported continued distribution growth\nModel: The projects have yielded high returns and supported continued distribution growth",
+    "filename": "siying"
+  },
+  {
+    "id": "63b8",
+    "valid": true,
+    "instance": "Source Text\nRisks surrounding additional waves of COVID-19 cases remain, leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels.\n\nCause\nReference: Risks surrounding additional waves of COVID-19 cases remain\nModel: Risks surrounding additional waves of COVID-19 cases remain\n\nEffect\nReference: potential needs for incremental liquidity\nModel: leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels",
+    "filename": "siying"
+  },
+  {
+    "id": "7b6b",
+    "valid": true,
+    "instance": "Source Text\nThe firm has been a leader in deploying the latest network technologies, which we think will insulate it from unexpected changes in the future.\n\nCause\nReference: The firm has been a leader in deploying the latest network technologies\nModel: The firm has been a leader in deploying the latest network technologies\n\nEffect\nReference: unexpected changes in the future\nModel: will insulate it from unexpected changes in the future",
+    "filename": "siying"
+  },
+  {
+    "id": "5ad6",
+    "valid": true,
+    "instance": "Source Text\nGathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020, and while volumes have recovered in late 2020, the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok.\n\nCause\nReference: Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020\nModel: Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020\n\nEffect\nReference: the challenging basin economics for producers and thus volume security for Oneok\nModel: the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok",
+    "filename": "siying"
+  },
+  {
+    "id": "24fa",
+    "valid": true,
+    "instance": "Source Text\nBased on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets, we rate Medtronic's uncertainty as medium.\n\nCause\nReference: Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic market\nModel: The average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets\n\nEffect\nReference: we rate Medtronic's uncertainty as medium\nModel: We rate Medtronic's uncertainty as medium",
+    "filename": "siying"
+  },
+  {
+    "id": "9b55",
+    "valid": false,
+    "instance": "Source Text\nWe think the runaway cost of living in West Coast metros is an area of concern, given that this has the potential to push the tech industry's center of gravity away from these high-cost regions.\n\nCause\nReference: this has the potential to push the tech industry's center of gravity away from these high-cost regions\nModel: the runaway cost of living in West Coast metros\n\nEffect\nReference: the runaway cost of living in West Coast metros is an area of concern\nModel: this has the potential to push the tech industry's center of gravity away from these high-cost regions",
+    "filename": "siying"
+  },
+  {
+    "id": "f716",
+    "valid": false,
+    "instance": "Source Text\nIn this regard, the company's success can be attributed to its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.\n\nCause\nReference: aggressive approach at building a recognizable brand\nModel: the company's aggressive approach at building a recognizable brand to attract consumers\n\nEffect\nReference: attract consumers and consequently the agents seeking their business\nModel: the agents seeking their business",
+    "filename": "siying"
+  },
+  {
+    "id": "b807",
+    "valid": true,
+    "instance": "Source Text\nDue to the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures, 2020 revenue declined 28%, but we forecast a 30% rebound in 2021 as backlog starts to ramp-up, with a return to normalized light vehicle demand in 2023.\n\nCause\nReference: the sale of most of its brake control business\nModel: the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures\n\nEffect\nReference: 2020 revenue declined 28%\nModel: 2020 revenue declined 28%",
+    "filename": "siying"
+  },
+  {
+    "id": "f916",
+    "valid": true,
+    "instance": "Source Text\nSlack offers a freemium model and caters to companies of all sizes, which means revenue is concentrated among the largest customers.\n\nCause\nReference: Slack offers a freemium model and caters to companies of all sizes\nModel: Slack offers a freemium model and caters to companies of all sizes\n\nEffect\nReference: revenue is concentrated among the largest customers\nModel: revenue is concentrated among the largest customers",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "d36f",
+    "valid": true,
+    "instance": "Source Text\nBecause of lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates, adjusted 2020 EBIT margin fell 110 basis points to 3.4%.\n\nCause\nReference: lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates\nModel: lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates\n\nEffect\nReference: adjusted 2020 EBIT margin fell 110 basis points to 3.4%\nModel: adjusted 2020 EBIT margin fell 110 basis points to 3.4%",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "2dea",
+    "valid": true,
+    "instance": "Source Text\nFollowing significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic, we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025.\n\nCause\nReference: Following significant core sales declines across all three segments in 2020\nModel: significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic\n\nEffect\nReference: an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025\nModel: we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "5145",
+    "valid": true,
+    "instance": "Source Text\nDue to decreasing reliance on its personnel base, we assume Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025.\n(Here, I think the reference for the cause is not correct while the cause generated by the model is correct)\nCause\nReference: Accenture will benefit from some operating leverage on the SG&A line (Not Correct)\nModel: decreasing reliance on its personnel base (Correct)\n\nEffect\nReference: operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025 (Not Correct)\nModel: Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025 (Correct)",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "5cd8",
+    "valid": true,
+    "instance": "Source Text\nThese advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk, all of which allow the banks to achieve greater risk-adjusted returns.\n\nCause\nReference: These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk\nModel: lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk\n\nEffect\nReference: the banks to achieve greater risk-adjusted returns\nModel: allow the banks to achieve greater risk-adjusted returns",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "f789",
+    "valid": true,
+    "instance": "Source Text\nIf Grifols is unable to bring an IG product to market with higher pricing power (like Takeda's HyQvia or CSL's Hizentra), it could lose market share.\n\nCause\nReference: Grifols is unable to bring an IG product to market with higher pricing power\nModel: Grifols is unable to bring an IG product to market with higher pricing power\n\nEffect\nReference: it could lose market share\nModel: it could lose market share",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "0327",
+    "valid": true,
+    "instance": "Source Text\nThanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.\n(Here, I think the references for both the cause and effect are not correct, but the model-generated one is correct.)\nCause\nReference: accelerating digital commerce trends (Not Correct)\nModel: external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions) (Correct)\n\nEffect\nReference: capitalize (Not Correct)\nModel: we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility (Correct)",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "d3ab",
+    "valid": false,
+    "instance": "Source Text\nWe see upside in margins for the F-35, as more sustainment enters the business mix as well and the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program.\n(Here, I think the model-generated one is consistent with the reference, but both are incorrect.) Cause:  as more sustainment enters the business mix as well and the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program. Effect:  We see upside in margins for the F-35.\nCause\nReference: the aircraft becomes a major defense acquisition program\nModel: more sustainment enters the business mix\n\nEffect\nReference: the potential to move to a more fixed-price contract\nModel: We see upside in margins for the F-35",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "edd2",
+    "valid": true,
+    "instance": "Source Text\nWith the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction, we do not foresee any immediate credit issues.\n\nCause\nReference: With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction\nModel: With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction\n\nEffect\nReference: do not foresee any immediate credit issues\nModel: we do not foresee any immediate credit issues",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "fb0d",
+    "valid": true,
+    "instance": "Source Text\nSnap's revenue growth will be driven primarily by growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads.\n\nCause\nReference: growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads\nModel: growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads\n\nEffect\nReference: Snap's revenue growth\nModel: Snap's revenue growth",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "dfe6",
+    "valid": false,
+    "instance": "Source Text\nWe assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021, with some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022.\n\nCause\nReference: some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022\nModel: The new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting\n\nEffect\nReference: We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021\nModel: will have greater impact in 2020 and 2021, with some easing in 2022",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "889a",
+    "valid": false,
+    "instance": "Source Text\nWhile the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline, as the projects have yielded high returns and supported continued distribution growth.\n\nCause\nReference: the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline\nModel: Magellan's capital discipline\n\nEffect\nReference: the projects have yielded high returns and supported continued distribution growth\nModel: The projects have yielded high returns and supported continued distribution growth",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "63b8",
+    "valid": true,
+    "instance": "Source Text\nRisks surrounding additional waves of COVID-19 cases remain, leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels.\n\nCause\nReference: Risks surrounding additional waves of COVID-19 cases remain\nModel: Risks surrounding additional waves of COVID-19 cases remain\n\nEffect\nReference: potential needs for incremental liquidity\nModel: leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "7b6b",
+    "valid": true,
+    "instance": "Source Text\nThe firm has been a leader in deploying the latest network technologies, which we think will insulate it from unexpected changes in the future.\n\nCause\nReference: The firm has been a leader in deploying the latest network technologies\nModel: The firm has been a leader in deploying the latest network technologies\n\nEffect\nReference: unexpected changes in the future\nModel: will insulate it from unexpected changes in the future",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "5ad6",
+    "valid": true,
+    "instance": "Source Text\nGathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020, and while volumes have recovered in late 2020, the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok.\n\nCause\nReference: Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020\nModel: Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020\n\nEffect\nReference: the challenging basin economics for producers and thus volume security for Oneok\nModel: the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "24fa",
+    "valid": true,
+    "instance": "Source Text\nBased on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets, we rate Medtronic's uncertainty as medium.\n\nCause\nReference: Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic market\nModel: The average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets\n\nEffect\nReference: we rate Medtronic's uncertainty as medium\nModel: We rate Medtronic's uncertainty as medium",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "9b55",
+    "valid": false,
+    "instance": "Source Text\nWe think the runaway cost of living in West Coast metros is an area of concern, given that this has the potential to push the tech industry's center of gravity away from these high-cost regions.\n\nCause\nReference: this has the potential to push the tech industry's center of gravity away from these high-cost regions \nModel: the runaway cost of living in West Coast metros\n\nEffect\nReference: the runaway cost of living in West Coast metros is an area of concern\nModel: this has the potential to push the tech industry's center of gravity away from these high-cost regions",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "f716",
+    "valid": false,
+    "instance": "Source Text\nIn this regard, the company's success can be attributed to its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.\nThe Cause should be:   its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.\nCause\nReference: aggressive approach at building a recognizable brand\nModel: the company's aggressive approach at building a recognizable brand to attract \nThe effect should be: the company's success\nEffect\nReference: attract consumers and consequently the agents seeking their business\nModel: the agents seeking their business",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "b807",
+    "valid": true,
+    "instance": "Source Text\nDue to the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures, 2020 revenue declined 28%, but we forecast a 30% rebound in 2021 as backlog starts to ramp-up, with a return to normalized light vehicle demand in 2023.\n\nCause\nReference: the sale of most of its brake control business (Not Correct)\nModel: the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures  (Correct)\n\nEffect\nReference: 2020 revenue declined 28%  (Correct)\nModel: 2020 revenue declined 28%  (Correct)",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "6d3e",
+    "valid": false,
+    "instance": "Source Text\nDespite having a model that requires franchisees to shoulder significant risk, Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation.\n\nCause\nReference: exclusive routes and its premium brand reputation\nModel: Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes due to exclusive routes and its premium brand reputation.\n\nEffect\nReference: Snap-on is considered one of the more attractive franchise opportunities by Entrepreneur Magazine and Forbes\nModel: Despite having a model that requires franchisees to shoulder significant risk",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "71b0",
+    "valid": false,
+    "instance": "Source Text\nWe expect fairly consistent results in soybean processing over the long run despite quarterly fluctuations caused by changes in crush margin and capacity utilization.\n\nCause\nReference: changes in crush margin and capacity utilization\nModel: changes in crush margin and capacity utilization\n\nEffect\nReference: quarterly fluctuations\nModel: fairly consistent results in soybean processing over the long run despite quarterly fluctuations",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "eb72",
+    "valid": true,
+    "instance": "Source Text\nA decade of consolidation in the corrugated packaging industry has allowed WestRock and its peers to push more aggressively on prices, resulting in a period of higher margins.\n\nCause\nReference: WestRock and its peers to push more aggressively on prices\nModel: A decade of consolidation in the corrugated packaging industry has allowed WestRock and its peers to push more aggressively on prices\n\nEffect\nReference: a period of higher margins\nModel: resulting in a period of higher margins",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "d0ed",
+    "valid": false,
+    "instance": "Source Text\nOur volume forecast is muted by the emergence of cheaper suppliers in lower-cost labor countries; however, Canopy's production expansion into Colombia and Lesotho helps protect its share.\n\nCause\nReference: Canopy's production expansion into Colombia and Lesotho\nModel: Canopy's production expansion into Colombia and Lesotho\n\nEffect\nReference: helps protect its share\nModel: Our volume forecast is muted",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "3e25",
+    "valid": false,
+    "instance": "Source Text\nTo continue winning contracts, the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets.\n(For the reference, Cause and effect are reversed.)\nCause\nReference: To continue winning contracts\nModel: suppliers that cannot meet the targets\n\nEffect\nReference: the turbine-makers will instate steep cost-reduction goals to their supply chain and will outsource suppliers that cannot meet the targets\nModel: will outsource suppliers that cannot meet the targets",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "2d3a",
+    "valid": false,
+    "instance": "Source Text\nAfter a very strong 2020, we expect some constraints on its margins going forward, as business operations normalize following the pandemic.\n\nCause\nReference: business operations normalize following the pandemic\nModel: After a very strong 2020\n\nEffect\nReference: some constraints on its margins going forward\nModel: we expect some constraints on its margins going forward",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "41d7",
+    "valid": true,
+    "instance": "Source Text\nIt is much more efficient for customers to trade two different equity index futures on the same exchange as this allows futures traders to net their positions out when posting collateral\n(For the reference, the cause and effect are reversed. However, for the model-generated one, it is correct.)\nCause\nReference: this allows futures traders to net their positions out when posting collateral (Not Correct)\nModel: It is much more efficient for customers to trade two different equity index futures on the same exchange (Correct)\n\nEffect\nReference: It is much more efficient for customers to trade two different equity index futures on the same exchange (Not Correct)\nModel: this allows futures traders to net their positions out when posting collateral (Correct)",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "d3ac",
+    "valid": true,
+    "instance": "Source Text\nIn 2021, we expect a rebound in refined products demand and weaker crude volumes, to be somewhat offset by expense savings and storage benefits to result in distributable cash flow of about $1.03 billion, similar to 2020 levels.\n\nCause\nReference: a rebound in refined products demand and weaker crude volumes ( we expect a rebound in refined products demand and weaker crude volumes, to be somewhat offset by expense savings and storage benefits)\nModel: a rebound in refined products demand and weaker crude volumes\n\nEffect\nReference: distributable cash flow of about $1.03 billion\nModel: result in distributable cash flow of about $1.03 billion, similar to 2020 levels",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "77b5",
+    "valid": false,
+    "instance": "Source Text\nDuring our 2021-25 forecast period, we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes. (I cannot find the cause.)\n\nCause\nReference: revenue to grow at about a 9% CAGR\nModel: During our 2021-25 forecast period\n\nEffect\nReference: strong growth in ESG and indexes\nModel: we expect revenue to grow at about a 9% CAGR with strong growth in ESG and indexes",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "92b9",
+    "valid": false,
+    "instance": "Source Text\nThe firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft because there are not material aftermarket servicing opportunities for aerostructures.\n\nCause\nReference: there are not material aftermarket servicing opportunities for aerostructures\nModel: The firm is a large aerostructure provider for both Boeing and Airbus\n\nEffect\nReference: The firm is a large aerostructure provider for both Boeing and Airbus, and the firm makes nearly all of its revenue on the original production of aircraft\nModel: The firm makes nearly all of its revenue on the original production of aircraft",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "313c",
+    "valid": true,
+    "instance": "Source Text\nAs the company has yet to generate positive free cash flow, it will continue to rely on outside capital raises, especially as it expands production to meet growing demand.\n\nCause\nReference: the company has yet to generate positive free cash flow\nModel: The company has yet to generate positive free cash flow\n\nEffect\nReference: it will continue to rely on outside capital raises\nModel: it will continue to rely on outside capital raises",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "df31",
+    "valid": true,
+    "instance": "Source Text\nOur fair value uncertainty rating for Facebook is high, based on uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data, both of which drive growth in the firm's source of revenue.\n\nCause\nReference: uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data\nModel: uncertainty over future advertising growth rates and additional regulations restricting Facebook's access to and use of data\n\nEffect\nReference: Our fair value uncertainty rating for Facebook is high\nModel: fair value uncertainty rating for Facebook is high",
+    "filename": "yanzheng"
+  },
+  {
+    "id": "6793",
+    "valid": false,
+    "instance": "Source Text\nBut we expect the gross margin to improve as more consumers consume JD's goods and services and JD's bargaining power against suppliers increases.\n\nCause\nReference: more consumers consume JD's goods and services and JD's bargaining power against suppliers increases\nModel: more consumers consume JD's goods and services\n\nEffect\nReference: the gross margin to improve\nModel: the gross margin to improve",
+    "filename": "yanzheng"
+  }
+]

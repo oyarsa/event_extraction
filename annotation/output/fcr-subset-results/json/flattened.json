@@ -1,0 +1,192 @@
+[
+  {
+    "id": "f916",
+    "input": "Slack offers a freemium model and caters to companies of all sizes, which means revenue is concentrated among the largest customers.",
+    "output": "[Cause] Slack offers a freemium model and caters to companies of all sizes [Relation] cause [Effect] revenue is concentrated among the largest customers",
+    "gold": "[Cause] Slack offers a freemium model and caters to companies of all sizes [Relation] enable [Effect] revenue is concentrated among the largest customers",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": true
+  },
+  {
+    "id": "d36f",
+    "input": "Because of lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates, adjusted 2020 EBIT margin fell 110 basis points to 3.4%.",
+    "output": "[Cause] lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates [Relation] cause [Effect] adjusted 2020 EBIT margin fell 110 basis points to 3.4%",
+    "gold": "[Cause] lower revenue, IT investments, and pressure on gross margins (net revenue/gross revenue) from rising capacity buy rates [Relation] cause [Effect] adjusted 2020 EBIT margin fell 110 basis points to 3.4%",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": true
+  },
+  {
+    "id": "2dea",
+    "input": "Following significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic, we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025.",
+    "output": "[Cause] significant core sales declines across all three segments in 2020 due to the COVID-19 pandemic [Relation] cause [Effect] we forecast an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+    "gold": "[Cause] Following significant core sales declines across all three segments in 2020 [Relation] cause [Effect] an average annual organic revenue growth rate for the firm of approximately 6.5% through 2025",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": false
+  },
+  {
+    "id": "5145",
+    "input": "Due to decreasing reliance on its personnel base, we assume Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025.",
+    "output": "[Cause] decreasing reliance on its personnel base [Relation] enable [Effect] Accenture will benefit from some operating leverage on the SG&A line, aiding in operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025",
+    "gold": "[Cause] Accenture will benefit from some operating leverage on the SG&A line [Relation] enable [Effect] operating margin expansion from 14.7% in fiscal 2020 to 15.9% in fiscal 2025",
+    "hanqi": false,
+    "siying": false,
+    "yanzheng": true,
+    "italo": false
+  },
+  {
+    "id": "5cd8",
+    "input": "These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk, all of which allow the banks to achieve greater risk-adjusted returns.",
+    "output": "[Cause] lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk [Relation] enable [Effect] allow the banks to achieve greater risk-adjusted returns",
+    "gold": "[Cause] These advantages manifest themselves in the form of lower operating costs, lower credit costs, lower regulatory costs, and lower absolute levels and better diversification of risk [Relation] enable [Effect] the banks to achieve greater risk-adjusted returns",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": false
+  },
+  {
+    "id": "f789",
+    "input": "If Grifols is unable to bring an IG product to market with higher pricing power (like Takeda's HyQvia or CSL's Hizentra), it could lose market share.",
+    "output": "[Cause] Grifols is unable to bring an IG product to market with higher pricing power [Relation] cause [Effect] it could lose market share",
+    "gold": "[Cause] Grifols is unable to bring an IG product to market with higher pricing power [Relation] cause [Effect] it could lose market share",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": true
+  },
+  {
+    "id": "0327",
+    "input": "Thanks to external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions), we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility.",
+    "output": "[Cause] external (COVID-19-related demand, smartphone ubiquity, wealth creation, underdevelopment payment industry infrastructure) and company-specific factors (product mix diversification, on- and off-platform payment technologies and shipping solutions) [Relation] enable [Effect] we believe MercadoLibre can capitalize on accelerating digital commerce trends in Latin America, despite lingering macro constraints volatility",
+    "gold": "[Cause] accelerating digital commerce trends [Relation] cause [Effect] capitalize",
+    "hanqi": false,
+    "siying": false,
+    "yanzheng": true,
+    "italo": false
+  },
+  {
+    "id": "d3ab",
+    "input": "We see upside in margins for the F-35, as more sustainment enters the business mix as well and the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program.",
+    "output": "[Cause] more sustainment enters the business mix | the potential to move to a more fixed-price contract as the aircraft becomes a major defense acquisition program [Relation] enable [Effect] We see upside in margins for the F-35",
+    "gold": "[Cause] the aircraft becomes a major defense acquisition program [Relation] cause [Effect] the potential to move to a more fixed-price contract",
+    "hanqi": false,
+    "siying": false,
+    "yanzheng": false,
+    "italo": false
+  },
+  {
+    "id": "edd2",
+    "input": "With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction, we do not foresee any immediate credit issues.",
+    "output": "[Cause] With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction [Relation] prevent [Effect] we do not foresee any immediate credit issues",
+    "gold": "[Cause] With the well-timed influx of $4.4 billion in additional cash from the sale of Epsilon, $2.4 billion of which was used for debt reduction [Relation] cause [Effect] do not foresee any immediate credit issues",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": true
+  },
+  {
+    "id": "fb0d",
+    "input": "Snap's revenue growth will be driven primarily by growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads.",
+    "output": "[Cause] growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads [Relation] enable [Effect] Snap's revenue growth",
+    "gold": "[Cause] growth in the firm's daily active users, or DAUs, user engagement, overall online advertising spending, and an increasing allocation of online ad dollars toward mobile and social network ads [Relation] cause [Effect] Snap's revenue growth",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": true
+  },
+  {
+    "id": "dfe6",
+    "input": "We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021, with some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022.",
+    "output": "[Cause] The new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting | recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022 [Relation] cause [Effect] will have greater impact in 2020 and 2021, with some easing in 2022",
+    "gold": "[Cause] some easing in 2022 thanks to recent COVID-19 stimulus legislation that further delays the resetting of rates until 2022 [Relation] cause [Effect] We assume the new Medicare clinical lab fee schedule adjustments from the first three-year cycle of rating setting will have greater impact in 2020 and 2021",
+    "hanqi": false,
+    "siying": false,
+    "yanzheng": false,
+    "italo": false
+  },
+  {
+    "id": "889a",
+    "input": "While the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline, as the projects have yielded high returns and supported continued distribution growth.",
+    "output": "[Cause] The competitive intensity of the new businesses is higher than the core refined product pipelines | Magellan's capital discipline [Relation] enable [Effect] The projects have yielded high returns and supported continued distribution growth",
+    "gold": "[Cause] the competitive intensity of the new businesses is higher than the core refined product pipelines, we've been impressed by Magellan's capital discipline [Relation] cause [Effect] the projects have yielded high returns and supported continued distribution growth",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": false,
+    "italo": false
+  },
+  {
+    "id": "63b8",
+    "input": "Risks surrounding additional waves of COVID-19 cases remain, leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels.",
+    "output": "[Cause] Risks surrounding additional waves of COVID-19 cases remain [Relation] cause [Effect] leading to potential needs for incremental liquidity, which perhaps could occur at value destructive levels",
+    "gold": "[Cause] Risks surrounding additional waves of COVID-19 cases remain [Relation] cause [Effect] potential needs for incremental liquidity",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": false
+  },
+  {
+    "id": "7b6b",
+    "input": "The firm has been a leader in deploying the latest network technologies, which we think will insulate it from unexpected changes in the future.",
+    "output": "[Cause] The firm has been a leader in deploying the latest network technologies [Relation] enable [Effect] will insulate it from unexpected changes in the future",
+    "gold": "[Cause] The firm has been a leader in deploying the latest network technologies [Relation] prevent [Effect] unexpected changes in the future",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": true
+  },
+  {
+    "id": "5ad6",
+    "input": "Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020, and while volumes have recovered in late 2020, the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok.",
+    "output": "[Cause] Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020 [Relation] cause [Effect] the sharp decline demonstrates the challenging basin economics for producers and thus volume security for Oneok",
+    "gold": "[Cause] Gathering and processing volumes across the Rockies and midcontinent fell 18%-20% in the second quarter of 2020 [Relation] cause [Effect] the challenging basin economics for producers and thus volume security for Oneok",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": true
+  },
+  {
+    "id": "24fa",
+    "input": "Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets, we rate Medtronic's uncertainty as medium.",
+    "output": "[Cause] The average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic markets [Relation] cause [Effect] We rate Medtronic's uncertainty as medium",
+    "gold": "[Cause] Based on the average volatility of cash flows from a diverse product portfolio in relatively less discretionary therapeutic market [Relation] enable [Effect] we rate Medtronic's uncertainty as medium",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": false
+  },
+  {
+    "id": "9b55",
+    "input": "We think the runaway cost of living in West Coast metros is an area of concern, given that this has the potential to push the tech industry's center of gravity away from these high-cost regions.",
+    "output": "[Cause] the runaway cost of living in West Coast metros [Relation] cause [Effect] this has the potential to push the tech industry's center of gravity away from these high-cost regions",
+    "gold": "[Cause] this has the potential to push the tech industry's center of gravity away from these high-cost regions [Relation] cause [Effect] the runaway cost of living in West Coast metros is an area of concern",
+    "hanqi": false,
+    "siying": false,
+    "yanzheng": false,
+    "italo": false
+  },
+  {
+    "id": "f716",
+    "input": "In this regard, the company's success can be attributed to its aggressive approach at building a recognizable brand to attract consumers and consequently the agents seeking their business.",
+    "output": "[Cause] the company's aggressive approach at building a recognizable brand to attract consumers [Relation] enable [Effect] the company's success | the agents seeking their business",
+    "gold": "[Cause] aggressive approach at building a recognizable brand [Relation] cause [Effect] attract consumers and consequently the agents seeking their business",
+    "hanqi": true,
+    "siying": false,
+    "yanzheng": false,
+    "italo": false
+  },
+  {
+    "id": "b807",
+    "input": "Due to the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures, 2020 revenue declined 28%, but we forecast a 30% rebound in 2021 as backlog starts to ramp-up, with a return to normalized light vehicle demand in 2023.",
+    "output": "[Cause] the sale of most of its brake control business as well as coronavirus-induced industrywide factory closures [Relation] cause [Effect] 2020 revenue declined 28% | we forecast a 30% rebound in 2021 as backlog starts to ramp-up | a return to normalized light vehicle demand in 2023",
+    "gold": "[Cause] the sale of most of its brake control business [Relation] cause [Effect] 2020 revenue declined 28%",
+    "hanqi": true,
+    "siying": true,
+    "yanzheng": true,
+    "italo": false
+  }
+]
