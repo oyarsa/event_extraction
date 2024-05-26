@@ -1,0 +1,702 @@
+[
+  {
+    "text": "MONTREAL  -  Transat AT Inc.'s third-quarter net loss more than doubled from the same time last year as the tour operator worked to complete its takeover by Air Canada.",
+    "reference": "[Cause] the tour operator worked to complete its takeover by Air Canada. [Relation] cause [Effect] Transat AT Inc.'s third-quarter net loss more than doubled from the same time last year",
+    "model": "[Cause] the tour operator worked to complete its takeover by Air Canada. [Relation] cause [Effect] MONTREAL - Transat AT Inc.'s third-quarter net loss more than doubled from the same time last year",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Transatlantic passenger traffic  -  key in the late-spring and summer months when sun-destination trips drop off  -  rose more than four per cent year over year last quarter to help boost revenue to $698.9 million, up from $664.6 million a year earlier.",
+    "reference": "[Cause] help boost revenue to $698.9 million, up from $664.6 million a year earlier. [Relation] cause [Effect] Transatlantic passenger traffic  -  key in the late-spring and summer months when sun-destination trips drop off  -  rose more than four per cent year over year last quarter",
+    "model": "[Cause] Transatlantic passenger traffic - key in the late-spring and summer months when sun-destination trips drop off - rose more than four per cent year over year last quarter [Relation] cause [Effect] boost revenue to $698.9 million, up from $664.6 million a year earlier.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Let's begin with a story: At the end of 2017, with new technology such as bitcoin, Ethereum, cryptocurrency and blockchain at their very buzziest, a small, publicly traded beverage company, Long Island Iced Tea, announced it was changing its name to Long Blockchain Corp. Literally overnight, shares skyrocketed 200% at the opening of the next trading day. Nothing had really changed except for the company's name, but the signal that the business was now tech-integrated attracted attention, press and real market value for the company and many new shareholders.",
+    "reference": "[Cause] Nothing had really changed except for the company's name, but the signal that the business was now tech-integrated attracted attention, press and real market value for the company and many new shareholders. [Relation] cause [Effect] Literally overnight, shares skyrocketed 200% at the opening of the next trading day.",
+    "model": "[Cause] Let's begin with a story: At the end of 2017, with new technology such as bitcoin, Ethereum, cryptocurrency and blockchain at their very buzziest, a small, publicly traded beverage company, Long Island Iced Tea, announced it was changing its name to Long Blockchain Corp. [Relation] cause [Effect] Literally overnight, shares skyrocketed 200% at the opening of the next trading day.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Largest Tencent Shareholder Leads $15M Round in Blockchain Game Developer by Cryptocurrency News Daily | Sep 23, 2019 | Cryptocurrency News | 0 comments  Naspers, the largest shareholder of Chinese Internet giant Tencent, participated in a $15 million investment in blockchain game developer Immutable. Immutable, a Sydney-based blockchain gaming startup, completed a new funding round led by Naspers and Mike Novogratz's crypto investment bank Galaxy Digital, the company announced in a blog post on Sept. 23.",
+    "reference": "[Cause] Immutable, a Sydney-based blockchain gaming startup, completed a new funding round led by Naspers and Mike Novogratz's crypto investment bank Galaxy Digital, the company announced in a blog post on Sept. 23. [Relation] cause [Effect] Largest Tencent Shareholder Leads $15M Round in Blockchain Game Developer by Cryptocurrency News Daily | Sep 23, 2019 | Cryptocurrency News | 0 comments  Naspers, the largest shareholder of Chinese Internet giant Tencent, participated in a $15 million investment in blockchain game developer Immutable.",
+    "model": "[Cause] Largest Tencent Shareholder Leads $15M Round in Blockchain Game Developer by Cryptocurrency News Daily | Sep 23, 2019 | Cryptocurrency News | 0 comments Naspers, the largest shareholder of Chinese Internet giant Tencent, participated in a $15 million investment in blockchain game developer Immutable. [Relation] cause [Effect] Immutable, a Sydney-based blockchain gaming startup, completed a new funding round led by Naspers and Mike Novogratz's crypto investment bank Galaxy Digital, the company announced in a blog post on Sept.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Scaling from 13,000 to 1 million gamers projected According to the report, Immutable's flagship game Gods Unchained has made over $4.5 million in revenue in just over a year, despite it is being played by a closed group of 13,000 gamers. Founded by brothers Robbie and James Ferguson in July 2018, Immutable reportedly expects to grow Gods Unchained from the current 13,000 to 1 million players with the new investment, James stated in an interview with AFR. Based on the Ethereum blockchain, Gods Unchained is a trading card game that has reportedly overtaken other popular TCGs such as Artifact, Faeria and Kards, Immutable stated.",
+    "reference": "[Cause] Based on the Ethereum blockchain, Gods Unchained is a trading card game that has reportedly overtaken other popular TCGs such as Artifact, Faeria and Kards, Immutable stated. [Relation] cause [Effect] Scaling from 13,000 to 1 million gamers projected According to the report, Immutable's flagship game Gods Unchained has made over $4.5 million in revenue in just over a year, despite it is being played by a closed group of 13,000 gamers.",
+    "model": "[Cause] Based on the Ethereum blockchain, Gods Unchained is a decentralized game that was developed by Immutable in July 2018. [Relation] cause [Effect] Founded by brothers Robbie and James Ferguson in July 2018, Immutable reportedly expects to grow Gods Unchained from the current 13,000 to 1 million players with the new investment, James stated in an interview with AFR.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "The Company has three primary levers to increase its project IRR:  1. Senior Loan Syndications  -  the company would originate a loan up to 80% LTV and create a senior A tranche (typically 50-60% LTV) as well as a junior B tranche.",
+    "reference": "[Cause] The Company has three primary levers to increase its project IRR:  1. Senior Loan Syndications [Relation] cause [Effect] the company would originate a loan up to 80% LTV and create a senior A tranche (typically 50-60% LTV) as well as a junior B tranche.",
+    "model": "[Cause] The Company has three primary levers to increase its project IRR: 1. Senior Loan Syndications - the company would originate a loan up to 80% LTV and create a senior A tranche (typically 50-60% LTV) as well as a junior B tranche. [Relation] cause [Effect] The Company has three primary levers to increase its project IRR: 1. Senior Loan Syndications - the company would originate a loan up to 80% LTV and create a senior A tranche (typically 50-60% LTV) as well",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Private Syndications  -  the company would syndicate up to 80% of a loan and mortgage investment to accredited investors, with terms of the syndicate generally mirroring the terms of the loan except for interest rates paid to syndicated investors, which are typically 300bps less.",
+    "reference": "[Cause] Private Syndications [Relation] cause [Effect] the company would syndicate up to 80% of a loan and mortgage investment to accredited investors, with terms of the syndicate generally mirroring the terms of the loan except for interest rates paid to syndicated investors, which are typically 300bps less.",
+    "model": "[Cause] Private Syndications - the company would syndicate up to 80% of a loan and mortgage investment to accredited investors, with terms of the syndicate generally mirroring the terms of the loan except for interest rates paid to syndicated investors, which are typically 300bps less. [Relation] cause [Effect] The company would syndicate up to 80% of a loan and mortgage investment to accredited investors",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Wilmington sees 10% drop in FY Ebitda but 'promising' sales in new year StockMarketWire.com - Information and education provider Wilmington reported a 9.7% drop in full-year earnings, reflecting previously announced cost increases to support its growth, even as it saw a 1% increase in revenues. Adjusted Ebitda fell 9.7% to £21.5m with Ebita margins at 17.6% while adjusted pre-tax profit fell 11.5% to £19.3m for the 12 months to 30 June 2019.",
+    "reference": "[Cause] Adjusted Ebitda fell 9.7% to £21.5m with Ebita margins at 17.6% while adjusted pre-tax profit fell 11.5% to £19.3m for the 12 months to 30 June 2019. [Relation] cause [Effect] Wilmington sees 10% drop in FY Ebitda but 'promising' sales in new year StockMarketWire.com - Information and education provider Wilmington reported a 9.7% drop in full-year earnings, reflecting previously announced cost increases to support its growth, even as it saw a 1% increase in revenues.",
+    "model": "[Cause] Wilmington sees 10% drop in FY Ebitda but 'promising' sales in new year StockMarketWire.com - Information and education provider Wilmington reported a 9.7% drop in full-year earnings, reflecting previously announced cost increases to support its growth, even as it saw a 1% increase in revenues. [Relation] cause [Effect] Adjusted Ebitda fell 9.7% to £21.5m with Ebita margins at 17.6% while adjusted pre-tax profit fell 11.5% to £19.3m for the 12 months to 30 June",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Instead, working with his bold economics minister György Matolcsy, he pursued policies decried at the time as radical and irresponsible. He raised the minimum wage. He cut personal income tax rates sharply, from 30% to a flat rate of 16% (they would fall further, and corporate rates would bottom out at 9%, the lowest in Europe).",
+    "reference": "[Cause] Instead, working with his bold economics minister György Matolcsy, he pursued policies decried at the time as radical and irresponsible. [Relation] cause [Effect] He cut personal income tax rates sharply, from 30% to a flat rate of 16% (they would fall further, and corporate rates would bottom out at 9%, the lowest in Europe).",
+    "model": "[Cause] Instead, working with his bold economics minister György Matolcsy, he pursued policies decried at the time as radical and irresponsible. [Relation] cause [Effect] He raised the minimum wage. He cut personal income tax rates sharply, from 30% to a flat rate of 16% (they would fall further, and corporate rates would bottom out at 9%, the lowest in Europe).",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "But all in all, Orbán's program, universally denounced as a gamble, was a staggering success. Hungary had repaid its IMF loans in full by 2013. The country now has 4% growth and an unemployment rate of about 3%. Debt has fallen from 85% to 71% of GDP, and labor force participation risen from 55% to around 70%.",
+    "reference": "[Cause] But all in all, Orbán's program, universally denounced as a gamble, was a staggering success. [Relation] cause [Effect] Debt has fallen from 85% to 71% of GDP, and labor force participation risen from 55% to around 70%.",
+    "model": "[Cause] But all in all, Orbán's program, universally denounced as a gamble, was a staggering success. [Relation] cause [Effect] The country now has 4% growth and an unemployment rate of about 3%.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "And Orbán has drawn up a plan offering a $30,000 loan to first-time mothers that gets written off when the mother bears a third child, and grants every woman who raises four children an exemption from income tax for the rest of her life.",
+    "reference": "[Cause] And Orbán has drawn up a plan [Relation] cause [Effect] offering a $30,000 loan to first-time mothers that gets written off when the mother bears a third child, and grants every woman who raises four children an exemption from income tax for the rest of her life.",
+    "model": "[Cause] the mother bears a third child, and grants every woman who raises four children an exemption from income tax for the rest of her life. [Relation] cause [Effect] And Orbán has drawn up a plan offering a $30,000 loan to first-time mothers that gets written off",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "As Nvidia Com (NVDA) Stock Value Declined, Shareholder Assetmark Has Cut Stake by $15.67 … Sep 14, 2019 | News Stories  Some Historical NVDA News: 27/03/2018  -  NVIDIA Boosts World's Leading Deep Learning Computing Platform, Bringing 10x Performance Gain in …  Link to Full Article: Read Here  Welcome to the home of information resources for AI and ML.",
+    "reference": "[Cause] NVIDIA Boosts World's Leading Deep Learning Computing Platform [Relation] cause [Effect] Bringing 10x Performance Gain in …  Link to Full Article: Read Here  Welcome to the home of information resources for AI and ML.",
+    "model": "[Cause] As Nvidia Com (NVDA) Stock Value Declined [Relation] cause [Effect] Shareholder Assetmark Has Cut Stake by $15.67... Sep 14, 2019 | News Stories Some Historical NVDA News: 27/03/2018 - NVIDIA Boosts World's Leading Deep Learning Computing Platform, Bringing 10x Performance Gain in... Link to Full Article: Read Here Welcome to the home of information resources for AI and ML.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Montreal-based digital asset custodian Knøx has secured $8.25 million in a seed round to support its crypto custody service for institutional customers and fiduciaries. The funding round was led by San Francisco-based venture capital firm Initialized Capital, with the participation of financial services giant Fidelity and venture firm iNovia, Canadian technology-focused news outlet BetaKit reported on Sept. 24.",
+    "reference": "[Cause] The funding round was led by San Francisco-based venture capital firm Initialized Capital, with the participation of financial services giant Fidelity and venture firm iNovia, Canadian technology-focused news outlet BetaKit reported on Sept. 24. [Relation] cause [Effect] Montreal-based digital asset custodian Knøx has secured $8.25 million in a seed round to support its crypto custody service for institutional customers and fiduciaries.",
+    "model": "[Cause] support its crypto custody service for institutional customers and fiduciaries. [Relation] cause [Effect] Montreal-based digital asset custodian Knx has secured $8.25 million in a seed round",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "We think that, right now, private money is beating public money in terms of its competitiveness, he said. Pension funds, private equity investors, high-net-worth investors, a lot of them have a much better opportunity to buy properties than public companies can. Blackstone, for example, took Pure Industrial Real Estate Trust private in 2018 for $2.5-billion in cash, plus assumed debt, and now it is buying Dream Global.",
+    "reference": "[Cause] Pension funds, private equity investors, high-net-worth investors, a lot of them have a much better opportunity to buy properties than public companies can. [Relation] cause [Effect] Blackstone, for example, took Pure Industrial Real Estate Trust private in 2018 for $2.5-billion in cash, plus assumed debt, and now it is buying Dream Global.",
+    "model": "[Cause] We think that, right now, private money is beating public money in terms of its competitiveness, he said. [Relation] cause [Effect] Blackstone, for example, took Pure Industrial Real Estate Trust private in 2018 for $2.5-billion in cash, plus assumed debt, and now it is buying Dream Global.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Citing an increased interest in cryptocurrency, the company will pay a benefit of 500-yen equivalent cryptocurrency BTC … to all shareholders regardless of the number of shares they are holding.",
+    "reference": "[Cause] Citing an increased interest in cryptocurrency [Relation] cause [Effect] the company will pay a benefit of 500-yen equivalent cryptocurrency BTC … to all shareholders regardless of the number of shares they are holding.",
+    "model": "[Cause] Citing an increased interest in cryptocurrency [Relation] cause [Effect] the company will pay a benefit of 500-yen equivalent cryptocurrency BTC... to all shareholders regardless of the number of shares they are holding.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Animalcare Group Plc (LON:ANCR) Announces Dividend of GBX 2 Tweet  Animalcare Group Plc (LON:ANCR) announced a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports. Stockholders of record on Thursday, October 24th will be paid a dividend of GBX 2 ($0.03) per share on Friday, November 22nd. This represents a dividend yield of 1.44%.",
+    "reference": "[Cause] Animalcare Group Plc (LON:ANCR) Announces Dividend of GBX 2 Tweet  Animalcare Group Plc (LON:ANCR) announced a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports. [Relation] cause [Effect] This represents a dividend yield of 1.44%.",
+    "model": "[Cause] Animalcare Group Plc (LON:ANCR) Announces Dividend of GBX 2 Tweet Animalcare Group Plc (LON:ANCR) announced a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports. [Relation] cause [Effect] Stockholders of record on Thursday, October 24th will be paid a dividend of GBX 2 ($0.03) per share on Friday, November 22nd.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "There are two reasons why they pay you big dividends, like the 7%+ cash streams we'll dive into shortly:  REITs are exempt from tax at the corporate level, but … To keep that tax exemption, they must pay 90% of their taxable income to shareholders as dividends.",
+    "reference": "[Cause] To keep that tax exemption, they must pay 90% of their taxable income to shareholders as dividends. [Relation] cause [Effect] There are two reasons why they pay you big dividends, like the 7%+ cash streams",
+    "model": "[Cause] There are two reasons why they pay you big dividends, like the 7%+ cash streams we'll dive into shortly: REITs are exempt from tax at the corporate level, but... [Relation] cause [Effect] To keep that tax exemption, they must pay 90% of their taxable income to shareholders as dividends.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "DOWG THRE/PAR VTG FPD 0.001 Declares Dividend of GBX 5 (LON:DP3H) Tweet  DOWG THRE/PAR VTG FPD 0.001 (LON:DP3H) declared a dividend on Friday, September 6th, Upcoming.Co.Uk reports. Investors of record on Thursday, October 17th will be paid a dividend of GBX 5 ($0.07) per share on Friday, November 8th. This represents a dividend yield of 12.66%.",
+    "reference": "[Cause] DOWG THRE/PAR VTG FPD 0.001 Declares Dividend of GBX 5 (LON:DP3H) Tweet  DOWG THRE/PAR VTG FPD 0.001 (LON:DP3H) declared a dividend on Friday, September 6th, Upcoming.Co.Uk reports. [Relation] cause [Effect] This represents a dividend yield of 12.66%.",
+    "model": "[Cause] DOWG THRE/PAR VTG FPD 0.001 Declares Dividend of GBX 5 (LON:DP3H) Tweet DOWG THRE/PAR VTG FPD 0.001 (LON:DP3H) declared a dividend on Friday, September 6th, Upcoming.Co.Uk reports. [Relation] cause [Effect] Investors of record on Thursday, October 17th will be paid a dividend of GBX 5 ($0.07) per share on Friday, November 8th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "- - Net Margins - Return on Equity - Return on Assets  - Santa Fe Financial - 5.41% - -4.65% - 4.78%  - Ellington Financial - 21.99% - 8.70% - 1.52%  Analyst Ratings  This is a breakdown of current ratings for Santa Fe Financial and Ellington Financial, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Santa Fe Financial - 0 - 0 - 0 - 0 - N/A  - Ellington Financial - 0 - 1 - 1 - 0 - 2.50  Ellington Financial has a consensus price target of $19.00, indicating a potential upside of 5.50%.",
+    "reference": "[Cause] Ellington Financial has a consensus price target of $19.00 [Relation] cause [Effect] a potential upside of 5.50%.",
+    "model": "[Cause] Santa Fe Financial currently has a consensus target price of $9.50 [Relation] cause [Effect] a potential upside of 26.78%.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "So far In 2019 EVERY single month the company has continued to post NEW RECORD REVENUES  On June 1st 2019 the company doubled its NET revenues to over $40 million with TWO more successful acquisitions in Florida.",
+    "reference": "[Cause] TWO more successful acquisitions in Florida. [Relation] cause [Effect] So far In 2019 EVERY single month the company has continued to post NEW RECORD REVENUES  On June 1st 2019 the company doubled its NET revenues to over $40 million",
+    "model": "[Cause] So far In 2019 EVERY single month the company has continued to post NEW RECORD REVENUES [Relation] cause [Effect] On June 1st 2019 the company doubled its NET revenues to over $40 million with TWO more successful acquisitions in Florida.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Andrea Lewis, estimated to be worth $2 million, who started Hugo House, a center for writers in Seattle, with her profits. Jim Allchin, who retired and became a renowned blues guitarist  Chris Peters, a bowling enthusiast, who cashed out and bought the Professional Bowlers Association for an estimated $5 million (and then promptly set it on track to turn profitable and double its revenue). For them, one stock did it all.",
+    "reference": "[Cause] For them, one stock did it all. [Relation] cause [Effect] Andrea Lewis, estimated to be worth $2 million, who started Hugo House, a center for writers in Seattle, with her profits.",
+    "model": "[Cause] Andrea Lewis, estimated to be worth $2 million, who started Hugo House, a center for writers in Seattle, with her profits. [Relation] cause [Effect] Jim Allchin, who retired and became a renowned blues guitarist Chris Peters, a bowling enthusiast, who cashed out and bought the Professional Bowlers Association for an estimated $5 million (and then promptly set it on track to turn profitable and double its revenue).",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Andrea Lewis, estimated to be worth $2 million, who started Hugo House, a center for writers in Seattle, with her profits. Jim Allchin, who retired and became a renowned blues guitarist  Chris Peters, a bowling enthusiast, who cashed out and bought the Professional Bowlers Association for an estimated $5 million (and then promptly set it on track to turn profitable and double its revenue). For them, one stock did it all.",
+    "reference": "[Cause] For them, one stock did it all. [Relation] cause [Effect] Jim Allchin, who retired and became a renowned blues guitarist  Chris Peters, a bowling enthusiast, who cashed out and bought the Professional Bowlers Association for an estimated $5 million (and then promptly set it on track to turn profitable and double its revenue).",
+    "model": "[Cause] Andrea Lewis, estimated to be worth $2 million, who started Hugo House, a center for writers in Seattle, with her profits. [Relation] cause [Effect] Jim Allchin, who retired and became a renowned blues guitarist Chris Peters, a bowling enthusiast, who cashed out and bought the Professional Bowlers Association for an estimated $5 million (and then promptly set it on track to turn profitable and double its revenue).",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Renishaw plc (LON:RSW) declared a dividend on Thursday, August 1st, Upcoming.Co.Uk reports. Shareholders of record on Thursday, September 26th will be given a dividend of GBX 46 ($0.60) per share on Thursday, October 31st. This represents a yield of 1.26%.",
+    "reference": "[Cause] Renishaw plc (LON:RSW) declared a dividend on Thursday, August 1st, Upcoming.Co.Uk reports. [Relation] cause [Effect] This represents a yield of 1.26%.",
+    "model": "[Cause] Renishaw plc (LON:RSW) declared a dividend on Thursday, August 1st, Upcoming.Co.Uk reports. [Relation] cause [Effect] Shareholders of record on Thursday, September 26th will be given a dividend of GBX 46 ($0.60) per share on Thursday, October 31st.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Finally, Deutsche Bank reaffirmed a sell rating on shares of Renishaw in a research note on Friday, July 12th. Five equities research analysts have rated the stock with a sell rating and three have issued a hold rating to the stock. The company currently has a consensus rating of Sell and a consensus price target of GBX 3,693.57 ($48.26).",
+    "reference": "[Cause] Five equities research analysts have rated the stock with a sell rating and three have issued a hold rating to the stock. [Relation] cause [Effect] The company currently has a consensus rating of Sell and a consensus price target of GBX 3,693.57 ($48.26).",
+    "model": "[Cause] Finally, Deutsche Bank reaffirmed a sell rating on shares of Renishaw in a research note on Friday, July 12th. [Relation] cause [Effect] The company currently has a consensus rating of Sell and a consensus price target of GBX 3,693.57 ($48.26).",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Fidelity MSCI Financials Index ETF (NYSEARCA:FNCL) declared a  -  dividend on Friday, September 20th, Wall Street Journal reports. Shareholders of record on Monday, September 23rd will be given a dividend of 0.265 per share on Wednesday, September 25th. This represents a yield of 2.2%.",
+    "reference": "[Cause] Fidelity MSCI Financials Index ETF (NYSEARCA:FNCL) declared a  -  dividend on Friday, September 20th, Wall Street Journal reports. [Relation] cause [Effect] This represents a yield of 2.2%.",
+    "model": "[Cause] Fidelity MSCI Financials Index ETF (NYSEARCA:FNCL) declared a - dividend on Friday, September 20th, Wall Street Journal reports. [Relation] cause [Effect] Shareholders of record on Monday, September 23rd will be given a dividend of 0.265 per share on Wednesday, September 25th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Analyst Ratings  This is a breakdown of recent ratings and recommmendations for Auris Medical and Elite Pharmaceuticals, as provided by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Auris Medical - 0 - 0 - 2 - 0 - 3.00  - Elite Pharmaceuticals - 0 - 0 - 0 - 0 - N/A  Auris Medical currently has a consensus price target of $75.00, indicating a potential upside of 2,383.44%.",
+    "reference": "[Cause] Auris Medical currently has a consensus price target of $75.00 [Relation] cause [Effect] a potential upside of 2,383.44%.",
+    "model": "[Cause] Auris Medical currently has a consensus price target of $9.50 [Relation] cause [Effect] a potential upside of 655.21%.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL) . (NASDAQ:MRVL) announced a quarterly dividend on Friday, September 20th, RTT News reports. Shareholders of record on Thursday, October 10th will be given a dividend of 0.06 per share by the semiconductor company on Wednesday, October 30th. This represents a $0.24 dividend on an annualized basis and a yield of 0.94%.",
+    "reference": "[Cause] Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL) . (NASDAQ:MRVL) announced a quarterly dividend on Friday, September 20th, RTT News reports. [Relation] cause [Effect] Shareholders of record on Thursday, October 10th will be given a dividend of 0.06 per share by the semiconductor company on Wednesday, October 30th.",
+    "model": "[Cause] Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL). [Relation] cause [Effect] Shareholders of record on Thursday, October 10th will be given a dividend of 0.06 per share by the semiconductor company on Wednesday, October 30th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL) . (NASDAQ:MRVL) announced a quarterly dividend on Friday, September 20th, RTT News reports. Shareholders of record on Thursday, October 10th will be given a dividend of 0.06 per share by the semiconductor company on Wednesday, October 30th. This represents a $0.24 dividend on an annualized basis and a yield of 0.94%.",
+    "reference": "[Cause] Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL) . (NASDAQ:MRVL) announced a quarterly dividend on Friday, September 20th, RTT News reports. [Relation] cause [Effect] This represents a $0.24 dividend on an annualized basis and a yield of 0.94%.",
+    "model": "[Cause] Announces Quarterly Dividend of $0.06 (NASDAQ:MRVL). [Relation] cause [Effect] Shareholders of record on Thursday, October 10th will be given a dividend of 0.06 per share by the semiconductor company on Wednesday, October 30th.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Finally, BMO Capital Markets set a $28.00 price target on Marvell Technology Group and gave the stock a buy rating in a report on Monday, August 26th. One research analyst has rated the stock with a sell rating, five have given a hold rating and twenty-two have assigned a buy rating to the stock. The company presently has a consensus rating of Buy and a consensus price target of $26.96.",
+    "reference": "[Cause] Finally, BMO Capital Markets set a $28.00 price target on Marvell Technology Group and gave the stock a buy rating in a report on Monday, August 26th. [Relation] cause [Effect] The company presently has a consensus rating of Buy and a consensus price target of $26.96.",
+    "model": "[Cause] One research analyst has rated the stock with a sell rating, five have given a hold rating and twenty-two have assigned a buy rating to the stock. [Relation] cause [Effect] The company presently has a consensus rating of Buy and a consensus price target of $26.96.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device. The iPhone 11 Pro (64 GB) is priced at S$1,649 upon release. -  Advertisement  -   According to the Ministry of Manpower, the average monthly earning in Singapore is S$5,410 before deducting Central Provident Fund (CPF) contributions and personal income tax.",
+    "reference": "[Cause] -  Advertisement  -   According to the Ministry of Manpower, the average monthly earning in Singapore is S$5,410 before deducting Central Provident Fund (CPF) contributions and personal income tax. [Relation] cause [Effect] The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device.",
+    "model": "[Cause] The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device. [Relation] cause [Effect] The iPhone 11 Pro (64 GB) is priced at S$1,649 upon release.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device. The iPhone 11 Pro (64 GB) is priced at S$1,649 upon release. -  Advertisement  -   According to the Ministry of Manpower, the average monthly earning in Singapore is S$5,410 before deducting Central Provident Fund (CPF) contributions and personal income tax.",
+    "reference": "[Cause] The iPhone 11 Pro (64 GB) is priced at S$1,649 upon release. [Relation] cause [Effect] The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device.",
+    "model": "[Cause] The index showed that Singaporeans earning minimum wage need to work 8.4 days in order to afford the iPhone 11 Pro, Apple's newest top of the line device. [Relation] cause [Effect] The iPhone 11 Pro (64 GB) is priced at S$1,649 upon release.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Advisors LLC raised its holdings in Kforce by 9.7% during the 2nd quarter. Advisors LLC now owns 7,943 shares of the business services provider's stock worth $279,000 after purchasing an additional 700 shares during the last quarter. Finally, US Bancorp DE raised its holdings in Kforce by 16.5% during the 1st quarter. US Bancorp DE now owns 8,152 shares of the business services provider's stock worth $287,000 after purchasing an additional 1,155 shares during the last quarter.",
+    "reference": "[Cause] Advisors LLC raised its holdings in Kforce by 9.7% during the 2nd quarter. [Relation] cause [Effect] Advisors LLC now owns 7,943 shares of the business services provider's stock worth $279,000 after purchasing an additional 700 shares during the last quarter.",
+    "model": "[Cause] Advisors LLC raised its holdings in Kforce by 9.7% during the 2nd quarter. [Relation] cause [Effect] Finally, US Bancorp DE raised its holdings in Kforce by 16.5% during the 1st quarter.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Advisors LLC raised its holdings in Kforce by 9.7% during the 2nd quarter. Advisors LLC now owns 7,943 shares of the business services provider's stock worth $279,000 after purchasing an additional 700 shares during the last quarter. Finally, US Bancorp DE raised its holdings in Kforce by 16.5% during the 1st quarter. US Bancorp DE now owns 8,152 shares of the business services provider's stock worth $287,000 after purchasing an additional 1,155 shares during the last quarter.",
+    "reference": "[Cause] Finally, US Bancorp DE raised its holdings in Kforce by 16.5% during the 1st quarter. [Relation] cause [Effect] US Bancorp DE now owns 8,152 shares of the business services provider's stock worth $287,000 after purchasing an additional 1,155 shares during the last quarter.",
+    "model": "[Cause] Advisors LLC raised its holdings in Kforce by 9.7% during the 2nd quarter. [Relation] cause [Effect] Finally, US Bancorp DE raised its holdings in Kforce by 16.5% during the 1st quarter.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "North American gold ETFs rose by nearly 78 tonnes (2.7 million ounces) last month, totaling 122.3 tonnes worldwide, according to the World Gold Council (WGC).  click to enlarge  In India, gold ETFs attracted the most money in more than six years as investors poured in money seeking safe havens amid record high domestic prices and a slowdown in the economy, Bloomberg reports this week.",
+    "reference": "[Cause] North American gold ETFs rose by nearly 78 tonnes (2.7 million ounces) last month [Relation] cause [Effect] totaling 122.3 tonnes worldwide, according to the World Gold Council (WGC).",
+    "model": "[Cause] click to enlarge In India, gold ETFs attracted the most money in more than six years as investors poured in money seeking safe havens amid record high domestic prices and a slowdown in the economy, Bloomberg reports this week. [Relation] cause [Effect] North American gold ETFs rose by nearly 78 tonnes (2.7 million ounces) last month, totaling 122.3 tonnes worldwide, according to the World Gold Council (WGC).",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Central banks, led by those in China and Russia, continue to load up on the yellow metal to diversify away from the U.S. dollar. Russia has quadrupled its gold reserves in the past decade, according to Bloomberg, and in the past year the reserves' value has jumped 42 percent to $109.5 billion. There is a massive substitution of U.S. dollar assets by gold - a strategy which has earned billions of dollars for the Bank of Russia just within several months, comments Vladimir Miklashevsky, a strategist at Danske Bank.",
+    "reference": "[Cause] There is a massive substitution of U.S. dollar assets by gold - a strategy which has earned billions of dollars for the Bank of Russia just within several months, comments Vladimir Miklashevsky, a strategist at Danske Bank. [Relation] cause [Effect] Russia has quadrupled its gold reserves in the past decade, according to Bloomberg, and in the past year the reserves' value has jumped 42 percent to $109.5 billion.",
+    "model": "[Cause] Central banks, led by those in China and Russia, continue to load up on the yellow metal to diversify away from the U.S. dollar. [Relation] cause [Effect] Russia has quadrupled its gold reserves in the past decade, according to Bloomberg, and in the past year the reserves' value has jumped 42 percent to $109.5 billion.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Since Trump's inauguration in January 2017, new government rules have added $20 billion on average per year.",
+    "reference": "[Cause] Since Trump's inauguration in January 2017 [Relation] cause [Effect] new government rules have added $20 billion on average per year.",
+    "model": "[Cause] Since Trump's inauguration in January 2017, new government rules [Relation] cause [Effect] have added $20 billion on average per year.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "At President Trump's direction, the Department of Agriculture has given out $28 billion in aid to farmers hurt by slowed demand out of China for their crops.",
+    "reference": "[Cause] farmers hurt by slowed demand out of China for their crops. [Relation] cause [Effect] At President Trump's direction, the Department of Agriculture has given out $28 billion",
+    "model": "[Cause] slowed demand out of China for their crops. [Relation] cause [Effect] At President Trump's direction, the Department of Agriculture has given out $28 billion in aid to farmers",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "70 prisoners were involved, 35 on each side, including 24 Ukrainian sailors who were detained when their ships were seized in 2018 in the Kerch Strait between Crimea and the Russian mainland.",
+    "reference": "[Cause] their ships were seized in 2018 in the Kerch Strait between Crimea and the Russian mainland. [Relation] cause [Effect] 70 prisoners were involved, 35 on each side, including 24 Ukrainian sailors who were detained",
+    "model": "[Cause] their ships were seized in 2018 in the Kerch Strait between Crimea and the Russian mainland. [Relation] cause [Effect] 70 prisoners were involved, 35 on each side, including 24 Ukrainian sailors",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "North American Income Trust PLC (LON:NAIT) declared a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports. Stockholders of record on Thursday, October 3rd will be paid a dividend of GBX 1.70 ($0.02) per share on Friday, October 25th. This represents a dividend yield of 0.56%.",
+    "reference": "[Cause] North American Income Trust PLC (LON:NAIT) declared a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports. [Relation] cause [Effect] This represents a dividend yield of 0.56%.",
+    "model": "[Cause] North American Income Trust PLC (LON:NAIT) declared a dividend on Tuesday, September 24th, Upcoming.Co.Uk reports. [Relation] cause [Effect] Stockholders of record on Thursday, October 3rd will be paid a dividend of GBX 1.70 ($0.02) per share on Friday, October 25th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "JOHANNESBURG, Sept 17 (Reuters) - South African miner Exxaro Resources Ltd said on Tuesday it acquired the remaining 50% stake in its wind farm joint venture for 1.55 billion rand ($105.56 million) as it looks to expand its energy business.",
+    "reference": "[Cause] it looks to expand its energy business. [Relation] cause [Effect] South African miner Exxaro Resources Ltd said on Tuesday it acquired the remaining 50% stake in its wind farm joint venture for 1.55 billion rand ($105.56 million)",
+    "model": "[Cause] it looks to expand its energy business. [Relation] cause [Effect] JOHANNESBURG, Sept 17 (Reuters) - South African miner Exxaro Resources Ltd said on Tuesday it acquired the remaining 50% stake in its wind farm joint venture for 1.55 billion rand ($105.56 million)",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Point of Sale: simple bar and table tent cards can provide easy and effective support as part of your on-premise merchandising (powerful too, with 50% plus hikes in sales rates reported), added to which the same promotional message can be highlighted on wine lists and food menus.",
+    "reference": "[Cause] Point of Sale: simple bar and table tent cards can provide easy and effective support as part of your on-premise merchandising [Relation] cause [Effect] 50% plus hikes in sales rates reported), added to which the same promotional message can be highlighted on wine lists and food menus.",
+    "model": "[Cause] Point of Sale: simple bar and table tent cards can provide easy and effective support as part of your on-premise merchandising (powerful too, with 50% plus hikes in sales rates reported), added to which the same promotional message can be highlighted on wine lists and food menus. [Relation] cause [Effect] The same promotional message can be highlighted on wine lists and food menus.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Analyst Ratings  This is a summary of recent recommendations for NEWTEK Business Services and Conduent, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - NEWTEK Business Services - 0 - 1 - 2 - 0 - 2.67  - Conduent - 0 - 5 - 3 - 0 - 2.38  NEWTEK Business Services currently has a consensus target price of $17.89, suggesting a potential downside of 24.98%.",
+    "reference": "[Cause] NEWTEK Business Services currently has a consensus target price of $17.89 [Relation] cause [Effect] a potential downside of 24.98%.",
+    "model": "[Cause] NEWTEK Business Services currently has a consensus target price of $17.89 [Relation] cause [Effect] a potential upside of 20.37%.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "We are sorry to announce that Thomas Cook has ceased trading with immediate effect, the company said in a post on Twitter, and the Civil Aviation Authority in Britain said that all Thomas Cook bookings, including flights and vacations, had been canceled. The liquidation of the world's oldest travel company has set in motion what was being described as the biggest peacetime repatriation in British history, as the government announced plans to bring back 150,000 Britons. An estimated 600,000 people were believed to be stranded around the world, according to the BBC, and it was not immediately clear what would happen to those who are not British.",
+    "reference": "[Cause] We are sorry to announce that Thomas Cook has ceased trading with immediate effect, the company said in a post on Twitter, and the Civil Aviation Authority in Britain said that all Thomas Cook bookings, including flights and vacations, had been canceled. [Relation] cause [Effect] An estimated 600,000 people were believed to be stranded around the world, according to the BBC, and it was not immediately clear what would happen to those who are not British.",
+    "model": "[Cause] We are sorry to announce that Thomas Cook has ceased trading with immediate effect, the company said in a post on Twitter, and the Civil Aviation Authority in Britain said that all Thomas Cook bookings, including flights and vacations, had been canceled. [Relation] cause [Effect] The liquidation of the world's oldest travel company has set in motion what was being described as the biggest peacetime repatriation in British history, as the government announced plans to bring back 150,000 Britons.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "The company was struggling with debts approaching 2 billion pounds, or nearly $2.5 billion, forcing it to enter negotiations with shareholders and creditors to obtain at least an additional £200 million that eventually failed.",
+    "reference": "[Cause] The company was struggling with debts approaching 2 billion pounds, or nearly $2.5 billion [Relation] cause [Effect] it to enter negotiations with shareholders and creditors to obtain at least an additional £200 million that eventually failed.",
+    "model": "[Cause] The company was struggling with debts approaching 2 billion pounds, or nearly $2.5 billion [Relation] cause [Effect] forcing it to enter negotiations with shareholders and creditors to obtain at least an additional £200 million that eventually failed.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Last year already contributed some momentum. Overall revenue grew by 10% to $1.4 billion. Net income increased 55% to $410 million and earnings per share rose 60% to $3.47.",
+    "reference": "[Cause] Last year already contributed some momentum. [Relation] cause [Effect] Overall revenue grew by 10% to $1.4 billion.",
+    "model": "[Cause] Last year already contributed some momentum. [Relation] cause [Effect] Overall revenue grew by 10% to $1.4 billion. Net income increased 55% to $410 million and earnings per share rose 60% to $3.47.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Last year already contributed some momentum. Overall revenue grew by 10% to $1.4 billion. Net income increased 55% to $410 million and earnings per share rose 60% to $3.47.",
+    "reference": "[Cause] Last year already contributed some momentum. [Relation] cause [Effect] Net income increased 55% to $410 million and earnings per share rose 60% to $3.47.",
+    "model": "[Cause] Last year already contributed some momentum. [Relation] cause [Effect] Overall revenue grew by 10% to $1.4 billion. Net income increased 55% to $410 million and earnings per share rose 60% to $3.47.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Games Workshop Group PLC (GAW) to Issue Dividend of GBX 35 on November 8th Tweet  Games Workshop Group PLC (LON:GAW) announced a dividend on Wednesday, September 18th, Upcoming.Co.Uk reports. Stockholders of record on Thursday, September 26th will be given a dividend of GBX 35 ($0.46) per share on Friday, November 8th. This represents a dividend yield of 0.73%.",
+    "reference": "[Cause] Games Workshop Group PLC (GAW) to Issue Dividend of GBX 35 on November 8th Tweet  Games Workshop Group PLC (LON:GAW) announced a dividend on Wednesday, September 18th, Upcoming.Co.Uk reports. [Relation] cause [Effect] This represents a dividend yield of 0.73%.",
+    "model": "[Cause] Games Workshop Group PLC (GAW) to Issue Dividend of GBX 35 on November 8th Tweet Games Workshop Group PLC (LON:GAW) announced a dividend on Wednesday, September 18th, Upcoming.Co.Uk reports. [Relation] cause [Effect] Stockholders of record on Thursday, September 26th will be given a dividend of GBX 35 ($0.46) per share on Friday, November 8th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Invesco S&P 500 Equal Weight Technology ETF (NYSEARCA:RYT) to Issue $0.45  -  Dividend Tweet  Invesco S&P 500 Equal Weight Technology ETF (NYSEARCA:RYT) declared a  -  dividend on Monday, September 23rd, Wall Street Journal reports. Shareholders of record on Tuesday, September 24th will be given a dividend of 0.4476 per share on Monday, September 30th. This represents a dividend yield of 1%.",
+    "reference": "[Cause] Invesco S&P 500 Equal Weight Technology ETF (NYSEARCA:RYT) to Issue $0.45  -  Dividend Tweet  Invesco S&P 500 Equal Weight Technology ETF (NYSEARCA:RYT) declared a  -  dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] This represents a dividend yield of 1%.",
+    "model": "[Cause] Invesco S&P 500 Equal Weight Technology ETF (NYSEARCA:RYT) to Issue $0.45 - Dividend Tweet Invesco S&P 500 Equal Weight Technology ETF (NYSEARCA:RYT) declared a - dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] Shareholders of record on Tuesday, September 24th will be given a dividend of 0.4476 per share on Monday, September 30th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "The total offering amount was $6.38 million. The offering filing was filed on 2017-09-17. Fund Fg-Phl, A Series Of Forge Investments, Llc's clarification was: This amount represents a one time fixed cost to cover fund organizational and operating expenses..",
+    "reference": "[Cause] Fund Fg-Phl, A Series Of Forge Investments, Llc's clarification was: This amount represents a one time fixed cost to cover fund organizational and operating expenses.. [Relation] cause [Effect] The total offering amount was $6.38 million.",
+    "model": "[Cause] The offering filing was filed on 2017-09-17. Fund Fg-Phl, A Series Of Forge Investments, Llc's clarification was: This amount represents a one time fixed cost to cover fund organizational and operating expenses. [Relation] cause [Effect] The total offering amount was $6.38 million.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "(Reuters) - Nike Inc's (NKE.N) quarterly revenue and profit beat Wall Street expectations on Tuesday as a push to sell sneakers and apparels to consumers through its own stores and online retailers gained pace, boosting margins and sending its shares up 6%.",
+    "reference": "[Cause] Nike Inc's (NKE.N) quarterly revenue and profit beat Wall Street expectations on Tuesday as a push to sell sneakers and apparels to consumers through its own stores and online retailers gained pace [Relation] cause [Effect] boosting margins and sending its shares up 6%.",
+    "model": "[Cause] a push to sell sneakers and apparels to consumers through its own stores and online retailers gained pace, boosting margins and sending its shares up 6%. [Relation] cause [Effect] (Reuters) - Nike Inc's (NKE.N) quarterly revenue and profit beat Wall Street expectations on Tuesday",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "When they sell through their own website, that's a very strong margin and that's growing very rapidly, becoming a bigger and bigger part of the business. Revenue in North America, its biggest market, rose 3.6% to $4.29 billion, while sales from its digital platform, which includes apps and websites, grew 42%. Net income rose to $1.37 billion, or 86 cents per share, from $1.09 billion, or 67 cents per share, a year earlier.",
+    "reference": "[Cause] When they sell through their own website, that's a very strong margin and that's growing very rapidly, becoming a bigger and bigger part of the business. [Relation] cause [Effect] Net income rose to $1.37 billion, or 86 cents per share, from $1.09 billion, or 67 cents per share, a year earlier.",
+    "model": "[Cause] When they sell through their own website, that's a very strong margin and that's growing very rapidly, becoming a bigger and bigger part of the business. [Relation] cause [Effect] Revenue in North America, its biggest market, rose 3.6% to $4.29 billion, while sales from its digital platform, which includes apps and websites, grew 42%.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "PJT Partners Inc (NYSE:PJT) to Issue $0.05 Quarterly Dividend PJT Partners Inc (NYSE:PJT) announced a quarterly dividend on Wednesday, July 24th, NASDAQ reports. Stockholders of record on Wednesday, September 4th will be given a dividend of 0.05 per share by the financial services provider on Wednesday, September 18th. This represents a $0.20 dividend on an annualized basis and a dividend yield of 0.48%.",
+    "reference": "[Cause] PJT Partners Inc (NYSE:PJT) to Issue $0.05 Quarterly Dividend PJT Partners Inc (NYSE:PJT) announced a quarterly dividend on Wednesday, July 24th, NASDAQ reports. [Relation] cause [Effect] Stockholders of record on Wednesday, September 4th will be given a dividend of 0.05 per share by the financial services provider on Wednesday, September 18th.",
+    "model": "[Cause] PJT Partners Inc (NYSE:PJT) to Issue $0.05 Quarterly Dividend PJT Partners Inc (NYSE:PJT) announced a quarterly dividend on Wednesday, July 24th, NASDAQ reports. [Relation] cause [Effect] This represents a $0.20 dividend on an annualized basis and a dividend yield of 0.48%.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Finally, Buckingham Research cut their price target on shares of PJT Partners from $49.00 to $42.00 and set a neutral rating on the stock in a report on Thursday, July 11th. One equities research analyst has rated the stock with a sell rating, two have given a hold rating and three have assigned a buy rating to the company's stock. The stock currently has a consensus rating of Hold and a consensus price target of $52.33.",
+    "reference": "[Cause] Finally, Buckingham Research cut their price target on shares of PJT Partners from $49.00 to $42.00 and set a neutral rating on the stock in a report on Thursday, July 11th. [Relation] cause [Effect] The stock currently has a consensus rating of Hold and a consensus price target of $52.33.",
+    "model": "[Cause] One equities research analyst has rated the stock with a sell rating, two have given a hold rating and three have assigned a buy rating to the company's stock. [Relation] cause [Effect] The stock currently has a consensus rating of Hold and a consensus price target of $52.33.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "- - Net Margins - Return on Equity - Return on Assets  - Cloudera - -46.72% - -21.07% - -13.75%  - Shopify - -5.98% - -3.85% - -3.46%  Analyst Ratings  This is a breakdown of current ratings and price targets for Cloudera and Shopify, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Cloudera - 1 - 11 - 8 - 0 - 2.35  - Shopify - 2 - 10 - 14 - 0 - 2.46  Cloudera presently has a consensus target price of $12.82, indicating a potential upside of 43.72%.",
+    "reference": "[Cause] Cloudera presently has a consensus target price of $12.82 [Relation] cause [Effect] a potential upside of 43.72%.",
+    "model": "[Cause] Cloudera currently has a consensus price target of $9.50 [Relation] cause [Effect] a potential upside of 26.72%.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Sitharaman also mentioned the raising of liquidity support for the Housing Finance Corporation - to Rs 30,000 - as a major step towards easing the liquidity pressure.",
+    "reference": "[Cause] a major step towards easing the liquidity pressure. [Relation] cause [Effect] Sitharaman also mentioned the raising of liquidity support for the Housing Finance Corporation - to Rs 30,000",
+    "model": "[Cause] easing the liquidity pressure. [Relation] cause [Effect] Sitharaman also mentioned the raising of liquidity support for the Housing Finance Corporation - to Rs 30,000 -",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Users will be exempt from sales taxes on the wide array of equipment, including new servers and cooling systems, that need constant replacing,  The incentives were designed to attract the kind of large, hyperscale developments needed by companies like Apple, which in 2017 decided to place a new 400K SF, $1.3B hyperscale data center just outside of Des Moines in Waukee, Iowa, a state that had a robust set of incentives, said Tyler Diers, director of legislative relations of the Illinois Chamber of Commerce, which helped put the legislation together.",
+    "reference": "[Cause] Users will be exempt from sales taxes on the wide array of equipment, including new servers and cooling systems, that need constant replacing [Relation] cause [Effect] The incentives were designed to attract the kind of large, hyperscale developments needed by companies like Apple, which in 2017 decided to place a new 400K SF, $1.3B hyperscale data center just outside of Des Moines in Waukee, Iowa, a state that had a robust set of incentives, said Tyler Diers, director of legislative relations of the Illinois Chamber of Commerce, which helped put the legislation together.",
+    "model": "[Cause] The incentives were designed to attract the kind of large, hyperscale developments needed by companies like Apple, which in 2017 decided to place a new 400K SF, $1.3B hyperscale data center just outside of Des Moines in Waukee, Iowa, a state that had a robust set of incentives, said Tyler Diers, director of legislative relations of the Illinois Chamber of Commerce, which helped put the legislation together. [Relation] cause [Effect] Users will be exempt from sales taxes on the wide array of equipment, including new servers and cooling systems, that",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "(NASDAQ:MFNC) announced a 0.12000 dividend on Wednesday, September 18th, Wall Street Journal reports. Investors of record on Friday, September 27th will be given a dividend of 0.14 per share by the financial services provider on Tuesday, October 8th. This represents a yield of 3.1%.",
+    "reference": "[Cause] (NASDAQ:MFNC) announced a 0.12000 dividend on Wednesday, September 18th, Wall Street Journal reports. [Relation] cause [Effect] This represents a yield of 3.1%.",
+    "model": "[Cause] (NASDAQ:MFNC) announced a 0.12000 dividend on Wednesday, September 18th, Wall Street Journal reports. [Relation] cause [Effect] Investors of record on Friday, September 27th will be given a dividend of 0.14 per share by the financial services provider on Tuesday, October 8th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Similarly, the University House complex at 740 W. Chimes St., which last sold for $108.5 million in 2015, was assessed at $3.3 million in 2017, giving it an implied market value of some $33 million which, again, did not change in 2019.",
+    "reference": "[Cause] Similarly, the University House complex at 740 W. Chimes St., which last sold for $108.5 million in 2015, was assessed at $3.3 million in 2017 [Relation] cause [Effect] it an implied market value of some $33 million which, again, did not change in 2019.",
+    "model": "[Cause] Similarly, the University House complex at 740 W. Chimes St., which last sold for $108.5 million in 2015, was assessed at $3.3 million in 2017, giving it an implied market value of some $33 million which, again, did not change in 2019. [Relation] cause [Effect] This would have turned a $108.5 million property into an implied market value of some $33 million which, again, did not change in 2019.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "The company also needs to raise $US3 billion in a public offering in order to unlock a $US6 billion bank financing package.",
+    "reference": "[Cause] unlock a $US6 billion bank financing package. [Relation] cause [Effect] The company also needs to raise $US3 billion in a public offering",
+    "model": "[Cause] The company also needs to raise $US3 billion in a public offering [Relation] cause [Effect] unlock a $US6 billion bank financing package.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Analyst Ratings  This is a summary of recent ratings for Skandinaviska Enskilda Banken and GRUPO AVAL ACCI/S, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Skandinaviska Enskilda Banken - 0 - 0 - 0 - 0 - N/A  - GRUPO AVAL ACCI/S - 0 - 1 - 1 - 0 - 2.50  GRUPO AVAL ACCI/S has a consensus target price of $8.00, suggesting a potential upside of 5.54%.",
+    "reference": "[Cause] GRUPO AVAL ACCI/S has a consensus target price of $8.00 [Relation] cause [Effect] a potential upside of 5.54%.",
+    "model": "[Cause] Skandinaviska Enskilda Banken currently has a consensus price target of $9.50 [Relation] cause [Effect] a potential upside of 655.21%.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "This 0.1 percent includes households with incomes over $2.4 million, and wealth starting at $32 million. They own more wealth than the bottom 80 percent combined.",
+    "reference": "[Cause] This 0.1 percent includes households with incomes over $2.4 million, and wealth starting at $32 million. [Relation] cause [Effect] They own more wealth than the bottom 80 percent combined.",
+    "model": "[Cause] They own more wealth than the bottom 80 percent combined. [Relation] cause [Effect] This 0.1 percent includes households with incomes over $2.4 million, and wealth starting at $32 million.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "- - Net Margins - Return on Equity - Return on Assets  - Okta - -31.90% - -53.93% - -14.44%  - Mobileiron - -23.43% - -89.20% - -21.78%  Analyst Ratings  This is a summary of current ratings and recommmendations for Okta and Mobileiron, as provided by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Okta - 0 - 8 - 11 - 0 - 2.58  - Mobileiron - 0 - 1 - 2 - 0 - 2.67  Okta presently has a consensus price target of $130.94, suggesting a potential upside of 27.88%.",
+    "reference": "[Cause] Okta presently has a consensus price target of $130.94 [Relation] cause [Effect] a potential upside of 27.88%.",
+    "model": "[Cause] Okta currently has a consensus price target of $9.50 [Relation] cause [Effect] a potential upside of 23.37%.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Perspecta Inc (NASDAQ:PRSP) Plans $0.06 Quarterly Dividend Perspecta Inc (NASDAQ:PRSP) announced a quarterly dividend on Tuesday, August 13th, NASDAQ reports. Investors of record on Wednesday, September 4th will be given a dividend of 0.06 per share on Tuesday, October 15th. This represents a $0.24 dividend on an annualized basis and a yield of 0.91%.",
+    "reference": "[Cause] Perspecta Inc (NASDAQ:PRSP) Plans $0.06 Quarterly Dividend Perspecta Inc (NASDAQ:PRSP) announced a quarterly dividend on Tuesday, August 13th, NASDAQ reports. [Relation] cause [Effect] This represents a $0.24 dividend on an annualized basis and a yield of 0.91%.",
+    "model": "[Cause] Perspecta Inc (NASDAQ:PRSP) Plans $0.06 Quarterly Dividend Perspecta Inc (NASDAQ:PRSP) announced a quarterly dividend on Tuesday, August 13th, NASDAQ reports. [Relation] cause [Effect] Investors of record on Wednesday, September 4th will be given a dividend of 0.06 per share on Tuesday, October 15th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Finally, Morgan Stanley set a $21.00 price target on Perspecta and gave the stock a sell rating in a report on Monday, June 17th. Two analysts have rated the stock with a sell rating, two have assigned a hold rating and two have given a buy rating to the stock. The company currently has a consensus rating of Hold and a consensus target price of $25.33.",
+    "reference": "[Cause] Finally, Morgan Stanley set a $21.00 price target on Perspecta and gave the stock a sell rating in a report on Monday, June 17th. [Relation] cause [Effect] The company currently has a consensus rating of Hold and a consensus target price of $25.33.",
+    "model": "[Cause] Two analysts have rated the stock with a sell rating, two have assigned a hold rating and two have given a buy rating to the stock. [Relation] cause [Effect] The company currently has a consensus rating of Hold and a consensus target price of $25.33.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "iShares Select Dividend ETF comprises approximately 0.8% of Vivaldi Capital Management LLC's portfolio, making the stock its 29th biggest holding. Vivaldi Capital Management LLC's holdings in iShares Select Dividend ETF were worth $3,204,000 as of its most recent filing with the Securities and Exchange Commission.",
+    "reference": "[Cause] iShares Select Dividend ETF comprises approximately 0.8% of Vivaldi Capital Management LLC's portfolio, making the stock its 29th biggest holding. [Relation] cause [Effect] Vivaldi Capital Management LLC's holdings in iShares Select Dividend ETF were worth $3,204,000 as of its most recent filing with the Securities and Exchange Commission.",
+    "model": "[Cause] iShares Select Dividend ETF comprises approximately 0.8% of Vivaldi Capital Management LLC's portfolio [Relation] cause [Effect] making the stock its 29th biggest holding.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "India is a crucial and an integral part of our overall global investment strategy. It is home to outstanding engineering talent for our global R&D operations that is helping drive innovation across our entire product portfolio. In October 2018, we announced an investment of $2 billion for the country.",
+    "reference": "[Cause] India is a crucial and an integral part of our overall global investment strategy. [Relation] cause [Effect] In October 2018, we announced an investment of $2 billion for the country.",
+    "model": "[Cause] India is a crucial and an integral part of our overall global investment strategy. [Relation] cause [Effect] It is home to outstanding engineering talent for our global R&D operations that is helping drive innovation across our entire product portfolio.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "India is a crucial and an integral part of our overall global investment strategy. It is home to outstanding engineering talent for our global R&D operations that is helping drive innovation across our entire product portfolio. In October 2018, we announced an investment of $2 billion for the country.",
+    "reference": "[Cause] It is home to outstanding engineering talent for our global R&D operations that is helping drive innovation across our entire product portfolio. [Relation] cause [Effect] In October 2018, we announced an investment of $2 billion for the country.",
+    "model": "[Cause] India is a crucial and an integral part of our overall global investment strategy. [Relation] cause [Effect] It is home to outstanding engineering talent for our global R&D operations that is helping drive innovation across our entire product portfolio.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "United Capital Financial Advisers LLC Purchases 1,685 Shares of BlackRock Enhanced Global Dividend Trust (NYSE:BOE) .9% in the second quarter, Holdings Channel.com reports. The firm owned 60,162 shares of the financial services provider's stock after buying an additional 1,685 shares during the quarter.",
+    "reference": "[Cause] United Capital Financial Advisers LLC Purchases 1,685 Shares of BlackRock Enhanced Global Dividend Trust (NYSE:BOE) .9% in the second quarter, Holdings Channel.com reports. [Relation] cause [Effect] The firm owned 60,162 shares of the financial services provider's stock after buying an additional 1,685 shares during the quarter.",
+    "model": "[Cause] United Capital Financial Advisers LLC Purchases 1,685 Shares of BlackRock Enhanced Global Dividend Trust (NYSE:BOE).9% in the second quarter, Holdings Channel.com reports. [Relation] cause [Effect] The firm owned 60,162 shares of the financial services provider's stock after buying an additional 1,685 shares during the quarter.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Ltd. raised its holdings in BlackRock Enhanced Global Dividend Trust by 93.1% in the first quarter. City of London Investment Management Co. Ltd. now owns 904,742 shares of the financial services provider's stock worth $9,649,000 after purchasing an additional 436,110 shares in the last quarter.",
+    "reference": "[Cause] Ltd. raised its holdings in BlackRock Enhanced Global Dividend Trust by 93.1% in the first quarter. [Relation] cause [Effect] Ltd. now owns 904,742 shares of the financial services provider's stock worth $9,649,000 after purchasing an additional 436,110 shares in the last quarter.",
+    "model": "[Cause] Ltd. raised its holdings in BlackRock Enhanced Global Dividend Trust by 93.1% in the first quarter. [Relation] cause [Effect] City of London Investment Management Co. Ltd. now owns 904,742 shares of the financial services provider's stock worth $9,649,000 after purchasing an additional 436,110 shares in the last quarter.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "With 4.52 billion shares outstanding as of July 19, the stock has to close at or above $221.28 for Apple to have a market cap of at least $1 trillion.",
+    "reference": "[Cause] With 4.52 billion shares outstanding as of July 19, the stock has to close at or above $221.28 [Relation] cause [Effect] Apple to have a market cap of at least $1 trillion.",
+    "model": "[Cause] With 4.52 billion shares outstanding as of July 19 [Relation] cause [Effect] the stock has to close at or above $221.28 for Apple to have a market cap of at least $1 trillion.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Apple's market cap closed above $1 trillion in back-to-back sessions last week, on Sept. 11 and Sept. 12, for the first time in nearly a year, as Apple held a $1+ trillion market cap for 65-straight sessions from Aug. 2, 2018 to Nov. 1. Meanwhile, Microsoft Corp. remains the most valuable U.S. company with a current market cap of $1.077 trillion, after that software giant raised its dividend, effectively lifting the dividend yield above Apple's, and approved a $40 billion stock repurchase program, to mark the 73rd-straight session in 13-digit territory.",
+    "reference": "[Cause] Apple held a $1+ trillion market cap for 65-straight sessions from Aug. 2, 2018 to Nov. 1 [Relation] cause [Effect] Apple's market cap closed above $1 trillion in back-to-back sessions last week, on Sept. 11 and Sept. 12, for the first time in nearly a year",
+    "model": "[Cause] that software giant raised its dividend, effectively lifting the dividend yield above Apple's, and approved a $40 billion stock repurchase program, to mark the company's fourth quarter fiscal year end. [Relation] cause [Effect] Apple's market cap closed above $1 trillion in back-to-back sessions last week, on Sept. 11 and Sept. 12, for the first time in nearly a year, as Apple held a $1+ trillion market cap for 65-straight sessions from Aug. 2, 2018 to Nov. 1.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Apple's market cap closed above $1 trillion in back-to-back sessions last week, on Sept. 11 and Sept. 12, for the first time in nearly a year, as Apple held a $1+ trillion market cap for 65-straight sessions from Aug. 2, 2018 to Nov. 1. Meanwhile, Microsoft Corp. remains the most valuable U.S. company with a current market cap of $1.077 trillion, after that software giant raised its dividend, effectively lifting the dividend yield above Apple's, and approved a $40 billion stock repurchase program, to mark the 73rd-straight session in 13-digit territory.",
+    "reference": "[Cause] that software giant raised its dividend, effectively lifting the dividend yield above Apple's, and approved a $40 billion stock repurchase program, to mark the 73rd-straight session in 13-digit territory. [Relation] cause [Effect] Meanwhile, Microsoft Corp. remains the most valuable U.S. company with a current market cap of $1.077 trillion",
+    "model": "[Cause] that software giant raised its dividend, effectively lifting the dividend yield above Apple's, and approved a $40 billion stock repurchase program, to mark the company's fourth quarter fiscal year end. [Relation] cause [Effect] Apple's market cap closed above $1 trillion in back-to-back sessions last week, on Sept. 11 and Sept. 12, for the first time in nearly a year, as Apple held a $1+ trillion market cap for 65-straight sessions from Aug. 2, 2018 to Nov. 1.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Read more:  Thomas Cook collapses leaving 150k Brits stranded overseas and putting 20k jobs at risk  Who was Thomas Cook, the travel pioneer whose journey started in Leicester?",
+    "reference": "[Cause] Read more:  Thomas Cook collapses [Relation] cause [Effect] leaving 150k Brits stranded overseas and putting 20k jobs at risk",
+    "model": "[Cause] Read more: Thomas Cook collapses [Relation] cause [Effect] leaving 150k Brits stranded overseas and putting 20k jobs at risk Who was Thomas Cook, the travel pioneer whose journey started in Leicester?",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Adjusted net income was $81.1M (YoY increase of 13.7%) but the non-GAAP operating margin declined by 20bps YoY (to 18.7%).",
+    "reference": "[Cause] YoY increase of 13.7% [Relation] cause [Effect] Adjusted net income was $81.1M",
+    "model": "[Cause] the non-GAAP operating margin declined by 20bps YoY (to 18.7%). [Relation] cause [Effect] Adjusted net income was $81.1M (YoY increase of 13.7%)",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Benefits of Starting a Business in Hamriya Free Zone    100% foreign ownership is allowed  100% repatriation of profits and capital  100% import and export tax-free  100% exemption from all the commercial levies  Zero personal and corporate tax  Hassle-free recruitment of staff and labourers  Strategic location with access to the UAE and global markets  Easy access via highways, 3 seaports, and Sharjah International Airports  There are three main types of licenses allowed in Hamriya Free Zone.",
+    "reference": "[Cause] Benefits of Starting a Business in Hamriya Free Zone [Relation] cause [Effect] 100% foreign ownership is allowed  100% repatriation of profits and capital  100% import and export tax-free  100% exemption from all the commercial levies  Zero personal and corporate tax  Hassle-free recruitment of staff and labourers  Strategic location with access to the UAE and global markets  Easy access via highways, 3 seaports, and Sharjah International Airports  There are three main types of licenses allowed in Hamriya Free Zone.",
+    "model": "[Cause] Benefits of Starting a Business in Hamriya Free Zone 100% foreign ownership is allowed 100% repatriation of profits and capital 100% import and export tax-free 100% exemption from all the commercial levies Zero personal and corporate tax Hassle-free recruitment of staff and labourers Strategic location with access to the UAE and global markets Easy access via highways, 3 seaports, and Sharjah International Airports There are three main types of licenses allowed in Hamriya Free Zone. [Relation] cause [Effect] There are three main types of licenses allowed in Hamriya",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "FM Nirmala Sitharaman  Notwithstanding its acute budget constraints, the government on Friday went the whole hog and unveiled a massive fiscal stimulus of Rs 1.45 lakh crore or 0.7% of the gross domestic product (GDP), mostly in the form of surprise, more-than-asked-for tax cuts for the whole of corporate India. Hitherto, the government has been trying to spur the lethargic economy via easing of credit flows, making loans cheaper and bolstering liquidity across the financial-sector entities, rather than via a potentially hazardous fiscal digression.",
+    "reference": "[Cause] Hitherto, the government has been trying to spur the lethargic economy via easing of credit flows, making loans cheaper and bolstering liquidity across the financial-sector entities, rather than via a potentially hazardous fiscal digression. [Relation] cause [Effect] FM Nirmala Sitharaman  Notwithstanding its acute budget constraints, the government on Friday went the whole hog and unveiled a massive fiscal stimulus of Rs 1.45 lakh crore or 0.7% of the gross domestic product (GDP), mostly in the form of surprise, more-than-asked-for tax cuts for the whole of corporate India.",
+    "model": "[Cause] Hitherto, the government has been trying to spur the lethargic economy via easing of credit flows, making loans cheaper and bolstering liquidity across the financial-sector entities, rather than via a potentially hazardous fiscal stimulus [Relation] cause [Effect] FM Nirmala Sitharaman Notwithstanding its acute budget constraints, the government on Friday went the whole hog and unveiled a massive fiscal stimulus of Rs 1.45 lakh crore or 0.7% of the gross domestic product (GDP), mostly in the form of surprise, more-than-asked-",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Analysts estimate the steepest corporate tax cuts in nearly three decades, announced by finance minister Nirmala Sitharaman here, would provide a direct cash booster of 10% of profit before tax (PBT) for most domestic companies across all sectors above an annual turnover of Rs 400 crore for those below this size (99.3% of the firms registered), the reduction in the tax rate will be roughly 4 percentage points.",
+    "reference": "[Cause] Analysts estimate the steepest corporate tax cuts in nearly three decades, announced by finance minister Nirmala Sitharaman here [Relation] cause [Effect] a direct cash booster of 10% of profit before tax (PBT) for most domestic companies across all sectors above an annual turnover of Rs 400 crore for those below this size (99.3% of the firms registered), the reduction in the tax rate will be roughly 4 percentage points.",
+    "model": "[Cause] Analysts estimate the steepest corporate tax cuts in nearly three decades, announced by finance minister Nirmala Sitharaman here [Relation] cause [Effect] would provide a direct cash booster of 10% of profit before tax (PBT) for most domestic companies across all sectors above an annual turnover of Rs 400 crore for those below this size (99.3% of the firms registered), the reduction in the tax rate will be roughly 4 percentage points.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Friday's package also opened a legit facility for companies to reduce the tax incidence on part-business by a dream-like 20% of PBT by using a new benign effective rate of 17% announced for those making fresh investments in manufacturing.",
+    "reference": "[Cause] using a new benign effective rate of 17% announced for those making fresh investments in manufacturing. [Relation] cause [Effect] Friday's package also opened a legit facility for companies to reduce the tax incidence on part-business by a dream-like 20% of PBT",
+    "model": "[Cause] Friday's package also opened a legit facility for companies to reduce the tax incidence on part-business by a dream-like 20% of PBT by using a new benign effective rate of 17% announced for those making fresh investments in manufacturing. [Relation] cause [Effect] Friday's package also opened a legit facility for companies to reduce the tax incidence on part-business by a dream-like 20% of PBT",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "The largesse has met the long-standing demand from the industry for the headline corporate tax rate comparable to the Asian peers (see chart), but it widened the tax disparity between domestic and foreign companies with branch operations here, the larger ones of which are under a rate of 44%.",
+    "reference": "[Cause] The largesse has met the long-standing demand from the industry for the headline corporate tax rate comparable to the Asian peers (see chart) [Relation] cause [Effect] it widened the tax disparity between domestic and foreign companies with branch operations here, the larger ones of which are under a rate of 44%.",
+    "model": "[Cause] The largesse has met the long-standing demand from the industry for the headline corporate tax rate comparable to the Asian peers (see chart), but it widened the tax disparity between domestic and foreign companies with branch operations here, the larger ones of which are under a rate of 44%. [Relation] cause [Effect] The largesse has met the long-standing demand from the industry for the headline corporate tax rate comparable to the Asian peers (see chart), but it widened the tax disparity between domestic and foreign companies with branch operations here, the",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "For sure, the steps, aimed at creating a virtuous cycle of investments, will disturb the Centre's fiscal maths in a big way and will necessitate a major reformulation of the medium-term fiscal glide path, as per which the fiscal deficit is to be 3.3% of GDP in FY20 and the FRBM-mandated 3% in FY21.",
+    "reference": "[Cause] For sure, the steps, aimed at creating a virtuous cycle of investments [Relation] cause [Effect] will disturb the Centre's fiscal maths in a big way and will necessitate a major reformulation of the medium-term fiscal glide path, as per which the fiscal deficit is to be 3.3% of GDP in FY20 and the FRBM-mandated 3% in FY21.",
+    "model": "[Cause] For sure, the steps, aimed at creating a virtuous cycle of investments, will disturb the Centre's fiscal maths in a big way [Relation] cause [Effect] a major reformulation of the medium-term fiscal glide path, as per which the fiscal deficit is to be 3.3% of GDP in FY20 and the FRBM-mandated 3% in FY21.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "Ceteris paribus, the fiscal deficit this fiscal will widen to around 4% owing to the stimulus if extra transfers from RBI are counted, the deficit's size could be 3.8%.",
+    "reference": "[Cause] the stimulus [Relation] cause [Effect] Ceteris paribus, the fiscal deficit this fiscal will widen to around 4%",
+    "model": "[Cause] the stimulus if extra transfers from RBI are counted, the deficit's size could be 3.8%. [Relation] cause [Effect] Ceteris paribus, the fiscal deficit this fiscal will widen to around 4%",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "To be sure, domestic companies will have now the option of paying tax on their income effective FY20 at 22% (25.17% including surcharge and cess) or pay the 30% rate (34.94%) and avail themselves of assorted incentives to reduce the actual tax incidence.",
+    "reference": "[Cause] reduce the actual tax incidence. [Relation] cause [Effect] To be sure, domestic companies will have now the option of paying tax on their income effective FY20 at 22% (25.17% including surcharge and cess) or pay the 30% rate (34.94%) and avail themselves of assorted incentives",
+    "model": "[Cause] To be sure, domestic companies will have now the option of paying tax on their income effective FY20 at 22% (25.17% including surcharge and cess) or pay the 30% rate (34.94%) and avail themselves of assorted incentives to reduce the actual tax incidence. [Relation] cause [Effect] To be sure, domestic companies will have now the option of paying tax on their income effective FY20 at 22% (25.17% including surcharge and cess) or pay the 30% rate (34.94%) and avail themselves of assorted incentives",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "If over the course of the next 10 years, the P/E were to revert to 27.91 and everything else was held equal, it would produce a 10-year CAGR of about -1.54%.  Business/Shareholder Yield There are four components to the business/shareholder yield: the dividend yield, the expected buyback yield, the portion of the earnings yield that the business keeps to reinvest itself, and the full-cycle earnings growth rate.",
+    "reference": "[Cause] If over the course of the next 10 years, the P/E were to revert to 27.91 and everything else was held equal [Relation] cause [Effect] it would produce a 10-year CAGR of about -1.54%.",
+    "model": "[Cause] Business/Shareholder Yield There are four components to the business/shareholder yield: the dividend yield, the expected buyback yield, the portion of the earnings yield that the business keeps to reinvest itself, and the full-cycle earnings growth rate. [Relation] cause [Effect] If over the course of the next 10 years, the P/E were to revert to 27.91 and everything else was held equal, it would produce a 10-year CAGR of about -1.54%.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "My expectation is that owners would be able to increase the number of Starbucks shares they own by 20-25% using this strategy without spending any additional money.",
+    "reference": "[Cause] using this strategy without spending any additional money. [Relation] cause [Effect] My expectation is that owners would be able to increase the number of Starbucks shares they own by 20-25%",
+    "model": "[Cause] this strategy without spending any additional money. [Relation] cause [Effect] My expectation is that owners would be able to increase the number of Starbucks shares they own by 20-25%",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "All Thomas Cook bookings, including flights and holidays, have now been cancelled. The repatriation efforts set out under Operation Matterhorn will now see flights back to the UK from 53 airports in 18 countries. An estimated 40 aircraft from as far away as Malaysia have been chartered to operate approximately 1,000 flights over the next two weeks.",
+    "reference": "[Cause] All Thomas Cook bookings, including flights and holidays, have now been cancelled. [Relation] cause [Effect] The repatriation efforts set out under Operation Matterhorn will now see flights back to the UK from 53 airports in 18 countries.",
+    "model": "[Cause] All Thomas Cook bookings, including flights and holidays, have now been cancelled. [Relation] cause [Effect] An estimated 40 aircraft from as far away as Malaysia have been chartered to operate approximately 1,000 flights over the next two weeks.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Based on positive drill results, in July, the Company increased the 2019 exploration budget in Mali by $3 million to $20.5 million.",
+    "reference": "[Cause] Based on positive drill results, in July, [Relation] cause [Effect] the Company increased the 2019 exploration budget in Mali by $3 million to $20.5 million.",
+    "model": "[Cause] Based on positive drill results [Relation] cause [Effect] in July, the Company increased the 2019 exploration budget in Mali by $3 million to $20.5 million.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "On September 20, Finance minister Nirmala Sitharaman announced a reduction in the base corporate tax rate to 22 per cent from 30 per cent as part of stimulus measures to revive the slowing economic growth.",
+    "reference": "[Cause] stimulus measures to revive the slowing economic growth. [Relation] cause [Effect] On September 20, Finance minister Nirmala Sitharaman announced a reduction in the base corporate tax rate to 22 per cent from 30 per cent",
+    "model": "[Cause] revive the slowing economic growth. [Relation] cause [Effect] On September 20, Finance minister Nirmala Sitharaman announced a reduction in the base corporate tax rate to 22 per cent from 30 per cent",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Thomas Cook's lending banks and bondholders will stump up a further 450 million pounds and convert their existing debt to equity, giving them in total about 75% of the airline and up to 25% in the tour operator business.",
+    "reference": "[Cause] Thomas Cook's lending banks and bondholders will stump up a further 450 million pounds and convert their existing debt to equity [Relation] cause [Effect] them in total about 75% of the airline and up to 25% in the tour operator business.",
+    "model": "[Cause] Thomas Cook's lending banks and bondholders will stump up a further 450 million pounds and convert their existing debt to equity [Relation] cause [Effect] giving them in total about 75% of the airline and up to 25% in the tour operator business.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Trump's tariffs on imported aluminum created an estimated 300 jobs during 2018 at a cost of $690 million.",
+    "reference": "[Cause] Trump's tariffs on imported aluminum [Relation] cause [Effect] an estimated 300 jobs during 2018 at a cost of $690 million.",
+    "model": "[Cause] Trump's tariffs on imported aluminum [Relation] cause [Effect] created an estimated 300 jobs during 2018 at a cost of $690 million.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Year-to-date revenue advanced 72% to almost CA$26.7 million. (Source: EnWave Corp, August 29, 2019, op cit.) The revenue growth was fueled by increased orders for REV equipment by cannabis companies, and ongoing growth in Moon Cheese. The company continued to be cash-flow-positive, with adjusted earnings before interest, tax, depreciation, and amortization (EBITDA) of CA$139,000.",
+    "reference": "[Cause] The revenue growth was fueled by increased orders for REV equipment by cannabis companies, and ongoing growth in Moon Cheese. [Relation] cause [Effect] Year-to-date revenue advanced 72% to almost CA$26.7 million.",
+    "model": "[Cause] The revenue growth was fueled by increased orders for REV equipment by cannabis companies, and ongoing growth in Moon Cheese. [Relation] cause [Effect] The company continued to be cash-flow-positive, with adjusted earnings before interest, tax, depreciation, and amortization (EBITDA) of CA$139,000.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Electric vehicle manufacturers, components for the vehicles, batteries and producers for charging infrastructure who invest over Rs 50 crore and create at least 50 jobs stand eligible for total SGST (State GST) refund on their sales till end of calendar year 2030.",
+    "reference": "[Cause] Electric vehicle manufacturers, components for the vehicles, batteries and producers for charging infrastructure who invest over Rs 50 crore and create at least 50 jobs [Relation] cause [Effect] total SGST (State GST) refund on their sales till end of calendar year 2030.",
+    "model": "[Cause] Electric vehicle manufacturers, components for the vehicles, batteries and producers for charging infrastructure who invest over Rs 50 crore and create at least 50 jobs [Relation] cause [Effect] stand eligible for total SGST (State GST) refund on their sales till end of calendar year 2030.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Twentyfour Select Monthly Incm Fd Ltd Plans Dividend of GBX 0.50 (LON:SMIF) Tweet  Twentyfour Select Monthly Incm Fd Ltd (LON:SMIF) announced a dividend on Friday, September 6th, Upcoming.Co.Uk reports. Investors of record on Thursday, September 19th will be given a dividend of GBX 0.50 ($0.01) per share on Monday, September 30th. This represents a yield of 0.54%.",
+    "reference": "[Cause] Twentyfour Select Monthly Incm Fd Ltd Plans Dividend of GBX 0.50 (LON:SMIF) Tweet  Twentyfour Select Monthly Incm Fd Ltd (LON:SMIF) announced a dividend on Friday, September 6th, Upcoming.Co.Uk reports. [Relation] cause [Effect] This represents a yield of 0.54%.",
+    "model": "[Cause] Twentyfour Select Monthly Incm Fd Ltd Plans Dividend of GBX 0.50 (LON:SMIF) Tweet Twentyfour Select Monthly Incm Fd Ltd (LON:SMIF) announced a dividend on Friday, September 6th, Upcoming.Co.Uk reports. [Relation] cause [Effect] Investors of record on Thursday, September 19th will be given a dividend of GBX 0.50 ($0.01) per share on Monday, September 30th.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "Analyst Ratings  This is a breakdown of current ratings for First Data and International Monetary Systems, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - First Data - 0 - 19 - 2 - 0 - 2.10  - International Monetary Systems - 0 - 0 - 0 - 0 - N/A  First Data currently has a consensus price target of $24.66, indicating a potential downside of 22.19%.",
+    "reference": "[Cause] First Data currently has a consensus price target of $24.66 [Relation] cause [Effect] a potential downside of 22.19%.",
+    "model": "[Cause] First Data currently has a consensus price target of $24.66 [Relation] cause [Effect] a potential upside of 20.87%.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "The amendment is said to be government's move to uplift the slowing economy of the country. Few major changes brought in by the amendment are:  · Reduced tax rate for the domestic companies not availing any tax exemptions  A new provision, Section 115BAA has been added in the Income Tax Act, 1961 (IT Act) which specifies that income tax payable in respect of the total income of the domestic company shall be computed at the rate of 22% if the total income of the company has been computed:  i. without any deductions allowed under provisions of IT Act  ii.",
+    "reference": "[Cause] The amendment is said to be government's move to uplift the slowing economy of the country. [Relation] cause [Effect] Few major changes brought in by the amendment are:  · Reduced tax rate for the domestic companies not availing any tax exemptions  A new provision, Section 115BAA has been added in the Income Tax Act, 1961 (IT Act) which specifies that income tax payable in respect of the total income of the domestic company shall be computed at the rate of 22% if the total income of the company has been computed:  i. without any deductions allowed under provisions of IT Act  ii.",
+    "model": "[Cause] The amendment is said to be government's move to uplift the slowing economy of the country. [Relation] cause [Effect] Few major changes brought in by the amendment are:  Reduced tax rate for the domestic companies not availing any tax exemptions A new provision, Section 115BAA has been added in the Income Tax Act, 1961 (IT Act) which specifies that income tax payable in respect of the total income of the domestic company shall be computed at the rate of 22% if the total income of the company has been computed: i",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "If the total income of a company was in excess of INR 1 Crore but less than INR 10 Crores then applicable surcharge was of 7% and if income exceeded INR 10 Crores, then the surcharge was charged at 12%.",
+    "reference": "[Cause] If the total income of a company was in excess of INR 1 Crore but less than INR 10 Crores [Relation] cause [Effect] applicable surcharge was of 7%",
+    "model": "[Cause] If the total income of a company was in excess of INR 1 Crore but less than INR 10 Crores [Relation] cause [Effect] applicable surcharge was of 7% and if income exceeded INR 10 Crores, then the surcharge was charged at 12%.",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "If the total income of a company was in excess of INR 1 Crore but less than INR 10 Crores then applicable surcharge was of 7% and if income exceeded INR 10 Crores, then the surcharge was charged at 12%.",
+    "reference": "[Cause] income exceeded INR 10 Crores [Relation] cause [Effect] the surcharge was charged at 12%.",
+    "model": "[Cause] If the total income of a company was in excess of INR 1 Crore but less than INR 10 Crores [Relation] cause [Effect] applicable surcharge was of 7% and if income exceeded INR 10 Crores, then the surcharge was charged at 12%.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "The slashing of corporate tax from 30% to 22% among other changes brought in by the Ordinance is seen as a bold move by the government.",
+    "reference": "[Cause] the Ordinance is seen as a bold move by the government. [Relation] cause [Effect] The slashing of corporate tax from 30% to 22% among other changes",
+    "model": "[Cause] a bold move by the government. [Relation] cause [Effect] The slashing of corporate tax from 30% to 22% among other changes brought in by the Ordinance",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "YOU MIGHT BE INTERESTED IN... Every quarter Fannie and Freddie send nearly all of their profits, minus the $3 billion they are currently permitted to retain as capital, to the Treasury Department as payment for their ongoing support from the department.",
+    "reference": "[Cause] their ongoing support from the department. [Relation] cause [Effect] YOU MIGHT BE INTERESTED IN... Every quarter Fannie and Freddie send nearly all of their profits, minus the $3 billion they are currently permitted to retain as capital, to the Treasury Department as payment",
+    "model": "[Cause] their ongoing support from the department. [Relation] cause [Effect] YOU MIGHT BE INTERESTED IN... Every quarter Fannie and Freddie send nearly all of their profits, minus the $3 billion they are currently permitted to retain as capital, to the Treasury Department",
+    "file": "evaluation_output.json",
+    "em": 0.5
+  },
+  {
+    "text": "---  In other business, the Matlacha Civic Association board voted to donate $500 to Linda Joseph's son, Anthony, for a brain injury suffered when he was struck by a vehicle while working as a flagman on Pine Island Road two weeks ago.",
+    "reference": "[Cause] a brain injury suffered when he was struck by a vehicle while working as a flagman on Pine Island Road two weeks ago. [Relation] cause [Effect] ---  In other business, the Matlacha Civic Association board voted to donate $500 to Linda Joseph's son, Anthony",
+    "model": "[Cause] he was struck by a vehicle while working as a flagman on Pine Island Road two weeks ago. [Relation] cause [Effect] --- In other business, the Matlacha Civic Association board voted to donate $500 to Linda Joseph's son, Anthony, for a brain injury suffered",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  },
+  {
+    "text": "As a cooperative bank, we never do unsecured lending and our loan coverage ratio has always been 100-110 percent, Thomas said.",
+    "reference": "[Cause] As a cooperative bank [Relation] cause [Effect] we never do unsecured lending and our loan coverage ratio has always been 100-110 percent, Thomas said.",
+    "model": "[Cause] As a cooperative bank, we never do unsecured lending [Relation] cause [Effect] our loan coverage ratio has always been 100-110 percent, Thomas said.",
+    "file": "evaluation_output.json",
+    "em": 0.0
+  }
+]
