@@ -29,26 +29,25 @@ def get_or_allocate_annotation_path(
     return path
 
 
-# TODO: Use "username" instead of "prolific_id" to be platform-agnostic
-_PROLIFIC_ID_KEY = "prolific_id"
+_USERNAME_KEY = "username"
 
 
 def get_username() -> str | None:
     user: str | None = None
-    if prolific_id := st.query_params.get(_PROLIFIC_ID_KEY):
-        st.session_state[_PROLIFIC_ID_KEY] = prolific_id
+    if username := st.query_params.get(_USERNAME_KEY):
+        st.session_state[_USERNAME_KEY] = username
 
-    if prolific_id := st.session_state.get(_PROLIFIC_ID_KEY):
-        st.query_params[_PROLIFIC_ID_KEY] = prolific_id
-        user = prolific_id
+    if username := st.session_state.get(_USERNAME_KEY):
+        st.query_params[_USERNAME_KEY] = username
+        user = username
 
     if user is None:
-        st.markdown("Please enter your Prolific ID")
+        st.markdown("Please enter your username:")
 
-        if prolific_id := st.text_input("Prolific ID"):
-            st.session_state[_PROLIFIC_ID_KEY] = prolific_id
-            st.query_params[_PROLIFIC_ID_KEY] = prolific_id
-            user = prolific_id
+        if username := st.text_input("Username"):
+            st.session_state[_USERNAME_KEY] = username
+            st.query_params[_USERNAME_KEY] = username
+            user = username
 
     if user is None:
         return None

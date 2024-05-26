@@ -5,4 +5,4 @@ data:
   split_to_user: data/inputs/split_to_user.json
 instructions: src/annotation/instructions.md
 admin_password: TODO
-completion_code: TODO
+completion_url: TODO
