@@ -319,7 +319,8 @@ def main() -> None:
         "input", type=argparse.FileType("r"), help="JSON input file to evaluate"
     )
     parser.add_argument(
-        "--output",
+        "output",
+        nargs="?",
         type=str,
         help="path to output score file (or stdout if not provided)",
     )
