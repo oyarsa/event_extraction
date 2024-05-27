@@ -1,0 +1,16 @@
+{
+  "key_file": "/home/ubuntu/.config/event_extraction/gpt_config.json",
+  "key_name": "openai",
+  "model": "gpt-4-0125-preview",
+  "print_logs": false,
+  "log_file": "output/extraction/dev/lines/fincausal-gpt4/log.jsonl",
+  "input": "data/extraction/fincausal/lines/dev.json",
+  "output": "output/extraction/dev/lines/fincausal-gpt4/output.json",
+  "metrics_path": "output/extraction/dev/lines/fincausal-gpt4/metrics.json",
+  "args_path": "output/extraction/dev/lines/fincausal-gpt4/args.json",
+  "prompt": 5,
+  "sys_prompt": 3,
+  "examples": "data/extraction/fincausal/lines/examples.json",
+  "mode": "lines_no_relation",
+  "list_prompts": false
+}
