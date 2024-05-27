@@ -1,21 +1,26 @@
 #!/usr/bin/env fish
 
-if test -z "$argv[1]"
-    echo "Usage: $(status -f) <input-file>"
+if test (count $argv) -ne 3
+    echo "Usage: $(basename (status -f)) <model> <input> <output>"
     exit 1
 end
 
-set file $argv[1]
-set output output/extraction/dev/lines/fincausal
+set model $argv[1]
+set input $argv[2]
+set out $argv[3]
 
 python extraction.py ~/.config/event_extraction/gpt_config.json openai \
-    --model gpt-3.5-turbo-0125 \
-    --input $file \
-    --output $output/output.json \
-    --log-file $output/log.jsonl \
-    --metrics-path $output/metrics.json \
-    --args-path $output/args.json \
+    --model $model \
+    --input $input \
+    --log-file $out/log.jsonl \
+    --output $out/output.json \
+    --metrics-path $out/metrics.json \
+    --args-path $out/args.json \
     --sys-prompt 3 \
     --prompt 5 \
     --mode lines_no_relation \
     --examples data/extraction/fincausal/lines/examples.json
+
+set -l root (git rev-parse --show-toplevel 2>/dev/null)
+$root/chatgpt/scripts/convert_lines_to_tags.py $out/output.json >$out/output.tags.json
+$root/self_critique/scripts/fincausal_eval.py $out/output.tags.json -o $out/fincausal_metrics.json
