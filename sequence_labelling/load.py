@@ -99,19 +99,20 @@ def load_data_from_file(
             if len(list_tokens) == 0:
                 continue
 
-            if len(list_tokens) + 2 <= max_len:
-                flush_tokens(
-                    list_all_tokens,
-                    list_all_labels,
-                    list_all_masks,
-                    list_all_crf_masks,
-                    list_labels,
-                    list_tokens,
-                    cls_token_id,
-                    sep_token_id,
-                    pad_label,
-                    null_label,
-                )
+            list_tokens = list_tokens[:max_len]
+            list_labels = list_labels[:max_len]
+            flush_tokens(
+                list_all_tokens,
+                list_all_labels,
+                list_all_masks,
+                list_all_crf_masks,
+                list_labels,
+                list_tokens,
+                cls_token_id,
+                sep_token_id,
+                pad_label,
+                null_label,
+            )
 
     if list_tokens:
         flush_tokens(
