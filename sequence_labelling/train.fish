@@ -26,6 +26,8 @@ if not set -q TRAIN_DATA; or not set -q DEV_DATA
     usage
 end
 
+test (uname) = Darwin; and set device mps; or set device cuda
+
 printf "\n>>>>>>>>>> %s\n\n" (date) >>$LOGFILE
 
 python train.py \
@@ -34,7 +36,7 @@ python train.py \
     0 1 \
     $LM_NAME \
     --separator " " \
-    --device mps \
+    --device $device \
     --fine_tune \
     --run-name $RUN_NAME \
     --logfile $LOGFILE \
