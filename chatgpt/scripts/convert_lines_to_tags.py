@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 "Convert extraction in Lines format to Tags format."
+
 import json
 import sys
 from pathlib import Path
@@ -16,7 +17,7 @@ def convert_extract(extract: str) -> str:
     lines = extract.splitlines()
     cause = find_part("Cause", lines)
     effect = find_part("Effect", lines)
-    relation = find_part("Relation", lines)
+    relation = find_part("Relation", lines) or "cause"
     return f"[Cause] {cause} [Relation] {relation} [Effect] {effect}"
 
 
