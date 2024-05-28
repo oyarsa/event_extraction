@@ -52,13 +52,13 @@ if __name__ == "__main__":
         "--gold",
         type=str,
         default="gold",
-        help="Key in the JSON for the gold label (1 or 0)",
+        help="Key in the JSON for the gold label (values are 0 or 1)",
     )
     parser.add_argument(
         "--pred",
         type=str,
         default="pred",
-        help="Key in the JSON for the prediction score (float)",
+        help="Key in the JSON for the prediction score (values are float)",
     )
     args = parser.parse_args()
 
