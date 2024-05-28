@@ -776,8 +776,8 @@ class F1Evaluator(Evaluator):
     The F1 score is used the score. The class is obtained by thresholding the F1 score.
 
     The best known thresholds depend on the dataset:
-    - FCR: TODO
-    - FinCausal: TODO
+    - FCR: 0.8133333333333334
+    - FinCausal: 0.8210526315789475
     """
 
     def __init__(self, threshold: float, prompt: EvalPrompt) -> None:
@@ -831,12 +831,12 @@ def calc_f1_sentence(gold: list[str], pred: list[str]) -> float:
 class SentenceTransformerEvaluator(Evaluator):
     """Evaluator using SentenceTransformer embeddings and cosine similarity.
 
-    The normalised (to [0, 1]) cosine similarity is used as the score. The class is
-    obtained by thresholding the similarity score.
+    The normalised cosine similarity is used as the score. The class is obtained by
+    thresholding the similarity score.
 
     The best known thresholds are for the model all-MiniLM-L6-v2 and depend on dataset:
     - FCR: 0.9656984508037567
-    - FinCausal: TODO
+    - FinCausal: 1.4834709167480469
     """
 
     def __init__(
