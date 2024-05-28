@@ -1,7 +1,7 @@
 log_path: logs
 data:
-  input: /Users/italo/dev/event_extraction/annotation/tmp/fincausal-train-ann/inputs
-  answers: /Users/italo/dev/event_extraction/annotation/tmp/fincausal-train-ann/answers
-  split_to_user: /Users/italo/dev/event_extraction/annotation/tmp/fincausal-train-ann/inputs/split_to_user.json
+  input: output/fincausal-train-ann/inputs
+  answers: output/fincausal-train-ann/answers
+  split_to_user: output/fincausal-train-ann/inputs/split_to_user.json
 instructions: src/annotation/instructions.md
 admin_password: "3790d613ff80b4a579a97015a85632b078039f7831c18ffb7468b91d82b3a66b"

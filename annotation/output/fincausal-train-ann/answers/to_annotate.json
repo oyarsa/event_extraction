@@ -1,0 +1,1336 @@
+{
+  "username": "italo",
+  "items": [
+    {
+      "id": "5db6fdda",
+      "data": {
+        "text": "Pioneer Diversified High Income Trust Plans  -  Dividend of $0.10 (NYSEAMERICAN:HNW) Tweet  Pioneer Diversified High Income Trust (NYSEAMERICAN:HNW) declared a  -  dividend on Monday, September 9th, Wall Street Journal reports. Shareholders of record on Wednesday, September 18th will be given a dividend of 0.095 per share on Monday, September 30th. This represents a yield of 7.9%.",
+        "reference": "[Cause] Pioneer Diversified High Income Trust Plans  -  Dividend of $0.10 (NYSEAMERICAN:HNW) Tweet  Pioneer Diversified High Income Trust (NYSEAMERICAN:HNW) declared a  -  dividend on Monday, September 9th, Wall Street Journal reports. [Relation] cause [Effect] This represents a yield of 7.9%.",
+        "model": "[Cause] Pioneer Diversified High Income Trust Plans - Dividend of $0.10 (NYSEAMERICAN:HNW) Tweet Pioneer Diversified High Income Trust (NYSEAMERICAN:HNW) declared a - dividend on Monday, September 9th, Wall Street Journal reports. [Relation] cause [Effect] Shareholders of record on Wednesday, September 18th will be given a dividend of 0.095 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "778a9fad",
+      "data": {
+        "text": "W. R. Berkley Corp (WRB) To Go Ex-Dividend on September 18th Tweet  W. R. Berkley Corp (NYSE:WRB) declared a quarterly dividend on Tuesday, August 6th, Zacks reports. Investors of record on Thursday, September 19th will be paid a dividend of 0.11 per share by the insurance provider on Thursday, October 3rd. This represents a $0.44 annualized dividend and a yield of 0.62%.",
+        "reference": "[Cause] W. R. Berkley Corp (WRB) To Go Ex-Dividend on September 18th Tweet  W. R. Berkley Corp (NYSE:WRB) declared a quarterly dividend on Tuesday, August 6th, Zacks reports. [Relation] cause [Effect] Investors of record on Thursday, September 19th will be paid a dividend of 0.11 per share by the insurance provider on Thursday, October 3rd.",
+        "model": "[Cause] W. R. Berkley Corp (WRB) To Go Ex-Dividend on September 18th Tweet W. R. Berkley Corp (NYSE:WRB) declared a quarterly dividend on Tuesday, August 6th, Zacks reports. [Relation] cause [Effect] This represents a $0.44 annualized dividend and a yield of 0.62%.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d9b6b67d",
+      "data": {
+        "text": "Invesco PureBeta MSCI USA ETF (BATS:PBUS) announced a  -  dividend on Monday, September 23rd, Wall Street Journal reports. Stockholders of record on Tuesday, September 24th will be given a dividend of 0.078 per share on Monday, September 30th. This represents a dividend yield of 1.8%.",
+        "reference": "[Cause] Invesco PureBeta MSCI USA ETF (BATS:PBUS) announced a  -  dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] This represents a dividend yield of 1.8%.",
+        "model": "[Cause] Invesco PureBeta MSCI USA ETF (BATS:PBUS) announced a - dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] Stockholders of record on Tuesday, September 24th will be given a dividend of 0.078 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "10eae83e",
+      "data": {
+        "text": "He bears responsibility, surely, for the decisions that led to that fall: the very poor industrial relations that have led to strikes by pilots, the screwing up of rosters that led to the mass cancellation of flights, the very heavy bet on Boeing's ill-fated 737 Max. But because of those failings, he now gets to buy Ryanair shares for \u20ac7 per share less than they were would have cost him in 2017.  This is one of the big problems with this incentive culture  -  the fabulous rewards for success are almost never matched by real penalties for failure.",
+        "reference": "[Cause] He bears responsibility, surely, for the decisions that led to that fall: the very poor industrial relations that have led to strikes by pilots, the screwing up of rosters that led to the mass cancellation of flights, the very heavy bet on Boeing's ill-fated 737 Max. [Relation] cause [Effect] But because of those failings, he now gets to buy Ryanair shares for \u20ac7 per share less than they were would have cost him in 2017.  This is one of the big problems with this incentive culture  -  the fabulous rewards for success are almost never matched by real penalties for failure.",
+        "model": "[Cause] He bears responsibility, surely, for the decisions that led to that fall: the very poor industrial relations that have led to strikes by pilots, the screwing up of rosters that led to the mass cancellation of flights, the very heavy bet on Boeing's ill-fated 737 Max. [Relation] cause [Effect] But because of those failings, he now gets to buy Ryanair shares for \u20ac7 per share less than they were would have cost him in 2017. This is one of the big problems with this incentive culture - the fabulous rewards for",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "63c83bf8",
+      "data": {
+        "text": "Finally, BidaskClub cut Sunrun from a buy rating to a hold rating in a research report on Friday, August 30th. Two investment analysts have rated the stock with a hold rating, six have issued a buy rating and one has assigned a strong buy rating to the company. Sunrun has a consensus rating of Buy and a consensus target price of $21.36.",
+        "reference": "[Cause] Finally, BidaskClub cut Sunrun from a buy rating to a hold rating in a research report on Friday, August 30th. [Relation] cause [Effect] Sunrun has a consensus rating of Buy and a consensus target price of $21.36.",
+        "model": "[Cause] Two investment analysts have rated the stock with a hold rating, six have issued a buy rating and one has assigned a strong buy rating to the company. [Relation] cause [Effect] Sunrun has a consensus rating of Buy and a consensus target price of $21.36.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "ac8ec21e",
+      "data": {
+        "text": "Fitting, then, that the office-rental firm's abortive listing, shelved on September 17th, threatens a financial shredding for its mastermind, Masayoshi Son - and that the debacle may be the tip of an iceberg for his $100bn Vision Fund (VF).  Mr Son bet on Adam Neumann, WeWork's charismatic co-founder, after meeting him for half an hour in 2017. SoftBank, the Japanese group Mr Son controls, and the VF then gave the firm $4.4bn, despite its tenuous claim to techiness.",
+        "reference": "[Cause] Fitting, then, that the office-rental firm's abortive listing, shelved on September 17th, threatens a financial shredding for its mastermind, Masayoshi Son - and that the debacle may be the tip of an iceberg for his $100bn Vision Fund (VF).  Mr Son bet on Adam Neumann, WeWork's charismatic co-founder, after meeting him for half an hour in 2017. [Relation] cause [Effect] SoftBank, the Japanese group Mr Son controls, and the VF then gave the firm $4.4bn, despite its tenuous claim to techiness.",
+        "model": "[Cause] Fitting, then, that the office-rental firm's abortive listing, shelved on September 17th, threatens a financial shredding for its mastermind, Masayoshi Son - and that the debacle may be the tip of an iceberg for his $100bn Vision Fund (VF). Mr Son bet on Adam Neumann, WeWork's charismatic co-founder, after meeting him for half an hour in 2017. [Relation] cause [Effect] SoftBank, the Japanese group Mr Son controls, and",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "81338e86",
+      "data": {
+        "text": "SPDR Bloomberg Barclays Short Term International Treasury Bond ETF (NYSEARCA:BWZ) to Issue  -  Dividend of $0.01 SPDR Bloomberg Barclays Short Term International Treasury Bond ETF (NYSEARCA:BWZ) declared a  -  dividend on Tuesday, September 3rd, Wall Street Journal reports. Stockholders of record on Wednesday, September 4th will be given a dividend of 0.0099 per share on Monday, September 9th. This represents a dividend yield of 1.3%.",
+        "reference": "[Cause] SPDR Bloomberg Barclays Short Term International Treasury Bond ETF (NYSEARCA:BWZ) to Issue  -  Dividend of $0.01 SPDR Bloomberg Barclays Short Term International Treasury Bond ETF (NYSEARCA:BWZ) declared a  -  dividend on Tuesday, September 3rd, Wall Street Journal reports. [Relation] cause [Effect] This represents a dividend yield of 1.3%.",
+        "model": "[Cause] SPDR Bloomberg Barclays Short Term International Treasury Bond ETF (NYSEARCA:BWZ) to Issue - Dividend of $0.01 SPDR Bloomberg Barclays Short Term International Treasury Bond ETF (NYSEARCA:BWZ) declared a - dividend on Tuesday, September 3rd, Wall Street Journal reports. [Relation] cause [Effect] Stockholders of record on Wednesday, September 4th will be given a dividend of 0.0099 per share on Monday, September 9th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d5e515e3",
+      "data": {
+        "text": "MJ Gleeson PLC (LON:GLE) Increases Dividend to GBX 23 Per Share Tweet  MJ Gleeson PLC (LON:GLE) declared a dividend on Monday, September 16th, Upcoming.Co.Uk reports. Stockholders of record on Thursday, November 14th will be given a dividend of GBX 23 ($0.30) per share on Friday, December 13th. This represents a dividend yield of 2.74%.",
+        "reference": "[Cause] MJ Gleeson PLC (LON:GLE) Increases Dividend to GBX 23 Per Share Tweet  MJ Gleeson PLC (LON:GLE) declared a dividend on Monday, September 16th, Upcoming.Co.Uk reports. [Relation] cause [Effect] Stockholders of record on Thursday, November 14th will be given a dividend of GBX 23 ($0.30) per share on Friday, December 13th.",
+        "model": "[Cause] MJ Gleeson PLC (LON:GLE) Increases Dividend to GBX 23 Per Share Tweet MJ Gleeson PLC (LON:GLE) declared a dividend on Monday, September 16th, Upcoming.Co.Uk reports. [Relation] cause [Effect] This represents a dividend yield of 2.74%.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "f67eb45d",
+      "data": {
+        "text": "If you are under age 59\u00bd when you make the withdrawal, you may be subject to surrender charges and assessed a 10% federal income tax penalty.",
+        "reference": "[Cause] If you are under age 59\u00bd when you make the withdrawal [Relation] cause [Effect] you may be subject to surrender charges and assessed a 10% federal income tax penalty.",
+        "model": "[Cause] If you are under age 5912 when you make the withdrawal [Relation] cause [Effect] you may be subject to surrender charges and assessed a 10% federal income tax penalty.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "cf32c352",
+      "data": {
+        "text": "Finally, Zacks Investment Research upgraded shares of Sunrun from a strong sell rating to a hold rating in a research report on Saturday, August 10th. One research analyst has rated the stock with a hold rating, seven have issued a buy rating and one has issued a strong buy rating to the company. Sunrun presently has a consensus rating of Buy and an average price target of $21.36.",
+        "reference": "[Cause] Finally, Zacks Investment Research upgraded shares of Sunrun from a strong sell rating to a hold rating in a research report on Saturday, August 10th. [Relation] cause [Effect] Sunrun presently has a consensus rating of Buy and an average price target of $21.36.",
+        "model": "[Cause] One research analyst has rated the stock with a hold rating, seven have issued a buy rating and one has issued a strong buy rating to the company. [Relation] cause [Effect] Sunrun presently has a consensus rating of Buy and an average price target of $21.36.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "569b005c",
+      "data": {
+        "text": "The business also recently announced a quarterly dividend, which was paid on Wednesday, September 18th. Shareholders of record on Wednesday, September 4th were paid a $1.40 dividend. This represents a $5.60 dividend on an annualized basis and a yield of 2.14%.",
+        "reference": "[Cause] The business also recently announced a quarterly dividend, which was paid on Wednesday, September 18th. [Relation] cause [Effect] This represents a $5.60 dividend on an annualized basis and a yield of 2.14%.",
+        "model": "[Cause] The business also recently announced a quarterly dividend, which was paid on Wednesday, September 18th. [Relation] cause [Effect] Shareholders of record on Wednesday, September 4th were paid a $1.40 dividend.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "5e691ea0",
+      "data": {
+        "text": "(TSE:SPB) declared a monthly dividend on Thursday, September 5th, Zacks reports. Investors of record on Monday, September 30th will be paid a dividend of 0.06 per share on Tuesday, October 15th. This represents a $0.72 annualized dividend and a yield of 5.98%.",
+        "reference": "[Cause] (TSE:SPB) declared a monthly dividend on Thursday, September 5th, Zacks reports. [Relation] cause [Effect] This represents a $0.72 annualized dividend and a yield of 5.98%.",
+        "model": "[Cause] (TSE:SPB) declared a monthly dividend on Thursday, September 5th, Zacks reports. [Relation] cause [Effect] Investors of record on Monday, September 30th will be paid a dividend of 0.06 per share on Tuesday, October 15th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "c9c42007",
+      "data": {
+        "text": "Finally, CIBC boosted their price objective on Superior Plus from C$14.50 to C$16.00 in a research report on Thursday, July 11th. One equities research analyst has rated the stock with a hold rating, six have assigned a buy rating and two have given a strong buy rating to the stock. The company has an average rating of Buy and an average target price of C$14.75.",
+        "reference": "[Cause] Finally, CIBC boosted their price objective on Superior Plus from C$14.50 to C$16.00 in a research report on Thursday, July 11th. [Relation] cause [Effect] The company has an average rating of Buy and an average target price of C$14.75.",
+        "model": "[Cause] One equities research analyst has rated the stock with a hold rating, six have assigned a buy rating and two have given a strong buy rating to the stock. [Relation] cause [Effect] The company has an average rating of Buy and an average target price of C$14.75.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "24cab02a",
+      "data": {
+        "text": "Parthenon Llc bought 151,218 shares as the company's stock declined 11.07% .",
+        "reference": "[Cause] e company's stock declined 11.07% . [Relation] cause [Effect] Parthenon Llc bought 151,218 shares",
+        "model": "[Cause] the company's stock declined 11.07%. [Relation] cause [Effect] Parthenon Llc bought 151,218 shares",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "24e1ea6c",
+      "data": {
+        "text": "Analyst Ratings  This is a breakdown of recent recommendations and price targets for Stoneridge and Regency Affiliates, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Stoneridge - 0 - 1 - 3 - 0 - 2.75  - Regency Affiliates - 0 - 0 - 0 - 0 - N/A  Stoneridge currently has a consensus target price of $33.67, suggesting a potential upside of 8.60%.",
+        "reference": "[Cause] Stoneridge currently has a consensus target price of $33.67 [Relation] cause [Effect] a potential upside of 8.60%.",
+        "model": "[Cause] Stoneridge currently has a consensus target price of $33.67 [Relation] cause [Effect] a potential upside of 20.37%.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "8fdf7854",
+      "data": {
+        "text": "Unemployment is now at its highest point in a year at 5.3 per cent, up from about 4.9 per cent earlier this year, with the majority of new jobs being part-time.",
+        "reference": "[Cause] from about 4.9 per cent earlier this year, with the majority of new jobs being part-time. [Relation] cause [Effect] Unemployment is now at its highest point in a year at 5.3 per cent",
+        "model": "[Cause] up from about 4.9 per cent earlier this year, with the majority of new jobs being part-time. [Relation] cause [Effect] Unemployment is now at its highest point in a year at 5.3 per cent",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "8895b217",
+      "data": {
+        "text": "If the attacks lead to sustained U.S. oil prices in the mid-$60-a-barrel range, it could cause U.S. output to grow by about 2 million barrels per day (bpd) next year, from about 1 million bpd this year, Johnson said.",
+        "reference": "[Cause] If the attacks lead to sustained U.S. oil prices in the mid-$60-a-barrel range [Relation] cause [Effect] it could cause U.S. output to grow by about 2 million barrels per day (bpd) next year, from about 1 million bpd this year, Johnson said.",
+        "model": "[Cause] If the attacks lead to sustained U.S. oil prices in the mid-$60-a-barrel range [Relation] cause [Effect] U.S. output to grow by about 2 million barrels per day (bpd) next year, from about 1 million bpd this year, Johnson said.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "14495867",
+      "data": {
+        "text": "National  The Australian government is on the brink of a surplus, being only $700 million in deficit. Labor has pinned the federal government's near return to surplus on the $4.6 billion underspending on the National Disability Insurance Scheme. Treasurer Josh Frydenberg released new data on Thursday which showed the Australian government was on the brink of a surplus, being $700 million in deficit.",
+        "reference": "[Cause] Labor has pinned the federal government's near return to surplus on the $4.6 billion underspending on the National Disability Insurance Scheme. [Relation] cause [Effect] Treasurer Josh Frydenberg released new data on Thursday which showed the Australian government was on the brink of a surplus, being $700 million in deficit.",
+        "model": "[Cause] Labor has pinned the federal government's near return to surplus on the $4.6 billion underspending on the National Disability Insurance Scheme. [Relation] cause [Effect] National The Australian government is on the brink of a surplus, being only $700 million in deficit.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "211bfa8a",
+      "data": {
+        "text": "Nike Inc (NKE.N) shares jumped 3.7% to a record high and were among the top boosts to the Dow Jones Industrial Average .DJI and the S&P 500 .SPX after the company's first-quarter results beat market expectations.",
+        "reference": "[Cause] the company's first-quarter results beat market expectations. [Relation] cause [Effect] Nike Inc (NKE.N) shares jumped 3.7% to a record high and were among the top boosts to the Dow Jones Industrial Average .DJI and the S&P 500 .SPX",
+        "model": "[Cause] the company's first-quarter results beat market expectations. [Relation] cause [Effect] Nike Inc (NKE.N) shares jumped 3.7% to a record high and were among the top boosts to the Dow Jones Industrial Average.DJI and the S&P 500.SPX",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "69761fa0",
+      "data": {
+        "text": "Invesco S&P 500 Pure Growth ETF (RPG) To Go Ex-Dividend on September 23rd . Stockholders of record on Tuesday, September 24th will be given a dividend of 0.3507 per share on Monday, September 30th. This represents a dividend yield of 0.6%.",
+        "reference": "[Cause] Invesco S&P 500 Pure Growth ETF (RPG) To Go Ex-Dividend on September 23rd . [Relation] cause [Effect] This represents a dividend yield of 0.6%.",
+        "model": "[Cause] Invesco S&P 500 Pure Growth ETF (RPG) To Go Ex-Dividend on September 23rd. [Relation] cause [Effect] Stockholders of record on Tuesday, September 24th will be given a dividend of 0.3507 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "ac8ec21e",
+      "data": {
+        "text": "Fitting, then, that the office-rental firm's abortive listing, shelved on September 17th, threatens a financial shredding for its mastermind, Masayoshi Son - and that the debacle may be the tip of an iceberg for his $100bn Vision Fund (VF).  Mr Son bet on Adam Neumann, WeWork's charismatic co-founder, after meeting him for half an hour in 2017. SoftBank, the Japanese group Mr Son controls, and the VF then gave the firm $4.4bn, despite its tenuous claim to techiness.",
+        "reference": "[Cause] Fitting, then, that the office-rental firm's abortive listing, shelved on September 17th, threatens a financial shredding for its mastermind, Masayoshi Son - and that the debacle may be the tip of an iceberg for his $100bn Vision Fund (VF).  Mr Son bet on Adam Neumann, WeWork's charismatic co-founder, after meeting him for half an hour in 2017. [Relation] cause [Effect] SoftBank, the Japanese group Mr Son controls, and the VF then gave the firm $4.4bn, despite its tenuous claim to techiness.",
+        "model": "[Cause] Fitting, then, that the office-rental firm's abortive listing, shelved on September 17th, threatens a financial shredding for its mastermind, Masayoshi Son - and that the debacle may be the tip of an iceberg for his $100bn Vision Fund (VF). Mr Son bet on Adam Neumann, WeWork's charismatic co-founder, after meeting him for half an hour in 2017. [Relation] cause [Effect] SoftBank, the Japanese group Mr Son controls, and",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "014d14ac",
+      "data": {
+        "text": "About 10.7 per cent of its shares were being 'shorted' yesterday, with the positions taken by hedge funds thought to be worth at least \u00a35.7million.",
+        "reference": "[Cause] the positions taken by hedge funds thought to be worth at least \u00a35.7million. [Relation] cause [Effect] About 10.7 per cent of its shares were being 'shorted' yesterday,",
+        "model": "[Cause] the positions taken by hedge funds thought to be worth at least \u00a35.7million. [Relation] cause [Effect] About 10.7 per cent of its shares were being'shorted' yesterday,",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "28dd2fd7",
+      "data": {
+        "text": "Clearstead Advisors LLC Sells 409 Shares of iShares Core High Dividend ETF (NYSEARCA:HDV) Clearstead Advisors LLC lowered its stake in iShares Core High Dividend ETF (NYSEARCA:HDV) by 8.8% in the second quarter, according to the company in its most recent disclosure with the Securities and Exchange Commission (SEC). The institutional investor owned 4,232 shares of the exchange traded fund's stock after selling 409 shares during the period. Clearstead Advisors LLC's holdings in iShares Core High Dividend ETF were worth $400,000 at the end of the most recent quarter.",
+        "reference": "[Cause] Clearstead Advisors LLC Sells 409 Shares of iShares Core High Dividend ETF (NYSEARCA:HDV) Clearstead Advisors LLC lowered its stake in iShares Core High Dividend ETF (NYSEARCA:HDV) by 8.8% in the second quarter, according to the company in its most recent disclosure with the Securities and Exchange Commission (SEC). [Relation] cause [Effect] Clearstead Advisors LLC's holdings in iShares Core High Dividend ETF were worth $400,000 at the end of the most recent quarter.",
+        "model": "[Cause] Clearstead Advisors LLC Sells 409 Shares of iShares Core High Dividend ETF (NYSEARCA:HDV) Clearstead Advisors LLC lowered its stake in iShares Core High Dividend ETF (NYSEARCA:HDV) by 8.8% in the second quarter, according to the company in its most recent disclosure with the Securities and Exchange Commission (SEC). [Relation] cause [Effect] The institutional investor owned 4,232 shares of the exchange traded fund's stock after selling 409 shares during the period.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "389e701c",
+      "data": {
+        "text": "It recorded a 4.8 per cent slide in people's expectations for their finances over the next 12 months. While households feel okay about their current financial situation, they are clearly quite worried about the outlook, for both their own finances and the economy, ANZ economist Felicity Emmett said. This is a disappointing development and suggests that expectations for tax and interest rate cuts to spur the consumer to lift the economy may be misplaced.",
+        "reference": "[Cause] This is a disappointing development and suggests that expectations for tax and interest rate cuts to spur the consumer to lift the economy may be misplaced. [Relation] cause [Effect] It recorded a 4.8 per cent slide in people's expectations for their finances over the next 12 months.",
+        "model": "[Cause] While households feel okay about their current financial situation, they are clearly quite worried about the outlook, for both their own finances and the economy, ANZ economist Felicity Emmett said. [Relation] cause [Effect] It recorded a 4.8 per cent slide in people's expectations for their finances over the next 12 months.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "25ae9e60",
+      "data": {
+        "text": "Vanguard Total International Stock ETF (NASDAQ:VXUS) declared a quarterly dividend on Monday, September 23rd, Zacks reports. Stockholders of record on Wednesday, September 25th will be given a dividend of 0.30 per share on Friday, September 27th. This represents a $1.20 dividend on an annualized basis and a dividend yield of 2.32%.",
+        "reference": "[Cause] Vanguard Total International Stock ETF (NASDAQ:VXUS) declared a quarterly dividend on Monday, September 23rd, Zacks reports. [Relation] cause [Effect] This represents a $1.20 dividend on an annualized basis and a dividend yield of 2.32%.",
+        "model": "[Cause] Vanguard Total International Stock ETF (NASDAQ:VXUS) declared a quarterly dividend on Monday, September 23rd, Zacks reports. [Relation] cause [Effect] Stockholders of record on Wednesday, September 25th will be given a dividend of 0.30 per share on Friday, September 27th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "1da46818",
+      "data": {
+        "text": "(NASDAQ:GOOD) declared a monthly dividend on Tuesday, July 9th, NASDAQ reports. Shareholders of record on Tuesday, September 17th will be given a dividend of 0.125 per share by the real estate investment trust on Monday, September 30th. This represents a $1.50 dividend on an annualized basis and a dividend yield of 6.39%.",
+        "reference": "[Cause] (NASDAQ:GOOD) declared a monthly dividend on Tuesday, July 9th, NASDAQ reports. [Relation] cause [Effect] This represents a $1.50 dividend on an annualized basis and a dividend yield of 6.39%.",
+        "model": "[Cause] (NASDAQ:GOOD) declared a monthly dividend on Tuesday, July 9th, NASDAQ reports. [Relation] cause [Effect] Shareholders of record on Tuesday, September 17th will be given a dividend of 0.125 per share by the real estate investment trust on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "351d1dc8",
+      "data": {
+        "text": "Finally, ValuEngine cut shares of Gladstone Commercial from a buy rating to a hold rating in a research report on Monday, July 22nd. Three investment analysts have rated the stock with a hold rating and two have assigned a buy rating to the company's stock. The stock presently has an average rating of Hold and an average price target of $22.50.",
+        "reference": "[Cause] Finally, ValuEngine cut shares of Gladstone Commercial from a buy rating to a hold rating in a research report on Monday, July 22nd. [Relation] cause [Effect] The stock presently has an average rating of Hold and an average price target of $22.50.",
+        "model": "[Cause] Three investment analysts have rated the stock with a hold rating and two have assigned a buy rating to the company's stock. [Relation] cause [Effect] The stock presently has an average rating of Hold and an average price target of $22.50.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "844ec769",
+      "data": {
+        "text": "Eaton Vance Tax-Managed Global Buy-Write (ETW) to Issue Monthly Dividend of $0.07 on September 30th Tweet  Eaton Vance Tax-Managed Global Buy-Write (NYSE:ETW) announced a monthly dividend on Tuesday, September 3rd, NASDAQ reports. Investors of record on Monday, September 23rd will be given a dividend of 0.073 per share on Monday, September 30th. This represents a $0.88 annualized dividend and a yield of 9.05%.",
+        "reference": "[Cause] Eaton Vance Tax-Managed Global Buy-Write (ETW) to Issue Monthly Dividend of $0.07 on September 30th Tweet  Eaton Vance Tax-Managed Global Buy-Write (NYSE:ETW) announced a monthly dividend on Tuesday, September 3rd, NASDAQ reports. [Relation] cause [Effect] This represents a $0.88 annualized dividend and a yield of 9.05%.",
+        "model": "[Cause] Eaton Vance Tax-Managed Global Buy-Write (ETW) to Issue Monthly Dividend of $0.07 on September 30th Tweet Eaton Vance Tax-Managed Global Buy-Write (NYSE:ETW) announced a monthly dividend on Tuesday, September 3rd, NASDAQ reports. [Relation] cause [Effect] Investors of record on Monday, September 23rd will be given a dividend of 0.073 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "962d3553",
+      "data": {
+        "text": "Market ReportMarket Movers  15:00 Thu 19 Sep 2019  A look at some of the top risers and fallers in London today  Bilby's P&R gas heating and maintenance services business recorded a loss  Gas heating, electrical and building services provider Bilby PLC (LON:BILB) revealed profits more than halved due to losses at its P&R subsidiary. Shares fell 7.6% to 24p in reaction. Bilby reported pre-tax profit of \u00a32.5mln for the year to 31 March, down from \u00a35.8mln a year ago.",
+        "reference": "[Cause] Market ReportMarket Movers  15:00 Thu 19 Sep 2019  A look at some of the top risers and fallers in London today  Bilby's P&R gas heating and maintenance services business recorded a loss  Gas heating, electrical and building services provider Bilby PLC (LON:BILB) revealed profits more than halved due to losses at its P&R subsidiary. [Relation] cause [Effect] Bilby reported pre-tax profit of \u00a32.5mln for the year to 31 March, down from \u00a35.8mln a year ago.",
+        "model": "[Cause] Market ReportMarket Movers 15:00 Thu 19 Sep 2019 A look at some of the top risers and fallers in London today Bilby's P&R gas heating and maintenance services business recorded a loss Gas heating, electrical and building services provider Bilby PLC (LON:BILB) revealed profits more than halved due to losses at its P&R subsidiary. [Relation] cause [Effect] Shares fell 7.6% to 24p in reaction.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "bc777c2c",
+      "data": {
+        "text": "BGC Partners class A common stock (BGCP) currently trades at about $5.62, with a current yield on the $.56 dividend of about 10.1%. The stock took a 24.5% clipping in the first three weeks of December 2018, and is off its December 2017 $10.70 high by 47.7%. The big dip coincides with the completion of BGCP's spin-off of Newmark Group, Inc.",
+        "reference": "[Cause] The big dip coincides with the completion of BGCP's spin-off of Newmark Group, Inc. [Relation] cause [Effect] BGC Partners class A common stock (BGCP) currently trades at about $5.62, with a current yield on the $.56 dividend of about 10.1%.",
+        "model": "[Cause] The big dip coincides with the completion of BGCP's spin-off of Newmark Group, Inc. [Relation] cause [Effect] The stock took a 24.5% clipping in the first three weeks of December 2018, and is off its December 2017 $10.70 high by 47.7%.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "1f73dd92",
+      "data": {
+        "text": "With each BGCP shareholder getting .4613 shares of NMRK, on spin day worth about $5 per share, BGCP was left at about $6.",
+        "reference": "[Cause] With each BGCP shareholder getting .4613 shares of NMRK, on spin day worth about $5 per share [Relation] cause [Effect] BGCP was left at about $6.",
+        "model": "[Cause] With each BGCP shareholder getting.4613 shares of NMRK, on spin day worth about $5 per share [Relation] cause [Effect] BGCP was left at about $6.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "aa8f696b",
+      "data": {
+        "text": "The Federal Reserve Open Market committee meeting agreed to lower the central bank's benchmark overnight lending rate to a range of 1.75% to 2.00% on a 7-3 vote, citing ongoing global risks and weakened business investment and exports.",
+        "reference": "[Cause] ongoing global risks and weakened business investment and exports. [Relation] cause [Effect] The Federal Reserve Open Market committee meeting agreed to lower the central bank's benchmark overnight lending rate to a range of 1.75% to 2.00% on a 7-3 vote",
+        "model": "[Cause] ongoing global risks and weakened business investment and exports. [Relation] cause [Effect] The Federal Reserve Open Market committee meeting meeting agreed to lower the central bank's benchmark overnight lending rate to a range of 1.75% to 2.00% on a 7-3 vote",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "011f8892",
+      "data": {
+        "text": "Nuveen Credit Strategies Income Fund (NYSE:JQC) to Issue Monthly Dividend of $0.10 Nuveen Credit Strategies Income Fund (NYSE:JQC) announced a monthly dividend on Tuesday, September 3rd, NASDAQ reports. Investors of record on Friday, September 13th will be given a dividend of 0.104 per share by the investment management company on Tuesday, October 1st. This represents a $1.25 dividend on an annualized basis and a dividend yield of 16.53%.",
+        "reference": "[Cause] Nuveen Credit Strategies Income Fund (NYSE:JQC) to Issue Monthly Dividend of $0.10 Nuveen Credit Strategies Income Fund (NYSE:JQC) announced a monthly dividend on Tuesday, September 3rd, NASDAQ reports. [Relation] cause [Effect] This represents a $1.25 dividend on an annualized basis and a dividend yield of 16.53%.",
+        "model": "[Cause] Nuveen Credit Strategies Income Fund (NYSE:JQC) to Issue Monthly Dividend of $0.10 Nuveen Credit Strategies Income Fund (NYSE:JQC) announced a monthly dividend on Tuesday, September 3rd, NASDAQ reports. [Relation] cause [Effect] Investors of record on Friday, September 13th will be given a dividend of 0.104 per share by the investment management company on Tuesday, October 1st.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "8358fc29",
+      "data": {
+        "text": "WisdomTree International MidCap Dividend Fund (NYSEARCA:DIM) to Issue  -  Dividend of $0.49 Tweet  WisdomTree International MidCap Dividend Fund (NYSEARCA:DIM) declared a  -  dividend on Tuesday, September 24th, Wall Street Journal reports. Shareholders of record on Wednesday, September 25th will be given a dividend of 0.485 per share on Friday, September 27th. This represents a yield of 3.6%.",
+        "reference": "[Cause] WisdomTree International MidCap Dividend Fund (NYSEARCA:DIM) to Issue  -  Dividend of $0.49 Tweet  WisdomTree International MidCap Dividend Fund (NYSEARCA:DIM) declared a  -  dividend on Tuesday, September 24th, Wall Street Journal reports. [Relation] cause [Effect] This represents a yield of 3.6%.",
+        "model": "[Cause] WisdomTree International MidCap Dividend Fund (NYSEARCA:DIM) to Issue - Dividend of $0.49 Tweet WisdomTree International MidCap Dividend Fund (NYSEARCA:DIM) declared a - dividend on Tuesday, September 24th, Wall Street Journal reports. [Relation] cause [Effect] Shareholders of record on Wednesday, September 25th will be given a dividend of 0.485 per share on Friday, September 27th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "3a4f3a0d",
+      "data": {
+        "text": "Analyst Recommendations  This is a summary of current recommendations and price targets for Jerash Holdings (US) and its competitors, as provided by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Jerash Holdings (US) - 0 - 0 - 3 - 0 - 3.00  - Jerash Holdings (US) Competitors - 247 - 1112 - 1569 - 66 - 2.49  Jerash Holdings (US) presently has a consensus target price of $9.50, indicating a potential upside of 23.38%.",
+        "reference": "[Cause] Jerash Holdings (US) presently has a consensus target price of $9.50 [Relation] cause [Effect] a potential upside of 23.38%.",
+        "model": "[Cause] Jerash Holdings (US) presently has a consensus price target of $9.50 [Relation] cause [Effect] a potential upside of 23.38%.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "329f3489",
+      "data": {
+        "text": "Vanguard U.S. Quality Factor (VFQY) To Go Ex-Dividend on September 16th Tweet  Vanguard U.S. Quality Factor (BATS:VFQY) announced a  -  dividend on Monday, September 16th, Wall Street Journal reports. Stockholders of record on Tuesday, September 17th will be given a dividend of 0.238 per share on Thursday, September 19th. This represents a dividend yield of 1.4%.",
+        "reference": "[Cause] Vanguard U.S. Quality Factor (VFQY) To Go Ex-Dividend on September 16th Tweet  Vanguard U.S. Quality Factor (BATS:VFQY) announced a  -  dividend on Monday, September 16th, Wall Street Journal reports. [Relation] cause [Effect] This represents a dividend yield of 1.4%.",
+        "model": "[Cause] Vanguard U.S. Quality Factor (VFQY) To Go Ex-Dividend on September 16th Tweet Vanguard U.S. Quality Factor (BATS:VFQY) announced a - dividend on Monday, September 16th, Wall Street Journal reports. [Relation] cause [Effect] Stockholders of record on Tuesday, September 17th will be given a dividend of 0.238 per share on Thursday, September 19th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "a5e223a8",
+      "data": {
+        "text": "FSC will issue nearly 37m shares to Nippon Express at a 22% premium on the current market price. Through this primary issue Nippon Express will hold 8.6% stake on a fully diluted basis and FSC will raise additional for funding its near\u2010term growth plans.",
+        "reference": "[Cause] FSC will issue nearly 37m shares to Nippon Express at a 22% premium on the current market price. [Relation] cause [Effect] Through this primary issue Nippon Express will hold 8.6% stake on a fully diluted basis and FSC will raise additional for funding its near\u2010term growth plans.",
+        "model": "[Cause] FSC will issue nearly 37m shares to Nippon Express at a 22% premium on the current market price. [Relation] cause [Effect] Through this primary issue Nippon Express will hold 8.6% stake on a fully diluted basis and FSC will raise additional for funding its nearterm growth plans.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "73d8c15d",
+      "data": {
+        "text": "Invesco Balanced Multi-Asset Allocation ETF (BATS:PSMB) Plans  -  Dividend of $0.10 Invesco Balanced Multi-Asset Allocation ETF (BATS:PSMB) declared a  -  dividend on Monday, September 23rd, Wall Street Journal reports. Stockholders of record on Tuesday, September 24th will be paid a dividend of 0.0952 per share on Monday, September 30th. This represents a dividend yield of 2.5%.",
+        "reference": "[Cause] Invesco Balanced Multi-Asset Allocation ETF (BATS:PSMB) Plans  -  Dividend of $0.10 Invesco Balanced Multi-Asset Allocation ETF (BATS:PSMB) declared a  -  dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] This represents a dividend yield of 2.5%.",
+        "model": "[Cause] Invesco Balanced Multi-Asset Allocation ETF (BATS:PSMB) Plans - Dividend of $0.10 Invesco Balanced Multi-Asset Allocation ETF (BATS:PSMB) declared a - dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] Stockholders of record on Tuesday, September 24th will be paid a dividend of 0.0952 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "713b8250",
+      "data": {
+        "text": "iShares Core S&P Mid-Cap ETF (NYSEARCA:IJH) to Issue $0.86  -  Dividend . Investors of record on Wednesday, September 25th will be paid a dividend of 0.8583 per share on Monday, September 30th. This represents a yield of 1.5%.",
+        "reference": "[Cause] iShares Core S&P Mid-Cap ETF (NYSEARCA:IJH) to Issue $0.86  -  Dividend . [Relation] cause [Effect] This represents a yield of 1.5%.",
+        "model": "[Cause] iShares Core S&P Mid-Cap ETF (NYSEARCA:IJH) to Issue $0.86 - Dividend. [Relation] cause [Effect] Investors of record on Wednesday, September 25th will be paid a dividend of 0.8583 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "097cdf63",
+      "data": {
+        "text": "Analyst Recommendations  This is a breakdown of current ratings and recommmendations for Gibraltar Industries and General Steel, as provided by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Gibraltar Industries - 0 - 1 - 0 - 0 - 2.00  - General Steel - 0 - 0 - 0 - 0 - N/A  Gibraltar Industries currently has a consensus price target of $40.00, suggesting a potential downside of 14.29%.",
+        "reference": "[Cause] Gibraltar Industries currently has a consensus price target of $40.00 [Relation] cause [Effect] a potential downside of 14.29%.",
+        "model": "[Cause] Gibraltar Industries currently has a consensus price target of $9.50 [Relation] cause [Effect] a potential upside of 655.21%.",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "3e482265",
+      "data": {
+        "text": "Rex Collins, HBK CPAs & Consultants (HBK) Dealership Industry Group Principal, had an audience with the House Ways and Means Committee during the development of the bill proposals. As a result of his testimony, the House version of the bill included language that allowed dealerships with floor plan financing to deduct all floor plan related interest expense, even if that expense ultimately exceeded 30% of adjusted taxable income. However, dealerships would also not be able to benefit from 100% bonus expensing.",
+        "reference": "[Cause] Rex Collins, HBK CPAs & Consultants (HBK) Dealership Industry Group Principal, had an audience with the House Ways and Means Committee during the development of the bill proposals. [Relation] cause [Effect] As a result of his testimony, the House version of the bill included language that allowed dealerships with floor plan financing to deduct all floor plan related interest expense, even if that expense ultimately exceeded 30% of adjusted taxable income.",
+        "model": "[Cause] Rex Collins, HBK CPAs & Consultants (HBK) Dealership Industry Group Principal, had an audience with the House Ways and Means Committee during the development of the bill proposals. [Relation] cause [Effect] However, dealerships would also not be able to benefit from 100% bonus expensing.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "3750dbe7",
+      "data": {
+        "text": "(NASDAQ:MERC) (TSE:MRI.U) announced a quarterly dividend on Thursday, August 1st, Zacks reports. Stockholders of record on Wednesday, September 25th will be given a dividend of 0.275 per share by the basic materials company on Wednesday, October 2nd. This represents a $1.10 dividend on an annualized basis and a dividend yield of 8.59%.",
+        "reference": "[Cause] (NASDAQ:MERC) (TSE:MRI.U) announced a quarterly dividend on Thursday, August 1st, Zacks reports. [Relation] cause [Effect] This represents a $1.10 dividend on an annualized basis and a dividend yield of 8.59%.",
+        "model": "[Cause] (NASDAQ:MERC) (TSE:MRI.U) announced a quarterly dividend on Thursday, August 1st, Zacks reports. [Relation] cause [Effect] Stockholders of record on Wednesday, September 25th will be given a dividend of 0.275 per share by the basic materials company on Wednesday, October 2nd.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "f3c0f45a",
+      "data": {
+        "text": "Finally, CIBC lowered Mercer International from a sector outperform rating to a neutral rating in a research report on Friday, July 5th. One investment analyst has rated the stock with a sell rating, four have given a hold rating and two have issued a buy rating to the company. The company currently has an average rating of Hold and an average target price of $17.50.",
+        "reference": "[Cause] Finally, CIBC lowered Mercer International from a sector outperform rating to a neutral rating in a research report on Friday, July 5th. [Relation] cause [Effect] The company currently has an average rating of Hold and an average target price of $17.50.",
+        "model": "[Cause] One investment analyst has rated the stock with a sell rating, four have given a hold rating and two have issued a buy rating to the company. [Relation] cause [Effect] The company currently has an average rating of Hold and an average target price of $17.50.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "f66ffd3a",
+      "data": {
+        "text": "Operating Income of $30 million was up $15 million from Q1 of last year, excluding the $12.8 million benefit related to the take-or-pay contract within our industrial products business and impairment charges in the prior year, cylinder operating income was up 4% year-over-year due primarily to improvements in the oil and gas business and in the industrial products business.",
+        "reference": "[Cause] the take-or-pay contract within our industrial products business and impairment charges in the prior year [Relation] cause [Effect] Operating Income of $30 million was up $15 million from Q1 of last year, excluding the $12.8 million benefit",
+        "model": "[Cause] improvements in the oil and gas business and in the industrial products business. [Relation] cause [Effect] cylinder operating income was up 4% year-over-year",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "9549d57a",
+      "data": {
+        "text": "FILE PHOTO: Federal Reserve Board building on Constitution Avenue is pictured in Washington, U.S., March 19, 2019. REUTERS/Leah Millis/File Photo  Cash available to banks for their short-term funding needs all but dried up on Monday and Tuesday, and interest rates in U.S. money markets shot up to as high as 10% for some overnight loans, more than four times the Fed's rate. That forced the Fed to make an emergency injection of more than $50 billion, its first since the financial crisis more than a decade ago, to prevent borrowing costs from spiraling even higher.",
+        "reference": "[Cause] FILE PHOTO: Federal Reserve Board building on Constitution Avenue is pictured in Washington, U.S., March 19, 2019. REUTERS/Leah Millis/File Photo  Cash available to banks for their short-term funding needs all but dried up on Monday and Tuesday, and interest rates in U.S. money markets shot up to as high as 10% for some overnight loans, more than four times the Fed's rate. [Relation] cause [Effect] That forced the Fed to make an emergency injection of more than $50 billion, its first since the financial crisis more than a decade ago, to prevent borrowing costs from spiraling even higher.",
+        "model": "[Cause] FILE PHOTO: Federal Reserve Board building on Constitution Avenue is pictured in Washington, U.S., March 19, 2019. REUTERS/Leah Millis/File Photo Cash available to banks for their short-term funding needs all but dried up on Monday and Tuesday, and interest rates in U.S. money markets shot up to as high as 10% for some overnight loans, more than four times the Fed's rate. [Relation] cause [Effect] That forced the Fed to make an emergency injection of more than $50 billion, its first since the financial",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "1a0d3e83",
+      "data": {
+        "text": "Copa Holdings, S.A. (NYSE:CPA) Plans Quarterly Dividend of $0.65 Daily Ratings & News for Copa Complete the form below to receive the latest headlines and analysts' recommendations for Copa with our free daily email newsletter:  Copa Holdings, S.A. (NYSE:CPA) declared a quarterly dividend on Wednesday, August 7th, Zacks reports. Stockholders of record on Friday, August 30th will be given a dividend of 0.65 per share by the transportation company on Friday, September 13th. This represents a $2.60 annualized dividend and a dividend yield of 2.72%.",
+        "reference": "[Cause] Copa Holdings, S.A. (NYSE:CPA) Plans Quarterly Dividend of $0.65 Daily Ratings & News for Copa Complete the form below to receive the latest headlines and analysts' recommendations for Copa with our free daily email newsletter:  Copa Holdings, S.A. (NYSE:CPA) declared a quarterly dividend on Wednesday, August 7th, Zacks reports. [Relation] cause [Effect] Stockholders of record on Friday, August 30th will be given a dividend of 0.65 per share by the transportation company on Friday, September 13th.",
+        "model": "[Cause] Copa Holdings, S.A. (NYSE:CPA) Plans Quarterly Dividend of $0.65 Daily Ratings & News for Copa Complete the form below to receive the latest headlines and analysts' recommendations for Copa with our free daily email newsletter: Copa Holdings, S.A. (NYSE:CPA) declared a quarterly dividend on Wednesday, August 7th, Zacks reports. [Relation] cause [Effect] Stockholders of record on Friday, August 30th will be given a dividend of 0.65 per share",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "c9f76e31",
+      "data": {
+        "text": "Copa Holdings, S.A. (NYSE:CPA) Plans Quarterly Dividend of $0.65 Daily Ratings & News for Copa Complete the form below to receive the latest headlines and analysts' recommendations for Copa with our free daily email newsletter:  Copa Holdings, S.A. (NYSE:CPA) declared a quarterly dividend on Wednesday, August 7th, Zacks reports. Stockholders of record on Friday, August 30th will be given a dividend of 0.65 per share by the transportation company on Friday, September 13th. This represents a $2.60 annualized dividend and a dividend yield of 2.72%.",
+        "reference": "[Cause] Copa Holdings, S.A. (NYSE:CPA) Plans Quarterly Dividend of $0.65 Daily Ratings & News for Copa Complete the form below to receive the latest headlines and analysts' recommendations for Copa with our free daily email newsletter:  Copa Holdings, S.A. (NYSE:CPA) declared a quarterly dividend on Wednesday, August 7th, Zacks reports. [Relation] cause [Effect] This represents a $2.60 annualized dividend and a dividend yield of 2.72%.",
+        "model": "[Cause] Copa Holdings, S.A. (NYSE:CPA) Plans Quarterly Dividend of $0.65 Daily Ratings & News for Copa Complete the form below to receive the latest headlines and analysts' recommendations for Copa with our free daily email newsletter: Copa Holdings, S.A. (NYSE:CPA) declared a quarterly dividend on Wednesday, August 7th, Zacks reports. [Relation] cause [Effect] Stockholders of record on Friday, August 30th will be given a dividend of 0.65 per share",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "78c260dd",
+      "data": {
+        "text": "They set an overweight rating and a $122.00 price objective for the company. Two equities research analysts have rated the stock with a sell rating, four have assigned a hold rating and eight have given a buy rating to the company's stock. Copa presently has a consensus rating of Hold and a consensus price target of $109.36.",
+        "reference": "[Cause] They set an overweight rating and a $122.00 price objective for the company. [Relation] cause [Effect] Copa presently has a consensus rating of Hold and a consensus price target of $109.36.",
+        "model": "[Cause] Two equities research analysts have rated the stock with a sell rating, four have assigned a hold rating and eight have given a buy rating to the company's stock. [Relation] cause [Effect] Copa presently has a consensus rating of Hold and a consensus price target of $109.36.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "9eca5e8c",
+      "data": {
+        "text": "Invesco QQQ Trust (NASDAQ:QQQ) declared a  -  dividend on Monday, September 23rd, Wall Street Journal reports. Investors of record on Tuesday, September 24th will be given a dividend of 0.3842 per share by the exchange traded fund on Thursday, October 31st. This represents a dividend yield of 0.8%.",
+        "reference": "[Cause] Invesco QQQ Trust (NASDAQ:QQQ) declared a  -  dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] This represents a dividend yield of 0.8%.",
+        "model": "[Cause] Invesco QQQ Trust (NASDAQ:QQQ) declared a - dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] Investors of record on Tuesday, September 24th will be given a dividend of 0.3842 per share by the exchange traded fund on Thursday, October 31st.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "4b0ec876",
+      "data": {
+        "text": "Global Medical REIT Inc (NYSE:GMRE) Plans $0.20  -  Dividend Global Medical REIT Inc (NYSE:GMRE) declared a  -  dividend on Monday, September 16th, Wall Street Journal reports. Investors of record on Wednesday, September 25th will be paid a dividend of 0.20 per share on Thursday, October 10th. This represents a yield of 7.1%.",
+        "reference": "[Cause] Global Medical REIT Inc (NYSE:GMRE) Plans $0.20  -  Dividend Global Medical REIT Inc (NYSE:GMRE) declared a  -  dividend on Monday, September 16th, Wall Street Journal reports. [Relation] cause [Effect] This represents a yield of 7.1%.",
+        "model": "[Cause] Global Medical REIT Inc (NYSE:GMRE) Plans $0.20 - Dividend Global Medical REIT Inc (NYSE:GMRE) declared a - dividend on Monday, September 16th, Wall Street Journal reports. [Relation] cause [Effect] Investors of record on Wednesday, September 25th will be paid a dividend of 0.20 per share on Thursday, October 10th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d0bf42a0",
+      "data": {
+        "text": "Finally, ValuEngine downgraded shares of Global Medical REIT from a buy rating to a hold rating in a report on Thursday, August 1st. Three analysts have rated the stock with a hold rating and four have issued a buy rating to the company. The company has an average rating of Buy and a consensus price target of $10.67.",
+        "reference": "[Cause] Finally, ValuEngine downgraded shares of Global Medical REIT from a buy rating to a hold rating in a report on Thursday, August 1st. [Relation] cause [Effect] The company has an average rating of Buy and a consensus price target of $10.67.",
+        "model": "[Cause] Three analysts have rated the stock with a hold rating and four have issued a buy rating to the company. [Relation] cause [Effect] The company has an average rating of Buy and a consensus price target of $10.67.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "b574693f",
+      "data": {
+        "text": "Finally, ValuEngine upgraded Ovid Therapeutics from a sell rating to a hold rating in a research note on Thursday, August 1st. One investment analyst has rated the stock with a hold rating and seven have issued a buy rating to the company. The company presently has a consensus rating of Buy and an average price target of $12.67.",
+        "reference": "[Cause] Finally, ValuEngine upgraded Ovid Therapeutics from a sell rating to a hold rating in a research note on Thursday, August 1st. [Relation] cause [Effect] The company presently has a consensus rating of Buy and an average price target of $12.67.",
+        "model": "[Cause] One investment analyst has rated the stock with a hold rating and seven have issued a buy rating to the company. [Relation] cause [Effect] The company presently has a consensus rating of Buy and an average price target of $12.67.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "2d3e4731",
+      "data": {
+        "text": "Petrol prices could hit $2 per litre if Middle East tensions escalate Economists have warned that under a worst-case scenario Australian petrol prices could hit $2 per litre, if tensions between the United States and Iran escalate into a full-blown war.",
+        "reference": "[Cause] Middle East tensions escalate [Relation] cause [Effect] Petrol prices could hit $2 per litre",
+        "model": "[Cause] tensions between the United States and Iran escalate into a full-blown war. [Relation] cause [Effect] Petrol prices could hit $2 per litre",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "b697812a",
+      "data": {
+        "text": "Petrol prices could hit $2 per litre if Middle East tensions escalate Economists have warned that under a worst-case scenario Australian petrol prices could hit $2 per litre, if tensions between the United States and Iran escalate into a full-blown war.",
+        "reference": "[Cause] tensions between the United States and Iran escalate into a full-blown war. [Relation] cause [Effect] Australian petrol prices could hit $2 per litre",
+        "model": "[Cause] tensions between the United States and Iran escalate into a full-blown war. [Relation] cause [Effect] Petrol prices could hit $2 per litre",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "b56d476c",
+      "data": {
+        "text": "Highland/iBoxx Senior Loan ETF (SNLN) To Go Ex-Dividend on September 13th Highland/iBoxx Senior Loan ETF (NASDAQ:SNLN) announced a  -  dividend on Friday, September 13th, Wall Street Journal reports. Stockholders of record on Monday, September 16th will be given a dividend of 0.0572 per share on Monday, September 30th. This represents a dividend yield of 5.2%.",
+        "reference": "[Cause] Highland/iBoxx Senior Loan ETF (SNLN) To Go Ex-Dividend on September 13th Highland/iBoxx Senior Loan ETF (NASDAQ:SNLN) announced a  -  dividend on Friday, September 13th, Wall Street Journal reports. [Relation] cause [Effect] This represents a dividend yield of 5.2%.",
+        "model": "[Cause] Highland/iBoxx Senior Loan ETF (SNLN) To Go Ex-Dividend on September 13th Highland/iBoxx Senior Loan ETF (NASDAQ:SNLN) announced a - dividend on Friday, September 13th, Wall Street Journal reports. [Relation] cause [Effect] Stockholders of record on Monday, September 16th will be given a dividend of 0.0572 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "acd2c07c",
+      "data": {
+        "text": "Analyst Recommendations  This is a summary of current recommendations for Professional Diversity Network and InterXion, as provided by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Professional Diversity Network - 0 - 0 - 0 - 0 - N/A  - InterXion - 0 - 3 - 5 - 0 - 2.63  InterXion has a consensus price target of $83.17, suggesting a potential upside of 8.84%.",
+        "reference": "[Cause] InterXion has a consensus price target of $83.17 [Relation] cause [Effect] a potential upside of 8.84%.",
+        "model": "[Cause] InterXion has a consensus price target of $83.11. [Relation] cause [Effect] a potential upside of 20.37%.",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "f687fee0",
+      "data": {
+        "text": "PulteGroup Inc., up 55 cents to $35.46  Shares in homebuilders rose after the National Association of Realtors reported U.S. home sales rose 1.3% in August.",
+        "reference": "[Cause] Shares in homebuilders rose after the National Association of Realtors reported U.S. home sales rose 1.3% in August. [Relation] cause [Effect] PulteGroup Inc., up 55 cents to $35.46",
+        "model": "[Cause] the National Association of Realtors reported U.S. home sales rose 1.3% in August. [Relation] cause [Effect] PulteGroup Inc., up 55 cents to $35.46 Shares in homebuilders rose",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "db7dcac3",
+      "data": {
+        "text": "In a bid to spur its festive sales, e-tailer Snapdeal has partnered with RuPay to offer discounts to credit and debit card users of NPCI's payment system. Snapdeal has extended the 20% discount scheme to about 60 crore RuPay users who can avail the offer by using their RuPay card while making payments on the online platform. Valid on payments of any amount, Snapdeal is giving a maximum discount of Rs 150 per transaction.",
+        "reference": "[Cause] In a bid to spur its festive sales, e-tailer Snapdeal has partnered with RuPay to offer discounts to credit and debit card users of NPCI's payment system. [Relation] cause [Effect] Snapdeal has extended the 20% discount scheme to about 60 crore RuPay users who can avail the offer by using their RuPay card while making payments on the online platform.",
+        "model": "[Cause] In a bid to spur its festive sales, e-tailer Snapdeal has partnered with RuPay to offer discounts to credit and debit card users of NPCI's payment system. [Relation] cause [Effect] Valid on payments of any amount, Snapdeal is giving a maximum discount of Rs 150 per transaction.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "c6f6c200",
+      "data": {
+        "text": "- - Net Margins - Return on Equity - Return on Assets  - Spartan Motors - 1.27% - 8.65% - 4.35%  - Kandi Technologies Group - -17.33% - -10.19% - -5.38%  Analyst Ratings  This is a summary of recent ratings and recommmendations for Spartan Motors and Kandi Technologies Group, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Spartan Motors - 0 - 0 - 2 - 0 - 3.00  - Kandi Technologies Group - 0 - 0 - 0 - 0 - N/A  Spartan Motors currently has a consensus target price of $16.00, indicating a potential upside of 17.13%.",
+        "reference": "[Cause] Spartan Motors currently has a consensus target price of $16.00 [Relation] cause [Effect] a potential upside of 17.13%.",
+        "model": "[Cause] Spartan Motors currently has a consensus price target of $9.50 [Relation] cause [Effect] a potential upside of 28.13%.",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "7731da0e",
+      "data": {
+        "text": "Flowserve Corp (FLS) To Go Ex-Dividend on September 19th Flowserve Corp (NYSE:FLS) declared a quarterly dividend on Wednesday, August 21st, Zacks reports. Investors of record on Friday, September 20th will be given a dividend of 0.19 per share by the industrial products company on Friday, October 4th. This represents a $0.76 annualized dividend and a yield of 1.54%.",
+        "reference": "[Cause] Flowserve Corp (FLS) To Go Ex-Dividend on September 19th Flowserve Corp (NYSE:FLS) declared a quarterly dividend on Wednesday, August 21st, Zacks reports. [Relation] cause [Effect] Investors of record on Friday, September 20th will be given a dividend of 0.19 per share by the industrial products company on Friday, October 4th.",
+        "model": "[Cause] Flowserve Corp (FLS) To Go Ex-Dividend on September 19th Flowserve Corp (NYSE:FLS) declared a quarterly dividend on Wednesday, August 21st, Zacks reports. [Relation] cause [Effect] This represents a $0.76 annualized dividend and a yield of 1.54%.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "5e01c2b2",
+      "data": {
+        "text": "Finally, Credit Suisse Group upgraded shares of Flowserve from a neutral rating to an outperform rating and set a $54.00 target price for the company in a research report on Friday, August 2nd. One investment analyst has rated the stock with a sell rating, eight have assigned a hold rating and three have issued a buy rating to the company's stock. The stock has a consensus rating of Hold and an average target price of $50.56.",
+        "reference": "[Cause] Finally, Credit Suisse Group upgraded shares of Flowserve from a neutral rating to an outperform rating and set a $54.00 target price for the company in a research report on Friday, August 2nd. [Relation] cause [Effect] The stock has a consensus rating of Hold and an average target price of $50.56.",
+        "model": "[Cause] One investment analyst has rated the stock with a sell rating, eight have assigned a hold rating and three have issued a buy rating to the company's stock. [Relation] cause [Effect] The stock has a consensus rating of Hold and an average target price of $50.56.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "cb0763fc",
+      "data": {
+        "text": "Global Economic Developments Output growth across major advanced economies remained subdued, confronted by legacy headwinds, including the subsisting trade war between the US and China, regional hostilities in the Middle-East, rising debt levels, growing uncertainties around BREXIT and increasing political tensions between the US and Iran, including fragilities in the financial markets. In the EMDEs, output growth remained broadly mixed with some economies performing stronger than others. Consequently, the International Monetary Fund (IMF) revised its projected global growth forecast to 3.2 per cent in 2019 from 3.6per cent.",
+        "reference": "[Cause] In the EMDEs, output growth remained broadly mixed with some economies performing stronger than others. [Relation] cause [Effect] Consequently, the International Monetary Fund (IMF) revised its projected global growth forecast to 3.2 per cent in 2019 from 3.6per cent.",
+        "model": "[Cause] Global Economic Developments Output growth across major advanced economies remained subdued, confronted by legacy headwinds, including the subsisting trade war between the US and China, regional hostilities in the Middle-East, rising debt levels, growing uncertainties around BREXIT and increasing political tensions between the US and Iran, including fragilities in the financial markets. [Relation] cause [Effect] Consequently, the International Monetary Fund (IMF) revised its projected global growth forecast to 3.2 per cent in 2019 from 3.6per cent",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "dceca6aa",
+      "data": {
+        "text": "The Committee observed that broad money supply (M3) grew by\u00a0 5.65 per cent in August 2019, compared with the level at end December 2018, annualized to 8.48 per cent, but remaining below the 2019 indicative benchmark of 16.08 per cent. The growth was largely driven by the increase in Net Domestic Credit (NDC), which grew by 24.36 percent in August 2019 from the level at endmDecember 2018. The growth in NDC was accounted for by the significant increase in credit to Government, which grew by 94.33 per cent while credit to the private sector grew by 9.36 per cent in August 2019.",
+        "reference": "[Cause] The growth in NDC was accounted for by the significant increase in credit to Government, which grew by 94.33 per cent while credit to the private sector grew by 9.36 per cent in August 2019. [Relation] cause [Effect] The growth was largely driven by the increase in Net Domestic Credit (NDC), which grew by 24.36 percent in August 2019 from the level at endmDecember 2018.",
+        "model": "[Cause] The growth was largely driven by the increase in Net Domestic Credit (NDC), which grew by 24.36 percent in August 2019 from the level at endmDecember 2018. [Relation] cause [Effect] The Committee observed that broad money supply (M3) grew by 5.65 per cent in August 2019, compared with the level at end December 2018, annualized to 8.48 per cent, but remaining below the 2019 indicative benchmark of 16.08 per cent.",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d3c81fbb",
+      "data": {
+        "text": "By Current Publishing on Fishers Community  By Tony Sandleben  The Fishers City Council unanimously approved an income tax increase of .1 percent to help fund the Hamilton County Dispatch Center.",
+        "reference": "[Cause] help fund the Hamilton County Dispatch Center. [Relation] cause [Effect] By Current Publishing on Fishers Community  By Tony Sandleben  The Fishers City Council unanimously approved an income tax increase of .1 percent",
+        "model": "[Cause] help fund the Hamilton County Dispatch Center. [Relation] cause [Effect] By Current Publishing on Fishers Community By Tony Sandleben The Fishers City Council unanimously approved an income tax increase of.1 percent",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "8e967872",
+      "data": {
+        "text": "Houlihan Lokey Inc (NYSE:HLI) to Issue Quarterly Dividend of $0.31 Daily Ratings & News for Houlihan Lokey Complete the form below to receive the latest headlines and analysts' recommendations for Houlihan Lokey with our free daily email newsletter:  Houlihan Lokey Inc (NYSE:HLI) announced a quarterly dividend on Thursday, July 25th, Zacks reports. Stockholders of record on Thursday, September 5th will be paid a dividend of 0.31 per share by the financial services provider on Monday, September 16th. This represents a $1.24 annualized dividend and a dividend yield of 2.84%.",
+        "reference": "[Cause] Houlihan Lokey Inc (NYSE:HLI) to Issue Quarterly Dividend of $0.31 Daily Ratings & News for Houlihan Lokey Complete the form below to receive the latest headlines and analysts' recommendations for Houlihan Lokey with our free daily email newsletter:  Houlihan Lokey Inc (NYSE:HLI) announced a quarterly dividend on Thursday, July 25th, Zacks reports. [Relation] cause [Effect] Stockholders of record on Thursday, September 5th will be paid a dividend of 0.31 per share by the financial services provider on Monday, September 16th.",
+        "model": "[Cause] Houlihan Lokey Inc (NYSE:HLI) to Issue Quarterly Dividend of $0.31 Daily Ratings & News for Houlihan Lokey Complete the form below to receive the latest headlines and analysts' recommendations for Houlihan Lokey with our free daily email newsletter: Houlihan Lokey Inc (NYSE:HLI) announced a quarterly dividend on Thursday, July 25th, Zacks reports. [Relation] cause [Effect] Stockholders of record on Thursday, September 5th will be paid a dividend of 0.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "475a857d",
+      "data": {
+        "text": "Houlihan Lokey Inc (NYSE:HLI) to Issue Quarterly Dividend of $0.31 Daily Ratings & News for Houlihan Lokey Complete the form below to receive the latest headlines and analysts' recommendations for Houlihan Lokey with our free daily email newsletter:  Houlihan Lokey Inc (NYSE:HLI) announced a quarterly dividend on Thursday, July 25th, Zacks reports. Stockholders of record on Thursday, September 5th will be paid a dividend of 0.31 per share by the financial services provider on Monday, September 16th. This represents a $1.24 annualized dividend and a dividend yield of 2.84%.",
+        "reference": "[Cause] Houlihan Lokey Inc (NYSE:HLI) to Issue Quarterly Dividend of $0.31 Daily Ratings & News for Houlihan Lokey Complete the form below to receive the latest headlines and analysts' recommendations for Houlihan Lokey with our free daily email newsletter:  Houlihan Lokey Inc (NYSE:HLI) announced a quarterly dividend on Thursday, July 25th, Zacks reports. [Relation] cause [Effect] This represents a $1.24 annualized dividend and a dividend yield of 2.84%.",
+        "model": "[Cause] Houlihan Lokey Inc (NYSE:HLI) to Issue Quarterly Dividend of $0.31 Daily Ratings & News for Houlihan Lokey Complete the form below to receive the latest headlines and analysts' recommendations for Houlihan Lokey with our free daily email newsletter: Houlihan Lokey Inc (NYSE:HLI) announced a quarterly dividend on Thursday, July 25th, Zacks reports. [Relation] cause [Effect] Stockholders of record on Thursday, September 5th will be paid a dividend of 0.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "41598f26",
+      "data": {
+        "text": "Finally, Zacks Investment Research raised Houlihan Lokey from a hold rating to a buy rating and set a $52.00 target price for the company in a research note on Wednesday, July 31st. Two research analysts have rated the stock with a hold rating and six have given a buy rating to the stock. The company has a consensus rating of Buy and an average target price of $50.09.",
+        "reference": "[Cause] Finally, Zacks Investment Research raised Houlihan Lokey from a hold rating to a buy rating and set a $52.00 target price for the company in a research note on Wednesday, July 31st. [Relation] cause [Effect] The company has a consensus rating of Buy and an average target price of $50.09.",
+        "model": "[Cause] Two research analysts have rated the stock with a hold rating and six have given a buy rating to the stock. [Relation] cause [Effect] The company has a consensus rating of Buy and an average target price of $50.09.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "92d383f1",
+      "data": {
+        "text": "The company's stock has plummeted 51 percent in the past year. Last week, 3G sold more than 25 million of its Kraft Heinz shares, bringing its stake in the company down by almost 10 percent. Some analysts and former Kraft Heinz employees place much of the blame at the feet of 3G and its use of a highly vaunted zero-based budgeting strategy that critics say focuses more on cutting costs than creating products that people want to buy.",
+        "reference": "[Cause] Last week, 3G sold more than 25 million of its Kraft Heinz shares [Relation] cause [Effect] bringing its stake in the company down by almost 10 percent",
+        "model": "[Cause] Some analysts and former Kraft Heinz employees place much of the blame at the feet of 3G and its use of a highly vaunted zero-based budgeting strategy that critics say focuses more on cutting costs than creating products that people want to buy. [Relation] cause [Effect] The company's stock has plummeted 51 percent in the past year.",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d9f246ae",
+      "data": {
+        "text": "Analyst Ratings  This is a breakdown of recent recommendations for Mackinac Financial and Mercantile Bank, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Mackinac Financial - 0 - 0 - 0 - 0 - N/A  - Mercantile Bank - 0 - 1 - 0 - 0 - 2.00  Mercantile Bank has a consensus target price of $36.50, indicating a potential upside of 8.89%.",
+        "reference": "[Cause] Mercantile Bank has a consensus target price of $36.50 [Relation] cause [Effect] a potential upside of 8.89%.",
+        "model": "[Cause] Mercantile Bank has a consensus target price of $9.50 [Relation] cause [Effect] a potential upside of 20.37%.",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "e56b04ec",
+      "data": {
+        "text": "Analyst Ratings  This is a summary of recent ratings for Anika Therapeutics and Nephros, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - Anika Therapeutics - 0 - 1 - 2 - 1 - 3.00  - Nephros - 0 - 0 - 0 - 0 - N/A  Anika Therapeutics presently has a consensus price target of $46.00, suggesting a potential downside of 13.40%.",
+        "reference": "[Cause] Anika Therapeutics presently has a consensus price target of $46.00 [Relation] cause [Effect] a potential downside of 13.40%.",
+        "model": "[Cause] Anika Therapeutics presently has a consensus price target of $46.00 [Relation] cause [Effect] a potential upside of 20.37%.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "08e1003f",
+      "data": {
+        "text": "Invesco S&P International Developed Momentum ETF (NYSEARCA:IDMO) Declares $0.13  -  Dividend Tweet  Invesco S&P International Developed Momentum ETF (NYSEARCA:IDMO) announced a  -  dividend on Monday, September 23rd, Wall Street Journal reports. Shareholders of record on Tuesday, September 24th will be given a dividend of 0.1337 per share on Monday, September 30th. This represents a yield of 2.3%.",
+        "reference": "[Cause] Invesco S&P International Developed Momentum ETF (NYSEARCA:IDMO) Declares $0.13  -  Dividend Tweet  Invesco S&P International Developed Momentum ETF (NYSEARCA:IDMO) announced a  -  dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] This represents a yield of 2.3%.",
+        "model": "[Cause] Invesco S&P International Developed Momentum ETF (NYSEARCA:IDMO) Declares $0.13 - Dividend Tweet Invesco S&P International Developed Momentum ETF (NYSEARCA:IDMO) announced a - dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] Shareholders of record on Tuesday, September 24th will be given a dividend of 0.1337 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "b0591426",
+      "data": {
+        "text": "Ruralco Holdings Ltd (ASX:RHL) Raises Dividend to $0.84 Per Share Ruralco Holdings Ltd (ASX:RHL) declared a interim dividend on Friday, September 13th, MarketIndexAU reports. Shareholders of record on Monday, September 30th will be paid a dividend of 0.84 per share on Monday, September 30th. This represents a yield of 19.09%.",
+        "reference": "[Cause] Ruralco Holdings Ltd (ASX:RHL) Raises Dividend to $0.84 Per Share Ruralco Holdings Ltd (ASX:RHL) declared a interim dividend on Friday, September 13th, MarketIndexAU reports. [Relation] cause [Effect] This represents a yield of 19.09%.",
+        "model": "[Cause] Ruralco Holdings Ltd (ASX:RHL) Raises Dividend to $0.84 Per Share Ruralco Holdings Ltd (ASX:RHL) declared a interim dividend on Friday, September 13th, MarketIndexAU reports. [Relation] cause [Effect] Shareholders of record on Monday, September 30th will be paid a dividend of 0.84 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "737e43ea",
+      "data": {
+        "text": "- - Net Margins - Return on Equity - Return on Assets  - ATA - 22,426.20% - -19.31% - -15.59%  - Afya - N/A - N/A - N/A  Analyst Ratings  This is a breakdown of recent ratings and target prices for ATA and Afya, as reported by MarketBeat.com.  - - Sell Ratings - Hold Ratings - Buy Ratings - Strong Buy Ratings - Rating Score  - ATA - 0 - 0 - 0 - 0 - N/A  - Afya - 0 - 1 - 4 - 0 - 2.80  Afya has a consensus price target of $29.44, suggesting a potential upside of 28.73%.",
+        "reference": "[Cause] Afya has a consensus price target of $29.44 [Relation] cause [Effect] a potential upside of 28.73%.",
+        "model": "[Cause] Afya has a consensus price target of $29.55 [Relation] cause [Effect] a potential upside of 28.11%.",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "554fbae8",
+      "data": {
+        "text": "WisdomTree Emerging Markets Consumer Growth Fund (NASDAQ:EMCG) Declares $0.41  -  Dividend . Investors of record on Wednesday, September 25th will be given a dividend of 0.405 per share on Friday, September 27th. This represents a yield of 1.9%.",
+        "reference": "[Cause] WisdomTree Emerging Markets Consumer Growth Fund (NASDAQ:EMCG) Declares $0.41  -  Dividend . [Relation] cause [Effect] This represents a yield of 1.9%.",
+        "model": "[Cause] WisdomTree Emerging Markets Consumer Growth Fund (NASDAQ:EMCG) Declares $0.41 - Dividend. [Relation] cause [Effect] Investors of record on Wednesday, September 25th will be given a dividend of 0.405 per share on Friday, September 27th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d8b8810c",
+      "data": {
+        "text": "Vident International Equity Fund (NASDAQ:VIDI) declared a  -  dividend on Tuesday, September 17th, Wall Street Journal reports. Stockholders of record on Wednesday, September 18th will be given a dividend of 0.0147 per share on Thursday, September 19th. This represents a dividend yield of 2.9%.",
+        "reference": "[Cause] Vident International Equity Fund (NASDAQ:VIDI) declared a  -  dividend on Tuesday, September 17th, Wall Street Journal reports. [Relation] cause [Effect] This represents a dividend yield of 2.9%.",
+        "model": "[Cause] Vident International Equity Fund (NASDAQ:VIDI) declared a - dividend on Tuesday, September 17th, Wall Street Journal reports. [Relation] cause [Effect] Stockholders of record on Wednesday, September 18th will be given a dividend of 0.0147 per share on Thursday, September 19th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "c0ef9d5e",
+      "data": {
+        "text": "Smith & Nephew plc (SNN) to Issue  -  Dividend of $0.29 on October 30th . Shareholders of record on Friday, October 4th will be paid a dividend of 0.288 per share by the medical equipment provider on Wednesday, October 30th. This represents a yield of 1.5%.",
+        "reference": "[Cause] Smith & Nephew plc (SNN) to Issue  -  Dividend of $0.29 on October 30th . [Relation] cause [Effect] This represents a yield of 1.5%.",
+        "model": "[Cause] Smith & Nephew plc (SNN) to Issue - Dividend of $0.29 on October 30th. [Relation] cause [Effect] Shareholders of record on Friday, October 4th will be paid a dividend of 0.288 per share by the medical equipment provider on Wednesday, October 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "eb73cbc3",
+      "data": {
+        "text": "Berenberg Bank raised Smith & Nephew from a hold rating to a buy rating in a research report on Tuesday, July 23rd. Four equities research analysts have rated the stock with a hold rating and four have assigned a buy rating to the company. The stock has a consensus rating of Buy and an average target price of $27.50.",
+        "reference": "[Cause] Four equities research analysts have rated the stock with a hold rating and four have assigned a buy rating to the company. [Relation] cause [Effect] The stock has a consensus rating of Buy and an average target price of $27.50.",
+        "model": "[Cause] Berenberg Bank raised Smith & Nephew from a hold rating to a buy rating in a research report on Tuesday, July 23rd. [Relation] cause [Effect] The stock has a consensus rating of Buy and an average target price of $27.50.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "09c99d42",
+      "data": {
+        "text": "A wafer-thin majority, 50.5%, approved the remuneration report at Ryanair's annual meeting in Dublin, which means O'Leary could land the extraordinary windfall despite widespread shareholder dissent. O'Leary's current pay and annual bonus will be halved to a total maximum \u20ac1m a year. However, he will have an option to buy 10m shares at a fixed price of \u20ac11.12 a share, should the airline either record \u20ac2bn profit in any one year by 2024, or should the share price rise above \u20ac21.",
+        "reference": "[Cause] A wafer-thin majority, 50.5%, approved the remuneration report at Ryanair's annual meeting in Dublin, which means O'Leary could land the extraordinary windfall despite widespread shareholder dissent. [Relation] cause [Effect] O'Leary's current pay and annual bonus will be halved to a total maximum \u20ac1m a year.",
+        "model": "[Cause] A wafer-thin majority, 50.5%, approved the remuneration report at Ryanair's annual meeting in Dublin, which means O'Leary could land the extraordinary windfall despite widespread shareholder dissent. [Relation] cause [Effect] However, he will have an option to buy 10m shares at a fixed price of \u20ac11.12 a share, should the airline either record \u20ac2bn profit in any one year by 2024, or should the share price rise above \u20ac21.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "6b46aa03",
+      "data": {
+        "text": "The company also recently disclosed a quarterly dividend, which was paid on Monday, September 9th. Shareholders of record on Monday, August 26th were paid a dividend of $0.01 per share. This represents a $0.04 dividend on an annualized basis and a yield of 0.48%.",
+        "reference": "[Cause] The company also recently disclosed a quarterly dividend, which was paid on Monday, September 9th. [Relation] cause [Effect] This represents a $0.04 dividend on an annualized basis and a yield of 0.48%.",
+        "model": "[Cause] The company also recently disclosed a quarterly dividend, which was paid on Monday, September 9th. [Relation] cause [Effect] Shareholders of record on Monday, August 26th were paid a dividend of $0.01 per share.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "c437df37",
+      "data": {
+        "text": "Malloy testified that as of Sept. 11, the Virgin Islands outstanding trust fund loan balance was $63.4 million. There is $4.4 million in the our current trust fund to cover current benefits, he said. The recession in 2007 and the loss of Hovensa LLC in 2012 depleted the trust fund, which had been $66 million in 2001.",
+        "reference": "[Cause] The recession in 2007 and the loss of Hovensa LLC in 2012 depleted the trust fund, which had been $66 million in 2001. [Relation] cause [Effect] Malloy testified that as of Sept. 11, the Virgin Islands outstanding trust fund loan balance was $63.4 million.",
+        "model": "[Cause] The recession in 2007 and the loss of Hovensa LLC in 2012 depleted the trust fund, which had been $66 million in 2001. [Relation] cause [Effect] There is $4.4 million in the our current trust fund to cover current benefits, he said.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "1e0249c7",
+      "data": {
+        "text": "Financial Account Transactions (tables 1, 6, 7, and 8)  Net financial account transactions were \u2212$155.1 billion in the second quarter, reflecting net U.S. borrowing from foreign residents.",
+        "reference": "[Cause] net U.S. borrowing from foreign residents. [Relation] cause [Effect] Financial Account Transactions (tables 1, 6, 7, and 8)  Net financial account transactions were \u2212$155.1 billion in the second quarter",
+        "model": "[Cause] net U.S. borrowing from foreign residents. [Relation] cause [Effect] Financial Account Transactions (tables 1, 6, 7, and 8) Net financial account transactions were $155.1 billion in the second quarter",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "892f5ea2",
+      "data": {
+        "text": "Financial Derivatives  Net transactions in financial derivatives were \u2212$9.2 billion in the second quarter, reflecting net borrowing from foreign residents.",
+        "reference": "[Cause] net borrowing from foreign residents. [Relation] cause [Effect] Financial Derivatives  Net transactions in financial derivatives were \u2212$9.2 billion in the second quarter",
+        "model": "[Cause] net borrowing from foreign residents. [Relation] cause [Effect] Financial Derivatives Net transactions in financial derivatives were $9.2 billion in the second quarter",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "53a122e2",
+      "data": {
+        "text": "SPDR Russell 1000 Yield Focus ETF (NYSEARCA:ONEY) Plans $0.61  -  Dividend Tweet  SPDR Russell 1000 Yield Focus ETF (NYSEARCA:ONEY) announced a  -  dividend on Monday, September 23rd, Wall Street Journal reports. Investors of record on Tuesday, September 24th will be paid a dividend of 0.6134 per share on Thursday, September 26th. This represents a yield of 3.3%.",
+        "reference": "[Cause] SPDR Russell 1000 Yield Focus ETF (NYSEARCA:ONEY) Plans $0.61  -  Dividend Tweet  SPDR Russell 1000 Yield Focus ETF (NYSEARCA:ONEY) announced a  -  dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] This represents a yield of 3.3%.",
+        "model": "[Cause] SPDR Russell 1000 Yield Focus ETF (NYSEARCA:ONEY) Plans $0.61 - Dividend Tweet SPDR Russell 1000 Yield Focus ETF (NYSEARCA:ONEY) announced a - dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] Investors of record on Tuesday, September 24th will be paid a dividend of 0.6134 per share on Thursday, September 26th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "4f970aa6",
+      "data": {
+        "text": "WestJet Airlines Ltd. to Issue Quarterly Dividend of $0.14 (TSE:WJA) Tweet  WestJet Airlines Ltd. (TSE:WJA) announced a quarterly dividend on Friday, July 26th, Zacks reports. Investors of record on Wednesday, September 11th will be given a dividend of 0.14 per share on Monday, September 30th. This represents a $0.56 annualized dividend and a dividend yield of 1.83%.",
+        "reference": "[Cause] WestJet Airlines Ltd. to Issue Quarterly Dividend of $0.14 (TSE:WJA) Tweet  WestJet Airlines Ltd. (TSE:WJA) announced a quarterly dividend on Friday, July 26th, Zacks reports. [Relation] cause [Effect] This represents a $0.56 annualized dividend and a dividend yield of 1.83%.",
+        "model": "[Cause] WestJet Airlines Ltd. to Issue Quarterly Dividend of $0.14 (TSE:WJA) Tweet WestJet Airlines Ltd. (TSE:WJA) announced a quarterly dividend on Friday, July 26th, Zacks reports. [Relation] cause [Effect] Investors of record on Wednesday, September 11th will be given a dividend of 0.14 per share on Monday, September 30th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d98a3cec",
+      "data": {
+        "text": "A 401(k) loan not paid is deemed a distribution, subject to income taxes and a 10% tax penalty if the account owner is under 59\u00bd.",
+        "reference": "[Cause] the account owner is under 59\u00bd. [Relation] cause [Effect] A 401(k) loan not paid is deemed a distribution, subject to income taxes and a 10% tax penalty",
+        "model": "[Cause] the account owner is under 5912. [Relation] cause [Effect] A 401(k) loan not paid is deemed a distribution, subject to income taxes and a 10% tax penalty",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "9f50b47c",
+      "data": {
+        "text": "SPDR S&P International Dividend ETF (DWX) to Issue  -  Dividend of $0.39 on September 26th SPDR S&P International Dividend ETF (NYSEARCA:DWX) announced a  -  dividend on Monday, September 23rd, Wall Street Journal reports. Shareholders of record on Tuesday, September 24th will be given a dividend of 0.3867 per share on Thursday, September 26th. This represents a yield of 4.1%.",
+        "reference": "[Cause] SPDR S&P International Dividend ETF (DWX) to Issue  -  Dividend of $0.39 on September 26th SPDR S&P International Dividend ETF (NYSEARCA:DWX) announced a  -  dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] This represents a yield of 4.1%.",
+        "model": "[Cause] SPDR S&P International Dividend ETF (DWX) to Issue - Dividend of $0.39 on September 26th SPDR S&P International Dividend ETF (NYSEARCA:DWX) announced a - dividend on Monday, September 23rd, Wall Street Journal reports. [Relation] cause [Effect] Shareholders of record on Tuesday, September 24th will be given a dividend of 0.3867 per share on Thursday, September 26th.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "7ac6f2b5",
+      "data": {
+        "text": "BlackRock Enhanced Global Dividend Trust (NYSE:BOE) Shares Purchased by LPL Financial LLC LPL Financial LLC increased its position in shares of BlackRock Enhanced Global Dividend Trust (NYSE:BOE) by 58.7% during the 2nd quarter, according to the company in its most recent 13F filing with the Securities and Exchange Commission. The fund owned 144,674 shares of the financial services provider's stock after acquiring an additional 53,493 shares during the quarter. LPL Financial LLC's holdings in BlackRock Enhanced Global Dividend Trust were worth $1,552,000 as of its most recent filing with the Securities and Exchange Commission.",
+        "reference": "[Cause] BlackRock Enhanced Global Dividend Trust (NYSE:BOE) Shares Purchased by LPL Financial LLC LPL Financial LLC increased its position in shares of BlackRock Enhanced Global Dividend Trust (NYSE:BOE) by 58.7% during the 2nd quarter, according to the company in its most recent 13F filing with the Securities and Exchange Commission. [Relation] cause [Effect] LPL Financial LLC's holdings in BlackRock Enhanced Global Dividend Trust were worth $1,552,000 as of its most recent filing with the Securities and Exchange Commission.",
+        "model": "[Cause] BlackRock Enhanced Global Dividend Trust (NYSE:BOE) Shares Purchased by LPL Financial LLC LPL Financial LLC increased its position in shares of BlackRock Enhanced Global Dividend Trust (NYSE:BOE) by 58.7% during the 2nd quarter, according to the company in its most recent 13F filing with the Securities and Exchange Commission. [Relation] cause [Effect] The fund owned 144,674 shares of the financial services provider's stock after acquiring an additional 53,493 shares during the quarter.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "6ea32e0d",
+      "data": {
+        "text": "The company also recently disclosed a monthly dividend, which will be paid on Monday, September 30th. Stockholders of record on Monday, September 16th will be issued a $0.063 dividend. This represents a $0.76 annualized dividend and a dividend yield of 7.33%.",
+        "reference": "[Cause] The company also recently disclosed a monthly dividend, which will be paid on Monday, September 30th. [Relation] cause [Effect] This represents a $0.76 annualized dividend and a dividend yield of 7.33%.",
+        "model": "[Cause] The company also recently disclosed a monthly dividend, which will be paid on Monday, September 30th. [Relation] cause [Effect] Stockholders of record on Monday, September 16th will be issued a $0.063 dividend.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d24ec824",
+      "data": {
+        "text": "Liberals offer retrofit program to assist 1.5 million homes with upgrades Kathleen Harris \u00b7 CBC News \u00b7  Liberal Leader Justin Trudeau says a re-elected Liberal government would offer Canadians an interest-free loan of up to $40,000 to make their homes more energy efficient and resistant to climate change.",
+        "reference": "[Cause] make their homes more energy efficient and resistant to climate change. [Relation] cause [Effect] Liberals offer retrofit program to assist 1.5 million homes with upgrades Kathleen Harris \u00b7 CBC News \u00b7  Liberal Leader Justin Trudeau says a re-elected Liberal government would offer Canadians an interest-free loan of up to $40,000",
+        "model": "[Cause] make their homes more energy efficient and resistant to climate change. [Relation] cause [Effect] Liberals offer retrofit program to assist 1.5 million homes with upgrades Kathleen Harris  CBC News  Liberal Leader Justin Trudeau says a re-elected Liberal government would offer Canadians an interest-free loan of up to $40,000",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "7f11817d",
+      "data": {
+        "text": "Trudeau is in Port Coquitlam, B.C. today to make his party's second climate change action plan announcement of the week  -  a promise to introduce a new program to cut energy bills and fortify homes if he's re-elected. The Liberal Party says the program would offer a free energy audit and would help to retrofit about 1.5 million homes. Homeowners and landlords would be eligible for an interest-free loan of up to $40,000 for eligible green-friendly renovations  -  such as high efficiency doors or windows, rooftop solar panels, basement flood-proofing or insulation.",
+        "reference": "[Cause] Trudeau is in Port Coquitlam, B.C. today to make his party's second climate change action plan announcement of the week  -  a promise to introduce a new program to cut energy bills and fortify homes if he's re-elected. [Relation] cause [Effect] The Liberal Party says the program would offer a free energy audit and would help to retrofit about 1.5 million homes.",
+        "model": "[Cause] Trudeau is in Port Coquitlam, B.C. today to make his party's second climate change action plan announcement of the week - a promise to introduce a new program to cut energy bills and fortify homes if he's re-elected. [Relation] cause [Effect] Homeowners and landlords would be eligible for an interest-free loan of up to $40,000 for eligible green-friendly renovations - such as high efficiency doors or windows, rooftop solar panels, basement flood-proofing or insulation.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "871a4c59",
+      "data": {
+        "text": "The increase in net interest income was due primarily to a $152.9 billion increase in average outstanding loans, a $32.6 billion increase in average securities, partially offset by a 78 basis point decrease in earning asset yields.NIM was 3.22% for 2020, down 20 basis points compared to the prior year.",
+        "reference": "[Cause] a $152.9 billion increase in average outstanding loans, a $32.6 billion increase in average securities, partially offset by a 78 basis point decrease in earning asset yields. [Relation] cause [Effect] The increase in net interest income",
+        "model": "[Cause] a $152.9 billion increase in average outstanding loans, a $32.6 billion increase in average securities, partially offset by a 78 basis point decrease in earning asset yields.NIM was 3.22% for 2020, down 20 basis points compared to the prior year. [Relation] cause [Effect] The increase in net interest income",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "7fc00b12",
+      "data": {
+        "text": "The provision for credit losses was $2.3 billion, compared to $615 million for the earlier period. The increase in the provision for credit losses reflects the significant builds to the allowance for credit losses in the first and second quarters of the year due to increased economic stress associated with the pandemic and specific consideration of its impact on certain industries, as well as uncertainty related to performance after the expiration of relief packages and COVID-19, increased loan balances arising from the Merger and the effect of applying the CECL methodology in the current period compared to the incurred loss methodology in the earlier period.",
+        "reference": "[Cause] The increase in the provision for credit losses reflects the significant builds to the allowance for credit losses in the first and second quarters of the year due to increased economic stress associated with the pandemic and specific consideration of its impact on certain industries, as well as uncertainty related to performance after the expiration of relief packages and COVID-19, increased loan balances arising from the Merger and the effect of applying the CECL methodology in the current period compared to the incurred loss methodology in the earlier period. [Relation] cause [Effect] The provision for credit losses was $2.3 billion, compared to $615 million for the earlier period.",
+        "model": "[Cause] The increase in the provision for credit losses reflects the significant builds to the allowance for credit losses in the first and second quarters of the year due to increased economic stress associated with the pandemic and specific consideration of its impact on certain industries, as well as uncertainty related to performance after the expiration of relief packages and COVID-19, increased loan balances arising from the Merger and the effect of applying the CECL methodology in the current period compared to the incurred loss methodology in the earlier period. [Relation] cause [Effect] The provision for credit losses was",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "dc9ebe64",
+      "data": {
+        "text": "The Company remains on track to deliver approximately $200.0 of net savings from its three-year, Phase II of Dx\u2019s LaunchPad initiative by the end of 2021.DD operating income was $37.3 for the year ended December 31, 2020, a decrease of 90.9% from operating income of $411.5 in the corresponding period of 2019 and a decrease of 820 basis points in operating margin year-over-year. The decrease in operating income and margin were primarily due to the negative impact of COVID-19, specifically goodwill and other asset impairment of $450.5, and higher personnel costs, partially offset by organic demand, acquisitions, and LaunchPad savings.",
+        "reference": "[Cause] The decrease in operating income and margin were primarily due to the negative impact of COVID-19, specifically goodwill and other asset impairment of $450.5, and higher personnel costs, partially offset by organic demand, acquisitions, and LaunchPad savings. [Relation] cause [Effect] The Company remains on track to deliver approximately $200.0 of net savings from its three-year, Phase II of Dx\u2019s LaunchPad initiative by the end of 2021.DD operating income was $37.3 for the year ended December 31, 2020, a decrease of 90.9% from operating income of $411.5 in the corresponding period of 2019 and a decrease of 820 basis points in operating margin year-over-year.",
+        "model": "[Cause] The decrease in operating income and margin were primarily due to the negative impact of COVID-19, specifically goodwill and other asset impairment of $450.5, and higher personnel costs, partially offset by organic demand, acquisitions, and LaunchPad savings. [Relation] cause [Effect] The Company remains on track to deliver approximately $200.0 of net savings from its three-year, Phase II of Dx\u2019s LaunchPad initiative by the end of 2021.DD operating income was $37.3 for the year ended December 31, 2020, a decrease of 90.9% from operating income of",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "5ee5608e",
+      "data": {
+        "text": "In 2020, net cash provided by investing activities included $387.4 million in proceeds from the divestiture of the Business Products Group and $18.1 million in proceeds from the sale of property, plant and equipment.",
+        "reference": "[Cause] the divestiture of the Business Products Group and $18.1 million in proceeds from the sale of property, plant and equipment. [Relation] cause [Effect] In 2020, net cash provided by investing activities included $387.4 million",
+        "model": "[Cause] proceeds from the divestiture of the Business Products Group and $18.1 million in proceeds from the sale of property, plant and equipment. [Relation] cause [Effect] In 2020, net cash provided by investing activities included $387.4 million",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "f338a1cd",
+      "data": {
+        "text": "The growth in emerging markets was partially offset by a decline in the Company\u2019s European businesses due to a challenging macroeconomic environment.",
+        "reference": "[Cause] a decline in the Company\u2019s European businesses due to a challenging macroeconomic environment. [Relation] cause [Effect] The growth in emerging markets was partially offset",
+        "model": "[Cause] a challenging macroeconomic environment. [Relation] cause [Effect] The growth in emerging markets was partially offset by a decline in the Company\u2019s European businesses",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "27dd9841",
+      "data": {
+        "text": "The primary drivers of the 20 basis point gross margin increase were pricing and productivity, partially offset by input cost inflation. SG&A expenses for 2012 were 25.8% of net sales, or $1,521.1 million, versus 25.8% of net sales, or $1,515.3 million, for 2011. In constant currency, SG&A expenses increased $32.6 million, primarily due to $37.1 million of incremental investments in brand building and strategic SG&A activities to support new products, marketing initiatives, new market entries and global expansion, and a $7.3 million increase in structural SG&A due to increased annual incentive compensation offset by savings from structural cost savings initiatives and ongoing restructuring projects.",
+        "reference": "[Cause] In constant currency, SG&A expenses increased $32.6 million, primarily due to $37.1 million of incremental investments in brand building and strategic SG&A activities to support new products, marketing initiatives, new market entries and global expansion, and a $7.3 million increase in structural SG&A due to increased annual incentive compensation offset by savings from structural cost savings initiatives and ongoing restructuring projects. [Relation] cause [Effect] The primary drivers of the 20 basis point gross margin increase were pricing and productivity, partially offset by input cost inflation. SG&A expenses for 2012 were 25.8% of net sales, or $1,521.1 million, versus 25.8% of net sales, or $1,515.3 million, for 2011.",
+        "model": "[Cause] In constant currency, SG&A expenses increased $32.6 million, primarily due to $37.1 million of incremental investments in brand building and strategic SG&A activities to support new products, marketing initiatives, new market entries and global expansion, and a $7.3 million increase in structural SG&A due to increased annual incentive compensation offset by savings from structural cost savings initiatives and ongoing restructuring projects. [Relation] cause [Effect] The primary drivers of the 20 basis point gross margin increase were pricing and productivity, partially offset by input cost inflation. SG&A expenses for 2012 were",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "3c1727d0",
+      "data": {
+        "text": "Operating income for 2012 was $109.8 million, or 13.6% of net sales, a decrease of $9.3 million, or 7.8%, from $119.1 million, or 15.3% of net sales, for 2011. The 170 basis point decrease in operating margin is partially attributable to input cost inflation and unfavorable mix, partially offset by pricing and productivity. The decrease was also the result of a 100 basis point increase in constant currency SG&A costs as a percentage of net sales due to higher brand building and ongoing strategic SG&A spending, structural SG&A to support geographic expansion, and sustained investment in selling and marketing resources in certain businesses.",
+        "reference": "[Cause] The 170 basis point decrease in operating margin is partially attributable to input cost inflation and unfavorable mix, partially offset by pricing and productivity. The decrease was also the result of a 100 basis point increase in constant currency SG&A costs as a percentage of net sales due to higher brand building and ongoing strategic SG&A spending, structural SG&A to support geographic expansion, and sustained investment in selling and marketing resources in certain businesses [Relation] cause [Effect] Operating income for 2012 was $109.8 million, or 13.6% of net sales, a decrease of $9.3 million, or 7.8%, from $119.1 million, or 15.3% of net sales, for 2011.",
+        "model": "[Cause] The 170 basis point decrease in operating margin is partially attributable to input cost inflation and unfavorable mix, partially offset by pricing and productivity. The decrease was also the result of a 100 basis point increase in constant currency SG&A costs as a percentage of net sales due to higher brand building and ongoing strategic SG&A spending, structural SG&A to support geographic expansion, and sustained investment in selling and marketing resources in certain businesses [Relation] cause [Effect] Operating income for 2012 was $109.8 million, or 13.6% of net sales",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "c4195227",
+      "data": {
+        "text": "Operating income for 2012 was $72.7 million, or 9.9% of net sales, an increase of $21.1 million, or 40.9%, from $51.6 million, or 7.6% of net sales, for 2011. The 230 basis point increase in operating margin is attributable to productivity, favorable mix, and better leverage of constant currency SG&A costs on the net sales increase, partially offset by input cost inflation.SpecialtyNet sales for 2012 were $540.6 million, a decrease of $13.0 million, or 2.3%, from $553.6 million for 2011.",
+        "reference": "[Cause] The 230 basis point increase in operating margin is attributable to productivity, favorable mix, and better leverage of constant currency SG&A costs on the net sales increase, partially offset by input cost inflation.SpecialtyNet sales for 2012 were $540.6 million, a decrease of $13.0 million, or 2.3%, from $553.6 million for 2011. [Relation] cause [Effect] Operating income for 2012 was $72.7 million, or 9.9% of net sales, an increase of $21.1 million, or 40.9%, from $51.6 million, or 7.6% of net sales, for 2011.",
+        "model": "[Cause] The 230 basis point increase in operating margin is attributable to productivity, favorable mix, and better leverage of constant currency SG&A costs on the net sales increase, partially offset by input cost inflation.SpecialtyNet sales for 2012 were $540.6 million, a decrease of $13.0 million, or 2.3%, from $553.6 million for 2011. [Relation] cause [Effect] Operating income for 2012 was $72.7 million, or 9.9% of net sales, an increase of $21.1 million, or 40.9%, from $51.6 million, or 7.",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "981d6f2e",
+      "data": {
+        "text": "Core sales increased 0.8% with low-single-digit core sales growth in fine writing products, partially offset by a modest core sales decline in everyday writing products.",
+        "reference": "[Cause] a modest core sales decline in everyday writing products. [Relation] cause [Effect] Core sales increased 0.8% with low-single-digit core sales growth in fine writing products",
+        "model": "[Cause] a modest core sales decline in everyday writing products. [Relation] cause [Effect] Core sales increased 0.8% with low-single-digit core sales growth in fine writing products, partially offset",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "42f05a4f",
+      "data": {
+        "text": "The $57.2 million year-over-year increase in operating cash flow was primarily driven by the following:\u2022improved profitability in 2012 compared to 2011\u2022a $61.7 million decrease in incentive compensation payments made in 2012 compared to 2011 and\u2022a $9.2 million decrease in customer program payments during 2012 compared to 2011Partially offset by\u2022a $41.1 million increase in contributions to the Company\u2019s defined benefit plans, including its primary U.S. defined benefit pension plan.",
+        "reference": "[Cause] \u2022improved profitability in 2012 compared to 2011\u2022a $61.7 million decrease in incentive compensation payments made in 2012 compared to 2011 and\u2022a $9.2 million decrease in customer program payments during 2012 compared to 2011Partially offset by\u2022a $41.1 million increase in contributions to the Company\u2019s defined benefit plans, including its primary U.S. defined benefit pension plan. [Relation] cause [Effect] The $57.2 million year-over-year increase in operating cash flow",
+        "model": "[Cause] the following:\u2022improved profitability in 2012 compared to 2011\u2022a $61.7 million decrease in incentive compensation payments made in 2012 compared to 2011 and\u2022a $9.2 million decrease in customer program payments during 2012 compared to 2011Partially offset by\u2022a $41.1 million increase in contributions to the Company\u2019s defined benefit plans, including its primary U.S. defined benefit pension plan. [Relation] cause [Effect] The $57.2 million year-over-year increase in operating cash flow",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "2996c8db",
+      "data": {
+        "text": "The Company's short-term borrowings, which include commercial paper and the receivables financing facility, were $210.7 million at December 31, 2012 compared to $103.6 million at December 31, 2011. The increase in short-term borrowings is primarily due to the redemption of the $436.7 million of the 5.25% Junior Convertible Subordinated Debentures (the Debentures) in July 2012 and the repayments of an aggregate $750.0 million principal amount of medium-term notes during 2012, partially offset by proceeds from long-term debt issuances in the second and fourth quarters of 2012.",
+        "reference": "[Cause] The increase in short-term borrowings is primarily due to the redemption of the $436.7 million of the 5.25% Junior Convertible Subordinated Debentures (the Debentures) in July 2012 and the repayments of an aggregate $750.0 million principal amount of medium-term notes during 2012, partially offset by proceeds from long-term debt issuances in the second and fourth quarters of 2012. [Relation] cause [Effect] The Company's short-term borrowings, which include commercial paper and the receivables financing facility, were $210.7 million at December 31, 2012 compared to $103.6 million at December 31, 2011.",
+        "model": "[Cause] The increase in short-term borrowings is primarily due to the redemption of the $436.7 million of the 5.25% Junior Convertible Subordinated Debentures (the Debentures) in July 2012 and the repayments of an aggregate $750.0 million principal amount of medium-term notes during 2012, partially offset by proceeds from long-term debt issuances in the second and fourth quarters of 2012. [Relation] cause [Effect] The Company's short-term borrowings, which include commercial paper and the receivables financing facility, were $2",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "421947b0",
+      "data": {
+        "text": "The Company\u2019s floating-rate debt, which includes medium-term notes that are subject to fixed-for-floating interest rate swaps, was 51.7% and 17.7% of total debt as of December 31, 2012 and 2011, respectively. The increase in floating-rate debt is primarily due to fixed-for-floating interest rate swaps related to $500.0 million of 4.7% medium-term notes due 2020 that were entered into during 2012, whereas in 2011, the Company terminated and settled fixed-for-floating interest rate swaps relating to $750.0 million principal amount of medium-term notes.",
+        "reference": "[Cause] The increase in floating-rate debt is primarily due to fixed-for-floating interest rate swaps related to $500.0 million of 4.7% medium-term notes due 2020 that were entered into during 2012, whereas in 2011, the Company terminated and settled fixed-for-floating interest rate swaps relating to $750.0 million principal amount of medium-term notes. [Relation] cause [Effect] The Company\u2019s floating-rate debt, which includes medium-term notes that are subject to fixed-for-floating interest rate swaps, was 51.7% and 17.7% of total debt as of December 31, 2012 and 2011, respectively.",
+        "model": "[Cause] The increase in floating-rate debt is primarily due to fixed-for-floating interest rate swaps related to $500.0 million of 4.7% medium-term notes due 2020 that were entered into during 2012, whereas in 2011, the Company terminated and settled fixed-for-floating interest rate swaps relating to $750.0 million principal amount of medium-term notes. [Relation] cause [Effect] The Company\u2019s floating-rate debt, which includes medium-term notes that are subject to fixed-for-floating interest rate swaps, was 51.7% and",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "ec6e45fc",
+      "data": {
+        "text": "Foreign currency had the impact of reducing net sales by 1.6%.Gross margin, as a percentage of net sales, for 2012 was 37.8%, or $2,229.1 million, versus 37.6% of net sales, or $2,205.2 million, for 2011. The primary drivers of the 20 basis point gross margin increase were pricing and productivity, partially offset by input cost inflation. SG&A expenses for 2012 were 25.8% of net sales, or $1,521.1 million, versus 25.8% of net sales, or $1,515.3 million, for 2011.",
+        "reference": "[Cause] The primary drivers of the 20 basis point gross margin increase were pricing and productivity, partially offset by input cost inflation. SG&A expenses for 2012 were 25.8% of net sales, or $1,521.1 million, versus 25.8% of net sales, or $1,515.3 million, for 2011. [Relation] cause [Effect] Foreign currency had the impact of reducing net sales by 1.6%.Gross margin, as a percentage of net sales, for 2012 was 37.8%, or $2,229.1 million, versus 37.6% of net sales, or $2,205.2 million, for 2011.",
+        "model": "[Cause] The primary drivers of the 20 basis point gross margin increase were pricing and productivity, partially offset by input cost inflation. SG&A expenses for 2012 were 25.8% of net sales, or $1,521.1 million, versus 25.8% of net sales, or $1,515.3 million, for 2011. [Relation] cause [Effect] Foreign currency had the impact of reducing net sales by 1.6%.Gross margin, as a percentage of net sales, for 2012 was 37.8%, or $2,229.1 million, versus 37.6% of net",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "56a2c9af",
+      "data": {
+        "text": "Gross margin, as a percentage of net sales, for 2011 was 37.6%, or $2,205.2 million, versus 38.0% of net sales, or $2,148.7 million, for 2010. The primary drivers of the 40 basis point gross margin decrease were input and sourced product cost inflation, partially offset by pricing and productivity. SG&A expenses for 2011 were 25.8% of net sales, or $1,515.3 million, versus 25.6% of net sales, or $1,447.8 million, for 2010.",
+        "reference": "[Cause] The primary drivers of the 40 basis point gross margin decrease were input and sourced product cost inflation, partially offset by pricing and productivity. SG&A expenses for 2011 were 25.8% of net sales, or $1,515.3 million, versus 25.6% of net sales, or $1,447.8 million, for 2010. [Relation] cause [Effect] Gross margin, as a percentage of net sales, for 2011 was 37.6%, or $2,205.2 million, versus 38.0% of net sales, or $2,148.7 million, for 2010.",
+        "model": "[Cause] The primary drivers of the 40 basis point gross margin decrease were input and sourced product cost inflation, partially offset by pricing and productivity. SG&A expenses for 2011 were 25.8% of net sales, or $1,515.3 million, versus 25.6% of net sales, or $1,447.8 million, for 2010. [Relation] cause [Effect] Gross margin, as a percentage of net sales, for 2011 was 37.6%, or $2,205.2 million, versus 38.0% of net sales, or $2,148.7 million, for",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "9e7b9d15",
+      "data": {
+        "text": "In constant currency, SG&A costs as a percentage of net sales remained relatively unchanged as reductions in SG&A driven by savings realized from Project Renewal were consistent with the declines in net sales.",
+        "reference": "[Cause] savings realized from Project Renewal were consistent with the declines in net sales. [Relation] cause [Effect] In constant currency, SG&A costs as a percentage of net sales remained relatively unchanged as reductions in SG&A",
+        "model": "[Cause] reductions in SG&A driven by savings realized from Project Renewal were consistent with the declines in net sales. [Relation] cause [Effect] In constant currency, SG&A costs as a percentage of net sales remained relatively unchanged",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "3c1727d0",
+      "data": {
+        "text": "Operating income for 2012 was $109.8 million, or 13.6% of net sales, a decrease of $9.3 million, or 7.8%, from $119.1 million, or 15.3% of net sales, for 2011. The 170 basis point decrease in operating margin is partially attributable to input cost inflation and unfavorable mix, partially offset by pricing and productivity. The decrease was also the result of a 100 basis point increase in constant currency SG&A costs as a percentage of net sales due to higher brand building and ongoing strategic SG&A spending, structural SG&A to support geographic expansion, and sustained investment in selling and marketing resources in certain businesses.",
+        "reference": "[Cause] The 170 basis point decrease in operating margin is partially attributable to input cost inflation and unfavorable mix, partially offset by pricing and productivity. The decrease was also the result of a 100 basis point increase in constant currency SG&A costs as a percentage of net sales due to higher brand building and ongoing strategic SG&A spending, structural SG&A to support geographic expansion, and sustained investment in selling and marketing resources in certain businesses [Relation] cause [Effect] Operating income for 2012 was $109.8 million, or 13.6% of net sales, a decrease of $9.3 million, or 7.8%, from $119.1 million, or 15.3% of net sales, for 2011.",
+        "model": "[Cause] The 170 basis point decrease in operating margin is partially attributable to input cost inflation and unfavorable mix, partially offset by pricing and productivity. The decrease was also the result of a 100 basis point increase in constant currency SG&A costs as a percentage of net sales due to higher brand building and ongoing strategic SG&A spending, structural SG&A to support geographic expansion, and sustained investment in selling and marketing resources in certain businesses [Relation] cause [Effect] Operating income for 2012 was $109.8 million, or 13.6% of net sales",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "180eb1db",
+      "data": {
+        "text": "Foreign currency had an unfavorable impact of 1.9%.Operating income for 2012 was $68.2 million, or 12.6% of net sales, an increase of $8.0 million, or 13.3%, from $60.2 million, or 10.9% of net sales, for 2011. The 170 basis point increase in operating margin is attributable to a 280 basis point decrease in constant currency SG&A costs as a percentage of net sales, driven by reductions in strategic SG&A activities, partially offset by input cost inflation.",
+        "reference": "[Cause] The 170 basis point increase in operating margin is attributable to a 280 basis point decrease in constant currency SG&A costs as a percentage of net sales, driven by reductions in strategic SG&A activities, partially offset by input cost inflation. [Relation] cause [Effect] Foreign currency had an unfavorable impact of 1.9%.Operating income for 2012 was $68.2 million, or 12.6% of net sales, an increase of $8.0 million, or 13.3%, from $60.2 million, or 10.9% of net sales, for 2011.",
+        "model": "[Cause] The 170 basis point increase in operating margin is attributable to a 280 basis point decrease in constant currency SG&A costs as a percentage of net sales, driven by reductions in strategic SG&A activities, partially offset by input cost inflation. [Relation] cause [Effect] Foreign currency had an unfavorable impact of 1.9%.Operating income for 2012 was $68.2 million, or 12.6% of net sales, an increase of $8.0 million, or 13.3%, from $60.2 million, or 10.9% of net sales,",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "45eb3ab4",
+      "data": {
+        "text": "In connection with the extinguishments of $20.2 million principal amount of Convertible Notes, the Company paid $3.1 million in cash to the holders of such Convertible Notes during 2011.",
+        "reference": "[Cause] In connection with the extinguishments of $20.2 million principal amount of Convertible Notes [Relation] cause [Effect] the Company paid $3.1 million in cash to the holders of such Convertible Notes during 2011.",
+        "model": "[Cause] the Company paid $3.1 million in cash to the holders of such Convertible Notes during 2011. [Relation] cause [Effect] In connection with the extinguishments of $20.2 million principal amount of Convertible Notes",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "421947b0",
+      "data": {
+        "text": "The Company\u2019s floating-rate debt, which includes medium-term notes that are subject to fixed-for-floating interest rate swaps, was 51.7% and 17.7% of total debt as of December 31, 2012 and 2011, respectively. The increase in floating-rate debt is primarily due to fixed-for-floating interest rate swaps related to $500.0 million of 4.7% medium-term notes due 2020 that were entered into during 2012, whereas in 2011, the Company terminated and settled fixed-for-floating interest rate swaps relating to $750.0 million principal amount of medium-term notes.",
+        "reference": "[Cause] The increase in floating-rate debt is primarily due to fixed-for-floating interest rate swaps related to $500.0 million of 4.7% medium-term notes due 2020 that were entered into during 2012, whereas in 2011, the Company terminated and settled fixed-for-floating interest rate swaps relating to $750.0 million principal amount of medium-term notes. [Relation] cause [Effect] The Company\u2019s floating-rate debt, which includes medium-term notes that are subject to fixed-for-floating interest rate swaps, was 51.7% and 17.7% of total debt as of December 31, 2012 and 2011, respectively.",
+        "model": "[Cause] The increase in floating-rate debt is primarily due to fixed-for-floating interest rate swaps related to $500.0 million of 4.7% medium-term notes due 2020 that were entered into during 2012, whereas in 2011, the Company terminated and settled fixed-for-floating interest rate swaps relating to $750.0 million principal amount of medium-term notes. [Relation] cause [Effect] The Company\u2019s floating-rate debt, which includes medium-term notes that are subject to fixed-for-floating interest rate swaps, was 51.7% and",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "9f07c8f4",
+      "data": {
+        "text": "The change in fair value of contingent consideration liabilities resulted in expense of $13.6 million in 2020 and income of $6.1 million in 2019. The expense in 2020 was primarily driven by the accretion of interest due to the passage of time and adjustments to discount rates, partially offset by changes in the projected probability and timing of milestone achievements, and the projected timing of cash inflows. The income in 2019 was due primarily to longer product development timelines, which reduced the probability of milestone achievements, partially offset by the accretion of interest due to the passage of time and discount rate adjustments.",
+        "reference": "[Cause] The expense in 2020 was primarily driven by the accretion of interest due to the passage of time and adjustments to discount rates, partially offset by changes in the projected probability and timing of milestone achievements, and the projected timing of cash inflows. The income in 2019 was due primarily to longer product development timelines, which reduced the probability of milestone achievements, partially offset by the accretion of interest due to the passage of time and discount rate adjustments. [Relation] cause [Effect] The change in fair value of contingent consideration liabilities resulted in expense of $13.6 million in 2020 and income of $6.1 million in 2019.",
+        "model": "[Cause] The expense in 2020 was primarily driven by the accretion of interest due to the passage of time and adjustments to discount rates, partially offset by changes in the projected probability and timing of milestone achievements, and the projected timing of cash inflows. The income in 2019 was due primarily to longer product development timelines, which reduced the probability of milestone achievements, partially offset by the accretion of interest due to the passage of time and discount rate adjustments. [Relation] cause [Effect] The change in fair value of contingent consideration liabilities resulted in expense of $1",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "3ebbc2b9",
+      "data": {
+        "text": "Our pre-tax loss for 2020 was $15.6 billion, representing a $21.8 billion decrease compared to the prior year primarily due to the impact of the COVID-19 pandemic on our business which resulted in a 64% decrease in revenue and $8.2 billion of restructuring charges and $2.4 billion in investment impairments and equity method losses.",
+        "reference": "[Cause] the impact of the COVID-19 pandemic on our business which resulted in a 64% decrease in revenue and $8.2 billion of restructuring charges and $2.4 billion in investment impairments and equity method losses. [Relation] cause [Effect] Our pre-tax loss for 2020 was $15.6 billion, representing a $21.8 billion decrease compared to the prior year",
+        "model": "[Cause] the COVID-19 pandemic on our business which resulted in a 64% decrease in revenue and $8.2 billion of restructuring charges and $2.4 billion in investment impairments and equity method losses. [Relation] cause [Effect] Our pre-tax loss for 2020 was $15.6 billion, representing a $21.8 billion decrease compared to the prior year",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "a37c6910",
+      "data": {
+        "text": "In 2020, following the onset of the COVID-19 pandemic, reduced industry capacity drove a significant increase in our cargo yield, and we also generated cargo revenue through the operation of cargo-only charter flights (i.e., using aircraft in our fleet not then being utilized for passenger travel). These two factors contributed to the smaller percentage decline in cargo revenue, than in passenger revenue, compared to the prior year.The length and severity of the reduction in travel demand due to the COVID-19 pandemic are uncertain, as described in Item 1A.",
+        "reference": "[Cause] In 2020, following the onset of the COVID-19 pandemic, reduced industry capacity drove a significant increase in our cargo yield, and we also generated cargo revenue through the operation of cargo-only charter flights (i.e., using aircraft in our fleet not then being utilized for passenger travel). [Relation] cause [Effect] These two factors contributed to the smaller percentage decline in cargo revenue, than in passenger revenue, compared to the prior year.The length and severity of the reduction in travel demand due to the COVID-19 pandemic are uncertain, as described in Item 1A.",
+        "model": "[Cause] In 2020, following the onset of the COVID-19 pandemic, reduced industry capacity drove a significant increase in our cargo yield, and we also generated cargo revenue through the operation of cargo-only charter flights (i.e., using aircraft in our fleet not then being utilized for passenger travel). [Relation] cause [Effect] These two factors contributed to the smaller percentage decline in cargo revenue, than in passenger revenue, compared to the prior year.The length and severity of the reduction in travel demand due to the COVID-19 pandemic are uncertain,",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "53f3a3f8",
+      "data": {
+        "text": "As a percent of sales, selling, general and administrative expenses increased slightly to 24.5% in 2013 from 23.7% in 2012 primarily due to the addition of acquired businesses which have higher distribution related costs.",
+        "reference": "[Cause] to the addition of acquired businesses which have higher distribution related costs. [Relation] cause [Effect] As a percent of sales, selling, general and administrative expenses increased slightly to 24.5% in 2013 from 23.7% in 2012",
+        "model": "[Cause] the addition of acquired businesses which have higher distribution related costs. [Relation] cause [Effect] As a percent of sales, selling, general and administrative expenses increased slightly to 24.5% in 2013 from 23.7% in 2012",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "6349e45e",
+      "data": {
+        "text": "Segment income increased $134 million, or 23% from the prior year, to $724 million primarily due to the impact from the higher sales coupled with ongoing cost management initiatives and the benefits from the Company's restructuring actions initiated in 2012.",
+        "reference": "[Cause] the impact from the higher sales coupled with ongoing cost management initiatives and the benefits from the Company's restructuring actions initiated in 2012. [Relation] cause [Effect] Segment income increased $134 million, or 23% from the prior year, to $724 million",
+        "model": "[Cause] the higher sales coupled with ongoing cost management initiatives and the benefits from the Company's restructuring actions initiated in 2012. [Relation] cause [Effect] Segment income increased $134 million, or 23% from the prior year, to $724 million",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "b8430964",
+      "data": {
+        "text": "Segment income of $590 million increased $152 million, or 35% from the prior year, as the impact of higher pricing, sales volume growth and manufacturing cost savings overcame the adverse impact of inflation and higher overhead costs incurred to support growth.",
+        "reference": "[Cause] the impact of higher pricing, sales volume growth and manufacturing cost savings overcame the adverse impact of inflation and higher overhead costs incurred to support growth. [Relation] cause [Effect] Segment income of $590 million increased $152 million, or 35% from the prior year",
+        "model": "[Cause] higher pricing, sales volume growth and manufacturing cost savings overcame the adverse impact of inflation and higher overhead costs incurred to support growth. [Relation] cause [Effect] Segment income of $590 million increased $152 million, or 35% from the prior year",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "1e2264fc",
+      "data": {
+        "text": "In conjunction with the Company's annual impairment testing of goodwill and indefinite-lived intangible assets during the fourth quarter (on December 1), the Company recorded a non-cash impairment charge of $20 million associated with a tradename in the Learning and Development segment, as its carrying value exceeded its fair value. The impairment reflected a downward revision of forecasted results due to the impact of the delayed and limited re-opening of schools and offices as a result of the COVID-19 global pandemic, as well as the continued deterioration in sales for slime-related adhesive products.27During the third quarter of 2020, the Company concluded that a triggering event had occurred for an indefinite-lived intangible asset in the Learning and Development segment.",
+        "reference": "[Cause] The impairment reflected a downward revision of forecasted results due to the impact of the delayed and limited re-opening of schools and offices as a result of the COVID-19 global pandemic, as well as the continued deterioration in sales for slime-related adhesive products.27During the third quarter of 2020, the Company concluded that a triggering event had occurred for an indefinite-lived intangible asset in the Learning and Development segment. [Relation] cause [Effect] In conjunction with the Company's annual impairment testing of goodwill and indefinite-lived intangible assets during the fourth quarter (on December 1), the Company recorded a non-cash impairment charge of $20 million associated with a tradename in the Learning and Development segment, as its carrying value exceeded its fair value.",
+        "model": "[Cause] The impairment reflected a downward revision of forecasted results due to the delayed and limited re-opening of schools and offices as a result of the COVID-19 global pandemic, as well as the continued deterioration in sales for slime-related adhesive products. [Relation] cause [Effect] In conjunction with the Company's annual impairment testing of goodwill and indefinite-lived intangible assets during the fourth quarter (on December 1), the Company recorded a non-cash impairment charge of $20 million associated with a trade",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "a888f5a5",
+      "data": {
+        "text": "In addition, operating loss was unfavorably impacted by the cumulative catch-up adjustment for depreciation and amortization expense of $57 million recorded in 2019 as a result of the Company\u2019s decision to retain the Commercial Business.",
+        "reference": "[Cause] the cumulative catch-up adjustment for depreciation and amortization expense of $57 million recorded in 2019 as a result of the Company\u2019s decision to retain the Commercial Business. [Relation] cause [Effect] In addition, operating loss was unfavorably impacted",
+        "model": "[Cause] the Company\u2019s decision to retain the Commercial Business. [Relation] cause [Effect] In addition, operating loss was unfavorably impacted by the cumulative catch-up adjustment for depreciation and amortization expense of $57 million recorded in 2019",
+        "file": "prediction_output.json",
+        "em": 0.0
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d6956874",
+      "data": {
+        "text": "The impairment reflected a downward revision of forecasted results due to the impact of the delayed and limited re-opening of schools and offices as a result of the COVID-19 global pandemic, as well as the continued deterioration in sales for slime-related adhesive products.",
+        "reference": "[Cause] the impact of the delayed and limited re-opening of schools and offices as a result of the COVID-19 global pandemic, as well as the continued deterioration in sales for slime-related adhesive products. [Relation] cause [Effect] The impairment reflected a downward revision of forecasted results",
+        "model": "[Cause] the delayed and limited re-opening of schools and offices as a result of the COVID-19 global pandemic, as well as the continued deterioration in sales for slime-related adhesive products. [Relation] cause [Effect] The impairment reflected a downward revision of forecasted results",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "7fc00b12",
+      "data": {
+        "text": "The provision for credit losses was $2.3 billion, compared to $615 million for the earlier period. The increase in the provision for credit losses reflects the significant builds to the allowance for credit losses in the first and second quarters of the year due to increased economic stress associated with the pandemic and specific consideration of its impact on certain industries, as well as uncertainty related to performance after the expiration of relief packages and COVID-19, increased loan balances arising from the Merger and the effect of applying the CECL methodology in the current period compared to the incurred loss methodology in the earlier period.",
+        "reference": "[Cause] The increase in the provision for credit losses reflects the significant builds to the allowance for credit losses in the first and second quarters of the year due to increased economic stress associated with the pandemic and specific consideration of its impact on certain industries, as well as uncertainty related to performance after the expiration of relief packages and COVID-19, increased loan balances arising from the Merger and the effect of applying the CECL methodology in the current period compared to the incurred loss methodology in the earlier period. [Relation] cause [Effect] The provision for credit losses was $2.3 billion, compared to $615 million for the earlier period.",
+        "model": "[Cause] The increase in the provision for credit losses reflects the significant builds to the allowance for credit losses in the first and second quarters of the year due to increased economic stress associated with the pandemic and specific consideration of its impact on certain industries, as well as uncertainty related to performance after the expiration of relief packages and COVID-19, increased loan balances arising from the Merger and the effect of applying the CECL methodology in the current period compared to the incurred loss methodology in the earlier period. [Relation] cause [Effect] The provision for credit losses was",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "064615b4",
+      "data": {
+        "text": "LHFS decreased $2.3 billion during 2020 primarily due to the sale of loans that had been placed in LHFS after the close of the Merger and the branch divestiture in connection with the Merger, partially offset by the transfer of $1.0 billion to LHFS due to the decision to exit a small ticket loan and lease portfolio.",
+        "reference": "[Cause] to the sale of loans that had been placed in LHFS after the close of the Merger and the branch divestiture in connection with the Merger, partially offset by the transfer of $1.0 billion to LHFS due to the decision to exit a small ticket loan and lease portfolio. [Relation] cause [Effect] LHFS decreased $2.3 billion during 2020",
+        "model": "[Cause] the sale of loans that had been placed in LHFS after the close of the Merger and the branch divestiture in connection with the Merger, partially offset by the transfer of $1.0 billion to LHFS due to the decision to exit a small ticket loan and lease portfolio. [Relation] cause [Effect] LHFS decreased $2.3 billion during 2020",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "4a060ca1",
+      "data": {
+        "text": "Entertainment, retail and other expenses decreased $59.8 million, $13.9 million, and $7.2 million at our Las Vegas Operations, Wynn Palace, and Wynn Macau, respectively. The decreases were primarily a result of lower operating costs related to the declines in entertainment, retail and other revenues at each property resulting from the effects of the COVID-19 pandemic, including the closure of the Le Reve show at our Las Vegas Operations, and were partially offset by increased entertainment, retail and other expenses of $3.3 million at Encore Boston Harbor due to the opening of the property in June 2019.",
+        "reference": "[Cause] The decreases were primarily a result of lower operating costs related to the declines in entertainment, retail and other revenues at each property resulting from the effects of the COVID-19 pandemic, including the closure of the Le Reve show at our Las Vegas Operations, and were partially offset by increased entertainment, retail and other expenses of $3.3 million at Encore Boston Harbor due to the opening of the property in June 2019. [Relation] cause [Effect] Entertainment, retail and other expenses decreased $59.8 million, $13.9 million, and $7.2 million at our Las Vegas Operations, Wynn Palace, and Wynn Macau, respectively.",
+        "model": "[Cause] The decreases were primarily a result of lower operating costs related to the declines in entertainment, retail and other revenues at each property resulting from the effects of the COVID-19 pandemic, including the closure of the Le Reve show at our Las Vegas Operations, and were partially offset by increased entertainment, retail and other expenses of $3.3 million at Encore Boston Harbor due to the opening of the property in June 2019. [Relation] cause [Effect] Entertainment, retail and other expenses decreased $59.8 million, $13.9 million, and $7.2 million at our Las Vegas",
+        "file": "prediction_output.json",
+        "em": 0.5
+      },
+      "answer": "invalid"
+    }
+  ]
+}
