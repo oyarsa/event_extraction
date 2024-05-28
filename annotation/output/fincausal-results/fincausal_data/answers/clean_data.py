@@ -45,12 +45,10 @@ def main(
     output_file: TextIO,
 ) -> None:
     train_data = json.load(train_file)
-
-    # Dev also contains Italo's annotations
     dev_data = json.load(dev_ann_file)
-    inputs = [shape_data("italo", dev_data)]
 
     # We need to convert the annotations from the others to the same format
+    inputs: list[list[dict[str, Any]]] = []
     for file in raw_files:
         raw_data = json.load(file)
         username = clean_name(raw_data["username"])
@@ -82,11 +80,6 @@ def main(
     }
     for item in instances:
         item["source"] = id_to_source.get(item["new_id"])
-
-    # Use majority voting (defaulting to False) to get the valid label
-    for item in instances:
-        answers = [a["answer"] == "valid" for a in item["answers"]]
-        item["valid"] = answers.count(True) > answers.count(False)
 
     json.dump(instances, output_file, indent=2)
 
