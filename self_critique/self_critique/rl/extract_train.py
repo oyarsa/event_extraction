@@ -19,6 +19,7 @@ import json
 import logging
 import os
 import warnings
+from abc import ABC
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -29,6 +30,8 @@ from typing import Any, TypedDict, cast
 
 import simple_parsing
 import torch
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 from torch.utils.data import DataLoader, Dataset, TensorDataset
 
 # Suppress TensorFlow warnings. This must be done before importing transformers.
@@ -54,6 +57,7 @@ from trl import (
 )
 from trl.models.modeling_base import PreTrainedModelWrapper
 
+from self_critique.metric import fgcr_metric_cls
 from self_critique.util import (
     get_current_commit,
     get_device,
@@ -82,6 +86,21 @@ class EvalPrompt(Enum):
             case EvalPrompt.COMBINED:
                 return f"{entry.context}\n{entry.answer}"
 
+    def get_answer(self, item: str) -> str:
+        match self:
+            case EvalPrompt.PASSAGE:
+                raise ValueError("Cannot get answer for PASSAGE prompt.")
+            case EvalPrompt.GOLD:
+                return item
+            case EvalPrompt.COMBINED:
+                return item.splitlines()[1]
+
+
+class EvaluatorType(Enum):
+    REWARD = "reward"
+    F1 = "f1"
+    SENTENCE_TRANSFORMER = "sentence_transformer"
+
 
 @dataclass
 class Config:
@@ -91,8 +110,17 @@ class Config:
     train_file: Path
     # Extraction model name or path
     extraction_model: str
-    # Reward model name or path
-    reward_model: str
+    # Evaluator type
+    evaluator: EvaluatorType = EvaluatorType.REWARD
+    # Reward model name or path. Used by both model-based and SentenceTransformer
+    # evaluators
+    reward_model: str | None = None
+    # Threshold used by SentenceTransformer and F1 evaluator to determine the class.
+    # See the respective classes documentation for more information: `F1Evaluator` and
+    # `SentenceTransformerEvaluator`.
+    # Note that the the thresholds are optimum at the time of writing this code and
+    # may need to be adjusted for different datasets.
+    evaluator_threshold: float = 0.9656984508037567
     # Learning rate
     learning_rate: float = 1e-5
     # PPO minibatch size (inner PPO loop)
@@ -174,6 +202,8 @@ class Config:
                     value = path.resolve()
                 case EvalPrompt(name=name):
                     value = name
+                case EvaluatorType(name=name):
+                    value = name
                 case _:
                     value = val
             config_lines.append(f"  {key}: {value}")
@@ -254,45 +284,6 @@ def text_encode(
     )
 
 
-def run_reward(
-    reward: Module,
-    max_seq_length: int,
-    batch_size: int,
-    sentence1: list[str],
-    sentence2: list[str],
-    device: torch.device,
-    label2id: dict[str, int],
-    id2label: dict[int, str],
-    true_class: str,
-) -> tuple[list[torch.FloatTensor], list[str]]:
-    inputs = text_encode(reward.tokenizer, max_seq_length, sentence1, sentence2)
-    dataset = TensorDataset(
-        inputs["input_ids"],
-        inputs["attention_mask"],
-        inputs["token_type_ids"],
-    )
-    loader = DataLoader(dataset, batch_size=batch_size)
-
-    scores: list[torch.FloatTensor] = []
-    predictions: list[str] = []
-
-    reward.model.eval()
-    with torch.no_grad():
-        for input_ids, attention_mask, token_type_ids in loader:
-            outputs = reward.model(
-                input_ids=input_ids.to(device),
-                attention_mask=attention_mask.to(device),
-                token_type_ids=token_type_ids.to(device),
-            )
-            # Get logit for the reward class and use it as a score
-            scores.extend(outputs.logits.select(dim=-1, index=label2id[true_class]))
-
-            preds = torch.argmax(outputs.logits, dim=-1)
-            predictions.extend(id2label[int(x.item())] for x in preds)
-
-    return scores, predictions
-
-
 def log_tensorboard(
     writer: SummaryWriter,
     eval_output: list[dict[str, Any]],
@@ -303,10 +294,22 @@ def log_tensorboard(
     writer.add_scalar("eval/reward_ratio", ratio, n_iter)
 
 
+class Evaluator(ABC):
+    def run_reward(
+        self,
+        sentence1: list[str],
+        sentence2: list[str],
+        label2id: dict[str, int],
+        id2label: dict[int, str],
+        true_class: str,
+    ) -> tuple[list[torch.Tensor], list[str]]:
+        raise NotImplementedError
+
+
 def train_extract(
     extract: Module,
     extract_ref: PreTrainedModel,
-    reward: Module,
+    evaluator: Evaluator,
     train_dataset: Dataset,
     args: Config,
     eval_dataset: Dataset | None,
@@ -346,15 +349,17 @@ def train_extract(
 
     device = ppo_trainer.accelerator.device
     logger.info(f"Training on {device}")
-    reward = reward.to(device)
     tb_writer = SummaryWriter(log_dir=output_dir / "tb")
+
+    if isinstance(evaluator, RewardEvaluator):
+        evaluator.set_device(device)
 
     if eval_dataset is not None:
         ref_desc = "Ref eval"
         ref_result = evaluate(
             dataset=eval_dataset,
             extract=Module(extract_ref, extract.tokenizer),
-            reward=reward,
+            evaluator=evaluator,
             args=args,
             device=device,
             true_class=true_class,
@@ -384,13 +389,9 @@ def train_extract(
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
 
-            rewards, labels = run_reward(
-                reward=reward,
-                max_seq_length=args.max_reward_seq_length,
-                batch_size=args.reward_batch_size,
+            rewards, labels = evaluator.run_reward(
                 sentence1=batch["eval_inputs"],
                 sentence2=extract_response,
-                device=device,
                 true_class=true_class,
                 label2id=label2id,
                 id2label=id2label,
@@ -412,7 +413,7 @@ def train_extract(
                 eval_result = evaluate(
                     dataset=eval_dataset,
                     extract=extract,
-                    reward=reward,
+                    evaluator=evaluator,
                     args=args,
                     device=device,
                     true_class=true_class,
@@ -464,7 +465,7 @@ def train_extract(
             eval_result = evaluate(
                 dataset=eval_dataset,
                 extract=extract,
-                reward=reward,
+                evaluator=evaluator,
                 args=args,
                 device=device,
                 true_class=true_class,
@@ -611,15 +612,14 @@ def clean_response(s: str, eos_tag: str = "</s>") -> str:
 class BlockOutput:
     extract_txt: list[str]
     reward_labels: list[str]
-    scores: list[torch.FloatTensor]
+    scores: list[torch.Tensor]
 
 
 def generate_and_reward(
     extract: Module,
+    evaluator: Evaluator,
     inputs: Mapping[str, torch.Tensor],
     original_sentence: list[str],
-    args: Config,
-    reward: Module,
     device: torch.device,
     true_class: str,
     label2id: dict[str, int],
@@ -633,13 +633,9 @@ def generate_and_reward(
     )
     extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
-    scores, reward_labels = run_reward(
-        reward=reward,
-        max_seq_length=args.max_reward_seq_length,
-        batch_size=args.reward_batch_size,
+    scores, reward_labels = evaluator.run_reward(
         sentence1=original_sentence,
         sentence2=extract_response_txt,
-        device=device,
         true_class=true_class,
         label2id=label2id,
         id2label=id2label,
@@ -651,7 +647,7 @@ def generate_and_reward(
 def evaluate(
     dataset: Dataset,
     extract: Module,
-    reward: Module,
+    evaluator: Evaluator,
     device: torch.device,
     args: Config,
     true_class: str,
@@ -670,10 +666,9 @@ def evaluate(
 
             output = generate_and_reward(
                 extract,
+                evaluator,
                 batch,
                 eval_inputs,
-                args,
-                reward,
                 device,
                 true_class,
                 label2id,
@@ -733,7 +728,7 @@ def resolve_arg_paths(args: Config) -> Config:
     return dataclasses.replace(
         args,
         extraction_model=resolve(args.extraction_model),
-        reward_model=resolve(args.reward_model),
+        reward_model=resolve(args.reward_model) if args.reward_model else None,
         train_file=Path(resolve(args.train_file)),
         eval_file=Path(resolve(args.eval_file)) if args.eval_file else None,
         output_dir=Path(resolve(args.output_dir)),
@@ -774,6 +769,162 @@ def get_labelling(reward_type: str) -> tuple[dict[str, int], dict[int, str], str
     return label2id, id2label, true_class
 
 
+# TODO: Add thresholds for F1 and SentenceTransformer
+class F1Evaluator(Evaluator):
+    """Evaluator using macro-average token-F1 score.
+
+    The F1 score is used the score. The class is obtained by thresholding the F1 score.
+
+    The best known thresholds depend on the dataset:
+    - FCR: TODO
+    - FinCausal: TODO
+    """
+
+    def __init__(self, threshold: float, prompt: EvalPrompt) -> None:
+        self.threshold = threshold
+        self.prompt = prompt
+
+    def run_reward(
+        self,
+        sentence1: list[str],
+        sentence2: list[str],
+        label2id: dict[str, int],
+        id2label: dict[int, str],
+        true_class: str,
+    ) -> tuple[list[torch.Tensor], list[str]]:
+        sentence1 = [self.prompt.get_answer(s) for s in sentence1]
+
+        f1_scores = [calc_f1(s1, s2) for s1, s2 in zip(sentence1, sentence2)]
+        scores = [torch.tensor(x) for x in f1_scores]
+        predictions = [id2label[int(x >= self.threshold)] for x in f1_scores]
+
+        return scores, predictions
+
+
+def calc_f1(sentence1: str, sentence2: str) -> float:
+    entities1, _ = fgcr_metric_cls.parse_instance(sentence1)
+    entities2, _ = fgcr_metric_cls.parse_instance(sentence2)
+
+    f1_cause = calc_f1_sentence(entities1["Cause"], entities2["Cause"])
+    f1_effect = calc_f1_sentence(entities1["Effect"], entities2["Effect"])
+
+    return (f1_cause + f1_effect) / 2
+
+
+def calc_f1_sentence(gold: list[str], pred: list[str]) -> float:
+    gold_toks = fgcr_metric_cls.get_tokens(" ".join(gold))
+    pred_toks = fgcr_metric_cls.get_tokens(" ".join(pred))
+
+    if not gold_toks or not pred_toks:
+        return 0
+
+    common = Counter(gold_toks) & Counter(pred_toks)
+    precision = sum(common.values()) / len(pred_toks)
+    recall = sum(common.values()) / len(gold_toks)
+
+    if precision + recall != 0:
+        return (2 * precision * recall) / (precision + recall)
+    else:
+        return 0
+
+
+class SentenceTransformerEvaluator(Evaluator):
+    """Evaluator using SentenceTransformer embeddings and cosine similarity.
+
+    The normalised (to [0, 1]) cosine similarity is used as the score. The class is
+    obtained by thresholding the similarity score.
+
+    The best known thresholds are for the model all-MiniLM-L6-v2 and depend on dataset:
+    - FCR: 0.9656984508037567
+    - FinCausal: TODO
+    """
+
+    def __init__(
+        self, model: SentenceTransformer, threshold: float, prompt: EvalPrompt
+    ) -> None:
+        self.model = model
+        self.threshold = threshold
+        self.prompt = prompt
+
+    def run_reward(
+        self,
+        sentence1: list[str],
+        sentence2: list[str],
+        label2id: dict[str, int],
+        id2label: dict[int, str],
+        true_class: str,
+    ) -> tuple[list[torch.Tensor], list[str]]:
+        sentence1 = [self.prompt.get_answer(s) for s in sentence1]
+
+        sent1_emb = self.model.encode(sentence1)
+        sent2_emb = self.model.encode(sentence2)
+
+        cosine_sims = cosine_similarity(sent1_emb, sent2_emb)
+        cosine_sim_norm = [float(sim) + 1 / 2 for sim in cosine_sims.diagonal()]
+
+        scores = [torch.tensor(x) for x in cosine_sim_norm]
+        predictions = [id2label[int(x >= self.threshold)] for x in cosine_sim_norm]
+
+        return scores, predictions
+
+
+class RewardEvaluator(Evaluator):
+    def __init__(
+        self,
+        model: Module,
+        max_seq_length: int,
+        batch_size: int,
+        device: torch.device | None = None,
+    ) -> None:
+        self.model = model
+        self.max_seq_length = max_seq_length
+        self.batch_size = batch_size
+        self.device = device
+
+    def set_device(self, device: torch.device) -> None:
+        self.device = device
+
+    def run_reward(
+        self,
+        sentence1: list[str],
+        sentence2: list[str],
+        label2id: dict[str, int],
+        id2label: dict[int, str],
+        true_class: str,
+    ) -> tuple[list[torch.Tensor], list[str]]:
+        if self.device is None:
+            raise ValueError("Device must be set before running the evaluator.")
+
+        inputs = text_encode(
+            self.model.tokenizer, self.max_seq_length, sentence1, sentence2
+        )
+        dataset = TensorDataset(
+            inputs["input_ids"],
+            inputs["attention_mask"],
+            inputs["token_type_ids"],
+        )
+        loader = DataLoader(dataset, batch_size=self.batch_size)
+
+        scores: list[torch.Tensor] = []
+        predictions: list[str] = []
+
+        self.model.model.eval()
+        with torch.no_grad():
+            for input_ids, attention_mask, token_type_ids in loader:
+                outputs = self.model.model(
+                    input_ids=input_ids.to(self.device),
+                    attention_mask=attention_mask.to(self.device),
+                    token_type_ids=token_type_ids.to(self.device),
+                )
+                # Get logit for the reward class and use it as a score
+                scores.extend(outputs.logits.select(dim=-1, index=label2id[true_class]))
+
+                preds = torch.argmax(outputs.logits, dim=-1)
+                predictions.extend(id2label[int(x.item())] for x in preds)
+
+        return scores, predictions
+
+
 def suppress_warnings() -> None:
     suppress_transformers_warnings()
     # trl PPO warning on high KL divergence
@@ -802,7 +953,9 @@ def main() -> None:
 
     (output_dir / "args.json").write_text(
         json.dumps(
-            dataclasses.asdict(args) | {"git_commit": git_commit}, default=str, indent=2
+            dataclasses.asdict(args) | {"git_commit": git_commit},
+            default=str,
+            indent=2,
         )
     )
 
@@ -825,7 +978,26 @@ def main() -> None:
 
     extract = load_seq2seq_valuehead_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(cast(PreTrainedModelWrapper, extract.model))
+
+    if args.reward_model is None:
+        raise ValueError("Must provide a reward model when using a learned evaluator.")
     reward = load_reward_model(args.reward_model, label2id=label2id, id2label=id2label)
+
+    match args.evaluator:
+        case EvaluatorType.REWARD:
+            evaluator = RewardEvaluator(
+                model=reward,
+                max_seq_length=args.max_reward_seq_length,
+                batch_size=args.reward_batch_size,
+                device=None,
+            )
+        case EvaluatorType.SENTENCE_TRANSFORMER:
+            model = SentenceTransformer(args.reward_model)
+            threshold = args.evaluator_threshold
+            evaluator = SentenceTransformerEvaluator(model, threshold, args.eval_prompt)
+        case EvaluatorType.F1:
+            threshold = args.evaluator_threshold
+            evaluator = F1Evaluator(threshold, args.eval_prompt)
 
     train_data = load_data(args.train_file, args.max_train_samples)
     train_dataset = preprocess_data(
@@ -854,7 +1026,7 @@ def main() -> None:
         extract, device = train_extract(
             extract=extract,
             extract_ref=cast(PreTrainedModel, extract_ref),
-            reward=reward,
+            evaluator=evaluator,
             train_dataset=train_dataset,
             args=args,
             eval_dataset=eval_dataset,
@@ -869,11 +1041,14 @@ def main() -> None:
 
     if eval_dataset is not None and args.do_eval:
         device = device or get_device()
+        if isinstance(evaluator, RewardEvaluator):
+            evaluator.set_device(device)
+
         desc = "Final evaluation"
         eval_result = evaluate(
             dataset=eval_dataset,
             extract=extract.to(device),
-            reward=reward.to(device),
+            evaluator=evaluator,
             args=args,
             label2id=label2id,
             id2label=id2label,
