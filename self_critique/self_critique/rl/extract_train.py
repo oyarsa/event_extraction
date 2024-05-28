@@ -979,12 +979,16 @@ def main() -> None:
     extract = load_seq2seq_valuehead_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(cast(PreTrainedModelWrapper, extract.model))
 
-    if args.reward_model is None:
-        raise ValueError("Must provide a reward model when using a learned evaluator.")
-    reward = load_reward_model(args.reward_model, label2id=label2id, id2label=id2label)
-
     match args.evaluator:
         case EvaluatorType.REWARD:
+            if args.reward_model is None:
+                raise ValueError(
+                    "Must provide a reward model name or path when using a learned"
+                    " evaluator."
+                )
+            reward = load_reward_model(
+                args.reward_model, label2id=label2id, id2label=id2label
+            )
             evaluator = RewardEvaluator(
                 model=reward,
                 max_seq_length=args.max_reward_seq_length,
@@ -992,6 +996,8 @@ def main() -> None:
                 device=None,
             )
         case EvaluatorType.SENTENCE_TRANSFORMER:
+            if args.reward_model is None:
+                raise ValueError("Must provide a reward model name")
             model = SentenceTransformer(args.reward_model)
             threshold = args.evaluator_threshold
             evaluator = SentenceTransformerEvaluator(model, threshold, args.eval_prompt)
