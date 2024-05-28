@@ -1,1 +1,2 @@
-annotation/
+annotation/*
+!annotation/fincausal
