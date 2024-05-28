@@ -79,6 +79,7 @@ def main(
         hash_data(d): "train" for d in train_data
     }
     for item in instances:
+        item.pop("username", None)
         item["source"] = id_to_source.get(item["new_id"])
 
     json.dump(instances, output_file, indent=2)
