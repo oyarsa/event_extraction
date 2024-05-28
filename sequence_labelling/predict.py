@@ -5,8 +5,9 @@ from pathlib import Path
 
 import torch
 import transformers
-from load import load_data_from_file
 from tqdm import tqdm
+
+from load import load_data_from_file
 from utils import dump_args, init_logger
 
 logger = logging.getLogger("bert.predict")

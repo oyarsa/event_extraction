@@ -5,13 +5,14 @@ from pathlib import Path
 
 import torch
 import transformers
-from load import load_data
-from model import LangModelWithDense
 from torch.utils.tensorboard import (
     SummaryWriter,  # pyright: ignore[reportPrivateImportUsage]
 )
 from torchcrf import CRF
 from tqdm import tqdm
+
+from load import load_data
+from model import LangModelWithDense
 from utils import Meter, dump_args, init_logger, print_info
 
 logger = logging.getLogger("bert.train")
