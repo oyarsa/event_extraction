@@ -1,4 +1,4 @@
-"""Convert sequence labelled data to tagged data.
+"""Convert the output of sequence labelling models to tagged.
 
 The input file should contain sequence labelled data. It is separated by blocks with an
 empty line between them. Each blocks represents an instance of the dataset.
@@ -8,12 +8,14 @@ Each line of the block is a pair of token and tag separated by a space.
 The output file is a JSON file with tagged data. Each instance is a dictionary with the
 following keys:
 - id: Unique identifier for the instance.
-- context: The input context of the instance.
-- question: The question to ask about the context. Fixed to "What are the events?".
-- question_type: The type of question to ask. Fixed to "cause".
-- answers: The tagged answer to the question.
+- input: The input context of the instance.
+- gold: The tagged gold answer.
+- output: The tagged model output.
 
 The answer has the format "[Cause] <cause> [Relation] cause [Effect] <effect>".
+
+The goal is that this output can be directly use for evaluation. E.g. self_critique's
+run_reward and eval_std scripts.
 """
 
 import argparse
@@ -111,13 +113,11 @@ def seq_item_to_tag(
     pred_tags = [pred for _, _, pred in item]
 
     out = {
-        "context": detokeniser.detokenize(context),
-        "question": "What are the events?",
-        "question_type": "cause",
-        "answers": seq_clause_to_tag(detokeniser, context, gold_tags),
+        "input": detokeniser.detokenize(context),
+        "gold": seq_clause_to_tag(detokeniser, context, gold_tags),
         "output": seq_clause_to_tag(detokeniser, context, pred_tags),
     }
-    return out | {"id": hash_instance(out, ["context", "answers"])}
+    return out | {"id": hash_instance(out, ["input", "gold"])}
 
 
 def main(input_file: TextIO, output_file: TextIO) -> None:
