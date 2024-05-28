@@ -24,7 +24,7 @@ set train $argv[3]
 
 # Transform Italo's dev annotations to the same format as other
 # annotations
-jq '{username: "italo", items: .}' $dev_ann >$dev_out.json
+jq '{username: "italo", items: .}' $dev_ann >$dev_out
 
 # Merge italo_dev.json and italo_train.json into a single file
 # Information on the data source (i.e. which split is the item from) is lost,
