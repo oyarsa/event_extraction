@@ -174,7 +174,7 @@ class Config:
     # Evaluate the model every N batches (waiting for the whole epoch takes too long)
     eval_batches: int = 100
     # Reward type: 'entailment' or 'valid'
-    reward_type: str = "entailment"
+    reward_type: str = "valid"
     # Whether to perform training
     do_train: bool = True
     # Whether to perform evaluation
