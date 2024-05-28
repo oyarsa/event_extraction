@@ -19,6 +19,9 @@ Files:
 - remain_unannotated.json: The remaining examples from the train set that were not
   annotated by humans
 
+Inside "inputs":
+- to_annotate.json: copy of remain_unannotated.json
+
 TODO:
 - Annotate `remain_unannotated.json` and add to `human_annotated.json`
 - Merge `human_annotated.json` with `tagged.json` to create a completely annotated
