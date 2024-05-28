@@ -769,7 +769,6 @@ def get_labelling(reward_type: str) -> tuple[dict[str, int], dict[int, str], str
     return label2id, id2label, true_class
 
 
-# TODO: Add thresholds for F1 and SentenceTransformer
 class F1Evaluator(Evaluator):
     """Evaluator using macro-average token-F1 score.
 
@@ -1004,6 +1003,9 @@ def main() -> None:
                 raise ValueError("Must provide a reward model name")
             model = SentenceTransformer(args.reward_model)
             threshold = args.evaluator_threshold
+            # TODO: Figure out device explicitly. It currently does that internally if
+            # it's not set, but I want it to be explicit. Maybe together with
+            # RewardEvaluator? Which needs a better name?
             evaluator = SentenceTransformerEvaluator(model, threshold, args.eval_prompt)
         case EvaluatorType.F1:
             threshold = args.evaluator_threshold
