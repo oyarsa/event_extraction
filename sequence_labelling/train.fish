@@ -37,6 +37,7 @@ python train.py \
     $LM_NAME \
     --separator " " \
     --device $device \
+    --save_path models/$RUN_NAME \
     --fine_tune \
     --run-name $RUN_NAME \
     --logfile $LOGFILE \
