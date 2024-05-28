@@ -13,28 +13,46 @@ import json
 from typing import Any, TextIO
 
 
-def get_answer(item: dict[str, Any], usernames_ordered: list[str]) -> bool:
+def get_answer(item: dict[str, Any], users_ordered: list[str]) -> bool:
     user_to_answer = {
-        a["name"]: a["answer"] for a in item["answers"] if a["answer"] is not None
+        a["name"]: a["answer"] == "valid"
+        for a in item["answers"]
+        if a["answer"] is not None
     }
     answers = list(user_to_answer.values())
 
-    count_true = answers.count("valid")
-    count_false = answers.count("invalid")
+    count_true = answers.count(True)
+    count_false = answers.count(False)
 
+    # If we have a clean majority, use that
     if count_true != count_false:
         return count_true > count_false
 
-    for username in usernames_ordered:
-        if username in user_to_answer:
-            return user_to_answer[username] == "valid"
+    # Tie breaker: find first username in the ordered list that answered the question
+    for user in users_ordered:
+        if answer := user_to_answer.get(user):
+            return answer
 
     raise ValueError(f"None of the usernames answered the question: {item['id']}")
+
+
+def ensure_users(data: list[dict[str, Any]], usernames_ordered: list[str]) -> None:
+    """Ensure that all users who answered are in the order file.
+
+    If they aren't, we can't break ties correctly.
+    """
+    answers = {a["name"] for d in data for a in d["answers"]}
+    ordered = set(usernames_ordered)
+
+    missing = answers - ordered
+    if missing:
+        raise ValueError(f"Users who answered but are not in the order file: {missing}")
 
 
 def main(infile: TextIO, order_file: TextIO, outfile: TextIO) -> None:
     usernames_ordered = json.load(order_file)
     data = json.load(infile)
+    ensure_users(data, usernames_ordered)
 
     for item in data:
         item["valid"] = get_answer(item, usernames_ordered)
