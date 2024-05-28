@@ -7,7 +7,9 @@ import torch
 import transformers
 from load import load_data
 from model import LangModelWithDense
-from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard import (
+    SummaryWriter,  # pyright: ignore[reportPrivateImportUsage]
+)
 from torchcrf import CRF
 from tqdm import tqdm
 from utils import Meter, dump_args, init_logger, print_info
@@ -26,7 +28,7 @@ def train_model(
     target_classes,
     label_encoder,
     device,
-):
+):  # sourcery skip: low-code-quality
     # create to Meter's classes to track the performance of the model during
     # training and evaluating
     train_meter = Meter(target_classes)
@@ -80,9 +82,8 @@ def train_model(
         tb_writer.flush()
 
         logger.info(
-            "[{}/{}] Train Loss: {:.4f}, Train Macro F1: {:.4f}".format(
-                epoch + 1, args.epochs, train_meter.loss, train_meter.macro_f1
-            )
+            f"[{epoch + 1}/{args.epochs}] Train Loss: {train_meter.loss:.4f}, Train"
+            f" Macro F1: {train_meter.macro_f1:.4f}"
         )
 
         train_meter.reset()
@@ -111,9 +112,8 @@ def train_model(
             )
 
             dev_tqdm.set_description(
-                "Dev Loss: {:.4f}, Dev Micro F1: {:.4f}, Dev Macro F1: {:.4f}".format(
-                    loss, micro_f1, macro_f1
-                )
+                f"Dev Loss: {loss:.4f}, Dev Micro F1: {micro_f1:.4f}, Dev Macro F1:"
+                f" {macro_f1:.4f}"
             )
             dev_tqdm.refresh()
 
@@ -122,9 +122,8 @@ def train_model(
         tb_writer.flush()
 
         logger.info(
-            "[{}/{}] Dev Loss: {:.4f}, Dev Macro F1: {:.4f}".format(
-                epoch + 1, args.epochs, dev_meter.loss, dev_meter.macro_f1
-            )
+            f"[{epoch + 1}/{args.epochs}] Dev Loss: {dev_meter.loss:.4f}, Dev Macro F1:"
+            f" {dev_meter.macro_f1:.4f}"
         )
 
         dev_meter.reset()
@@ -134,9 +133,8 @@ def train_model(
             args.save_path.mkdir(parents=True, exist_ok=True)
 
             logger.info(
-                "Macro F1 score improved from {:.4f} -> {:.4f}. Saving model...".format(
-                    best_f1, macro_f1
-                )
+                f"Macro F1 score improved from {best_f1:.4f} -> {macro_f1:.4f}."
+                f" Saving model..."
             )
 
             best_f1 = macro_f1
@@ -176,6 +174,7 @@ def main(args: argparse.Namespace) -> None:
 
     # create the model, the optimizer (weights are set to 0 for <pad> and <X>)
     # and the loss function
+    assert label_encoder.classes_ is not None, "Problem initialising the label encoder"
     model = LangModelWithDense(
         lang_model, input_size, len(label_encoder.classes_), args.fine_tune
     ).to(device)
@@ -199,7 +198,8 @@ def main(args: argparse.Namespace) -> None:
     classes.remove(args.null_label)
     classes.remove(args.pad_label)
     target_classes = [
-        label_encoder.transform([clss])[0] for clss in classes  # type: ignore
+        label_encoder.transform([clss])[0]
+        for clss in classes  # type: ignore
     ]
 
     print_info(
