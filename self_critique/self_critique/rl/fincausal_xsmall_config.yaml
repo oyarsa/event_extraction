@@ -6,6 +6,7 @@ eval_file: ../data/fincausal/processed/dev.json
 max_train_samples: null
 max_eval_samples: null
 
+# This is FCR's reward model used as the reward for FinCausal training
 reward_model: ../evaluation/output/classifier/fcr-deberta-v3-xsmall-combined/
 reward_type: valid
 max_reward_seq_length: 400
