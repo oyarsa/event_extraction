@@ -8,3 +8,4 @@ black
 mypy
 isort
 flake8
+nltk
