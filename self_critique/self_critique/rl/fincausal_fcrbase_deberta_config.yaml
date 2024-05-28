@@ -1,31 +1,33 @@
 num_epochs: 1
-eval_batches: 100
+eval_batches: 20
 
-train_file: ../data/genqa_joint/train.json
-eval_file: ../data/genqa_joint/dev.json
+train_file: ../data/fincausal/processed/train.json
+eval_file: ../data/fincausal/processed/dev.json
 max_train_samples: null
 max_eval_samples: null
 
+# This is FCR's reward model used as the reward for FinCausal training
 reward_model: ../evaluation/output/classifier/fcr-deberta-v3-xsmall-combined/
 reward_type: valid
 max_reward_seq_length: 400
 
-extraction_model: output/extraction/t5-base
+# This also is FCR's extraction model as base
+extraction_model: output/extraction/flan-t5-large
 max_generation_length: 128
 
 output_dir: output/rl
-run_name: xsmall-t5-base
+run_name: fincausal-fcrbase-flan-t5-large
 log_with: null
 
 # Batch sizes need to be lower for models larger than T5-Base
-reward_batch_size: 96
-ppo_batch_size: 96
-ppo_minibatch_size: 96
+reward_batch_size: 16
+ppo_batch_size: 16
+ppo_minibatch_size: 16
 
 # PPO parameters
 kl_penalty: kl
 adaptive_kl_ctrl: true
-init_kl_coef: 0.2
+init_kl_coef: 0.4
 use_reward_scaling: false
 use_reward_norm: false
 
@@ -33,5 +35,5 @@ use_reward_norm: false
 generation_top_k: null
 generation_top_p: null
 degeneration_penalty: null
-generation_do_sample: false
-generation_num_beams: 1
+generation_do_sample: true
+generation_num_beams: 2

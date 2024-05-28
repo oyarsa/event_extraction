@@ -879,10 +879,14 @@ class RewardEvaluator(Evaluator):
         self.model = model
         self.max_seq_length = max_seq_length
         self.batch_size = batch_size
+
         self.device = device
+        if device is not None:
+            self.model = self.model.to(device)
 
     def set_device(self, device: torch.device) -> None:
         self.device = device
+        self.model = self.model.to(device)
 
     def run_reward(
         self,
