@@ -299,8 +299,8 @@ def evaluate_files(data: list[dict[str, str]]) -> dict[str, float]:
 
     return {
         "F1": f1,
-        "Recall": recall,
         "Precision": precision,
+        "Recall": recall,
         "ExactMatch": exact_match,
     }
 
