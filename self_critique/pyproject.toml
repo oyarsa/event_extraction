@@ -8,6 +8,7 @@ authors = [
 dependencies = [
     "BLEURT @ git+https://github.com/google-research/bleurt.git@cebe7e6",
     "accelerate>=0.20.3",
+    "async_timeout==4.0.3",  # undeclared dependency of aiohttp, via TRL
     "bert-score>=0.3.13",
     "datasets==2.12.0",
     "evaluate==0.4.1",
