@@ -13,6 +13,7 @@ from typing import Any, TypeVar
 import simple_parsing
 import torch
 import torch.backends.mps
+from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
 
 # Suppress TensorFlow warnings. This must be done before importing transformers.
@@ -31,9 +32,9 @@ from self_critique import metric
 from self_critique.metric.fgcr_metric_cls import parse_instance
 from self_critique.rl.extract_train import (
     Module,
-    run_reward,
     save_results,
     setup_logger,
+    text_encode,
 )
 from self_critique.util import (
     get_current_commit,
@@ -42,6 +43,45 @@ from self_critique.util import (
 )
 
 logger = logging.getLogger("self.reward")
+
+
+def run_reward(
+    reward: Module,
+    max_seq_length: int,
+    batch_size: int,
+    sentence1: list[str],
+    sentence2: list[str],
+    device: torch.device,
+    label2id: dict[str, int],
+    id2label: dict[int, str],
+    true_class: str,
+) -> tuple[list[torch.FloatTensor], list[str]]:
+    inputs = text_encode(reward.tokenizer, max_seq_length, sentence1, sentence2)
+    dataset = TensorDataset(
+        inputs["input_ids"],
+        inputs["attention_mask"],
+        inputs["token_type_ids"],
+    )
+    loader = DataLoader(dataset, batch_size=batch_size)
+
+    scores: list[torch.FloatTensor] = []
+    predictions: list[str] = []
+
+    reward.model.eval()
+    with torch.no_grad():
+        for input_ids, attention_mask, token_type_ids in loader:
+            outputs = reward.model(
+                input_ids=input_ids.to(device),
+                attention_mask=attention_mask.to(device),
+                token_type_ids=token_type_ids.to(device),
+            )
+            # Get logit for the reward class and use it as a score
+            scores.extend(outputs.logits.select(dim=-1, index=label2id[true_class]))
+
+            preds = torch.argmax(outputs.logits, dim=-1)
+            predictions.extend(id2label[int(x.item())] for x in preds)
+
+    return scores, predictions
 
 
 @dataclass
@@ -76,6 +116,8 @@ class Config:
     output_dir: Path = Path("output/reward")
     # Name of the directory inside the output dir for this run
     run_name: str | None = None
+    # Device to use (default: automatic)
+    device: str | None = None
 
     def __str__(self) -> str:
         config_lines = [">>>> CONFIGURATION"]
@@ -291,7 +333,7 @@ def main() -> None:
 
     label_config = get_labelling(args.reward_type)
 
-    device = get_device()
+    device = torch.device(args.device or get_device())
     tokeniser, model = load_reward_model(args.model_path, label_config)
     reward = Module(model.to(device), tokeniser)
 
