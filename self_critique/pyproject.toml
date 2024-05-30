@@ -52,6 +52,14 @@ extend-ignore = ["UP007"]  # HF doesn't like T | None
 typeCheckingMode = "basic"
 useLibraryCodeForTypes = false
 reportMissingImports = false
+ignore = [
+    "self_critique/run_entailment.py",
+    "self_critique/predict_entailment.py",
+    "self_critique/run_seq2seq_qa.py",
+    "self_critique/predict_seq2seq_qa.py",
+    "self_critique/ensemble.py",
+    "self_critique/rl/entailment_eval.py",
+]
 
 [tool.mypy]
 disallow_untyped_calls = false
