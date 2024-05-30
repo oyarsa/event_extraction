@@ -51,23 +51,36 @@ def main():
 
     metrics_chosen = sorted(args.metrics)
 
+    model_padding = (
+        max(len(os.path.basename(data_path)) for data_path in args.data_paths) + 2
+    )
+    padding = [len(metric) + 3 for metric in ["Valid", *metrics_chosen]]
     header = [
-        "Model file".ljust(30),
-        *[metric.upper().ljust(15) for metric in ["Valid", *metrics_chosen]],
+        "Model file".ljust(model_padding),
+        *[
+            metric.capitalize().ljust(padding[i])
+            for i, metric in enumerate(["Valid", *metrics_chosen])
+        ],
     ]
-    print(" ".join(header))
+
+    output: list[str] = [" ".join(header)]
 
     for data_path in args.data_paths:
         data = load_json(data_path)
-        metric_values: list[float] = [
+        metric_values = [
             sum(r.pred for r in data) / len(data),
             *(calculate_metrics(metric, data) for metric in metrics_chosen),
         ]
         row = [
-            os.path.basename(data_path).ljust(30),
-            *[f"{metric:.4f}".ljust(15) for metric in metric_values],
+            os.path.basename(data_path).ljust(model_padding),
+            *[
+                f"{metric:.4f}".ljust(padding[i])
+                for i, metric in enumerate(metric_values)
+            ],
         ]
-        print(" ".join(row))
+        output.append(" ".join(row))
+
+    print("\n".join(output))
 
 
 if __name__ == "__main__":
