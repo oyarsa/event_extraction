@@ -49,19 +49,17 @@ def main(input_file: TextIO, output_file: str) -> None:
     for line in input_file:
         data = json.loads(line.strip())
 
+        if "causal_relations" not in data:
+            continue
+
         events: list[dict[str, str]] = []
         event_id_to_mentions: dict[str, list[str]] = {}
 
         # save all the events so that we can trace the casual ones from it
-        if "events" not in data:
-            events = data["event_mentions"]
-        else:
-            for e in data["events"]:
-                events.extend(e["mention"])
-                event_id_to_mentions[e["id"]] = [m["id"] for m in e["mention"]]
+        for e in data["events"]:
+            events.extend(e["mention"])
+            event_id_to_mentions[e["id"]] = [m["id"] for m in e["mention"]]
 
-        if "causal_relations" not in data:
-            continue
         relations: dict[str, list[tuple[str, str]]] = data["causal_relations"]
 
         # save the causal-effect pair
@@ -75,7 +73,11 @@ def main(input_file: TextIO, output_file: str) -> None:
 
         sentences = data["sentences"]
 
+        done = False
         for cause_event in events:
+            if done:
+                break
+
             for effect_event in events:
                 if cause_event["id"] == effect_event["id"]:
                     continue
@@ -97,10 +99,13 @@ def main(input_file: TextIO, output_file: str) -> None:
                     "question": question,
                     "question_type": question_type,
                     "answers": answer,
+                    "sentences": sentences,
                 }
                 example["id"] = hash_instance(example)
 
                 examples.append(example)
+                done = True
+                break
 
     print(f"{len(examples)} examples.")
 
@@ -116,7 +121,7 @@ if __name__ == "__main__":
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
-        "input_file", type=argparse.FileType("r"), help="Input MAVEN-ERE JSONL file"
+        "input_file", type=argparse.FileType("r"), help="Input MAVEN-ERE JSONLines file"
     )
     parser.add_argument(
         "output_file",
