@@ -61,6 +61,7 @@ from self_critique.metric import fgcr_metric_cls
 from self_critique.util import (
     get_current_commit,
     get_device,
+    load_json,
     report_gpu_memory,
     resolve_path,
     save_model,
@@ -523,7 +524,7 @@ def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEn
 
     The JSON list may be behind a "data" key.
     """
-    data = json.loads(file_path.read_text())
+    data = load_json(file_path)
     if "data" in data:
         data = data["data"]
     return [

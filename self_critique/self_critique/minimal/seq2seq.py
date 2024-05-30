@@ -27,6 +27,7 @@ from self_critique import metric
 from self_critique.minimal.config import Config
 from self_critique.util import (
     get_current_commit,
+    load_json,
     log_metrics,
     report_gpu_memory,
     save_model,
@@ -71,7 +72,7 @@ class Seq2SeqEntry:
 
 
 def load_data(file_path: Path) -> list[Seq2SeqEntry]:
-    data = json.loads(file_path.read_text())
+    data = load_json(file_path)
     if "data" in data:
         data = data["data"]
     return [

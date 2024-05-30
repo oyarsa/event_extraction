@@ -38,6 +38,7 @@ from self_critique.rl.extract_train import (
 )
 from self_critique.util import (
     get_current_commit,
+    load_json,
     set_seed,
     suppress_transformers_warnings,
 )
@@ -163,7 +164,7 @@ def calculate_extract_metrics(data: list[EvalEntry]) -> dict[str, float]:
 
 
 def load_data(file_path: Path, max_samples: int | None = None) -> list[EvalEntry]:
-    data = json.loads(file_path.read_text())
+    data = load_json(file_path)
     return [
         EvalEntry(input=d["input"], output=d["output"], gold=d["gold"]) for d in data
     ][:max_samples]

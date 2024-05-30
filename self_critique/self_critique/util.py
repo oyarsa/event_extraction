@@ -1,5 +1,7 @@
 import contextlib
 import dataclasses
+import gzip
+import json
 import logging
 import multiprocessing
 import multiprocessing.sharedctypes
@@ -27,7 +29,18 @@ if TYPE_CHECKING:
     from trl.models.modeling_base import PreTrainedModelWrapper
 
 
-def get_root(module: str) -> str:
+def load_json(path: os.PathLike) -> Any:
+    """Load JSON from a file, optionally decompressing it if it is gzipped.
+
+    It's compressed if the file extension is `.gz`.
+    """
+    file_path = Path(path)
+    is_compressed = file_path.suffix == ".gz"
+    with gzip.open(file_path) if is_compressed else file_path.open() as f:
+        return json.load(f)
+
+
+def get_root(module: str) -> Path:
     files = resources.files(module)
     with resources.as_file(files) as path:
         return path.parent.resolve()
