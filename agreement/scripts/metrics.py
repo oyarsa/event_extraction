@@ -6,7 +6,14 @@ import krippendorff
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import cohen_kappa_score
 
-AVAILABLE_METRICS = ["agreement", "krippendorff", "spearman", "cohen", "pearson"]
+AVAILABLE_METRICS = [
+    "agreement",
+    "cohen",
+    "krippendorff",
+    "pearson",
+    "spearman",
+    "valid",
+]
 
 
 def are_numbers_ints(xs: list[float]) -> bool:
@@ -40,5 +47,7 @@ def calculate_metric(
             return pearsonr(x, y)[0]
         case "cohen":
             return cohen_kappa_score(x, y)
+        case "valid":
+            return sum(y) / len(y)
         case _:
             raise ValueError(f"Metric not implmeneted: {metric}")
