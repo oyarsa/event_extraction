@@ -9,7 +9,7 @@ import typer
 
 
 def main(files: list[Path]) -> None:
-    metrics: list[dict[str, float]] = []
+    metrics: list[dict[str, str | float]] = []
 
     for file in files:
         data = json.loads(file.read_text())

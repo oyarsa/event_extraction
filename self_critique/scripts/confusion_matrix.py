@@ -8,9 +8,9 @@ import typer
 from sklearn.metrics import confusion_matrix
 
 
-def class_acc(y_true: list[str], y_pred: list[str]) -> dict[str, int]:
+def class_acc(y_true: list[str], y_pred: list[str]) -> dict[str, float]:
     true_counts = Counter(y_true)
-    class_accuracies: dict[str, int] = {}
+    class_accuracies: dict[str, float] = {}
 
     for label, true_count in true_counts.items():
         correct_count = sum(
@@ -36,7 +36,7 @@ def print_confusion(cm: np.ndarray, labels: list[str]) -> None:
         print(f"{labels[i].ljust(label_width)}  {row_render}")
 
 
-def print_acc(accuracies: dict[str, int]) -> None:
+def print_acc(accuracies: dict[str, float]) -> None:
     print("\nCLASS ACCURACY")
     label_width = max(len(label) for label in accuracies) + 1
     for label, rate in accuracies.items():
