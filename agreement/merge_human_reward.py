@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """Combine human annotation file and machine prediction file into a single file.
 
 The human annotation file follows the `annotation` format. It's a JSON file with a list

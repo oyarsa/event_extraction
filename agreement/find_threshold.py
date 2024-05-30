@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """Find the best threshold for a binary classifier.
 
 Given a JSON file with gold labels and prediction scores, this script finds the
