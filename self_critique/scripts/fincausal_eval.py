@@ -13,6 +13,12 @@ Expects a JSON file with the following format:
 
 Both "input" and "output" are expected to be in the format:
 "[Cause] <cause text> [Relation] <relation text> [Effect] <effect text>"
+
+Copied from [1], with modifications to use our tagged JSON format instead of their CSV
+format.
+Copyright https://github.com/yseop/YseopLab 2020. No license provided.
+
+[1] https://github.com/yseop/YseopLab/blob/88d7da13a83fdbfc1f9343fb7f6e6cf04c9fe234/FNP_2020_FinCausal/scoring/task2/task2_evaluate.py
 """
 
 import argparse

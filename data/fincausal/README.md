@@ -1,7 +1,8 @@
 # FinCausal data
 
 This is data from multiple years of the [FinCausal
-task](https://github.com/yseop/YseopLab).
+task](https://github.com/yseop/YseopLab). Unfortunately, they don't provide a license,
+so attribution is the best I can do.
 
 The raw data is in the `raw` directory. They're CSV semicolon-separated files. Not every
 year has all the files. Only 2020 has all dev/test/train, while 2021 has only dev/train
