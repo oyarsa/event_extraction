@@ -354,6 +354,7 @@ def train_extract(
     if isinstance(evaluator, RewardEvaluator):
         evaluator.set_device(device)
 
+    ref_result = None
     if eval_dataset is not None:
         ref_desc = "Ref eval"
         ref_result = evaluate(
@@ -427,8 +428,9 @@ def train_extract(
                     dir=output_dir,
                     file_name=f"mini_eval_result_{epoch}.{batch_idx+1}.json",
                 )
+                if ref_result is not None:
+                    log_label_distribution(ref_result, desc="Reference")
 
-                log_label_distribution(ref_result, desc="Reference")
                 log_label_distribution(eval_result, desc=desc)
                 log_tensorboard(
                     tb_writer,
@@ -479,7 +481,8 @@ def train_extract(
                 dir=output_dir,
                 file_name=f"eval_result_{epoch}.json",
             )
-            log_label_distribution(ref_result, desc="Reference")
+            if ref_result is not None:
+                log_label_distribution(ref_result, desc="Reference")
             log_label_distribution(eval_result, desc=desc)
 
     logger.info(
