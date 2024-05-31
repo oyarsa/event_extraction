@@ -1,0 +1,34 @@
+{
+  "command": [
+    "src/evaluation/chain_generation.py",
+    "../../knowwhy/data/converted/train.censored_clustered_12.json",
+    "--openai-config-path",
+    "/home/ubuntu/.config/event_extraction/gpt_config.json",
+    "--api-type",
+    "azure4",
+    "--system-prompt",
+    "prompts/qa/system.txt",
+    "--user-template",
+    "prompts/qa/chain_generation.txt",
+    "--print-messages",
+    "--result-mode",
+    "valid",
+    "--run-name",
+    "gpt4-newcluster-12"
+  ],
+  "data_hash": "b18b1de6a75e7d17114d31455775941a",
+  "git_hash": "47b65c6",
+  "params": {
+    "openai_config_path": "/home/ubuntu/.config/event_extraction/gpt_config.json",
+    "api_type": "azure4",
+    "system_prompt_path": "prompts/qa/system.txt",
+    "user_template_path": "prompts/qa/chain_generation.txt",
+    "print_messages": true,
+    "result_mode": "valid",
+    "run_name": "gpt4-newcluster-12",
+    "file": "../../knowwhy/data/converted/train.censored_clustered_12.json",
+    "model": "gpt-3.5-turbo",
+    "output_dir": "output/chain_generation",
+    "n": null
+  }
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "input": "question: Why did I crochet after work for many days?\ncontext: I wanted to crochet a scarf. I sat down and began my work. I crocheted after work for many days. When I decided I was finished, I tried the scarf on. I'd made it way too long!",
+    "answer": "i wanted to crochet a scarf i sat down and began my work i crocheted after work for many days because i wanted to finish the scarf",
+    "score": 0,
+    "chain": "Question: What was the reason for crocheting after work for several days?\nContext: The goal was to create a scarf, so the activity of crocheting was undertaken each day after work. This process continued over multiple days. Upon completion, it was discovered that the scarf was excessively long."
+  },
+  {
+    "input": "question: Why did He think the shiny red ones looked very delicious?\ncontext: Max is a dog who likes to chew on everything. One day, he discovered the ornaments on the new Christmas tree. He thought the shiny red ones looked very delicious. His owners caught him chomping on the fragmented decoration. Max got scolded and his new toy was thrown away.",
+    "answer": "2 they were a different color than his usual toys",
+    "score": 1,
+    "chain": "Question: What made Max, the dog, think that the shiny red ornaments on the Christmas tree appeared to be very tasty?\nContext: Max is a dog with a habit of chewing on various objects. He recently encountered the ornaments hanging on the family's newly decorated Christmas tree. The shiny red ornaments in particular caught his attention, and he found them to be especially appetizing. Unfortunately, his owners discovered him biting into the broken pieces of these decorations, which led to him being reprimanded and the loss of his new toy."
+  },
+  {
+    "input": "question: Why did He make it?\ncontext: Ed had tried to get to the top of the apple tree for weeks. He could only get so far, then he couldn't reach any higher. He finally started to think about a different approach. The next day, he tried climbing from the opposite side. He made it to the top at last!",
+    "answer": "xintent phrase to get to the top",
+    "score": 0,
+    "chain": "Question: What was the reason for his success in reaching the top of the apple tree?\nContext: Ed had been attempting to climb an apple tree for several weeks but was unable to reach the top because he could only climb to a certain height before he couldn't go any higher. After considering a new strategy, he decided to climb the tree from the opposite side the following day, which allowed him to finally reach the top."
+  },
+  {
+    "input": "question: Why did Andre insist they use effects and was kicked out the studio?\ncontext: Andre was young and popular on the underground rap scene. A producer gave him a production deal to make records. In the studio, Andre insisted the producer use effects on the vocals. The producer didn't like the sound effects on the vocals. Andre insisted they use effects and was kicked out the studio.",
+    "answer": "andre insisted they use effects and was kicked out the studio",
+    "score": 0,
+    "chain": "Question: What was the reason for Andre being expelled from the recording studio?\nContext: Andre, a young artist who had gained popularity in the underground rap scene, was offered a production deal by a producer to create music records. During a studio session, Andre strongly advocated for the inclusion of sound effects on the vocal tracks. However, the producer was opposed to this idea and did not appreciate the sound effects on the vocals. Despite this, Andre continued to push for the use of effects, which ultimately led to his removal from the studio."
+  },
+  {
+    "input": "question: Why did He behave after that?\ncontext: Everyone was in a math class. There was a kid that caused trouble though. He would hit on girls and yell out. The teacher sent him out. He behaved after that.",
+    "answer": "he behaved after that",
+    "score": 0,
+    "chain": "Question: What caused the change in the student's behavior in math class?\nContext: In a math class, there was a student who was disruptive. He engaged in inappropriate behavior such as hitting on girls and shouting. As a consequence of his actions, the teacher decided to remove him from the classroom. Following this incident, there was a noticeable change in his behavior."
+  },
+  {
+    "input": "question: Why did She start by drawing lines?\ncontext: Victoria was learning to draw a face. She started by drawing lines. Then, she added eyes. Next she did a nose. Finally, she drew a mouth.",
+    "answer": "victoria was learning how to draw a face",
+    "score": 1,
+    "chain": "Question: What was the reason Victoria began with sketching lines?\nContext: Victoria was in the process of learning the steps to draw a face. Her initial step involved sketching lines. Following that, she proceeded to draw the eyes, then the nose, and completed the drawing with the mouth."
+  },
+  {
+    "input": "question: Why did Ann dig through her freezer?\ncontext: Ann really wanted a burger. But she found that all the local restaurants were closed! Ann dug through her freezer and found beef and rolls. She impatiently fried up her own homemade burgers. By the time they were done, she was so hungry she ate three!",
+    "answer": "ann was looking for beef and rolls so she could make her own burgers because all the restaurants were closed",
+    "score": 1,
+    "chain": "Question: What was the reason Ann searched her freezer?\nContext: Ann was craving a burger, but unfortunately, she discovered that all the nearby restaurants had already closed. Not giving up on her craving, Ann decided to rummage through her freezer where she successfully found some beef and rolls. With these ingredients, she quickly set to work and cooked homemade burgers for herself. Her hunger had grown so much by the time the burgers were ready that she ended up eating three of them."
+  },
+  {
+    "input": "question: Why did The Lone Gunman ride his horse?\ncontext: The Lone Gunman rode his horse through the worst part of town. The streets were empty because they all feared him. The Gunman raised his weapon and fired two shots into the sky. Behind him a door swung open. A man popped out and whistled with intimidation at the Gunman.",
+    "answer": "the lone gunman rode his horse through the worst part of town",
+    "score": 0,
+    "chain": "Question: What was the reason for The Lone Gunman riding his horse through town?\nContext: The Lone Gunman was seen riding his horse in the most dangerous part of town, which was deserted as people were afraid of him. During this ride, he fired his gun twice into the air, after which a man emerged from a door and whistled at the Gunman in a challenging manner."
+  },
+  {
+    "input": "question: Why did She tuck Jim?\ncontext: Jim's puppy Spot was recently found and returned home. Jim was so happy to have Spot back he gave him a bath. Afterwards he played with Spot for hours. Jane later found Jim and Spot asleep on the floor. She tucked Jim in kissed his forehead goodnight.",
+    "answer": "jane wanted to make sure jim was comfortable",
+    "score": 0,
+    "chain": "<empty>"
+  },
+  {
+    "input": "question: Why did He turn around?\ncontext: It was a late night and Joe was working dispatch. It was a quiet town so he was having trouble staying awake. All of a sudden, he felt a tapping on his shoulder. He turned around and saw the chief yelling at him for sleeping. He then woke up, and never fell asleep again on the job.",
+    "answer": "the chief was tapping him on the shoulder to wake him up",
+    "score": 1,
+    "chain": "Question: What caused Joe to turn around while he was working dispatch late at night?\nContext: Joe was on duty as a dispatcher during a late-night shift in a quiet town. He was struggling to keep his eyes open due to the lack of activity. Suddenly, he experienced a tapping sensation on his shoulder. When he turned around, he discovered that it was the chief, who was scolding him for falling asleep. This incident made such an impact on Joe that he made sure never to fall asleep on the job again."
+  },
+  {
+    "input": "question: Why did It manage to run away?\ncontext: Jeff visited a giraffe that was in the zoo. He fed several bard pellets and petted him. The giraffe jumped as soon as Jeff tapped his head. It managed to run away. However, it turned around and started charging at Jeff.",
+    "answer": "the giraffe was not chained or otherwise restrained so it was able to move freely",
+    "score": 0,
+    "chain": "Question: What allowed the giraffe to escape after being petted on the head by Jeff?\nContext: Jeff was at the zoo where he interacted with a giraffe. He fed the giraffe some pellets and then petted it. Upon being tapped on the head, the giraffe suddenly jumped and was able to escape. After running away, the giraffe turned and began to charge towards Jeff."
+  },
+  {
+    "input": "question: Why did They become inseparable?\ncontext: Billy felt lonely in school. He had no friends. One day, a new kid came to school. They instantly became friends. They became inseparable.",
+    "answer": "billy and the new kid were instant friends",
+    "score": 0,
+    "chain": "Question: What led to Billy and the new kid becoming inseparable?\nContext: Billy was experiencing loneliness at school because he didn't have any friends. However, this changed when a new student arrived at the school. Upon meeting, Billy and the new student formed an immediate friendship, which grew so strong that they were always together."
+  },
+  {
+    "input": "question: Why did He figure he could never have a better find?\ncontext: Tim used to collect geodes. One time he came upon a huge amethyst rock. It was so exciting for him. It was so exciting, in fact, that he stopped after that. He figured he could never have a better find.",
+    "answer": "amethyst rock was huge",
+    "score": 1,
+    "chain": "Question: What was the reason he decided to stop collecting geodes after a particular discovery?\nContext: Tim was an enthusiast who enjoyed collecting geodes. During his time collecting, he discovered an exceptionally large amethyst rock. This discovery was incredibly thrilling for him, to the point where he chose to cease his hobby. He believed that he would not be able to top this discovery with any future finds."
+  },
+  {
+    "input": "question: Why did They begin the process?\ncontext: The archaeologist was setting up a dig in Egypt. He and his team hoped to find artifacts from ancient times. They began the process by clearing away all the sand. It wasn't long before they found some bowls and plates that were old. The dig was an immediate success for the team!",
+    "answer": "the archaeologist and his team wanted to find artifacts",
+    "score": 1,
+    "chain": "Question: What was the reason for the archaeologist and his team to start their work?\nContext: An archaeologist and his team were preparing for an excavation in Egypt with the goal of uncovering ancient artifacts. To initiate their search, they first removed the sand from the site. Shortly after beginning, they discovered several ancient bowls and plates, marking the start of a successful excavation."
+  },
+  {
+    "input": "question: Why did He follow his suspect?\ncontext: The spy was on a mission. He was trying to recover a huge diamond. He followed his suspect very carefully and apprehended him. After apprehending the suspect, he questioned him intensely. The spy got the information and found the diamond.",
+    "answer": "3 to ensure the safety of others who might be in the area",
+    "score": 0,
+    "chain": "Question: What was the reason for the spy to follow his suspect?\nContext: The spy was tasked with a mission to retrieve a large diamond. During this mission, he tracked his suspect with great caution and eventually caught him. Once the suspect was in custody, the spy interrogated him thoroughly, which led to the discovery of the diamond's location."
+  },
+  {
+    "input": "question: Why did They arrive at their destination?\ncontext: Matt was on a train with his girlfriend. They arrived at their destination and got off the train. Five minutes later, Matt's girlfriend realized she forgot her phone. They had to drive really far to get her phone. Matt was annoyed and frustrated with the situation.",
+    "answer": "2 they arrived at their destination and got off the train",
+    "score": 0,
+    "chain": "Question: What was the reason for Matt and his girlfriend arriving at their destination?\nContext: Matt and his girlfriend were traveling together on a train. Upon reaching their destination, they disembarked from the train. Shortly after, Matt's girlfriend discovered that she had left her phone behind, which led to them having to undertake a long drive to retrieve it. This situation caused Matt to feel annoyed and frustrated."
+  },
+  {
+    "input": "question: Why did Ida love the combination she had discovered?\ncontext: Ida was lactose intolerant. Ida wanted cereal, but couldn't have milk. One day, I discovered almond milk. Ida tried almond milk and cereal. Ida loved the combination she had discovered.",
+    "answer": "the combination was easy for her to digest since she is lactose intolerant",
+    "score": 1,
+    "chain": "Question: What made the new cereal combination appealing to Ida?\nContext: Ida suffers from lactose intolerance, which prevents her from consuming regular milk. She was looking for an alternative that would allow her to enjoy cereal. Upon discovering almond milk, Ida decided to try it with her cereal. She found that she really enjoyed the new mixture she had put together."
+  },
+  {
+    "input": "question: Why did He feed several bard pellets?\ncontext: Jeff visited a giraffe that was in the zoo. He fed several bard pellets and petted him. The giraffe jumped as soon as Jeff tapped his head. It managed to run away. However, it turned around and started charging at Jeff.",
+    "answer": "to gain the giraffes trust",
+    "score": 1,
+    "chain": "Question: What was the reason for him giving the giraffe bard pellets?\nContext: During Jeff's visit to the zoo, he interacted with a giraffe by feeding it bard pellets and petting it. After tapping the giraffe's head, the animal jumped and managed to escape. Surprisingly, the giraffe then turned and began to charge towards Jeff."
+  },
+  {
+    "input": "question: Why did He fall in love with briefs?\ncontext: Sean liked boxers. He had never tried briefs. One day, his girlfriend bought him briefs as a present. Sean was disappointed but decided to try them. He fell in love with briefs.",
+    "answer": "he liked the fit",
+    "score": 1,
+    "chain": "Question: What made Sean start preferring briefs over boxers?\nContext: Initially, Sean was a fan of boxers and had not experienced wearing briefs. However, when his girlfriend gifted him a pair of briefs, despite his initial disappointment, he chose to give them a chance. After trying them on, Sean developed a fondness for briefs."
+  },
+  {
+    "input": "question: Why did Logan spend all his time?\ncontext: Logan had never been to a beach before. He always thought it would be cool to try surfing. Logan's parents planned a family vacation to Hawaii. He was very excited about experiencing the beach for the first time. Logan spent all his time swimming, diving and surfing.",
+    "answer": "xneed phrase to go to the beach",
+    "score": 1,
+    "chain": "Question: What was the reason for Logan dedicating all his time during the vacation?\nContext: Logan was experiencing the beach for the first time during a family vacation to Hawaii. He had always been interested in surfing but had never had the chance to try it before. Given his excitement and the opportunity presented, Logan devoted all his time to beach activities such as swimming, diving, and learning to surf."
+  }
+]

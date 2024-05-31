@@ -1,0 +1,20 @@
+{
+  "command": [
+    "src/evaluation/chain_generation.py",
+    "../../knowwhy/data/converted/train_clustered_12.json",
+    "--openai-config-path",
+    "/home/ubuntu/.config/event_extraction/gpt_config.json",
+    "--api-type",
+    "azure4",
+    "--system-prompt",
+    "prompts/qa/system.txt",
+    "--user-template",
+    "prompts/qa/chain_generation.txt",
+    "--print-messages",
+    "--result-mode",
+    "valid",
+    "--run-name",
+    "gpt4-cluster-12"
+  ],
+  "data_hash": "3600ef3b7ac54caaaa62b512f02919b7"
+}

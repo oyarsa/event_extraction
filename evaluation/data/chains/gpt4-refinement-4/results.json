@@ -1,0 +1,26 @@
+[
+  {
+    "input": "question: Why did Amy vow to never walk down this block again?\ncontext: Amy and Beth went for a walk. They walked past the house of Amy's crush Ray. Ray could be seen in the backyard talking to someone. Amy could see it was a girl. Amy vowed to never walk down this block again.",
+    "answer": "amy could see it was a girl so amy vowed to never walk down this block again",
+    "score": 1,
+    "chain": "Question: What prompted Amy to make a promise to herself to avoid walking down a particular block in the future?\nContext: During a stroll with her friend Beth, Amy happened to pass by the residence of Ray, the person she has feelings for. While passing by, Amy noticed Ray engaged in a conversation with a female in the backyard, which led to her decision to never walk down that block again."
+  },
+  {
+    "input": "question: Why did It manage to run away?\ncontext: Jeff visited a giraffe that was in the zoo. He fed several bard pellets and petted him. The giraffe jumped as soon as Jeff tapped his head. It managed to run away. However, it turned around and started charging at Jeff.",
+    "answer": "the giraffe was not chained or otherwise restrained so it was able to move freely",
+    "score": 0,
+    "chain": "Question: What allowed the giraffe to escape after being startled by Jeff?\nContext: Jeff was at the zoo where he interacted with a giraffe. He fed the giraffe some pellets and stroked it. When Jeff tapped the giraffe on the head, the animal got spooked and ran off. The giraffe was not confined in any way that prevented it from moving around. After running away, the giraffe turned and began to charge towards Jeff."
+  },
+  {
+    "input": "question: Why did He turn around?\ncontext: It was a late night and Joe was working dispatch. It was a quiet town so he was having trouble staying awake. All of a sudden, he felt a tapping on his shoulder. He turned around and saw the chief yelling at him for sleeping. He then woke up, and never fell asleep again on the job.",
+    "answer": "the chief was tapping him on the shoulder to wake him up",
+    "score": 1,
+    "chain": "Question: What prompted Joe to turn around while he was working dispatch late at night?\nContext: Joe was on duty as a dispatcher during a late-night shift in a quiet town. He was struggling to keep his eyes open due to the lack of activity. Suddenly, he experienced a tapping sensation on his shoulder. When he turned around, he discovered the chief, who was scolding him for falling asleep. This incident caused Joe to fully awaken, and he made a point never to doze off again while on the job."
+  },
+  {
+    "input": "question: Why did They become inseparable?\ncontext: Billy felt lonely in school. He had no friends. One day, a new kid came to school. They instantly became friends. They became inseparable.",
+    "answer": "billy and the new kid were instant friends",
+    "score": 0,
+    "chain": "Question: What led to Billy and the new kid becoming inseparable?\nContext: Billy was experiencing loneliness at school because he didn't have any friends. However, this changed when a new student arrived at the school. Upon meeting, Billy and the new student formed an immediate friendship, which grew to the point where they were always together."
+  }
+]

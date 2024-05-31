@@ -1,0 +1,35 @@
+{
+  "command": [
+    "src/evaluation/chain_generation_reference.py",
+    "data/training/train_clustered_4.json",
+    "--openai-config-path",
+    "/Users/italo/.config/event_extraction/gpt_config.json",
+    "--model",
+    "gpt-4-1106-preview",
+    "--run-name",
+    "fcr-reference-cluster-4",
+    "--system-prompt",
+    "prompts/extraction/system_reference.txt",
+    "--user-template",
+    "prompts/extraction/chain_generation_reference.txt",
+    "--result-mode",
+    "valid",
+    "-n",
+    "4"
+  ],
+  "data_hash": "1de7c270ae508d8ca647cc0bf4383c5a",
+  "git_hash": "ce8f008",
+  "params": {
+    "openai_config_path": "/Users/italo/.config/event_extraction/gpt_config.json",
+    "model": "gpt-4-1106-preview",
+    "run_name": "fcr-reference-cluster-4",
+    "system_prompt_path": "prompts/extraction/system_reference.txt",
+    "user_template_path": "prompts/extraction/chain_generation_reference.txt",
+    "result_mode": "valid",
+    "n": 4,
+    "file": "data/training/train_clustered_4.json",
+    "api_type": "openai",
+    "output_dir": "output/chain_generation",
+    "print_messages": false
+  }
+}

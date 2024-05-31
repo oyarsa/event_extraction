@@ -1,6 +1,7 @@
 *.json
 !**/*config*/*.json
 
+!data/chains/**
 !prediction_output.json
 !evaluation_output.json
 !prediction_substr.json

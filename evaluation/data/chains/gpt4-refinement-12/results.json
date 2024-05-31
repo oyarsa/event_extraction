@@ -1,0 +1,74 @@
+[
+  {
+    "input": "question: Why did Ali try to relax as she climbed the museum stairs?\ncontext: Ali's class had arrived at the museum. She looked around to see if the bully Val was there. Val was nowhere to be seen. Ali tried to relax as she climbed the museum stairs. Her stomach dropped when she saw Val waiting for her at the door.",
+    "answer": "she was hoping val would not be there",
+    "score": 1,
+    "chain": "Question: What was the reason for Ali attempting to calm herself while ascending the stairs of the museum?\nContext: Upon the arrival of Ali's class at the museum, Ali scanned the area in search of Val, the bully. Noticing that Val was not in immediate sight, Ali made an effort to soothe her nerves as she went up the museum stairs. However, her sense of relief was short-lived as she reached the top and spotted Val waiting at the entrance."
+  },
+  {
+    "input": "question: Why did He feed several bard pellets?\ncontext: Jeff visited a giraffe that was in the zoo. He fed several bard pellets and petted him. The giraffe jumped as soon as Jeff tapped his head. It managed to run away. However, it turned around and started charging at Jeff.",
+    "answer": "to gain the giraffes trust",
+    "score": 1,
+    "chain": "Question: What was the reason for him giving the giraffe bard pellets?\nContext: During Jeff's visit to the zoo, he interacted with a giraffe by feeding it bard pellets and petting it. After Jeff tapped the giraffe's head, the animal jumped and managed to escape. Subsequently, the giraffe turned back and charged towards Jeff."
+  },
+  {
+    "input": "question: Why did He make it?\ncontext: Ed had tried to get to the top of the apple tree for weeks. He could only get so far, then he couldn't reach any higher. He finally started to think about a different approach. The next day, he tried climbing from the opposite side. He made it to the top at last!",
+    "answer": "xintent phrase to get to the top",
+    "score": 0,
+    "chain": "Question: What was the reason for his success in reaching the top of the apple tree?\nContext: Ed had been attempting to climb an apple tree for several weeks but was unable to reach the top because he could only climb to a certain height before he couldn't go any higher. After considering a new strategy, he decided to climb the tree from the opposite side the following day, which allowed him to finally reach the top of the tree."
+  },
+  {
+    "input": "question: Why did He preppe their feet?\ncontext: The scouts gathered around the hot fire. The scoutmaster had five initiates lined up ready to walk. He prepped their feet and they started to walk across the coals. As the last initiate successfully made it across, the scouts cheered. The s'mores and marshmallows were brought out to celebrate.",
+    "answer": "the scoutmaster wanted to make sure the initiates didnt get burned",
+    "score": 1,
+    "chain": "Question: For what reason did the scoutmaster prepare the initiates' feet before they walked?\nContext: During a gathering of scouts around a warm fire, the scoutmaster arranged for five new members to participate in a ritual. This involved the scoutmaster preparing their feet in some way before they began to walk over a bed of hot coals. After the final new member completed the walk, the group celebrated with s'mores and marshmallows."
+  },
+  {
+    "input": "question: Why did I yell at him?\ncontext: I was watching the game furious. This Referee had no idea what he was doing. He kept making bad calls. I yelled at him. Then he had the nerve to kick me out of the game.",
+    "answer": "2 i wanted him to know that i thought he was doing a terrible job",
+    "score": 0,
+    "chain": "Question: What prompted me to raise my voice at the referee?\nContext: While I was watching the game, I became extremely angry because the referee seemed to be consistently making incorrect decisions. Out of frustration, I shouted at him, which led to him ejecting me from the game."
+  },
+  {
+    "input": "question: Why did She start by drawing lines?\ncontext: Victoria was learning to draw a face. She started by drawing lines. Then, she added eyes. Next she did a nose. Finally, she drew a mouth.",
+    "answer": "victoria was learning how to draw a face",
+    "score": 1,
+    "chain": "Question: What was the reason Victoria began with sketching lines when she was learning to draw?\nContext: Victoria was in the process of learning how to create a facial drawing. Her initial step was to sketch lines. Following that, she proceeded to add the eyes. After that, she drew the nose. To complete the face, she sketched the mouth last."
+  },
+  {
+    "input": "question: Why did He fill up?\ncontext: Joe had to deliver one-hundred guns to the rebels in Carson. He filled up his wagon with them and covered them with a blanket. He didn't expect to be searched, so he didn't bother hiding them. When he saw the border guards, he almost ran for it. Somehow he kept his cool and made it across.",
+    "answer": "xwant phrase the wagon is too heavy to carry",
+    "score": 0,
+    "chain": "Question: What was the reason for Joe loading his wagon?\nContext: Joe was tasked with delivering one hundred guns to the rebels in Carson. To transport them, he loaded the guns onto his wagon and concealed them with a blanket. Joe did not anticipate being stopped for a search, so he did not take extra measures to hide the guns more thoroughly. Upon encountering the border guards, Joe felt a strong urge to flee but managed to maintain his composure and successfully crossed the border."
+  },
+  {
+    "input": "question: Why did I try to calm her down throughout the ride?\ncontext: Grandma decided to go on the roller coaster with us. Although the roller coaster didn't move yet, she was scared. I tried to calm her down throughout the ride, but she wasn't relaxed. In addition, she screamed when the roller-coaster went down the peak. Before getting out, she took a few minutes to breathe.",
+    "answer": "my grandma was scared",
+    "score": 1,
+    "chain": "Question: What was the reason for my attempts to soothe her during the entire roller coaster experience?\nContext: My grandmother agreed to join us on the roller coaster. She was already frightened before the ride started moving. Despite my efforts to soothe her during the ride, she remained tense and even screamed as we descended from the highest point of the roller coaster. After the ride ended, she needed a few minutes just to catch her breath."
+  },
+  {
+    "input": "question: Why did Amy vow to never walk down this block again?\ncontext: Amy and Beth went for a walk. They walked past the house of Amy's crush Ray. Ray could be seen in the backyard talking to someone. Amy could see it was a girl. Amy vowed to never walk down this block again.",
+    "answer": "amy could see it was a girl so amy vowed to never walk down this block again",
+    "score": 1,
+    "chain": "Question: What prompted Amy to make a promise to herself to avoid walking down a particular block in the future?\nContext: During a stroll with her friend Beth, Amy happened to pass by the residence of Ray, the person she has feelings for. While passing by, Amy noticed Ray in the backyard engaged in a conversation with a female companion. This observation led to Amy's decision to steer clear of this block from that point onward."
+  },
+  {
+    "input": "question: Why did He run home?\ncontext: A barbarian was walking through the woods one day. He noticed a foreign tribe by his tribe's river. He ran home and warned his fellow tribesman. They ran over to the foreigners and engaged in combat. The other tribe fled and the barbarian and his tribe went home.",
+    "answer": "he noticed a foreign tribe by his tribes river",
+    "score": 1,
+    "chain": "Question: What prompted the barbarian to run home?\nContext: While a barbarian was strolling through the forest, he spotted a foreign tribe near the river that belonged to his own tribe. This sighting led him to rush back to his home to alert his tribesmen. Subsequently, his tribe confronted the foreigners, resulting in a skirmish that caused the foreign tribe to retreat. After the confrontation, the barbarian and his tribe returned to their homes."
+  },
+  {
+    "input": "question: Why did It manage to run away?\ncontext: Jeff visited a giraffe that was in the zoo. He fed several bard pellets and petted him. The giraffe jumped as soon as Jeff tapped his head. It managed to run away. However, it turned around and started charging at Jeff.",
+    "answer": "the giraffe was not chained or otherwise restrained so it was able to move freely",
+    "score": 0,
+    "chain": "Question: What allowed the giraffe to escape?\nContext: Jeff was at the zoo and interacted with a giraffe. He fed it some pellets and stroked it. When Jeff tapped the giraffe on the head, the animal leaped and was able to escape. After escaping, the giraffe turned and began to charge towards Jeff."
+  },
+  {
+    "input": "question: Why did I guess I wo n't get my hopes so high the next time?\ncontext: I went shopping at an outlet mall yesterday. I had hoped to find a lot of great deals. I was a bit disappointed that there weren't more sales than I found. I went home with pretty much nothing. I guess I won't get my hopes so high the next time.",
+    "answer": "i went home with pretty much nothing",
+    "score": 1,
+    "chain": "Question: What is the reason for me deciding not to have such high expectations in the future?\nContext: Yesterday, I visited an outlet mall with the anticipation of discovering numerous excellent bargains. However, my experience was somewhat disheartening as the sales were not as plentiful as I had expected. Consequently, I returned home almost empty-handed. This experience has led me to consider adjusting my expectations for similar situations in the future."
+  }
+]
