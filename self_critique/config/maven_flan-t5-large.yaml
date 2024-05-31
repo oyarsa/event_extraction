@@ -24,4 +24,3 @@ generation_top_p: null
 degeneration_penalty: null
 generation_do_sample: false
 add_question: true
-device: mps
