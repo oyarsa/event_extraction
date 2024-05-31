@@ -317,7 +317,10 @@ def train(
 def calculate_metrics(gold: list[int], preds: list[int]) -> dict[str, float]:
     accuracy = accuracy_score(gold, preds)
     precision, recall, f1, _ = precision_recall_fscore_support(
-        gold, preds, average="macro", zero_division=0  # type: ignore
+        gold,
+        preds,
+        average="macro",
+        zero_division=0,  # type: ignore
     )
     return {
         "accuracy": float(accuracy),
@@ -431,8 +434,6 @@ def main() -> None:
 
     suppress_transformers_warnings()
 
-    # TODO: I think this is erasing the contents of the directory, if there are
-    # any. That shouldn't happen. Needs investigation.
     config.output_dir.mkdir(exist_ok=True, parents=True)
 
     train_data, eval_data, predict_data = None, None, None
