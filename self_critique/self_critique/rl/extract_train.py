@@ -116,6 +116,8 @@ class Config:
     # Reward model name or path. Used by both model-based and SentenceTransformer
     # evaluators
     reward_model: str | None = None
+    # Whether to use softmax for reward model or use the raw logits
+    softmax_reward: bool = False
     # Threshold used by SentenceTransformer and F1 evaluator to determine the class.
     # See the respective classes documentation for more information: `F1Evaluator` and
     # `SentenceTransformerEvaluator`.
@@ -877,11 +879,13 @@ class RewardEvaluator(Evaluator):
         model: Module,
         max_seq_length: int,
         batch_size: int,
-        device: torch.device | None = None,
+        softmax_reward: bool,
+        device: torch.device | None,
     ) -> None:
         self.model = model
         self.max_seq_length = max_seq_length
         self.batch_size = batch_size
+        self.softmax_reward = softmax_reward
 
         self.device = device
         if device is not None:
@@ -923,10 +927,13 @@ class RewardEvaluator(Evaluator):
                     attention_mask=attention_mask.to(self.device),
                     token_type_ids=token_type_ids.to(self.device),
                 )
-                # Get logit for the reward class and use it as a score
-                scores.extend(outputs.logits.select(dim=-1, index=label2id[true_class]))
+                if self.softmax_reward:
+                    score = torch.softmax(outputs.logits, dim=-1)
+                else:
+                    score = outputs.logits
+                scores.extend(score.select(dim=-1, index=label2id[true_class]))
 
-                preds = torch.argmax(outputs.logits, dim=-1)
+                preds = torch.argmax(score, dim=-1)
                 predictions.extend(id2label[int(x.item())] for x in preds)
 
         return scores, predictions
@@ -1000,6 +1007,7 @@ def main() -> None:
                 model=reward,
                 max_seq_length=args.max_reward_seq_length,
                 batch_size=args.reward_batch_size,
+                softmax_reward=args.softmax_reward,
                 device=None,
             )
         case EvaluatorType.SENTENCE_TRANSFORMER:
