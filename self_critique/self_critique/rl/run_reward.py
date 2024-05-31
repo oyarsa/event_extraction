@@ -229,7 +229,8 @@ def evaluate(
 
     output: list[dict[str, Any]] = []
     for batch in tqdm(batches, desc=desc):
-        inputs = [f"{x.input}\n{x.gold}" for x in batch]
+        inputs = [x.input for x in batch]
+        eval_inputs = [f"{x.input}\n{x.gold}" for x in batch]
         extractions = [x.output for x in batch]
         golds = [x.gold for x in batch]
 
@@ -237,7 +238,7 @@ def evaluate(
             reward=reward,
             max_seq_length=args.max_seq_length,
             batch_size=args.batch_size,
-            sentence1=inputs,
+            sentence1=eval_inputs,
             sentence2=extractions,
             device=device,
             true_class=label_config.true_class,
