@@ -258,6 +258,7 @@ def train(
     eval_data: list[Seq2SeqEntry] | None,
     config: Seq2SeqConfig,
     generation_kwargs: dict[str, Any],
+    metric_early_stopping: str = "em",
 ) -> PreTrainedModel:
     train_data = train_data[: config.max_train_samples]
     train_loader = preprocess_data(
@@ -287,8 +288,7 @@ def train(
             desc="evaluation",
         )
 
-    # TODO: Parametrise which metric to use for early stopping
-    best_em = -1.0
+    best_metric = -1.0
     best_epoch = -1
     early_stopping_counter = 0
 
@@ -331,8 +331,8 @@ def train(
             )
             logger.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
 
-            if eval_result.metrics["em"] > best_em:
-                best_em = eval_result.metrics["em"]
+            if eval_result.metrics[metric_early_stopping] > best_metric:
+                best_metric = eval_result.metrics[metric_early_stopping]
                 best_epoch = epoch + 1
                 early_stopping_counter = 0
 
@@ -345,14 +345,15 @@ def train(
 
             if early_stopping_counter >= config.early_stopping_patience:
                 logger.info(
-                    f"Early stopping: {early_stopping_counter} epochs without improvement."
-                    f" Best EM: {best_em} at epoch {best_epoch}."
+                    f"Early stopping: {early_stopping_counter} epochs without"
+                    f" improvement. Best {metric_early_stopping}: {best_metric} at epoch"
+                    f" {best_epoch}."
                 )
                 break
 
     # Either we're not saving based on eval f1, or we're at the end of training
     # and we haven't saved yet
-    if best_em == -1:
+    if best_metric == -1:
         save_model(model, tokeniser, config.output_dir)
 
     return model
