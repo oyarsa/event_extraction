@@ -1,0 +1,23 @@
+[project]
+name = "data"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Italo Silva", email = "italo@maleldil.com"},
+]
+dependencies = [
+    "pandas>=2.2.2,<3",
+    "beartype>=0.18.5,<0.19",
+]
+requires-python = ">=3.10,<3.11"
+license = {text = "GPL-3.0-only"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.ruff]
+extend = "../pyproject.toml"
+
+[tool.pyright]
+typeCheckingMode = "basic"

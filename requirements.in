@@ -3,6 +3,7 @@
 -e ./evaluation
 -e ./self_critique
 -e ./annotation
+-e ./data
 
 ruff>=0.4
 jupyterlab>=4
