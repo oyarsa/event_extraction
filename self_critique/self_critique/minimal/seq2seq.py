@@ -48,8 +48,8 @@ def setup_logging(log_level: str) -> None:
 
 @dataclass
 class Seq2SeqConfig(Config):
-    # Seq2Seq mode: 'extract' or 'reconstruct. Changes the loss function and metrics.
-    mode: str = "extract"
+    # Metrics mode: 'fcr', 'extract' or 'maven'. 'extract' is a synonym for 'fcr'.
+    mode: str = "fcr"
     # Generation top-k used for reranking
     generation_top_k: int | None = None
     # Generation top-p used for selecting tokens
@@ -384,7 +384,7 @@ def calculate_metrics(
         for entry, out in zip(data, output)
     ]
 
-    metric_cls = metric.FGCRCls if mode == "extract" else metric.ReconstructMetric
+    metric_cls = metric.FGCRCls if mode in {"fcr", "extract"} else metric.Maven
     return metric_cls()._compute(predictions=predictions, references=references)
 
 
@@ -478,7 +478,7 @@ def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
 
 def main() -> None:
     config = simple_parsing.parse(Seq2SeqConfig, add_config_path_arg=True)
-    if config.mode not in ["reconstruct", "extract"]:
+    if config.mode not in ["extract", "fcr", "maven"]:
         raise SystemExit(f"Invalid mode: {config.mode}")
 
     set_seed(config.seed)
