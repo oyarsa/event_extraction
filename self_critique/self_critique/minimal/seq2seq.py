@@ -48,7 +48,8 @@ def setup_logging(log_level: str) -> None:
 
 @dataclass
 class Seq2SeqConfig(Config):
-    # Metrics mode: 'fcr', 'extract' or 'maven'. 'extract' is a synonym for 'fcr'.
+    # Metrics mode: 'fcr', 'extract', 'maven', or 'maven_s'.
+    # 'extract' is a synonym for 'fcr'.
     mode: str = "fcr"
     # Generation top-k used for reranking
     generation_top_k: int | None = None
@@ -478,7 +479,7 @@ def save_results(desc: str, output_dir: Path, result: InferenceResult) -> None:
 
 def main() -> None:
     config = simple_parsing.parse(Seq2SeqConfig, add_config_path_arg=True)
-    if config.mode not in ["extract", "fcr", "maven"]:
+    if config.mode not in ["extract", "fcr", "maven", "maven_s"]:
         raise SystemExit(f"Invalid mode: {config.mode}")
 
     set_seed(config.seed)
