@@ -365,28 +365,24 @@ def calculate_metrics(
     output: list[str],
     mode: str,
 ) -> dict[str, float]:
-    references = [
-        metric.MetricReference(
+    return metric.get_metrics(
+        mode,
+        references=[
             {
                 "id": entry["id"],
                 "answers": entry["answers"],
                 "question_type": entry["question_type"],
             }
-        )
-        for entry in data
-    ]
-    predictions = [
-        metric.MetricPrediction(
+            for entry in data
+        ],
+        predictions=[
             {
                 "id": entry["id"],
                 "prediction_text": out,
             }
-        )
-        for entry, out in zip(data, output)
-    ]
-
-    metric_cls = metric.FGCRCls if mode in {"fcr", "extract"} else metric.Maven
-    return metric_cls()._compute(predictions=predictions, references=references)
+            for entry, out in zip(data, output)
+        ],
+    )
 
 
 @dataclass
