@@ -8,7 +8,7 @@ per_device_test_batch_size: 22
 num_train_epochs: 20
 learning_rate: 0.0001
 train_file: ../data/maven/train.json
-validation_file: ../data/maven/valid.json
+validation_file: ../data/maven/dev.json
 do_predict: false
 do_eval: true
 do_train: true
