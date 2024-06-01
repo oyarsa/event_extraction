@@ -19,10 +19,14 @@ def hash_instance(
     return hashlib.sha256(key.encode("utf-8")).hexdigest()[:length]
 
 
-def process_data(data: list[dict[str, Any]]) -> list[dict[str, str]]:
+def process_data(data: list[dict[str, Any]], straight: bool) -> list[dict[str, str]]:
     question = "What are the events?"
     question_type = "cause"
-    answer_template = "[Cause] {cause} [Relation] cause [Effect]"
+
+    if straight:
+        answer_template = "{cause}"
+    else:
+        answer_template = "[Cause] {cause} [Relation] cause [Effect]"
 
     examples: list[dict[str, str]] = []
     for item in data:
@@ -62,14 +66,14 @@ def process_data(data: list[dict[str, Any]]) -> list[dict[str, str]]:
     return examples
 
 
-def main(input_file: TextIO, output_file: TextIO, seed: int) -> None:
+def main(input_file: TextIO, output_file: TextIO, seed: int, straight: bool) -> None:
     random.seed(seed)
 
     data = [json.loads(line) for line in input_file]
     if not is_bearable(data, list[dict[str, Any]]):
         raise ValueError("Invalid input data format.")
 
-    processed = process_data(data)
+    processed = process_data(data, straight)
 
     output = {"version": "v1.0", "data": processed}
     json.dump(output, output_file, indent=2)
@@ -93,5 +97,11 @@ if __name__ == "__main__":
         default=0,
         help="Random seed for reproducibility.",
     )
+    parser.add_argument(
+        "--straight",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Use straight causes instead of faux-tagged.",
+    )
     args = parser.parse_args()
-    main(args.input_file, args.output_file, args.seed)
+    main(args.input_file, args.output_file, args.seed, args.straight)
