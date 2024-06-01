@@ -33,6 +33,7 @@ class StructureFormat(str, Enum):
     TAGS = "tags"
     LINES = "lines"
     LINES_NO_RELATION = "lines_no_relation"
+    STRAIGHT = "straight"
 
 
 def calculate_metrics(
@@ -173,6 +174,8 @@ def parse_instance(
             return parse_instance_lines(answer)
         case StructureFormat.LINES_NO_RELATION:
             return parse_instance_lines_no_relation(answer)
+        case StructureFormat.STRAIGHT:
+            return parse_instance_straight(answer)
 
 
 def clean(s: str) -> str:
@@ -215,3 +218,13 @@ def parse_instance_lines(answer: str) -> tuple[dict[str, list[str]], str]:
 def parse_instance_tags(answer: str) -> tuple[dict[str, list[str]], str]:
     pattern = r"\[Cause\](?P<cause>.*?)\[Relation\](?P<relation>.*?)\[Effect\](?P<effect>.*?)$"
     return parse_spans(answer, pattern)
+
+
+def parse_instance_straight(answer: str) -> tuple[dict[str, list[str]], str]:
+    """Parse cause-only answer.
+
+    There's no effect or relation, so we hardcode the relation as "cause" and repeat the
+    effect. This repetition means the macro-averaged metrics will be the same as the
+    cause-only metrics.
+    """
+    return {"Cause": [answer], "Effect": [answer]}, "cause"

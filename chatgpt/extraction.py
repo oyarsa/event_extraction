@@ -76,7 +76,7 @@ around the extractions.
 What are the causes, effects and relations in the following text? \
 The relation must be one of "cause", "enable", or "prevent".
 """,
-    # 5
+    # 5 - FinCausal (no relation)
     """\
 What are the causes and effects in the following text?
 The causes and effects must be substrings of the text with no external words.
@@ -84,6 +84,14 @@ The causes and effects must be substrings of the text with no external words.
 The response should be formatted as this:
 Cause: <text>
 Effect: <text>
+""",
+    # 6 - MAVEN (cause only)
+    """\
+What is the cause in the following text?
+The cause must be a substring of the text with no external words.
+
+The response should be formatted as this:
+<cause text>
 """,
 ]
 SYSTEM_PROMPTS = [
@@ -226,7 +234,7 @@ def replace_relation(result: str, relation: str, mode: StructureFormat) -> str:
             return construct_instance_tags(entities, relation)
         case StructureFormat.LINES:
             return construct_instance_lines(entities, relation)
-        case StructureFormat.LINES_NO_RELATION:
+        case StructureFormat.LINES_NO_RELATION | StructureFormat.STRAIGHT:
             return result
 
 
@@ -374,7 +382,7 @@ def main() -> None:
     parser.add_argument(
         "--mode",
         default="tags",
-        choices=["tags", "lines", "lines_no_relation"],
+        choices=["tags", "lines", "lines_no_relation", "straight"],
         type=StructureFormat,
         help="The format of the structured output.",
     )
