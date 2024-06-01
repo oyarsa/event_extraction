@@ -19,7 +19,9 @@ def hash_instance(
     return hashlib.sha256(key.encode("utf-8")).hexdigest()[:length]
 
 
-def process_data(data: list[dict[str, Any]], straight: bool) -> list[dict[str, str]]:
+def process_data(
+    data: list[dict[str, Any]], straight: bool, max_sentences_around: int
+) -> list[dict[str, str]]:
     question = "What are the events?"
     question_type = "cause"
 
@@ -47,35 +49,57 @@ def process_data(data: list[dict[str, Any]], straight: bool) -> list[dict[str, s
             *sorted({sentences.index(s) for s in reference_sentences}),
             len(sentences),
         ]
-        current_sentence, next_sentence = indices[:2]
+        n_pairs = len(indices) - 1
 
-        start = random.randint(0, current_sentence)
-        end = random.randint(current_sentence + 1, next_sentence)
+        for i in range(n_pairs):
+            previous_sentence = indices[i - 1] if i > 0 else None
+            current_sentence = indices[i]
+            next_sentence = indices[i + 1]
 
-        context = ". ".join(sentences[start:end])
-        assert context, "Clipped context is empty."
+            start = random.randint(
+                0 if previous_sentence is None else previous_sentence + 1,
+                current_sentence,
+            )
+            end = random.randint(current_sentence + 1, next_sentence)
 
-        answer = answer_template.format(cause=sentences[current_sentence])
+            # if start or end are more than `max_sentences_around` away from the current
+            # sentence, clip them
+            start = max(start, current_sentence - max_sentences_around)
+            end = min(end, current_sentence + max_sentences_around)
 
-        instance = {
-            "context": context,
-            "question": question,
-            "question_type": question_type,
-            "answers": answer,
-        }
-        examples.append(instance | {"id": hash_instance(instance)})
+            context = ". ".join(sentences[start:end])
+            assert context, "Clipped context is empty."
 
+            answer = answer_template.format(cause=sentences[current_sentence])
+
+            instance = {
+                "context": context,
+                "question": question,
+                "question_type": question_type,
+                "answers": answer,
+            }
+            examples.append(instance | {"id": hash_instance(instance)})
+
+    # Each example must have a unique context, otherwise we'd be expecting the model
+    # to output different answers for the same context.
+    assert len({x["context"] for x in examples}) == len(examples), "Duplicate contexts."
     return examples
 
 
-def main(input_file: TextIO, output_file: TextIO, seed: int, straight: bool) -> None:
+def main(
+    input_file: TextIO,
+    output_file: TextIO,
+    seed: int,
+    straight: bool,
+    max_sentences_around: int,
+) -> None:
     random.seed(seed)
 
     data = [json.loads(line) for line in input_file]
     if not is_bearable(data, list[dict[str, Any]]):
         raise ValueError("Invalid input data format.")
 
-    processed = process_data(data, straight)
+    processed = process_data(data, straight, max_sentences_around)
 
     output = {"version": "v1.0", "data": processed}
     json.dump(output, output_file, indent=2)
@@ -105,5 +129,17 @@ if __name__ == "__main__":
         default=False,
         help="Use straight causes instead of faux-tagged.",
     )
+    parser.add_argument(
+        "--max-sentences-around",
+        type=int,
+        default=2,
+        help="Maximum number of sentences to include around the cause sentence.",
+    )
     args = parser.parse_args()
-    main(args.input_file, args.output_file, args.seed, args.straight)
+    main(
+        args.input_file,
+        args.output_file,
+        args.seed,
+        args.straight,
+        args.max_sentences_around,
+    )
