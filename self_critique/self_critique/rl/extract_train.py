@@ -393,9 +393,11 @@ def train_extract(
             )
             extract_response = text_decode(extract.tokenizer, response_tensors)
 
+            sentence2 = [add_tag(sentence) for sentence in extract_response]
+
             rewards, labels = evaluator.run_reward(
                 sentence1=batch["eval_inputs"],
-                sentence2=extract_response,
+                sentence2=sentence2,
                 true_class=true_class,
                 label2id=label2id,
                 id2label=id2label,
@@ -540,6 +542,19 @@ def load_data(file_path: Path, max_samples: int | None = None) -> list[Seq2SeqEn
     ][:max_samples]
 
 
+def add_tag(answer: str) -> str:
+    """If the input is straight, with no tags, wrap it in fake-tags.
+
+    This is used to make the input for the reward model consistent. The MAVEN dataset
+    only has causes, so we have a "straight" cause the just predicts them without
+    surrounding tags. However, the reward model is trained with tags, so we need to
+    add them here.
+    """
+    if answer.startswith("[Cause]"):
+        return answer
+    return f"[Cause] {answer} [Relation] cause [Effect]"
+
+
 def preprocess_data(
     tokeniser: PreTrainedTokenizer,
     data: list[Seq2SeqEntry],
@@ -550,6 +565,7 @@ def preprocess_data(
 ) -> Dataset:
     desc = desc or ""
     source_texts = [f"{d.question}\n{d.context.lstrip()}" for d in data]
+    data = [dataclasses.replace(d, answer=add_tag(d.answer)) for d in data]
     eval_inputs = [eval_prompt.get_eval_input(d) for d in data]
 
     model_inputs = tokeniser(
@@ -639,15 +655,17 @@ def generate_and_reward(
     )
     extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
 
+    sentence2 = [add_tag(sentence) for sentence in extract_response_txt]
+
     scores, reward_labels = evaluator.run_reward(
         sentence1=original_sentence,
-        sentence2=extract_response_txt,
+        sentence2=sentence2,
         true_class=true_class,
         label2id=label2id,
         id2label=id2label,
     )
 
-    return BlockOutput(extract_response_txt, reward_labels, scores)
+    return BlockOutput(sentence2, reward_labels, scores)
 
 
 def evaluate(
