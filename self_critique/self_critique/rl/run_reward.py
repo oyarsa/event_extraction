@@ -103,6 +103,9 @@ class Config:
     model_path: str
     # Path to the data to be evaluated
     data_file: Path
+    # Metrics mode: 'fcr', 'extract', 'maven', or 'maven_s'.
+    # 'extract' is a synonym for 'fcr'.
+    mode: str = "fcr"
     # Reward model type ("valid" or "entailment")
     reward_type: str = "valid"
     # Maximum sequence length
@@ -139,28 +142,25 @@ def hash_entry(entry: EvalEntry) -> str:
     return str(hash((entry.input, entry.gold)))
 
 
-def calculate_extract_metrics(data: list[EvalEntry]) -> dict[str, float]:
-    references = [
-        metric.MetricReference(
+def calculate_extract_metrics(data: list[EvalEntry], mode: str) -> dict[str, float]:
+    return metric.get_metrics(
+        mode,
+        predictions=[
+            {
+                "id": hash_entry(entry),
+                "prediction_text": entry.output,
+            }
+            for entry in data
+        ],
+        references=[
             {
                 "id": hash_entry(entry),
                 "answers": entry.gold,
                 "question_type": parse_instance(entry.gold)[1] or "none",
             }
-        )
-        for entry in data
-    ]
-    predictions = [
-        metric.MetricPrediction(
-            {
-                "id": hash_entry(entry),
-                "prediction_text": entry.output,
-            }
-        )
-        for entry in data
-    ]
-
-    return metric.FGCRCls()._compute(predictions=predictions, references=references)
+            for entry in data
+        ],
+    )
 
 
 def load_data(file_path: Path, max_samples: int | None = None) -> list[EvalEntry]:
@@ -261,12 +261,15 @@ def evaluate(
     return output
 
 
-def get_metrics(results: list[dict[str, Any]], true_class: str) -> dict[str, Any]:
+def get_metrics(
+    results: list[dict[str, Any]], true_class: str, mode: str
+) -> dict[str, Any]:
     extract_metrics = calculate_extract_metrics(
         data=[
             EvalEntry(input=r["input"], output=r["rl_extract_txt"], gold=r["gold"])
             for r in results
-        ]
+        ],
+        mode=mode,
     )
     return {
         "reward": sum(r["reward_label"] == true_class for r in results) / len(results),
@@ -308,6 +311,8 @@ def load_reward_model(
 
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
+    if args.mode not in ["extract", "fcr", "maven", "maven_s"]:
+        raise SystemExit(f"Invalid mode: {args.mode}")
 
     if args.run_name is not None:
         output_dir = args.output_dir / args.run_name
@@ -350,7 +355,7 @@ def main() -> None:
     )
     save_results(results, output_dir)
 
-    metrics = get_metrics(results, label_config.true_class)
+    metrics = get_metrics(results, label_config.true_class, args.mode)
     (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
     logger.info(f"\n>>>> METRICS\n{json.dumps(metrics, indent=2)}")
 
