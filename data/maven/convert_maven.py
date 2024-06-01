@@ -42,10 +42,12 @@ def process_data(data: list[dict[str, Any]], straight: bool) -> list[dict[str, s
             continue
 
         sentences: list[str] = [sent["sentence"] for sent in content]
-        indices = sorted({sentences.index(s) for s in reference_sentences})
 
-        current_sentence = indices[0]
-        next_sentence = indices[1] if len(indices) > 1 else len(sentences)
+        indices = [
+            *sorted({sentences.index(s) for s in reference_sentences}),
+            len(sentences),
+        ]
+        current_sentence, next_sentence = indices[:2]
 
         start = random.randint(0, current_sentence)
         end = random.randint(current_sentence + 1, next_sentence)
