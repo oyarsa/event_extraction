@@ -277,8 +277,7 @@ def get_metrics(
             class_: sum(r["reward_label"] == class_ for r in results)
             for class_ in {r["reward_label"] for r in results}
         },
-        "em": extract_metrics["em"],
-    }
+    } | extract_metrics
 
 
 def get_device() -> torch.device:
