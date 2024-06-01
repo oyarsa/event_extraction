@@ -14,7 +14,7 @@ def get_metrics(
         "maven": Maven,
         "maven_s": MavenStraight,
         "reconstruct": ReconstructMetric,
-    }[mode]._compute(references=references, predictions=predictions)
+    }[mode]()._compute(references=references, predictions=predictions)
 
 
 __all__ = [
