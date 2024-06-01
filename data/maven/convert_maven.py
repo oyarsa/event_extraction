@@ -46,23 +46,19 @@ def process_data(
         sentences: list[str] = [sent["sentence"] for sent in content]
 
         indices = [
+            -1,
             *sorted({sentences.index(s) for s in reference_sentences}),
             len(sentences),
         ]
         n_pairs = len(indices) - 1
 
-        for i in range(n_pairs):
-            previous_sentence = indices[i - 1] if i > 0 else None
-            current_sentence = indices[i]
-            next_sentence = indices[i + 1]
+        for i in range(1, n_pairs):
+            previous_sentence, current_sentence, next_sentence = indices[i - 1 : i + 2]
 
-            start = random.randint(
-                0 if previous_sentence is None else previous_sentence + 1,
-                current_sentence,
-            )
+            start = random.randint(previous_sentence + 1, current_sentence)
             end = random.randint(current_sentence + 1, next_sentence)
 
-            # if start or end are more than `max_sentences_around` away from the current
+            # If start or end are more than `max_sentences_around` away from the current
             # sentence, clip them
             start = max(start, current_sentence - max_sentences_around)
             end = min(end, current_sentence + max_sentences_around)
