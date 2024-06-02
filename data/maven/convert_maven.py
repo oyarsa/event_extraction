@@ -1,4 +1,12 @@
-"""Convert the MAVEN dataset to the tagged extraction format."""
+"""Convert the MAVEN dataset to the tagged extraction format.
+
+For more information about the MAVEN dataset, please refer to
+https://github.com/THU-KEG/MAVEN-dataset
+
+MAVEN: A Massive General Domain Event Detection Dataset
+Wang, Xiaozhi and Wang, Ziqi and Han, Xu and Jiang, Wangyi and Han, Rong and Liu, Zhiyuan and Li, Juanzi and Li, Peng and Lin, Yankai and Zhou, Jie
+Proceedings of EMNLP 2020
+"""
 
 import argparse
 import hashlib
