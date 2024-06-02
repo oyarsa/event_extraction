@@ -30,6 +30,7 @@ def process_data(
     straight: bool,
     tokeniser_model: str,
     max_tokens: int,
+    min_sentences: int,
     debug: bool,
 ) -> list[dict[str, Any]]:
     tokeniser = AutoTokenizer.from_pretrained(tokeniser_model)
@@ -69,10 +70,14 @@ def process_data(
             start = previous_sentence + 1
             end = random.randint(current_sentence + 1, next_sentence)
 
-            context = " ".join(sentences[start:end])
+            chosen_sentences = sentences[start:end]
+            if len(chosen_sentences) < min_sentences:
+                continue
+
+            context = " ".join(chosen_sentences)
             assert context, "Clipped context is empty."
 
-            # From seq2seq.preprocess_data
+            # From seq2seq.preprocess_data, remove entries that are too long.
             source_text = f"{question}\n{context.lstrip()}"
             if len(tokeniser.tokenize(source_text)) > max_tokens:
                 continue
@@ -88,7 +93,7 @@ def process_data(
             if debug:
                 instance |= {
                     "original_context": sentences,
-                    "sentences": sentences[start:end],
+                    "sentences": chosen_sentences,
                 }
             examples.append(instance | {"id": hash_instance(instance)})
 
@@ -105,6 +110,7 @@ def main(
     straight: bool,
     tokeniser_model: str,
     max_tokens: int,
+    min_sentences: int,
     debug: bool,
 ) -> None:
     random.seed(seed)
@@ -115,7 +121,9 @@ def main(
     if not is_bearable(data, list[dict[str, Any]]):
         raise ValueError("Invalid input data format.")
 
-    processed = process_data(data, straight, tokeniser_model, max_tokens, debug)
+    processed = process_data(
+        data, straight, tokeniser_model, max_tokens, min_sentences, debug
+    )
 
     output = {"version": "v1.0", "data": processed}
     json.dump(output, output_file, indent=2)
@@ -158,6 +166,12 @@ if __name__ == "__main__":
         help="Maximum number of tokens in the input.",
     )
     parser.add_argument(
+        "--min_sentences",
+        type=int,
+        default=3,
+        help="Minimum number of sentences in the context.",
+    )
+    parser.add_argument(
         "--debug",
         action=argparse.BooleanOptionalAction,
         default=False,
@@ -171,5 +185,6 @@ if __name__ == "__main__":
         args.straight,
         args.tokeniser_model,
         args.max_tokens,
+        args.min_sentences,
         args.debug,
     )
