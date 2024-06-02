@@ -63,7 +63,7 @@ def process_data(
             start = max(start, current_sentence - max_sentences_around)
             end = min(end, current_sentence + max_sentences_around)
 
-            context = ". ".join(sentences[start:end])
+            context = " ".join(sentences[start:end])
             assert context, "Clipped context is empty."
 
             answer = answer_template.format(cause=sentences[current_sentence])
