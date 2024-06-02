@@ -343,6 +343,10 @@ def train(
                 save_model(model, tokeniser, config.output_dir)
             else:
                 early_stopping_counter += 1
+                logger.info(
+                    "No improvement for %d epochs.",
+                    early_stopping_counter,
+                )
 
             if early_stopping_counter >= config.early_stopping_patience:
                 logger.info(
