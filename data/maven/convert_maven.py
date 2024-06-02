@@ -3,11 +3,17 @@
 import argparse
 import hashlib
 import json
+import os
 import random
+import warnings
 from collections.abc import Sequence
 from typing import Any, TextIO
 
 from beartype.door import is_bearable
+
+# Disable "None of PyTorch, TensorFlow >= 2.0, or Flax have been found." warning.
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+from transformers import AutoTokenizer  # noqa: E402
 
 HASH_KEYS = ("context", "answers")
 
@@ -20,8 +26,13 @@ def hash_instance(
 
 
 def process_data(
-    data: list[dict[str, Any]], straight: bool, max_sentences_around: int, debug: bool
+    data: list[dict[str, Any]],
+    straight: bool,
+    tokeniser_model: str,
+    max_tokens: int,
+    debug: bool,
 ) -> list[dict[str, Any]]:
+    tokeniser = AutoTokenizer.from_pretrained(tokeniser_model)
     question = "What are the events?"
     question_type = "cause"
 
@@ -61,6 +72,11 @@ def process_data(
             context = " ".join(sentences[start:end])
             assert context, "Clipped context is empty."
 
+            # From seq2seq.preprocess_data
+            source_text = f"{question}\n{context.lstrip()}"
+            if len(tokeniser.tokenize(source_text)) > max_tokens:
+                continue
+
             answer = answer_template.format(cause=sentences[current_sentence])
 
             instance = {
@@ -87,15 +103,19 @@ def main(
     output_file: TextIO,
     seed: int,
     straight: bool,
+    tokeniser_model: str,
+    max_tokens: int,
     debug: bool,
 ) -> None:
     random.seed(seed)
+    # HuggingFace's warning about resume_download usage from its own library.
+    warnings.filterwarnings("ignore", category=FutureWarning)
 
     data = [json.loads(line) for line in input_file]
     if not is_bearable(data, list[dict[str, Any]]):
         raise ValueError("Invalid input data format.")
 
-    processed = process_data(data, straight, max_sentences_around, debug)
+    processed = process_data(data, straight, tokeniser_model, max_tokens, debug)
 
     output = {"version": "v1.0", "data": processed}
     json.dump(output, output_file, indent=2)
@@ -126,7 +146,16 @@ if __name__ == "__main__":
         help="Use straight causes instead of faux-tagged.",
     )
     parser.add_argument(
+        "--tokeniser_model",
+        type=str,
+        default="google/flan-t5-large",
+        help="Hugging Face tokeniser model.",
+    )
+    parser.add_argument(
+        "--max_tokens",
         type=int,
+        default=512,
+        help="Maximum number of tokens in the input.",
     )
     parser.add_argument(
         "--debug",
@@ -140,5 +169,7 @@ if __name__ == "__main__":
         args.output_file,
         args.seed,
         args.straight,
+        args.tokeniser_model,
+        args.max_tokens,
         args.debug,
     )
