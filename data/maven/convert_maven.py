@@ -94,6 +94,7 @@ def process_data(
                 instance |= {
                     "original_context": sentences,
                     "sentences": chosen_sentences,
+                    "sentence": sentences[current_sentence],
                 }
             examples.append(instance | {"id": hash_instance(instance)})
 
