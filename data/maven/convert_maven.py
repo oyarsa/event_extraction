@@ -55,13 +55,8 @@ def process_data(
         for i in range(1, n_pairs):
             previous_sentence, current_sentence, next_sentence = indices[i - 1 : i + 2]
 
-            start = random.randint(previous_sentence + 1, current_sentence)
+            start = previous_sentence + 1
             end = random.randint(current_sentence + 1, next_sentence)
-
-            # If start or end are more than `max_sentences_around` away from the current
-            # sentence, clip them
-            start = max(start, current_sentence - max_sentences_around)
-            end = min(end, current_sentence + max_sentences_around)
 
             context = " ".join(sentences[start:end])
             assert context, "Clipped context is empty."
@@ -92,7 +87,6 @@ def main(
     output_file: TextIO,
     seed: int,
     straight: bool,
-    max_sentences_around: int,
     debug: bool,
 ) -> None:
     random.seed(seed)
@@ -132,10 +126,7 @@ if __name__ == "__main__":
         help="Use straight causes instead of faux-tagged.",
     )
     parser.add_argument(
-        "--max-sentences-around",
         type=int,
-        default=2,
-        help="Maximum number of sentences to include around the cause sentence.",
     )
     parser.add_argument(
         "--debug",
@@ -149,6 +140,5 @@ if __name__ == "__main__":
         args.output_file,
         args.seed,
         args.straight,
-        args.max_sentences_around,
         args.debug,
     )
