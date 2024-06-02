@@ -20,8 +20,8 @@ def hash_instance(
 
 
 def process_data(
-    data: list[dict[str, Any]], straight: bool, max_sentences_around: int
-) -> list[dict[str, str]]:
+    data: list[dict[str, Any]], straight: bool, max_sentences_around: int, debug: bool
+) -> list[dict[str, Any]]:
     question = "What are the events?"
     question_type = "cause"
 
@@ -30,7 +30,7 @@ def process_data(
     else:
         answer_template = "[Cause] {cause} [Relation] cause [Effect]"
 
-    examples: list[dict[str, str]] = []
+    examples: list[dict[str, Any]] = []
     for item in data:
         content = item["content"]
 
@@ -74,6 +74,11 @@ def process_data(
                 "question_type": question_type,
                 "answers": answer,
             }
+            if debug:
+                instance |= {
+                    "original_context": sentences,
+                    "sentences": sentences[start:end],
+                }
             examples.append(instance | {"id": hash_instance(instance)})
 
     # Each example must have a unique context, otherwise we'd be expecting the model
@@ -88,6 +93,7 @@ def main(
     seed: int,
     straight: bool,
     max_sentences_around: int,
+    debug: bool,
 ) -> None:
     random.seed(seed)
 
@@ -95,7 +101,7 @@ def main(
     if not is_bearable(data, list[dict[str, Any]]):
         raise ValueError("Invalid input data format.")
 
-    processed = process_data(data, straight, max_sentences_around)
+    processed = process_data(data, straight, max_sentences_around, debug)
 
     output = {"version": "v1.0", "data": processed}
     json.dump(output, output_file, indent=2)
@@ -131,6 +137,12 @@ if __name__ == "__main__":
         default=2,
         help="Maximum number of sentences to include around the cause sentence.",
     )
+    parser.add_argument(
+        "--debug",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Include debug information in the output.",
+    )
     args = parser.parse_args()
     main(
         args.input_file,
@@ -138,4 +150,5 @@ if __name__ == "__main__":
         args.seed,
         args.straight,
         args.max_sentences_around,
+        args.debug,
     )
