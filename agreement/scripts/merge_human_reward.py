@@ -28,11 +28,7 @@ The output file is a JSON file with a list of objects with the following keys:
 
 import argparse
 import json
-import sys
 from typing import Any, TextIO
-
-human_file = sys.argv[1]
-machine_file = sys.argv[2]
 
 
 def hash_data(data: dict[str, Any], keys: list[str]) -> int:
@@ -57,7 +53,7 @@ def main(human_file: TextIO, machine_file: TextIO, outfile: TextIO) -> None:
             "pred": int(m["reward_label"] == "VALID"),
             "passage": h["input"],
             "output": h["output"],
-            "tag": h["tag"],
+            "tag": h.get("tag"),
         }
         for h in human
         if (m := machine_idx.get(hash_data(h, keys)))
