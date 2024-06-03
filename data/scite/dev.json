@@ -1,0 +1,1339 @@
+[
+  {
+    "context": "Cutler ended up with a bleeding stomach ulcer caused by the stress and hard work supervising their tours twenty-four hours a day.",
+    "answers": "[Cause] the stress [Relation] cause [Effect] a bleeding stomach ulcer",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "60256368"
+  },
+  {
+    "context": "Paralysis or convulsions are caused by hormone deficiencies and imbalances.",
+    "answers": "[Cause] hormone deficiencies and imbalances [Relation] cause [Effect] Paralysis",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "261141e1"
+  },
+  {
+    "context": "In economic terms, the ecological catastrophe caused by the Prestige oil spill is comparable with that caused by the Exxon Valdez.",
+    "answers": "[Cause] the Prestige oil spill [Relation] cause [Effect] the ecological catastrophe",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "6474b2a5"
+  },
+  {
+    "context": "Use outdoor where sunlight and glare cause eye strain and fatigue.",
+    "answers": "[Cause] sunlight [Relation] cause [Effect] eye strain and fatigue",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "6dd2f261"
+  },
+  {
+    "context": "The pressure was caused by the rapid power acceleration at the start.",
+    "answers": "[Cause] the rapid power acceleration [Relation] cause [Effect] The pressure",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "e6fe1871"
+  },
+  {
+    "context": "The damage caused by a bullet depends on the amount of energy which it transfers to the tissues.",
+    "answers": "[Cause] a bullet [Relation] cause [Effect] The damage",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "5a6bfdb9"
+  },
+  {
+    "context": "Every child and young person seen at Starship with intoxication from alcohol or illicit drug use had a social work assessment before leaving the hospital.",
+    "answers": "[Cause] alcohol or illicit drug use [Relation] cause [Effect] intoxication",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c1d20b7c"
+  },
+  {
+    "context": "Priority must be given to efforts to combat insecurity and thus poverty, major cause of violence most often experienced by poorest.",
+    "answers": "[Cause] poverty [Relation] cause [Effect] violence",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c24ef98e"
+  },
+  {
+    "context": "The warmth was radiating from the fireplace to all corners of the room.",
+    "answers": "[Cause] the fireplace [Relation] cause [Effect] The warmth",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "ec81338a"
+  },
+  {
+    "context": "Liver plays key role in how steroids cause diabetes and hypertension.",
+    "answers": "[Cause] steroids [Relation] cause [Effect] diabetes",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "4c926f23"
+  },
+  {
+    "context": "Conflict had caused the collapse of the Somali Republic.",
+    "answers": "[Cause] Conflict [Relation] cause [Effect] the collapse",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "2b4e077b"
+  },
+  {
+    "context": "Cervical cancer is caused by infection with the human papillomavirus  and is one of the most common cancers in women in developing countries.",
+    "answers": "[Cause] infection [Relation] cause [Effect] Cervical cancer",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "487aa149"
+  },
+  {
+    "context": "The debris caused a crash on the Schuylkill, and it has been closed for hours because of the mishap.",
+    "answers": "[Cause] The debris [Relation] cause [Effect] a crash",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d5bbb929"
+  },
+  {
+    "context": "Glaucoma is one of the leading causes for blindness and currently about 90 million patients worldwide are affected by the disease.",
+    "answers": "[Cause] Glaucoma [Relation] cause [Effect] blindness",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "ce1c50c4"
+  },
+  {
+    "context": "The vascular dilatation was caused by the sympathetic and the course of vaso-motor nerves.",
+    "answers": "[Cause] the sympathetic [Relation] cause [Effect] The vascular dilatation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "3b6bf8a2"
+  },
+  {
+    "context": "Before he leaves Ephesus, however, a riot breaks out, instigated by the silversmiths who manufacture idols of the goddess Artemis; they are afraid that Paul's evangelistic success will ruin their business.",
+    "answers": "[Cause] the silversmiths [Relation] cause [Effect] a riot",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "cee9ff7a"
+  },
+  {
+    "context": "Colds and flu cause inflammation of the mucous membranes of the nose, throat and mouth.",
+    "answers": "[Cause] Colds [Relation] cause [Effect] inflammation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "0d39cd90"
+  },
+  {
+    "context": "Sudden death from inhalation of petroleum distillates is well recognised in misuses of volatile substances.",
+    "answers": "[Cause] inhalation [Relation] cause [Effect] Sudden death",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "bc769f27"
+  },
+  {
+    "context": "A cancer survivor writes about the relatively rare occurrence of calcification of the breast after radiation therapy.",
+    "answers": "[Cause] radiation therapy [Relation] cause [Effect] calcification",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "6c23debc"
+  },
+  {
+    "context": "Our country is resolving the war and poverty caused by the previous administration.",
+    "answers": "[Cause] the previous administration [Relation] cause [Effect] the war",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "18b7e7cc"
+  },
+  {
+    "context": "The elderly found it hard to cope with the high heat-humidity, which often causes nausea and dizziness from exhaustion and dehydration.",
+    "answers": "[Cause] exhaustion [Relation] cause [Effect] nausea",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "766f31ca"
+  },
+  {
+    "context": "Over 90% of the cases of ringworm of the scalp are caused by Trichophyton tonsurans, a fungus that infects the hairs and causes them to break.",
+    "answers": "[Cause] Trichophyton tonsurans [Relation] cause [Effect] ringworm",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "378843e0"
+  },
+  {
+    "context": "With the pollution caused by the buring of coal, the light-colored tree trunks became darker due to soot.",
+    "answers": "[Cause] the buring [Relation] cause [Effect] the pollution",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "0efdcf74"
+  },
+  {
+    "context": "If a participant complaint is the source of an investigative lead, interim contact with the participant should be made by the investigator.",
+    "answers": "[Cause] a participant complaint [Relation] cause [Effect] an investigative lead",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "5b023949"
+  },
+  {
+    "context": "The transmitter generates the electromagnetic wave, some of which will be incident on the receiver.",
+    "answers": "[Cause] The transmitter [Relation] cause [Effect] the electromagnetic wave",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "69b018d3"
+  },
+  {
+    "context": "Inhibition through synaptic depression is unlike the previous forms of inhibition in that it turns on more slowly and thus acts as delayed negative feedback.",
+    "answers": "[Cause] synaptic depression [Relation] cause [Effect] Inhibition",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "979c2339"
+  },
+  {
+    "context": "The drone strike that resulted in the death of Pakistan's most wanted terrorist is believed to be a result of deliberately planted false intelligence, sources in South Waziristan have confirmed.",
+    "answers": "[Cause] The drone strike [Relation] cause [Effect] the death",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c2c91f93"
+  },
+  {
+    "context": "Also, in the midst of the confusion caused by the coup, the issuing of militant posters was a way for artists and organizations to declare their active engagement against the rebellion.",
+    "answers": "[Cause] the coup [Relation] cause [Effect] the confusion",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "aed6d291"
+  },
+  {
+    "context": "Fog, rain, darkness, and or blowing snow lead to disorientation.",
+    "answers": "[Cause] Fog [Relation] cause [Effect] disorientation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "7cfe1b2a"
+  },
+  {
+    "context": "Cold sores or fever blisters are caused by the herpes simplex virus and are usually relatively easy to identify.",
+    "answers": "[Cause] the herpes simplex virus [Relation] cause [Effect] Cold sores",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "fb8e1059"
+  },
+  {
+    "context": "An alert victim with a broken neck or severely torn ligament has enough discomfort from the injury and muscle spasm to force him to hold his neck still.",
+    "answers": "[Cause] the injury [Relation] cause [Effect] enough discomfort",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "6e138ded"
+  },
+  {
+    "context": "I have always drawn satisfaction from exertion, straining my muscles to their limits.",
+    "answers": "[Cause] exertion [Relation] cause [Effect] satisfaction",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b96b66ef"
+  },
+  {
+    "context": "He created and advocated \"flower power,\"a strategy in which antiwar demonstrators promoted positive values like peace and love to dramatize their opposition to the destruction and death caused by the war in Vietnam.",
+    "answers": "[Cause] the war [Relation] cause [Effect] the destruction",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "8402629b"
+  },
+  {
+    "context": "Givers gain moral strength and happiness from giving.",
+    "answers": "[Cause] giving [Relation] cause [Effect] moral strength",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "ac2e3fc5"
+  },
+  {
+    "context": "Four of the entrapments resulted in suffocation: a 7-month-old in Gouverneur, N.Y.; a 7-month-old in New Iberia, La.; a 6-month-old in Summersville, W.Va.; and a 9-month-old in Bronx, N.Y.",
+    "answers": "[Cause] the entrapments [Relation] cause [Effect] suffocation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "2f541e0a"
+  },
+  {
+    "context": "I too, get a headache from wine, and was always told that it was the sulfites.",
+    "answers": "[Cause] wine [Relation] cause [Effect] a headache",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f0660365"
+  },
+  {
+    "context": "Overall, the fire after the earthquake burned out 7456 houses in over 530 localities.",
+    "answers": "[Cause] the earthquake [Relation] cause [Effect] the fire",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "42a22b12"
+  },
+  {
+    "context": "Most deaths from the accident were caused by radiation poisoning.",
+    "answers": "[Cause] the accident [Relation] cause [Effect] Most deaths",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "9c2e97a2"
+  },
+  {
+    "context": "The widespread opinion that protein and phosphorus cause calcium loss is examined.",
+    "answers": "[Cause] protein [Relation] cause [Effect] calcium loss",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f6a72a28"
+  },
+  {
+    "context": "The drugs he sold had caused the overdose death of Matthew Lessard, 19, of Lowell.",
+    "answers": "[Cause] The drugs [Relation] cause [Effect] the overdose death",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "7b4cf1ea"
+  },
+  {
+    "context": "Individual donors make a significant difference in addressing the suffering caused by the economic crisis.",
+    "answers": "[Cause] the economic crisis [Relation] cause [Effect] the suffering",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "4584a36e"
+  },
+  {
+    "context": "Chest pain from indigestion feels like an intense burning and is usually accompanied by regurgitation and gas.",
+    "answers": "[Cause] indigestion [Relation] cause [Effect] Chest pain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c901ac7e"
+  },
+  {
+    "context": "Each year, many infants and toddlers die due to suffocation from breathing small objects into their breathing passages and lungs.",
+    "answers": "[Cause] suffocation [Relation] cause [Effect] die",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "cafee734"
+  },
+  {
+    "context": "Gross revenues from the selling of crude oil in 2003 reached US$11.508 billion or some 112.85 percent of the amount targeted in the 2003 state budget.",
+    "answers": "[Cause] the selling [Relation] cause [Effect] Gross revenues",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "05220372"
+  },
+  {
+    "context": "Pneumococcal meningitis is caused by pneumococcus bacteria, which also cause several diseases of the respiratory system, including pneumonia.",
+    "answers": "[Cause] pneumococcus bacteria [Relation] cause [Effect] Pneumococcal meningitis",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "33beee43"
+  },
+  {
+    "context": "Eye discomfort from this staring effect is exacerbated by low humidity.",
+    "answers": "[Cause] this staring effect [Relation] cause [Effect] Eye discomfort",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "7fdd3d77"
+  },
+  {
+    "context": "The announcement of the game caused a stir on the web yesterday, with the Weekly Standard launching a protest campaign encouraging readers to e-mail Microsoft and T-Enterprise, the out-of-its-depth company that had hired actual Gitmo detainee Moazzam Begg as a consultant on the game.",
+    "answers": "[Cause] The announcement [Relation] cause [Effect] a stir",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "8882349b"
+  },
+  {
+    "context": "Zinc is essential for growth and cell division.",
+    "answers": "[Cause] Zinc [Relation] cause [Effect] growth",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "54b7633a"
+  },
+  {
+    "context": "The steam caused a backpressure on the VTD, resulting in the rupture disc opening.",
+    "answers": "[Cause] The steam [Relation] cause [Effect] a backpressure",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c5a2fed7"
+  },
+  {
+    "context": "Earthquakes are caused by the discharge of accumulated along geologic faults.",
+    "answers": "[Cause] the discharge [Relation] cause [Effect] Earthquakes",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "0b5c6513"
+  },
+  {
+    "context": "Muscle fatigue is the number one cause of arm muscle pain.",
+    "answers": "[Cause] Muscle fatigue [Relation] cause [Effect] arm muscle pain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "0413f332"
+  },
+  {
+    "context": "Menopause and PMS cause stress and anxiety even without imbalanced hormones.",
+    "answers": "[Cause] Menopause [Relation] cause [Effect] stress",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "edfbe035"
+  },
+  {
+    "context": "The presentation generated debate and there was general discussion on how journalists can better equip themselves to handle the challenges.",
+    "answers": "[Cause] The presentation [Relation] cause [Effect] debate",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "3b34aeb7"
+  },
+  {
+    "context": "Germs are microscopic organisms that cause sickness or disease.",
+    "answers": "[Cause] Germs [Relation] cause [Effect] sickness",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "644beed2"
+  },
+  {
+    "context": "Method according to claim 1, characterized in that the time duration of the quality reduction is limited at least to the duration of the interference triggered by the switching process.",
+    "answers": "[Cause] the switching process [Relation] cause [Effect] the interference",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a8c36c56"
+  },
+  {
+    "context": "Constipation is the most common cause of abdominal pain in the pediatric population.",
+    "answers": "[Cause] Constipation [Relation] cause [Effect] abdominal pain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a751d5b9"
+  },
+  {
+    "context": "When the force was generated via the joystick, the reproduced force matched the original force much more accurately.",
+    "answers": "[Cause] the joystick [Relation] cause [Effect] the force",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b82a67b8"
+  },
+  {
+    "context": "There were setbacks and technical problems that ensued from the location design, flooding, and moisture that plagued the winery and bumped up the investment cost beyond the initial budgetary estimates.",
+    "answers": "[Cause] the location design [Relation] cause [Effect] setbacks",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f1bc00c7"
+  },
+  {
+    "context": "The poet Essex Hemphill conquered sorrow after the loss of a friend by taking up the cause of that friend.",
+    "answers": "[Cause] the loss [Relation] cause [Effect] sorrow",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "933cc122"
+  },
+  {
+    "context": "An oil spill caused by a collision between a ship and a barge closed the ship channel servicing the nation's second largest port.",
+    "answers": "[Cause] a collision [Relation] cause [Effect] An oil spill",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "682e1e0c"
+  },
+  {
+    "context": "The changes now seen in the endometrium are caused by a hormone called progesterone.",
+    "answers": "[Cause] a hormone [Relation] cause [Effect] The changes",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b9fb1c82"
+  },
+  {
+    "context": "The incident was caused by the entry of high pressure gas from a deep formation that got confined in the porthole of the well.",
+    "answers": "[Cause] the entry [Relation] cause [Effect] The incident",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "494d6d0a"
+  },
+  {
+    "context": "The swelling of the vocal fold mucosa is caused by smoking.",
+    "answers": "[Cause] smoking [Relation] cause [Effect] The swelling",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "7c6e6af9"
+  },
+  {
+    "context": "The cysts are caused by chronic inflammation of the perichondrium with production of serous fluid between the perichondrium and cartilage.",
+    "answers": "[Cause] chronic inflammation [Relation] cause [Effect] The cysts",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b72baef9"
+  },
+  {
+    "context": "She mentioned the scandal caused by a BBC documentary on the treatment of children in a special-needs home and asked how the state had responded to these.",
+    "answers": "[Cause] a BBC documentary [Relation] cause [Effect] the scandal",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "e79991ca"
+  },
+  {
+    "context": "The cow makes a sound called lowing, also known as mooing.",
+    "answers": "[Cause] The cow [Relation] cause [Effect] a sound",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a605d78a"
+  },
+  {
+    "context": "The movie gives the inaccurate impression that the Apaches all surrendered.",
+    "answers": "[Cause] The movie [Relation] cause [Effect] the inaccurate impression",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "dfa2838d"
+  },
+  {
+    "context": "This is one of the more common causes of hair loss caused by stress and when you are losing hair because of this your hair stops growing and lies dormant.",
+    "answers": "[Cause] stress [Relation] cause [Effect] hair loss",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "9068fd90"
+  },
+  {
+    "context": "But the discomfort caused by the ointment and the duration of treatment often result in non-compliance.",
+    "answers": "[Cause] the discomfort [Relation] cause [Effect] non-compliance",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c744b8e1"
+  },
+  {
+    "context": "Oak root and chamomile provide a gentle astringent that helps reduce inflammation and calms skin irritation from the sun and environmental pollutants.",
+    "answers": "[Cause] the sun [Relation] cause [Effect] skin irritation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "745c24d5"
+  },
+  {
+    "context": "When I start the engine the car makes a screaching sound.",
+    "answers": "[Cause] the car [Relation] cause [Effect] a screaching sound",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "e9959114"
+  },
+  {
+    "context": "This year's Nobel Laureates in Physiology or Medicine made the remarkable and unexpected discovery that inflammation in the stomach  as well as ulceration of the stomach or duodenum  is the result of an infection of the stomach caused by the bacterium Helicobacter pylori.",
+    "answers": "[Cause] an infection [Relation] cause [Effect] inflammation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "502c1be9"
+  },
+  {
+    "context": "Seniors get much joy from animals.",
+    "answers": "[Cause] animals [Relation] cause [Effect] much joy",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "9fa7cd60"
+  },
+  {
+    "context": "The largest landslide triggered by the earthquake is located approximately 32 kilometers southeast of Muzafarrabad in a tributary valley of the Jhelum River.",
+    "answers": "[Cause] the earthquake [Relation] cause [Effect] The largest landslide",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a8f47db8"
+  },
+  {
+    "context": "The transmitter emits a constant radio signal to crea.",
+    "answers": "[Cause] The transmitter [Relation] cause [Effect] a constant radio signal",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "7db178eb"
+  },
+  {
+    "context": "These are all symptoms of the muscle paralysis caused by the bacterial toxin.",
+    "answers": "[Cause] the bacterial toxin [Relation] cause [Effect] the muscle paralysis",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "cea85653"
+  },
+  {
+    "context": "Patients with adenomyosis experience pain from this disease in the early 30's.",
+    "answers": "[Cause] this disease [Relation] cause [Effect] adenomyosis experience pain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c452ad89"
+  },
+  {
+    "context": "Lymphedema is an abnormal build-up of fluid that causes swelling, most often in the arms or legs.",
+    "answers": "[Cause] Lymphedema [Relation] cause [Effect] swelling",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "356a0971"
+  },
+  {
+    "context": "Generally it appears that most of the damage was caused by the winds and the rough seas.",
+    "answers": "[Cause] the winds [Relation] cause [Effect] the damage",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "5e09350d"
+  },
+  {
+    "context": "Aware of the suffering caused by exploitation, social injustice, stealing, and oppression, I am committed to cultivate loving kindness and learn ways to work for the well-being of people, animals, plants, and minerals.",
+    "answers": "[Cause] exploitation [Relation] cause [Effect] the suffering",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "729ea70c"
+  },
+  {
+    "context": "Oscillation of the lever caused by the swinging of the pendulum.",
+    "answers": "[Cause] the swinging [Relation] cause [Effect] Oscillation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "aee18415"
+  },
+  {
+    "context": "The malfunctions on Monday caused delays for patrons waiting to check out or renew books at the branches, and impeded access to personal accounts that allow users to renew or hold books online.",
+    "answers": "[Cause] The malfunctions [Relation] cause [Effect] delays",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b6d5c40a"
+  },
+  {
+    "context": "Stimulation of the posterior horn of the medial meniscus produced a measurable amount of CMAP latency for the semimembranosus muscle.",
+    "answers": "[Cause] Stimulation [Relation] cause [Effect] CMAP latency",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d95b1687"
+  },
+  {
+    "context": "General information about the infection caused by the bacteria called Salmonella, when food is eaten raw or undercooked.",
+    "answers": "[Cause] the bacteria [Relation] cause [Effect] the infection",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "8c895351"
+  },
+  {
+    "context": "The afterglow is produced by shock waves in the jets of tenuous gas that shoot from the blast at almost the speed of light.",
+    "answers": "[Cause] shock waves [Relation] cause [Effect] The afterglow",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "be50dfe6"
+  },
+  {
+    "context": "The light in the background is from the sunrise.",
+    "answers": "[Cause] the sunrise [Relation] cause [Effect] The light",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "e1edd052"
+  },
+  {
+    "context": "The volunteers enjoy a sense of satisfaction and personal fulfillment from helping others, and recent findings suggest that this feeling may well be a major reason why many people choose to volunteer.",
+    "answers": "[Cause] helping others [Relation] cause [Effect] satisfaction",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a90d11d0"
+  },
+  {
+    "context": "Finally, Slone's fear of AIDS and the mental distress she suffered from this fear were caused by the needle stab.",
+    "answers": "[Cause] the needle stab [Relation] cause [Effect] Slone's fear",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "ddc0e530"
+  },
+  {
+    "context": "The disruption caused by the latest Christmas terrorist has added too much to the weary trip home.",
+    "answers": "[Cause] the latest Christmas terrorist [Relation] cause [Effect] The disruption",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "3b76a399"
+  },
+  {
+    "context": "The funds raised through this appeal have a direct impact on the people affected by the severe devastations caused by the storms.",
+    "answers": "[Cause] the storms [Relation] cause [Effect] the severe devastations",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b129a4f5"
+  },
+  {
+    "context": "A trend has been caused by the growing absolute numbers of young people on the planet, and by the rising unemployment rate.",
+    "answers": "[Cause] the growing absolute numbers [Relation] cause [Effect] A trend",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "3575cb7d"
+  },
+  {
+    "context": "But just think, sadness leads to fear then fear leads to anger.",
+    "answers": "[Cause] sadness [Relation] cause [Effect] fear",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a941ad1b"
+  },
+  {
+    "context": "Eighty-four percent of the complications resulted in patient deaths, while 16 percent resulted in a serious injury.",
+    "answers": "[Cause] the complications [Relation] cause [Effect] patient deaths",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d96cfbe1"
+  },
+  {
+    "context": "The worst pain of all was caused by the torment to her head which was like the pain of thorns pressing into her.",
+    "answers": "[Cause] the torment [Relation] cause [Effect] The worst pain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "58afb009"
+  },
+  {
+    "context": "The genreal anesthetic cause unconsciousness and insensibility to paid and are used for major surgical procedures.",
+    "answers": "[Cause] The genreal anesthetic [Relation] cause [Effect] unconsciousness",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "92e26684"
+  },
+  {
+    "context": "Even nuclear energy is among the causes of water pollution.",
+    "answers": "[Cause] Even nuclear energy [Relation] cause [Effect] water pollution",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b171fc67"
+  },
+  {
+    "context": "Landslides caused the majority of the deaths.",
+    "answers": "[Cause] Landslides [Relation] cause [Effect] the deaths",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "63c0e534"
+  },
+  {
+    "context": "Aware of the suffering caused by unmindful drinking, I am committed to cultivate good health, both physical and mental, for myself, my family, and my society.",
+    "answers": "[Cause] unmindful drinking [Relation] cause [Effect] the suffering",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "0dd7b5b3"
+  },
+  {
+    "context": "As the molten metal cools, it hardens and assumes the shape created by the mold's cavity.",
+    "answers": "[Cause] the mold's cavity [Relation] cause [Effect] the shape",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "00fe70b9"
+  },
+  {
+    "context": "The drag caused by the Earth's atmosphere works against a rocket or a water molecule.",
+    "answers": "[Cause] the Earth's atmosphere [Relation] cause [Effect] The drag",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "32991204"
+  },
+  {
+    "context": "Snails and slugs cause damage to seedlings, flowers, vegetables and shrubs.",
+    "answers": "[Cause] Snails [Relation] cause [Effect] damage",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "087a3582"
+  },
+  {
+    "context": "The explosion caused a gas leak on the pipeline near the village of Pouce Coupe, south of Dawson Creek.",
+    "answers": "[Cause] The explosion [Relation] cause [Effect] a gas leak",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "2528113d"
+  },
+  {
+    "context": "Vulvodynia is the cause of chronic vulval pain in the absence of skin disease and infection.",
+    "answers": "[Cause] Vulvodynia [Relation] cause [Effect] chronic vulval pain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "39cd98fb"
+  },
+  {
+    "context": "Arcane Subtlety reduced the threat caused by Polymorph by 40% at max rank, though the threat caused by the spell is minimal.",
+    "answers": "[Cause] Polymorph [Relation] cause [Effect] the threat",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "43da8f9e"
+  },
+  {
+    "context": "We estimate a wind speed associated with the devastation caused by the tornado.",
+    "answers": "[Cause] the tornado [Relation] cause [Effect] the devastation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "0dbcdb02"
+  },
+  {
+    "context": "Like a catch-22 the worst part is that acne causes stress and stress triggers acne breakouts.",
+    "answers": "[Cause] acne [Relation] cause [Effect] stress",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "786af89e"
+  },
+  {
+    "context": "The problem comes from the widgets resembling HTC's own Sense UI widgets.",
+    "answers": "[Cause] the widgets [Relation] cause [Effect] The problem",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "6af28839"
+  },
+  {
+    "context": "The storm resulted in 31 deaths and 2.5 million dollars damage.",
+    "answers": "[Cause] The storm [Relation] cause [Effect] 31 deaths",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c2663427"
+  },
+  {
+    "context": "These chemical studies were directed toward proof of structure of the indole components of the seeds.",
+    "answers": "[Cause] These chemical studies [Relation] cause [Effect] proof",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "53fd0e22"
+  },
+  {
+    "context": "Smoke is one of the leading causes of kidney failures.",
+    "answers": "[Cause] Smoke [Relation] cause [Effect] kidney failures",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "5803b751"
+  },
+  {
+    "context": "The reports regarding the casualties has been announced and the loss that has been caused by the quake is being estimated.",
+    "answers": "[Cause] the quake [Relation] cause [Effect] the loss",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a65ff9ab"
+  },
+  {
+    "context": "My problem is that the advertisement gives the impression that women in rural Bangladesh have 6 children.",
+    "answers": "[Cause] the advertisement [Relation] cause [Effect] the impression",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "464fda3e"
+  },
+  {
+    "context": "In these cases, the disappointment from the purchase is not forgotten over time, but rather accumulates.",
+    "answers": "[Cause] the purchase [Relation] cause [Effect] the disappointment",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "8f74e6e5"
+  },
+  {
+    "context": "The radiation from the atomic bomb explosion is a typical acute radiation.",
+    "answers": "[Cause] the atomic bomb explosion [Relation] cause [Effect] The radiation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "77a0f443"
+  },
+  {
+    "context": "I have found that I have extremely sensitive skin and most cleaners cause rash or a burning sensation if it has contact with my skin.",
+    "answers": "[Cause] most cleaners [Relation] cause [Effect] rash",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "1ffb449f"
+  },
+  {
+    "context": "The disruption has been caused by work being carried out by track operator Network Rail.",
+    "answers": "[Cause] work [Relation] cause [Effect] The disruption",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f201237f"
+  },
+  {
+    "context": "In a person who already has some neck tension from stress, such an event can lead to a long-term increase of neck tension.",
+    "answers": "[Cause] stress [Relation] cause [Effect] some neck tension",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "ebbfc614"
+  },
+  {
+    "context": "When a tsunami is generated by a strong offshore earthquake, its first waves would reach the outer coast minutes after the ground stops shaking.",
+    "answers": "[Cause] a strong offshore earthquake [Relation] cause [Effect] a tsunami",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d31335c3"
+  },
+  {
+    "context": "Infection is one of the commonest causes of death in burn patients, particularly.",
+    "answers": "[Cause] Infection [Relation] cause [Effect] death",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "9be504b4"
+  },
+  {
+    "context": "The software caused a pretty good drain on the CPU for some reason.",
+    "answers": "[Cause] The software [Relation] cause [Effect] a pretty good drain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "8ed296b9"
+  },
+  {
+    "context": "Overall, discomfort from braces is typically short in duration and easily managed.",
+    "answers": "[Cause] braces [Relation] cause [Effect] discomfort",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "89f89135"
+  },
+  {
+    "context": "The crashes resulted in the collapse of much of the World Trade Center complex, the destruction of part of the southwest side of the Pentagon.",
+    "answers": "[Cause] The crashes [Relation] cause [Effect] the collapse",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a8c684c8"
+  },
+  {
+    "context": "The flooding, caused by a cyclone, came on the heels of a prolonged drought, which destroyed 60 percent of Fiji's sugar cane crop last year and cost more than 50 million Fijian dollars  in relief and rehabilitation.",
+    "answers": "[Cause] a cyclone [Relation] cause [Effect] The flooding",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "42ff77d0"
+  },
+  {
+    "context": "Obama's economic policies are turning into a global disaster.",
+    "answers": "[Cause] Obama's economic policies [Relation] cause [Effect] a global disaster",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f1b82bbe"
+  },
+  {
+    "context": "Sip the tea slowly to reduce stomach pain from indigestion, bloating and feeling of fullness.",
+    "answers": "[Cause] indigestion [Relation] cause [Effect] stomach pain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d0754474"
+  },
+  {
+    "context": "Whooping cough is another name for the pertussis, an infection of the airways caused by the bacteria bordetella pertussis.",
+    "answers": "[Cause] the bacteria bordetella pertussis [Relation] cause [Effect] the pertussis",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "8ba32529"
+  },
+  {
+    "context": "Sensitive pets experience rashes and discomfort from ticks and fleas.",
+    "answers": "[Cause] ticks [Relation] cause [Effect] rashes",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "314bee29"
+  },
+  {
+    "context": "Using the product around the house killed germs that were causing flu, colds or sore throat.",
+    "answers": "[Cause] germs [Relation] cause [Effect] flu",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "0e5452f2"
+  },
+  {
+    "context": "Discussion ensued from the Florida contingent on the fact that very stringent landowner protection laws in Florida make it imperative that the highest supportable appraised vallue be offered first.",
+    "answers": "[Cause] the Florida contingent [Relation] cause [Effect] Discussion",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "bd3243df"
+  },
+  {
+    "context": "The pipeline had to face the following main concerns from opposition: disturbance of animal migration patterns, environmental damage from spills, geological concerns and the Alaskan permafrost.",
+    "answers": "[Cause] spills [Relation] cause [Effect] environmental damage",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "282bc81e"
+  },
+  {
+    "context": "Much like the virus that caused the 1918 flu pandemic, this new H1N1 flu virus affects young adults and school children in greater numbers.",
+    "answers": "[Cause] the virus [Relation] cause [Effect] the 1918 flu pandemic",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "7f4bda55"
+  },
+  {
+    "context": "Increased reproductive toxicity of landfill leachate after degradation was caused by nitrite.",
+    "answers": "[Cause] nitrite [Relation] cause [Effect] Increased reproductive toxicity",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "e37739f0"
+  },
+  {
+    "context": "The relative calm produced by the Shia ceasefire has coincided with what the CIA is now calling the \"near strategic defeat\" of al-Qaeda in Iraq.",
+    "answers": "[Cause] the Shia ceasefire [Relation] cause [Effect] The relative calm",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "52eeb858"
+  },
+  {
+    "context": "Swissair was a victim of the clandestine wealth-transfer plaguing the productive sector as a result of the falling interest-rate structure caused by bond speculation.",
+    "answers": "[Cause] the falling interest-rate structure [Relation] cause [Effect] a victim",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "8f466fa2"
+  },
+  {
+    "context": "Dry air, dust and wind dry out the nose and throat and cause nosebleeds, coughing, wheezing, and other short-term respiratory problems",
+    "answers": "[Cause] Dry air [Relation] cause [Effect] nosebleeds",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "ee66c4c8"
+  },
+  {
+    "context": "When the first model sank in August 1991, the crash caused a seismic event registering 3.0 on the Richter scale, and left nothing but a pile of debris at 220m of depth.",
+    "answers": "[Cause] the crash [Relation] cause [Effect] a seismic event",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "3197cef3"
+  },
+  {
+    "context": "Progress comes from constructive competition, and churches and religions can benefit greatly from it.",
+    "answers": "[Cause] constructive competition [Relation] cause [Effect] Progress",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b4d76bea"
+  },
+  {
+    "context": "The clock struck twelve with a loud chime that made me jump.",
+    "answers": "[Cause] The clock [Relation] cause [Effect] a loud chime",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "e28aa1e0"
+  },
+  {
+    "context": "Various hormonal, bacterial and inflammatory disturbances cause acne.",
+    "answers": "[Cause] Various hormonal, bacterial and inflammatory disturbances [Relation] cause [Effect] acne",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "9847495f"
+  },
+  {
+    "context": "After the war, as the Midway was preparing for retirement, she was called upon one last time to the Philippines to help with an evacuation after the eruption of Mt. Pinatubo.",
+    "answers": "[Cause] the eruption [Relation] cause [Effect] an evacuation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "6dcda57e"
+  },
+  {
+    "context": "Lavender is excellent in the reatment of headaches from fatigue and exhaustion.",
+    "answers": "[Cause] fatigue [Relation] cause [Effect] headaches",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "12b6b657"
+  },
+  {
+    "context": "The alleged abuse resulted in bruises and swelling of the brain.",
+    "answers": "[Cause] The alleged abuse [Relation] cause [Effect] bruises",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "920b5d2f"
+  },
+  {
+    "context": "The presentation uses animation to show how germs and microbes cause sickness, and outlines simple preventive measures.",
+    "answers": "[Cause] germs [Relation] cause [Effect] sickness",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "eeee4de6"
+  },
+  {
+    "context": "Using solar electricity instead of conventional electricity sources helps to reduce pollution that causes smog, acid rain, respiratory illness and global warming.",
+    "answers": "[Cause] pollution [Relation] cause [Effect] smog",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "13480cfa"
+  },
+  {
+    "context": "The wire had caused a slight injury on the ventral side of the neck and at the base of horns.",
+    "answers": "[Cause] The wire [Relation] cause [Effect] a slight injury",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "2ce44bb8"
+  },
+  {
+    "context": "The election was caused by the appointment of Donald Sumner, formerly Conservative MP for Orpington, to be a county court judge.",
+    "answers": "[Cause] the appointment [Relation] cause [Effect] The election",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "31e72935"
+  },
+  {
+    "context": "A stereo buss outputs the stereo buss signal; a record buss outputs the record buss signal.",
+    "answers": "[Cause] A stereo buss [Relation] cause [Effect] the stereo buss signal",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "dba93b68"
+  },
+  {
+    "context": "The accolade was decided upon after an intense discussion between about 200 members.",
+    "answers": "[Cause] an intense discussion [Relation] cause [Effect] The accolade",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "e3443b10"
+  },
+  {
+    "context": "The hull caused a scratch on the eye and that is why it's not healing all the way.",
+    "answers": "[Cause] The hull [Relation] cause [Effect] a scratch",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d0e85fa2"
+  },
+  {
+    "context": "Getting help has reduced the time to reverse all the irritation that had been caused by the fungus.",
+    "answers": "[Cause] the fungus [Relation] cause [Effect] all the irritation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b0dcb9ac"
+  },
+  {
+    "context": "A fuel leak in one of the C-17s caused a delay on the morning of Nov. 7 as the crew was preparing for departure for Cairo, Egypt.",
+    "answers": "[Cause] A fuel leak [Relation] cause [Effect] a delay",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "438b902c"
+  },
+  {
+    "context": "The energy of emission produces the separation field.",
+    "answers": "[Cause] The energy [Relation] cause [Effect] the separation field",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f672512a"
+  },
+  {
+    "context": "The accident caused a major traffic snarl on the arterial road.",
+    "answers": "[Cause] The accident [Relation] cause [Effect] a major traffic snarl",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a5247086"
+  },
+  {
+    "context": "The violence resulted in the death of police \"capo\" Filippo Raciti, which caused widespread soul-searching and a week-long suspension of Italian football.",
+    "answers": "[Cause] The violence [Relation] cause [Effect] the death",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "4ebda1f6"
+  },
+  {
+    "context": "The dust, noise, and sleep deprivation produced by the construction are intolerable.",
+    "answers": "[Cause] the construction [Relation] cause [Effect] The dust",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f261eabc"
+  },
+  {
+    "context": "Plantar warts are caused by a virus that infects the outer layer of skin on the soles of the feet.",
+    "answers": "[Cause] a virus [Relation] cause [Effect] Plantar warts",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f28a610c"
+  },
+  {
+    "context": "More than 4500 tons of nitrogen oxides annually -- a pollutant that causes smog, acid rain, and contributes to asthma attacks and other breathing problems.",
+    "answers": "[Cause] a pollutant [Relation] cause [Effect] smog",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b2121ba4"
+  },
+  {
+    "context": "Companies face big risk from loss of key employees.",
+    "answers": "[Cause] loss [Relation] cause [Effect] big risk",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d2504ae5"
+  },
+  {
+    "context": "The author clearly got a great deal of pleasure from the work and did not allow his vast amount of material to force him into shallow generalizations.",
+    "answers": "[Cause] the work [Relation] cause [Effect] pleasure",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "086f6f72"
+  },
+  {
+    "context": "The Fujita Scale is used to rate the intensity of a tornado by examining the damage caused by the tornado after it has passed over a man-made structure.",
+    "answers": "[Cause] the tornado [Relation] cause [Effect] the damage",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c583b7d2"
+  },
+  {
+    "context": "A method of mitigating the effect of a market spike caused by the triggering and the election of a conditional order includes monitoring conditional orders.",
+    "answers": "[Cause] the triggering [Relation] cause [Effect] a market spike",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "5b7d3762"
+  },
+  {
+    "context": "About 30 ducks were found dead in Klamath County in the past two days, and officials are investigating whether the deaths are from a cholera outbreak.",
+    "answers": "[Cause] a cholera outbreak [Relation] cause [Effect] the deaths",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "24d16b17"
+  },
+  {
+    "context": "Tsunamis are caused by the sudden displacement of large volumes of water.",
+    "answers": "[Cause] the sudden displacement [Relation] cause [Effect] Tsunamis",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "4037b6e1"
+  },
+  {
+    "context": "Heat, wind and smoke cause flight delays.",
+    "answers": "[Cause] Heat [Relation] cause [Effect] flight delays",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "15c2615e"
+  },
+  {
+    "context": "A spaghetti pie served at a church dinner had caused the poisoning of one hundred people.",
+    "answers": "[Cause] A spaghetti pie [Relation] cause [Effect] the poisoning",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "2ac37490"
+  },
+  {
+    "context": "Thus previous scientific estimates had overstated the devastation caused by the asteroid, since topographic and ecologic factors contributing to the result had not been taken into account.",
+    "answers": "[Cause] the asteroid [Relation] cause [Effect] the devastation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "b00c9b81"
+  },
+  {
+    "context": "Alcohol and drugs directly cause suicide by significantly diminishing the reasoning of the person at the time of the suicide.",
+    "answers": "[Cause] Alcohol [Relation] cause [Effect] suicide",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "c205483c"
+  },
+  {
+    "context": "Three people had been killed in a fire after the quake and hundreds of people were injured.",
+    "answers": "[Cause] the quake [Relation] cause [Effect] a fire",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "63c132fd"
+  },
+  {
+    "context": "The damages caused by mudslides, tremors, subsidence, superficial or underground water were verified, as well as swelling clay soils.",
+    "answers": "[Cause] mudslides [Relation] cause [Effect] The damages",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "7b9fc5ee"
+  },
+  {
+    "context": "The boom and shaking was caused by the asteroid that passed Earth yesterday.",
+    "answers": "[Cause] the asteroid [Relation] cause [Effect] The boom",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "93eeaed6"
+  },
+  {
+    "context": "The pollution from animal factories is also destroying parts of the world's oceans.",
+    "answers": "[Cause] animal factories [Relation] cause [Effect] The pollution",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "cdeb57bf"
+  },
+  {
+    "context": "A large tsunami triggered by the earthquake spread outward from off the Sumatran coast.",
+    "answers": "[Cause] the earthquake [Relation] cause [Effect] A large tsunami",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "2bc3e0ae"
+  },
+  {
+    "context": "The cutaneous mycoses are caused by a homogeneous group of keratinophilic fungi termed the dermatophytes.",
+    "answers": "[Cause] keratinophilic fungi [Relation] cause [Effect] The cutaneous mycoses",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "5a9263ab"
+  },
+  {
+    "context": "The incoming water caused a stain on the wall that, through the lens of pareidolia, looked like a bearded man with a big afro hairdo.",
+    "answers": "[Cause] The incoming water [Relation] cause [Effect] a stain",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "36aec46a"
+  },
+  {
+    "context": "Bounding pulses are caused by the relatively low systemic arterial blood pressure due to the continuous runoff of blood from the aorta into the pulmonary artery.",
+    "answers": "[Cause] the relatively low systemic arterial blood pressure [Relation] cause [Effect] Bounding pulses",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "53315142"
+  },
+  {
+    "context": "Information about the foodborne illness caused by salmonella bacteria.",
+    "answers": "[Cause] salmonella bacteria [Relation] cause [Effect] the foodborne illness",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "a57da8f6"
+  },
+  {
+    "context": "Bed sores  are caused by pressure, which cuts off blood flow to parts of the body.",
+    "answers": "[Cause] pressure [Relation] cause [Effect] Bed sores",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "443c9fad"
+  },
+  {
+    "context": "Most illnesses, including colds and flu, cause a toxic overload that also increases the stress on the kidneys.",
+    "answers": "[Cause] colds [Relation] cause [Effect] a toxic overload",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "ba99203f"
+  },
+  {
+    "context": "The grief from sudden death is completely different from expected death, when families have time to prepare and say goodbye.",
+    "answers": "[Cause] sudden death [Relation] cause [Effect] The grief",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "8f6be90c"
+  },
+  {
+    "context": "The accident caused a traffic snarl on the ever busy bridge leading to diversions to other routes.",
+    "answers": "[Cause] The accident [Relation] cause [Effect] a traffic snarl",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "e555995e"
+  },
+  {
+    "context": "The contortions are caused by gravitational interactions with the small satellites Prometheus and Pandora.",
+    "answers": "[Cause] gravitational interactions [Relation] cause [Effect] The contortions",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d466bc4d"
+  },
+  {
+    "context": "The shock wave was generated by an explosive made from RDX.",
+    "answers": "[Cause] an explosive [Relation] cause [Effect] The shock wave",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "84315223"
+  },
+  {
+    "context": "Ordinary warts on the hands and feet are caused by viruses, which only affect humans.",
+    "answers": "[Cause] viruses [Relation] cause [Effect] Ordinary warts",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "34b7969a"
+  },
+  {
+    "context": "Headaches, dizziness, balance problems, and neck and back pain were caused by the work injury.",
+    "answers": "[Cause] the work injury [Relation] cause [Effect] Headaches",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "9b61b217"
+  },
+  {
+    "context": "Thus, evaluating capital punishment as a form of retribution is reduced by Sellin to merely estimating the proportion of capital murders that result in execution.",
+    "answers": "[Cause] capital murders [Relation] cause [Effect] execution",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "477822fb"
+  },
+  {
+    "context": "Traffic vibrations on the street outside had caused the movement of the light.",
+    "answers": "[Cause] Traffic vibrations [Relation] cause [Effect] the movement",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "4a0312cd"
+  },
+  {
+    "context": "I used to get terrible headaches from sinus infections that resulted in taking antibiotics a few times a year.",
+    "answers": "[Cause] terrible headaches [Relation] cause [Effect] taking antibiotics",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "06a75a9f"
+  },
+  {
+    "context": "Later on that same day, an electrical short at the Farragut North station caused a fire on the tracks which shut down service three times over the course of the day.",
+    "answers": "[Cause] an electrical short [Relation] cause [Effect] a fire",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "2c25d601"
+  },
+  {
+    "context": "The electricity is produced by 440 nuclear reactors in 31 countries.",
+    "answers": "[Cause] 440 nuclear reactors [Relation] cause [Effect] The electricity",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "ed5ab9b8"
+  },
+  {
+    "context": "Information about Salmonellosis, an illness caused by a bacteria found in raw food, soil, or water.",
+    "answers": "[Cause] a bacteria [Relation] cause [Effect] an illness",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "31a9c886"
+  },
+  {
+    "context": "The earthquake caused the failures of the electric power system, the water supply system, the sewer system, the telephone and telegraph systems.",
+    "answers": "[Cause] The earthquake [Relation] cause [Effect] the failures",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "280c588d"
+  }
+]
