@@ -12,6 +12,7 @@ import argparse
 import json
 import os.path
 from dataclasses import dataclass
+from typing import Any
 
 import agreement_metrics as metrics
 
@@ -86,6 +87,10 @@ def print_output(
     print("\n".join(output))
 
 
+def reshape_for_json(data: dict[str, dict[str, float]]) -> list[dict[str, Any]]:
+    return [{"model": model} | metrics for model, metrics in data.items()]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -99,11 +104,20 @@ def main() -> None:
         default=metrics.AVAILABLE_METRICS,
         choices=metrics.AVAILABLE_METRICS,
     )
+    parser.add_argument(
+        "--json",
+        help="output the results in JSON format",
+        action=argparse.BooleanOptionalAction,
+    )
     args = parser.parse_args()
 
     metrics_chosen = sorted(args.metrics)
 
     path_metric_value = calculate_all_metrics(args.data_paths, metrics_chosen)
+    if args.json:
+        print(json.dumps(reshape_for_json(path_metric_value), indent=2))
+        return
+
     model_padding, padding, header = define_output_style(
         args.data_paths, metrics_chosen
     )
