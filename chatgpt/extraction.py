@@ -302,7 +302,10 @@ def run_extraction(
     else:
         demonstration_examples = []
 
-    examples: list[MetricReference] = json.loads(input_path.read_text())["data"]
+    data = json.loads(input_path.read_text())
+    if "data" in data:
+        data = data["data"]
+    examples: list[MetricReference] = data
 
     responses, predictions, metrics = extract_clauses(
         client,
