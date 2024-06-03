@@ -23,8 +23,8 @@ logger = logging.getLogger("annotation.pages.3_Annotation")
 
 def render_clauses(header: str, reference: str, model: str) -> None:
     st.subheader(header)
-    st.markdown(f"**Reference**: {escape(reference)}")
-    st.markdown(f"**Model**: {escape(model)}")
+    st.markdown(f"**Reference**:\n\n{escape(reference)}")
+    st.markdown(f"**Model**:\n\n{escape(model)}")
 
 
 def answer_instance(
