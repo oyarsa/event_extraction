@@ -13,15 +13,16 @@ max_reward_seq_length: 400
 
 extraction_model: output/maven/flan-t5-large
 max_generation_length: 128
+max_input_seq_length: 512
 
 output_dir: output/rl
 run_name: maven-fcr-flan-t5-large
 log_with: null
 
 # Batch sizes need to be lower for models larger than T5-Base
-reward_batch_size: 16
-ppo_batch_size: 16
-ppo_minibatch_size: 16
+reward_batch_size: 4
+ppo_batch_size: 4
+ppo_minibatch_size: 4
 
 # PPO parameters
 kl_penalty: kl
