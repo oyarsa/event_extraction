@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"Convert extraction in Lines format to Tags format."
+"""Convert extraction in Lines format to Tags format.
 
+The input file should be a JSON with a list of objects with the following keys:
+- text (str): The input context.
+- pred (str): The extracted relation in Lines format.
+- answer (str): The gold relation in Lines format.
+"""
+
+import argparse
 import json
-import sys
-from pathlib import Path
+from typing import TextIO
 
 
 def find_part(part: str, lines: list[str]) -> str:
@@ -21,13 +27,8 @@ def convert_extract(extract: str) -> str:
     return f"[Cause] {cause} [Relation] {relation} [Effect] {effect}"
 
 
-def main() -> None:
-    if len(sys.argv) != 2:
-        print("Usage: python convert_lines_to_tags.py <data.json>")
-        sys.exit(1)
-
-    data_file = Path(sys.argv[1])
-    data = json.loads(data_file.read_text())
+def main(input_file: TextIO, output_file: TextIO) -> None:
+    data = json.load(input_file)
     converted = [
         {
             "input": d["text"],
@@ -36,8 +37,20 @@ def main() -> None:
         }
         for d in data
     ]
-    json.dump(converted, sys.stdout, indent=2)
+    json.dump(converted, output_file, indent=2)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "input_file", type=argparse.FileType("r"), help="Input file (use - for stdin)"
+    )
+    parser.add_argument(
+        "output_file",
+        type=argparse.FileType("w"),
+        help="Output file (use - for stdout)",
+    )
+    args = parser.parse_args()
+    main(args.input_file, args.output_file)
