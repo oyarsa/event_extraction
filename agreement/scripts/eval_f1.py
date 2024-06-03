@@ -18,10 +18,10 @@
 The F1 score is average of the F1 scores for Cause and Effect clauses.
 
 The input data is a JSON file with a list of objects with the following shape:
-- input: str = The input text passage
-- output: str = The extracted relation in tag form
-- gold: str = The gold relation in tag form
-- valid: bool = True if the output is valid, False otherwise
+- input (str): The input text passage
+- output (str): The extracted relation in tag form
+- gold (str): The gold relation in tag form
+- valid (bool, optional): True if the output is valid, False otherwise
 """
 
 import argparse
@@ -29,7 +29,7 @@ import json
 import re
 import string
 from collections import Counter
-from pathlib import Path
+from typing import TextIO
 
 
 def normalize_answer(s: str) -> str:
@@ -106,11 +106,11 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
     }, relation
 
 
-def main(input_file: Path, output_file: Path) -> None:
-    data = json.loads(input_file.read_text())
+def main(input_file: TextIO, output_file: TextIO) -> None:
+    data = json.load(input_file)
     out = [
         {
-            "gold": d["valid"],
+            "gold": d.get("valid"),
             "pred": calc_f1_instance(d["gold"], d["output"]),
             "annotation": d["gold"],
             "output": d["output"],
@@ -118,7 +118,7 @@ def main(input_file: Path, output_file: Path) -> None:
         }
         for d in data
     ]
-    output_file.write_text(json.dumps(out, indent=2))
+    json.dump(out, output_file, indent=2)
 
 
 if __name__ == "__main__":
@@ -127,7 +127,13 @@ if __name__ == "__main__":
         epilog="\n".join(__doc__.splitlines()[1:]),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("input_file", type=Path, help="Path to the input file")
-    parser.add_argument("output_file", type=Path, help="Path to the output file")
+    parser.add_argument(
+        "input_file", type=argparse.FileType("r"), help="Input file (use - for stdin)"
+    )
+    parser.add_argument(
+        "output_file",
+        type=argparse.FileType("w"),
+        help="Output file (use - for stdout)",
+    )
     args = parser.parse_args()
     main(args.input_file, args.output_file)
