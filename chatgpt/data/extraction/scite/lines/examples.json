@@ -1,0 +1,72 @@
+[
+  {
+    "context": "Thousands of women suffer headaches from caffeine withdrawal as a result of this study.",
+    "answers": "Cause: caffeine withdrawal\nEffect: headaches",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "91c12daf"
+  },
+  {
+    "context": "Also  the rainbow caused by the spray appeared smaller than that of the other rainbow.",
+    "answers": "Cause: the spray\nEffect: the rainbow",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "d4b7e4c4"
+  },
+  {
+    "context": "The mosaicism observed in the proband was derived from a postzygotic somatic mutation of the normal maternal y chromosome.",
+    "answers": "Cause: a postzygotic somatic mutation\nEffect: The mosaicism",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "f0ac32e4"
+  },
+  {
+    "context": "Scleroderma is a disease of the body's connective tissue that causes thickening and hardening of the skin.",
+    "answers": "Cause: Scleroderma\nEffect: thickening",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "45b463f6"
+  },
+  {
+    "context": "All thirty of the patches sewn into the cloth in 1534 by the Poor Clare nuns to repair the devastation caused by the 1532 fire were removed.",
+    "answers": "Cause: the 1532 fire\nEffect: the devastation",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "eb918c6e"
+  },
+  {
+    "context": "Thatch is caused by excessive growth from overfertilizing, by allowing the grass to get too high before mowing, or by incorrect watering.",
+    "answers": "Cause: excessive growth\nEffect: Thatch",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "092766e1"
+  },
+  {
+    "context": "Fats from meat and dairy cause heart disease, the leading killer of people with diabetes.",
+    "answers": "Cause: Fats\nEffect: heart disease",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "acf9e8b2"
+  },
+  {
+    "context": "Earplugs relieve the discomfort from traveling with a cold allergy or sinus condition.",
+    "answers": "Cause: traveling\nEffect: the discomfort",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "43bbd2f9"
+  },
+  {
+    "context": "No water enters the inside of the dishwasher, and the motor makes a sound as if under strain",
+    "answers": "Cause: the motor\nEffect: a sound",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "3a630a9b"
+  },
+  {
+    "context": "He testified that cause of death was massive bleeding into the blood sac of the heart caused by a stab wound on the left chest.",
+    "answers": "Cause: massive bleeding\nEffect: death",
+    "question": "What are the events?",
+    "question_type": "cause",
+    "id": "46a271de"
+  }
+]
