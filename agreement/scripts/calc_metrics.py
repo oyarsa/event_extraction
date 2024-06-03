@@ -13,7 +13,7 @@ import json
 import os.path
 from dataclasses import dataclass
 
-import metrics
+from . import metrics
 
 
 @dataclass
