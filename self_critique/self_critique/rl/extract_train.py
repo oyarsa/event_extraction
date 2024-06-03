@@ -996,7 +996,7 @@ def main() -> None:
 
     label2id, id2label, true_class = get_labelling(args.reward_type)
     generation_kwargs = {
-        "max_length": args.max_generation_length,
+        "max_new_tokens": args.max_generation_length,
         "penalty_alpha": args.degeneration_penalty,
         "top_k": args.generation_top_k,
         "top_p": args.generation_top_p,
