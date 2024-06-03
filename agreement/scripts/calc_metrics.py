@@ -13,7 +13,7 @@ import json
 import os.path
 from dataclasses import dataclass
 
-from . import metrics
+import agreement_metrics as metrics
 
 
 @dataclass
