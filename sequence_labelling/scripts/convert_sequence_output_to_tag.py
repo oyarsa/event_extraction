@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Convert the output of sequence labelling models to tagged.
 
 The input file should contain sequence labelled data. It is separated by blocks with an

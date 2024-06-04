@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Convert tagged data to sequence labelled data.
 
 Input format: JSON file with array of objects, each the following fields:
