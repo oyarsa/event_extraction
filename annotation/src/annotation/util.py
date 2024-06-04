@@ -6,10 +6,9 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import ClassVar, Literal, TypeAlias
+from typing import ClassVar, Literal, TypeAlias, override
 
 import yaml
-from typing_extensions import override
 
 logger = logging.getLogger("annotation.util")
 
