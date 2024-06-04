@@ -12,7 +12,7 @@ import warnings
 from collections import Counter, defaultdict
 from collections.abc import Iterable
 from pathlib import Path
-from typing import TypedDict, TypeVar
+from typing import Optional, TypedDict, TypeVar
 
 # ruff: noqa: E402
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # disable Tensorflow CPU/GPU warnings
@@ -381,7 +381,7 @@ def is_gpu_available() -> bool:
 
 def main(
     infiles: list[Path],
-    tag: Path | None = None,
+    tag: Optional[Path] = None,
     save: bool = True,
     bertscore: bool = False,
     bleurt: bool = False,
