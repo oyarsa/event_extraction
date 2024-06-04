@@ -648,24 +648,63 @@ def generate_and_reward(
     id2label: dict[int, str],
     generation_kwargs: dict[str, Any],
 ) -> BlockOutput:
-    extract_response_tensor = extract.model.generate(
-        input_ids=inputs["input_ids"].to(device),
-        attention_mask=inputs["attention_mask"].to(device),
-        **generation_kwargs,
-    )
-    extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
+    """Generates model outputs and calculates their rewards.
 
-    sentence2 = [add_tag(sentence) for sentence in extract_response_txt]
+    Can also be used for Best of N sampling. This is performed by repeating the
+    generation N times and selecting the output with the highest reward for each input.
+    The `best_of` key in `generation_kwargs` controls the number of repetitions.
 
-    scores, reward_labels = evaluator.run_reward(
-        sentence1=original_sentence,
-        sentence2=sentence2,
-        true_class=true_class,
-        label2id=label2id,
-        id2label=id2label,
-    )
+    This function doesn't introduce any randomness; it only repeats `model.generate`.
+    The caller should configure the generator to be stochastic if needed.
+    """
+    n = len(inputs["input_ids"])
+    responses: list[list[str]] = [[] for _ in range(n)]
+    scores_: list[list[torch.Tensor]] = [[] for _ in range(n)]
+    labels: list[list[str]] = [[] for _ in range(n)]
 
-    return BlockOutput(sentence2, reward_labels, scores)
+    repeats = generation_kwargs.pop("best_of", 1)
+
+    for _ in repeats:
+        extract_response_tensor = extract.model.generate(
+            input_ids=inputs["input_ids"].to(device),
+            attention_mask=inputs["attention_mask"].to(device),
+            **generation_kwargs,
+        )
+        extract_response_txt = text_decode(extract.tokenizer, extract_response_tensor)
+        sentence2 = [add_tag(sentence) for sentence in extract_response_txt]
+
+        scores, reward_labels = evaluator.run_reward(
+            sentence1=original_sentence,
+            sentence2=sentence2,
+            true_class=true_class,
+            label2id=label2id,
+            id2label=id2label,
+        )
+        for j in range(n):
+            responses[j].append(sentence2[j])
+            scores_[j].append(scores[j])
+            labels[j].append(reward_labels[j])
+
+    if repeats == 1:
+        return BlockOutput(responses[0], labels[0], scores_[0])
+
+    final_responses: list[str] = []
+    final_labels: list[str] = []
+    final_scores: list[torch.Tensor] = []
+
+    for j in range(n):
+        item_responses = responses[j]
+        item_labels = labels[j]
+        item_scores = scores_[j]
+
+        scores = torch.stack(item_scores)
+        best_idx = torch.argmax(scores)
+
+        final_responses.append(item_responses[best_idx])
+        final_scores.append(scores[best_idx])
+        final_labels.append(item_labels[best_idx])
+
+    return BlockOutput(final_responses, final_labels, final_scores)
 
 
 def evaluate(
