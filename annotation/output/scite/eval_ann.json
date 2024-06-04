@@ -1,0 +1,1574 @@
+[
+  {
+    "input": "Cutler ended up with a bleeding stomach ulcer caused by the stress and hard work supervising their tours twenty-four hours a day.",
+    "output": "[Cause] the stress [Relation] cause [Effect] a bleeding stomach ulcer",
+    "gold": "[Cause] the stress [Relation] cause [Effect] a bleeding stomach ulcer",
+    "valid": true
+  },
+  {
+    "input": "In economic terms, the ecological catastrophe caused by the Prestige oil spill is comparable with that caused by the Exxon Valdez.",
+    "output": "[Cause] the Prestige oil spill [Relation] cause [Effect] the ecological catastrophe",
+    "gold": "[Cause] the Prestige oil spill [Relation] cause [Effect] the ecological catastrophe",
+    "valid": true
+  },
+  {
+    "input": "The pressure was caused by the rapid power acceleration at the start.",
+    "output": "[Cause] the rapid power acceleration [Relation] cause [Effect] The pressure",
+    "gold": "[Cause] the rapid power acceleration [Relation] cause [Effect] The pressure",
+    "valid": true
+  },
+  {
+    "input": "The damage caused by a bullet depends on the amount of energy which it transfers to the tissues.",
+    "output": "[Cause] a bullet [Relation] cause [Effect] The damage",
+    "gold": "[Cause] a bullet [Relation] cause [Effect] The damage",
+    "valid": true
+  },
+  {
+    "input": "Priority must be given to efforts to combat insecurity and thus poverty, major cause of violence most often experienced by poorest.",
+    "output": "[Cause] poverty [Relation] cause [Effect] violence",
+    "gold": "[Cause] poverty [Relation] cause [Effect] violence",
+    "valid": true
+  },
+  {
+    "input": "The warmth was radiating from the fireplace to all corners of the room.",
+    "output": "[Cause] the fireplace [Relation] cause [Effect] The warmth",
+    "gold": "[Cause] the fireplace [Relation] cause [Effect] The warmth",
+    "valid": true
+  },
+  {
+    "input": "Liver plays key role in how steroids cause diabetes and hypertension.",
+    "output": "[Cause] steroids [Relation] cause [Effect] diabetes",
+    "gold": "[Cause] steroids [Relation] cause [Effect] diabetes",
+    "valid": true
+  },
+  {
+    "input": "Conflict had caused the collapse of the Somali Republic.",
+    "output": "[Cause] Conflict [Relation] cause [Effect] the collapse",
+    "gold": "[Cause] Conflict [Relation] cause [Effect] the collapse",
+    "valid": true
+  },
+  {
+    "input": "Cervical cancer is caused by infection with the human papillomavirus  and is one of the most common cancers in women in developing countries.",
+    "output": "[Cause] infection [Relation] cause [Effect] Cervical cancer",
+    "gold": "[Cause] infection [Relation] cause [Effect] Cervical cancer",
+    "valid": true
+  },
+  {
+    "input": "The debris caused a crash on the Schuylkill, and it has been closed for hours because of the mishap.",
+    "output": "[Cause] The debris [Relation] cause [Effect] a crash",
+    "gold": "[Cause] The debris [Relation] cause [Effect] a crash",
+    "valid": true
+  },
+  {
+    "input": "Glaucoma is one of the leading causes for blindness and currently about 90 million patients worldwide are affected by the disease.",
+    "output": "[Cause] Glaucoma [Relation] cause [Effect] blindness",
+    "gold": "[Cause] Glaucoma [Relation] cause [Effect] blindness",
+    "valid": true
+  },
+  {
+    "input": "The vascular dilatation was caused by the sympathetic and the course of vaso-motor nerves.",
+    "output": "[Cause] the sympathetic [Relation] cause [Effect] The vascular dilatation",
+    "gold": "[Cause] the sympathetic [Relation] cause [Effect] The vascular dilatation",
+    "valid": true
+  },
+  {
+    "input": "Before he leaves Ephesus, however, a riot breaks out, instigated by the silversmiths who manufacture idols of the goddess Artemis; they are afraid that Paul's evangelistic success will ruin their business.",
+    "output": "[Cause] the silversmiths [Relation] cause [Effect] a riot",
+    "gold": "[Cause] the silversmiths [Relation] cause [Effect] a riot",
+    "valid": true
+  },
+  {
+    "input": "Colds and flu cause inflammation of the mucous membranes of the nose, throat and mouth.",
+    "output": "[Cause] Colds [Relation] cause [Effect] inflammation",
+    "gold": "[Cause] Colds [Relation] cause [Effect] inflammation",
+    "valid": true
+  },
+  {
+    "input": "Sudden death from inhalation of petroleum distillates is well recognised in misuses of volatile substances.",
+    "output": "[Cause] inhalation [Relation] cause [Effect] Sudden death",
+    "gold": "[Cause] inhalation [Relation] cause [Effect] Sudden death",
+    "valid": true
+  },
+  {
+    "input": "A cancer survivor writes about the relatively rare occurrence of calcification of the breast after radiation therapy.",
+    "output": "[Cause] radiation therapy [Relation] cause [Effect] calcification",
+    "gold": "[Cause] radiation therapy [Relation] cause [Effect] calcification",
+    "valid": true
+  },
+  {
+    "input": "Our country is resolving the war and poverty caused by the previous administration.",
+    "output": "[Cause] the previous administration [Relation] cause [Effect] the war",
+    "gold": "[Cause] the previous administration [Relation] cause [Effect] the war",
+    "valid": true
+  },
+  {
+    "input": "The elderly found it hard to cope with the high heat-humidity, which often causes nausea and dizziness from exhaustion and dehydration.",
+    "output": "[Cause] exhaustion [Relation] cause [Effect] nausea",
+    "gold": "[Cause] exhaustion [Relation] cause [Effect] nausea",
+    "valid": true
+  },
+  {
+    "input": "Over 90% of the cases of ringworm of the scalp are caused by Trichophyton tonsurans, a fungus that infects the hairs and causes them to break.",
+    "output": "[Cause] Trichophyton tonsurans [Relation] cause [Effect] ringworm",
+    "gold": "[Cause] Trichophyton tonsurans [Relation] cause [Effect] ringworm",
+    "valid": true
+  },
+  {
+    "input": "With the pollution caused by the buring of coal, the light-colored tree trunks became darker due to soot.",
+    "output": "[Cause] the buring [Relation] cause [Effect] the pollution",
+    "gold": "[Cause] the buring [Relation] cause [Effect] the pollution",
+    "valid": true
+  },
+  {
+    "input": "If a participant complaint is the source of an investigative lead, interim contact with the participant should be made by the investigator.",
+    "output": "[Cause] a participant complaint [Relation] cause [Effect] an investigative lead",
+    "gold": "[Cause] a participant complaint [Relation] cause [Effect] an investigative lead",
+    "valid": true
+  },
+  {
+    "input": "The transmitter generates the electromagnetic wave, some of which will be incident on the receiver.",
+    "output": "[Cause] The transmitter [Relation] cause [Effect] the electromagnetic wave",
+    "gold": "[Cause] The transmitter [Relation] cause [Effect] the electromagnetic wave",
+    "valid": true
+  },
+  {
+    "input": "Inhibition through synaptic depression is unlike the previous forms of inhibition in that it turns on more slowly and thus acts as delayed negative feedback.",
+    "output": "[Cause] synaptic depression [Relation] cause [Effect] Inhibition",
+    "gold": "[Cause] synaptic depression [Relation] cause [Effect] Inhibition",
+    "valid": true
+  },
+  {
+    "input": "Also, in the midst of the confusion caused by the coup, the issuing of militant posters was a way for artists and organizations to declare their active engagement against the rebellion.",
+    "output": "[Cause] the coup [Relation] cause [Effect] the confusion",
+    "gold": "[Cause] the coup [Relation] cause [Effect] the confusion",
+    "valid": true
+  },
+  {
+    "input": "Fog, rain, darkness, and or blowing snow lead to disorientation.",
+    "output": "[Cause] Fog [Relation] cause [Effect] disorientation",
+    "gold": "[Cause] Fog [Relation] cause [Effect] disorientation",
+    "valid": true
+  },
+  {
+    "input": "Cold sores or fever blisters are caused by the herpes simplex virus and are usually relatively easy to identify.",
+    "output": "[Cause] the herpes simplex virus [Relation] cause [Effect] Cold sores",
+    "gold": "[Cause] the herpes simplex virus [Relation] cause [Effect] Cold sores",
+    "valid": true
+  },
+  {
+    "input": "An alert victim with a broken neck or severely torn ligament has enough discomfort from the injury and muscle spasm to force him to hold his neck still.",
+    "output": "[Cause] the injury [Relation] cause [Effect] enough discomfort",
+    "gold": "[Cause] the injury [Relation] cause [Effect] enough discomfort",
+    "valid": true
+  },
+  {
+    "input": "I have always drawn satisfaction from exertion, straining my muscles to their limits.",
+    "output": "[Cause] exertion [Relation] cause [Effect] satisfaction",
+    "gold": "[Cause] exertion [Relation] cause [Effect] satisfaction",
+    "valid": true
+  },
+  {
+    "input": "He created and advocated \"flower power,\"a strategy in which antiwar demonstrators promoted positive values like peace and love to dramatize their opposition to the destruction and death caused by the war in Vietnam.",
+    "output": "[Cause] the war [Relation] cause [Effect] the destruction",
+    "gold": "[Cause] the war [Relation] cause [Effect] the destruction",
+    "valid": true
+  },
+  {
+    "input": "Givers gain moral strength and happiness from giving.",
+    "output": "[Cause] giving [Relation] cause [Effect] moral strength",
+    "gold": "[Cause] giving [Relation] cause [Effect] moral strength",
+    "valid": true
+  },
+  {
+    "input": "I too, get a headache from wine, and was always told that it was the sulfites.",
+    "output": "[Cause] wine [Relation] cause [Effect] a headache",
+    "gold": "[Cause] wine [Relation] cause [Effect] a headache",
+    "valid": true
+  },
+  {
+    "input": "Overall, the fire after the earthquake burned out 7456 houses in over 530 localities.",
+    "output": "[Cause] the earthquake [Relation] cause [Effect] the fire",
+    "gold": "[Cause] the earthquake [Relation] cause [Effect] the fire",
+    "valid": true
+  },
+  {
+    "input": "The widespread opinion that protein and phosphorus cause calcium loss is examined.",
+    "output": "[Cause] protein [Relation] cause [Effect] calcium loss",
+    "gold": "[Cause] protein [Relation] cause [Effect] calcium loss",
+    "valid": true
+  },
+  {
+    "input": "The drugs he sold had caused the overdose death of Matthew Lessard, 19, of Lowell.",
+    "output": "[Cause] The drugs [Relation] cause [Effect] the overdose death",
+    "gold": "[Cause] The drugs [Relation] cause [Effect] the overdose death",
+    "valid": true
+  },
+  {
+    "input": "Individual donors make a significant difference in addressing the suffering caused by the economic crisis.",
+    "output": "[Cause] the economic crisis [Relation] cause [Effect] the suffering",
+    "gold": "[Cause] the economic crisis [Relation] cause [Effect] the suffering",
+    "valid": true
+  },
+  {
+    "input": "Chest pain from indigestion feels like an intense burning and is usually accompanied by regurgitation and gas.",
+    "output": "[Cause] indigestion [Relation] cause [Effect] Chest pain",
+    "gold": "[Cause] indigestion [Relation] cause [Effect] Chest pain",
+    "valid": true
+  },
+  {
+    "input": "Gross revenues from the selling of crude oil in 2003 reached US$11.508 billion or some 112.85 percent of the amount targeted in the 2003 state budget.",
+    "output": "[Cause] the selling [Relation] cause [Effect] Gross revenues",
+    "gold": "[Cause] the selling [Relation] cause [Effect] Gross revenues",
+    "valid": true
+  },
+  {
+    "input": "Pneumococcal meningitis is caused by pneumococcus bacteria, which also cause several diseases of the respiratory system, including pneumonia.",
+    "output": "[Cause] pneumococcus bacteria [Relation] cause [Effect] Pneumococcal meningitis",
+    "gold": "[Cause] pneumococcus bacteria [Relation] cause [Effect] Pneumococcal meningitis",
+    "valid": true
+  },
+  {
+    "input": "Eye discomfort from this staring effect is exacerbated by low humidity.",
+    "output": "[Cause] this staring effect [Relation] cause [Effect] Eye discomfort",
+    "gold": "[Cause] this staring effect [Relation] cause [Effect] Eye discomfort",
+    "valid": true
+  },
+  {
+    "input": "The announcement of the game caused a stir on the web yesterday, with the Weekly Standard launching a protest campaign encouraging readers to e-mail Microsoft and T-Enterprise, the out-of-its-depth company that had hired actual Gitmo detainee Moazzam Begg as a consultant on the game.",
+    "output": "[Cause] The announcement [Relation] cause [Effect] a stir",
+    "gold": "[Cause] The announcement [Relation] cause [Effect] a stir",
+    "valid": true
+  },
+  {
+    "input": "Zinc is essential for growth and cell division.",
+    "output": "[Cause] Zinc [Relation] cause [Effect] growth",
+    "gold": "[Cause] Zinc [Relation] cause [Effect] growth",
+    "valid": true
+  },
+  {
+    "input": "The steam caused a backpressure on the VTD, resulting in the rupture disc opening.",
+    "output": "[Cause] The steam [Relation] cause [Effect] a backpressure",
+    "gold": "[Cause] The steam [Relation] cause [Effect] a backpressure",
+    "valid": true
+  },
+  {
+    "input": "Earthquakes are caused by the discharge of accumulated along geologic faults.",
+    "output": "[Cause] the discharge [Relation] cause [Effect] Earthquakes",
+    "gold": "[Cause] the discharge [Relation] cause [Effect] Earthquakes",
+    "valid": true
+  },
+  {
+    "input": "Muscle fatigue is the number one cause of arm muscle pain.",
+    "output": "[Cause] Muscle fatigue [Relation] cause [Effect] arm muscle pain",
+    "gold": "[Cause] Muscle fatigue [Relation] cause [Effect] arm muscle pain",
+    "valid": true
+  },
+  {
+    "input": "Menopause and PMS cause stress and anxiety even without imbalanced hormones.",
+    "output": "[Cause] Menopause [Relation] cause [Effect] stress",
+    "gold": "[Cause] Menopause [Relation] cause [Effect] stress",
+    "valid": true
+  },
+  {
+    "input": "The presentation generated debate and there was general discussion on how journalists can better equip themselves to handle the challenges.",
+    "output": "[Cause] The presentation [Relation] cause [Effect] debate",
+    "gold": "[Cause] The presentation [Relation] cause [Effect] debate",
+    "valid": true
+  },
+  {
+    "input": "Germs are microscopic organisms that cause sickness or disease.",
+    "output": "[Cause] Germs [Relation] cause [Effect] sickness",
+    "gold": "[Cause] Germs [Relation] cause [Effect] sickness",
+    "valid": true
+  },
+  {
+    "input": "Method according to claim 1, characterized in that the time duration of the quality reduction is limited at least to the duration of the interference triggered by the switching process.",
+    "output": "[Cause] the switching process [Relation] cause [Effect] the interference",
+    "gold": "[Cause] the switching process [Relation] cause [Effect] the interference",
+    "valid": true
+  },
+  {
+    "input": "Constipation is the most common cause of abdominal pain in the pediatric population.",
+    "output": "[Cause] Constipation [Relation] cause [Effect] abdominal pain",
+    "gold": "[Cause] Constipation [Relation] cause [Effect] abdominal pain",
+    "valid": true
+  },
+  {
+    "input": "When the force was generated via the joystick, the reproduced force matched the original force much more accurately.",
+    "output": "[Cause] the joystick [Relation] cause [Effect] the force",
+    "gold": "[Cause] the joystick [Relation] cause [Effect] the force",
+    "valid": true
+  },
+  {
+    "input": "There were setbacks and technical problems that ensued from the location design, flooding, and moisture that plagued the winery and bumped up the investment cost beyond the initial budgetary estimates.",
+    "output": "[Cause] the location design [Relation] cause [Effect] setbacks",
+    "gold": "[Cause] the location design [Relation] cause [Effect] setbacks",
+    "valid": true
+  },
+  {
+    "input": "The poet Essex Hemphill conquered sorrow after the loss of a friend by taking up the cause of that friend.",
+    "output": "[Cause] the loss [Relation] cause [Effect] sorrow",
+    "gold": "[Cause] the loss [Relation] cause [Effect] sorrow",
+    "valid": true
+  },
+  {
+    "input": "An oil spill caused by a collision between a ship and a barge closed the ship channel servicing the nation's second largest port.",
+    "output": "[Cause] a collision [Relation] cause [Effect] An oil spill",
+    "gold": "[Cause] a collision [Relation] cause [Effect] An oil spill",
+    "valid": true
+  },
+  {
+    "input": "The changes now seen in the endometrium are caused by a hormone called progesterone.",
+    "output": "[Cause] a hormone [Relation] cause [Effect] The changes",
+    "gold": "[Cause] a hormone [Relation] cause [Effect] The changes",
+    "valid": true
+  },
+  {
+    "input": "The incident was caused by the entry of high pressure gas from a deep formation that got confined in the porthole of the well.",
+    "output": "[Cause] the entry [Relation] cause [Effect] The incident",
+    "gold": "[Cause] the entry [Relation] cause [Effect] The incident",
+    "valid": true
+  },
+  {
+    "input": "The swelling of the vocal fold mucosa is caused by smoking.",
+    "output": "[Cause] smoking [Relation] cause [Effect] The swelling",
+    "gold": "[Cause] smoking [Relation] cause [Effect] The swelling",
+    "valid": true
+  },
+  {
+    "input": "The cysts are caused by chronic inflammation of the perichondrium with production of serous fluid between the perichondrium and cartilage.",
+    "output": "[Cause] chronic inflammation [Relation] cause [Effect] The cysts",
+    "gold": "[Cause] chronic inflammation [Relation] cause [Effect] The cysts",
+    "valid": true
+  },
+  {
+    "input": "She mentioned the scandal caused by a BBC documentary on the treatment of children in a special-needs home and asked how the state had responded to these.",
+    "output": "[Cause] a BBC documentary [Relation] cause [Effect] the scandal",
+    "gold": "[Cause] a BBC documentary [Relation] cause [Effect] the scandal",
+    "valid": true
+  },
+  {
+    "input": "The cow makes a sound called lowing, also known as mooing.",
+    "output": "[Cause] The cow [Relation] cause [Effect] a sound",
+    "gold": "[Cause] The cow [Relation] cause [Effect] a sound",
+    "valid": true
+  },
+  {
+    "input": "The movie gives the inaccurate impression that the Apaches all surrendered.",
+    "output": "[Cause] The movie [Relation] cause [Effect] the inaccurate impression",
+    "gold": "[Cause] The movie [Relation] cause [Effect] the inaccurate impression",
+    "valid": true
+  },
+  {
+    "input": "This is one of the more common causes of hair loss caused by stress and when you are losing hair because of this your hair stops growing and lies dormant.",
+    "output": "[Cause] stress [Relation] cause [Effect] hair loss",
+    "gold": "[Cause] stress [Relation] cause [Effect] hair loss",
+    "valid": true
+  },
+  {
+    "input": "But the discomfort caused by the ointment and the duration of treatment often result in non-compliance.",
+    "output": "[Cause] the discomfort [Relation] cause [Effect] non-compliance",
+    "gold": "[Cause] the discomfort [Relation] cause [Effect] non-compliance",
+    "valid": true
+  },
+  {
+    "input": "Oak root and chamomile provide a gentle astringent that helps reduce inflammation and calms skin irritation from the sun and environmental pollutants.",
+    "output": "[Cause] the sun [Relation] cause [Effect] skin irritation",
+    "gold": "[Cause] the sun [Relation] cause [Effect] skin irritation",
+    "valid": true
+  },
+  {
+    "input": "When I start the engine the car makes a screaching sound.",
+    "output": "[Cause] the car [Relation] cause [Effect] a screaching sound",
+    "gold": "[Cause] the car [Relation] cause [Effect] a screaching sound",
+    "valid": true
+  },
+  {
+    "input": "This year's Nobel Laureates in Physiology or Medicine made the remarkable and unexpected discovery that inflammation in the stomach  as well as ulceration of the stomach or duodenum  is the result of an infection of the stomach caused by the bacterium Helicobacter pylori.",
+    "output": "[Cause] an infection [Relation] cause [Effect] inflammation",
+    "gold": "[Cause] an infection [Relation] cause [Effect] inflammation",
+    "valid": true
+  },
+  {
+    "input": "The largest landslide triggered by the earthquake is located approximately 32 kilometers southeast of Muzafarrabad in a tributary valley of the Jhelum River.",
+    "output": "[Cause] the earthquake [Relation] cause [Effect] The largest landslide",
+    "gold": "[Cause] the earthquake [Relation] cause [Effect] The largest landslide",
+    "valid": true
+  },
+  {
+    "input": "The transmitter emits a constant radio signal to crea.",
+    "output": "[Cause] The transmitter [Relation] cause [Effect] a constant radio signal",
+    "gold": "[Cause] The transmitter [Relation] cause [Effect] a constant radio signal",
+    "valid": true
+  },
+  {
+    "input": "These are all symptoms of the muscle paralysis caused by the bacterial toxin.",
+    "output": "[Cause] the bacterial toxin [Relation] cause [Effect] the muscle paralysis",
+    "gold": "[Cause] the bacterial toxin [Relation] cause [Effect] the muscle paralysis",
+    "valid": true
+  },
+  {
+    "input": "Generally it appears that most of the damage was caused by the winds and the rough seas.",
+    "output": "[Cause] the winds [Relation] cause [Effect] the damage",
+    "gold": "[Cause] the winds [Relation] cause [Effect] the damage",
+    "valid": true
+  },
+  {
+    "input": "Aware of the suffering caused by exploitation, social injustice, stealing, and oppression, I am committed to cultivate loving kindness and learn ways to work for the well-being of people, animals, plants, and minerals.",
+    "output": "[Cause] exploitation [Relation] cause [Effect] the suffering",
+    "gold": "[Cause] exploitation [Relation] cause [Effect] the suffering",
+    "valid": true
+  },
+  {
+    "input": "Oscillation of the lever caused by the swinging of the pendulum.",
+    "output": "[Cause] the swinging [Relation] cause [Effect] Oscillation",
+    "gold": "[Cause] the swinging [Relation] cause [Effect] Oscillation",
+    "valid": true
+  },
+  {
+    "input": "The malfunctions on Monday caused delays for patrons waiting to check out or renew books at the branches, and impeded access to personal accounts that allow users to renew or hold books online.",
+    "output": "[Cause] The malfunctions [Relation] cause [Effect] delays",
+    "gold": "[Cause] The malfunctions [Relation] cause [Effect] delays",
+    "valid": true
+  },
+  {
+    "input": "Stimulation of the posterior horn of the medial meniscus produced a measurable amount of CMAP latency for the semimembranosus muscle.",
+    "output": "[Cause] Stimulation [Relation] cause [Effect] CMAP latency",
+    "gold": "[Cause] Stimulation [Relation] cause [Effect] CMAP latency",
+    "valid": true
+  },
+  {
+    "input": "General information about the infection caused by the bacteria called Salmonella, when food is eaten raw or undercooked.",
+    "output": "[Cause] the bacteria [Relation] cause [Effect] the infection",
+    "gold": "[Cause] the bacteria [Relation] cause [Effect] the infection",
+    "valid": true
+  },
+  {
+    "input": "The light in the background is from the sunrise.",
+    "output": "[Cause] the sunrise [Relation] cause [Effect] The light",
+    "gold": "[Cause] the sunrise [Relation] cause [Effect] The light",
+    "valid": true
+  },
+  {
+    "input": "The volunteers enjoy a sense of satisfaction and personal fulfillment from helping others, and recent findings suggest that this feeling may well be a major reason why many people choose to volunteer.",
+    "output": "[Cause] helping others [Relation] cause [Effect] satisfaction",
+    "gold": "[Cause] helping others [Relation] cause [Effect] satisfaction",
+    "valid": true
+  },
+  {
+    "input": "Finally, Slone's fear of AIDS and the mental distress she suffered from this fear were caused by the needle stab.",
+    "output": "[Cause] the needle stab [Relation] cause [Effect] Slone's fear",
+    "gold": "[Cause] the needle stab [Relation] cause [Effect] Slone's fear",
+    "valid": true
+  },
+  {
+    "input": "The disruption caused by the latest Christmas terrorist has added too much to the weary trip home.",
+    "output": "[Cause] the latest Christmas terrorist [Relation] cause [Effect] The disruption",
+    "gold": "[Cause] the latest Christmas terrorist [Relation] cause [Effect] The disruption",
+    "valid": true
+  },
+  {
+    "input": "The funds raised through this appeal have a direct impact on the people affected by the severe devastations caused by the storms.",
+    "output": "[Cause] the storms [Relation] cause [Effect] the severe devastations",
+    "gold": "[Cause] the storms [Relation] cause [Effect] the severe devastations",
+    "valid": true
+  },
+  {
+    "input": "A trend has been caused by the growing absolute numbers of young people on the planet, and by the rising unemployment rate.",
+    "output": "[Cause] the growing absolute numbers [Relation] cause [Effect] A trend",
+    "gold": "[Cause] the growing absolute numbers [Relation] cause [Effect] A trend",
+    "valid": true
+  },
+  {
+    "input": "But just think, sadness leads to fear then fear leads to anger.",
+    "output": "[Cause] sadness [Relation] cause [Effect] fear",
+    "gold": "[Cause] sadness [Relation] cause [Effect] fear",
+    "valid": true
+  },
+  {
+    "input": "Eighty-four percent of the complications resulted in patient deaths, while 16 percent resulted in a serious injury.",
+    "output": "[Cause] the complications [Relation] cause [Effect] patient deaths",
+    "gold": "[Cause] the complications [Relation] cause [Effect] patient deaths",
+    "valid": true
+  },
+  {
+    "input": "The worst pain of all was caused by the torment to her head which was like the pain of thorns pressing into her.",
+    "output": "[Cause] the torment [Relation] cause [Effect] The worst pain",
+    "gold": "[Cause] the torment [Relation] cause [Effect] The worst pain",
+    "valid": true
+  },
+  {
+    "input": "The genreal anesthetic cause unconsciousness and insensibility to paid and are used for major surgical procedures.",
+    "output": "[Cause] The genreal anesthetic [Relation] cause [Effect] unconsciousness",
+    "gold": "[Cause] The genreal anesthetic [Relation] cause [Effect] unconsciousness",
+    "valid": true
+  },
+  {
+    "input": "Aware of the suffering caused by unmindful drinking, I am committed to cultivate good health, both physical and mental, for myself, my family, and my society.",
+    "output": "[Cause] unmindful drinking [Relation] cause [Effect] the suffering",
+    "gold": "[Cause] unmindful drinking [Relation] cause [Effect] the suffering",
+    "valid": true
+  },
+  {
+    "input": "As the molten metal cools, it hardens and assumes the shape created by the mold's cavity.",
+    "output": "[Cause] the mold's cavity [Relation] cause [Effect] the shape",
+    "gold": "[Cause] the mold's cavity [Relation] cause [Effect] the shape",
+    "valid": true
+  },
+  {
+    "input": "The drag caused by the Earth's atmosphere works against a rocket or a water molecule.",
+    "output": "[Cause] the Earth's atmosphere [Relation] cause [Effect] The drag",
+    "gold": "[Cause] the Earth's atmosphere [Relation] cause [Effect] The drag",
+    "valid": true
+  },
+  {
+    "input": "Snails and slugs cause damage to seedlings, flowers, vegetables and shrubs.",
+    "output": "[Cause] Snails [Relation] cause [Effect] damage",
+    "gold": "[Cause] Snails [Relation] cause [Effect] damage",
+    "valid": true
+  },
+  {
+    "input": "The explosion caused a gas leak on the pipeline near the village of Pouce Coupe, south of Dawson Creek.",
+    "output": "[Cause] The explosion [Relation] cause [Effect] a gas leak",
+    "gold": "[Cause] The explosion [Relation] cause [Effect] a gas leak",
+    "valid": true
+  },
+  {
+    "input": "Vulvodynia is the cause of chronic vulval pain in the absence of skin disease and infection.",
+    "output": "[Cause] Vulvodynia [Relation] cause [Effect] chronic vulval pain",
+    "gold": "[Cause] Vulvodynia [Relation] cause [Effect] chronic vulval pain",
+    "valid": true
+  },
+  {
+    "input": "Arcane Subtlety reduced the threat caused by Polymorph by 40% at max rank, though the threat caused by the spell is minimal.",
+    "output": "[Cause] Polymorph [Relation] cause [Effect] the threat",
+    "gold": "[Cause] Polymorph [Relation] cause [Effect] the threat",
+    "valid": true
+  },
+  {
+    "input": "We estimate a wind speed associated with the devastation caused by the tornado.",
+    "output": "[Cause] the tornado [Relation] cause [Effect] the devastation",
+    "gold": "[Cause] the tornado [Relation] cause [Effect] the devastation",
+    "valid": true
+  },
+  {
+    "input": "Like a catch-22 the worst part is that acne causes stress and stress triggers acne breakouts.",
+    "output": "[Cause] acne [Relation] cause [Effect] stress",
+    "gold": "[Cause] acne [Relation] cause [Effect] stress",
+    "valid": true
+  },
+  {
+    "input": "The problem comes from the widgets resembling HTC's own Sense UI widgets.",
+    "output": "[Cause] the widgets [Relation] cause [Effect] The problem",
+    "gold": "[Cause] the widgets [Relation] cause [Effect] The problem",
+    "valid": true
+  },
+  {
+    "input": "The storm resulted in 31 deaths and 2.5 million dollars damage.",
+    "output": "[Cause] The storm [Relation] cause [Effect] 31 deaths",
+    "gold": "[Cause] The storm [Relation] cause [Effect] 31 deaths",
+    "valid": true
+  },
+  {
+    "input": "These chemical studies were directed toward proof of structure of the indole components of the seeds.",
+    "output": "[Cause] These chemical studies [Relation] cause [Effect] proof",
+    "gold": "[Cause] These chemical studies [Relation] cause [Effect] proof",
+    "valid": true
+  },
+  {
+    "input": "Smoke is one of the leading causes of kidney failures.",
+    "output": "[Cause] Smoke [Relation] cause [Effect] kidney failures",
+    "gold": "[Cause] Smoke [Relation] cause [Effect] kidney failures",
+    "valid": true
+  },
+  {
+    "input": "The reports regarding the casualties has been announced and the loss that has been caused by the quake is being estimated.",
+    "output": "[Cause] the quake [Relation] cause [Effect] the loss",
+    "gold": "[Cause] the quake [Relation] cause [Effect] the loss",
+    "valid": true
+  },
+  {
+    "input": "My problem is that the advertisement gives the impression that women in rural Bangladesh have 6 children.",
+    "output": "[Cause] the advertisement [Relation] cause [Effect] the impression",
+    "gold": "[Cause] the advertisement [Relation] cause [Effect] the impression",
+    "valid": true
+  },
+  {
+    "input": "In these cases, the disappointment from the purchase is not forgotten over time, but rather accumulates.",
+    "output": "[Cause] the purchase [Relation] cause [Effect] the disappointment",
+    "gold": "[Cause] the purchase [Relation] cause [Effect] the disappointment",
+    "valid": true
+  },
+  {
+    "input": "The radiation from the atomic bomb explosion is a typical acute radiation.",
+    "output": "[Cause] the atomic bomb explosion [Relation] cause [Effect] The radiation",
+    "gold": "[Cause] the atomic bomb explosion [Relation] cause [Effect] The radiation",
+    "valid": true
+  },
+  {
+    "input": "I have found that I have extremely sensitive skin and most cleaners cause rash or a burning sensation if it has contact with my skin.",
+    "output": "[Cause] most cleaners [Relation] cause [Effect] rash",
+    "gold": "[Cause] most cleaners [Relation] cause [Effect] rash",
+    "valid": true
+  },
+  {
+    "input": "The disruption has been caused by work being carried out by track operator Network Rail.",
+    "output": "[Cause] work [Relation] cause [Effect] The disruption",
+    "gold": "[Cause] work [Relation] cause [Effect] The disruption",
+    "valid": true
+  },
+  {
+    "input": "When a tsunami is generated by a strong offshore earthquake, its first waves would reach the outer coast minutes after the ground stops shaking.",
+    "output": "[Cause] a strong offshore earthquake [Relation] cause [Effect] a tsunami",
+    "gold": "[Cause] a strong offshore earthquake [Relation] cause [Effect] a tsunami",
+    "valid": true
+  },
+  {
+    "input": "Infection is one of the commonest causes of death in burn patients, particularly.",
+    "output": "[Cause] Infection [Relation] cause [Effect] death",
+    "gold": "[Cause] Infection [Relation] cause [Effect] death",
+    "valid": true
+  },
+  {
+    "input": "The software caused a pretty good drain on the CPU for some reason.",
+    "output": "[Cause] The software [Relation] cause [Effect] a pretty good drain",
+    "gold": "[Cause] The software [Relation] cause [Effect] a pretty good drain",
+    "valid": true
+  },
+  {
+    "input": "Overall, discomfort from braces is typically short in duration and easily managed.",
+    "output": "[Cause] braces [Relation] cause [Effect] discomfort",
+    "gold": "[Cause] braces [Relation] cause [Effect] discomfort",
+    "valid": true
+  },
+  {
+    "input": "The crashes resulted in the collapse of much of the World Trade Center complex, the destruction of part of the southwest side of the Pentagon.",
+    "output": "[Cause] The crashes [Relation] cause [Effect] the collapse",
+    "gold": "[Cause] The crashes [Relation] cause [Effect] the collapse",
+    "valid": true
+  },
+  {
+    "input": "Obama's economic policies are turning into a global disaster.",
+    "output": "[Cause] Obama's economic policies [Relation] cause [Effect] a global disaster",
+    "gold": "[Cause] Obama's economic policies [Relation] cause [Effect] a global disaster",
+    "valid": true
+  },
+  {
+    "input": "Sip the tea slowly to reduce stomach pain from indigestion, bloating and feeling of fullness.",
+    "output": "[Cause] indigestion [Relation] cause [Effect] stomach pain",
+    "gold": "[Cause] indigestion [Relation] cause [Effect] stomach pain",
+    "valid": true
+  },
+  {
+    "input": "Sensitive pets experience rashes and discomfort from ticks and fleas.",
+    "output": "[Cause] ticks [Relation] cause [Effect] rashes",
+    "gold": "[Cause] ticks [Relation] cause [Effect] rashes",
+    "valid": true
+  },
+  {
+    "input": "Using the product around the house killed germs that were causing flu, colds or sore throat.",
+    "output": "[Cause] germs [Relation] cause [Effect] flu",
+    "gold": "[Cause] germs [Relation] cause [Effect] flu",
+    "valid": true
+  },
+  {
+    "input": "Much like the virus that caused the 1918 flu pandemic, this new H1N1 flu virus affects young adults and school children in greater numbers.",
+    "output": "[Cause] the virus [Relation] cause [Effect] the 1918 flu pandemic",
+    "gold": "[Cause] the virus [Relation] cause [Effect] the 1918 flu pandemic",
+    "valid": true
+  },
+  {
+    "input": "The relative calm produced by the Shia ceasefire has coincided with what the CIA is now calling the \"near strategic defeat\" of al-Qaeda in Iraq.",
+    "output": "[Cause] the Shia ceasefire [Relation] cause [Effect] The relative calm",
+    "gold": "[Cause] the Shia ceasefire [Relation] cause [Effect] The relative calm",
+    "valid": true
+  },
+  {
+    "input": "Dry air, dust and wind dry out the nose and throat and cause nosebleeds, coughing, wheezing, and other short-term respiratory problems",
+    "output": "[Cause] Dry air [Relation] cause [Effect] nosebleeds",
+    "gold": "[Cause] Dry air [Relation] cause [Effect] nosebleeds",
+    "valid": true
+  },
+  {
+    "input": "When the first model sank in August 1991, the crash caused a seismic event registering 3.0 on the Richter scale, and left nothing but a pile of debris at 220m of depth.",
+    "output": "[Cause] the crash [Relation] cause [Effect] a seismic event",
+    "gold": "[Cause] the crash [Relation] cause [Effect] a seismic event",
+    "valid": true
+  },
+  {
+    "input": "Progress comes from constructive competition, and churches and religions can benefit greatly from it.",
+    "output": "[Cause] constructive competition [Relation] cause [Effect] Progress",
+    "gold": "[Cause] constructive competition [Relation] cause [Effect] Progress",
+    "valid": true
+  },
+  {
+    "input": "Various hormonal, bacterial and inflammatory disturbances cause acne.",
+    "output": "[Cause] Various hormonal, bacterial and inflammatory disturbances [Relation] cause [Effect] acne",
+    "gold": "[Cause] Various hormonal, bacterial and inflammatory disturbances [Relation] cause [Effect] acne",
+    "valid": true
+  },
+  {
+    "input": "After the war, as the Midway was preparing for retirement, she was called upon one last time to the Philippines to help with an evacuation after the eruption of Mt. Pinatubo.",
+    "output": "[Cause] the eruption [Relation] cause [Effect] an evacuation",
+    "gold": "[Cause] the eruption [Relation] cause [Effect] an evacuation",
+    "valid": true
+  },
+  {
+    "input": "Lavender is excellent in the reatment of headaches from fatigue and exhaustion.",
+    "output": "[Cause] fatigue [Relation] cause [Effect] headaches",
+    "gold": "[Cause] fatigue [Relation] cause [Effect] headaches",
+    "valid": true
+  },
+  {
+    "input": "The alleged abuse resulted in bruises and swelling of the brain.",
+    "output": "[Cause] The alleged abuse [Relation] cause [Effect] bruises",
+    "gold": "[Cause] The alleged abuse [Relation] cause [Effect] bruises",
+    "valid": true
+  },
+  {
+    "input": "The presentation uses animation to show how germs and microbes cause sickness, and outlines simple preventive measures.",
+    "output": "[Cause] germs [Relation] cause [Effect] sickness",
+    "gold": "[Cause] germs [Relation] cause [Effect] sickness",
+    "valid": true
+  },
+  {
+    "input": "Using solar electricity instead of conventional electricity sources helps to reduce pollution that causes smog, acid rain, respiratory illness and global warming.",
+    "output": "[Cause] pollution [Relation] cause [Effect] smog",
+    "gold": "[Cause] pollution [Relation] cause [Effect] smog",
+    "valid": true
+  },
+  {
+    "input": "The wire had caused a slight injury on the ventral side of the neck and at the base of horns.",
+    "output": "[Cause] The wire [Relation] cause [Effect] a slight injury",
+    "gold": "[Cause] The wire [Relation] cause [Effect] a slight injury",
+    "valid": true
+  },
+  {
+    "input": "The election was caused by the appointment of Donald Sumner, formerly Conservative MP for Orpington, to be a county court judge.",
+    "output": "[Cause] the appointment [Relation] cause [Effect] The election",
+    "gold": "[Cause] the appointment [Relation] cause [Effect] The election",
+    "valid": true
+  },
+  {
+    "input": "A stereo buss outputs the stereo buss signal; a record buss outputs the record buss signal.",
+    "output": "[Cause] A stereo buss [Relation] cause [Effect] the stereo buss signal",
+    "gold": "[Cause] A stereo buss [Relation] cause [Effect] the stereo buss signal",
+    "valid": true
+  },
+  {
+    "input": "The accolade was decided upon after an intense discussion between about 200 members.",
+    "output": "[Cause] an intense discussion [Relation] cause [Effect] The accolade",
+    "gold": "[Cause] an intense discussion [Relation] cause [Effect] The accolade",
+    "valid": true
+  },
+  {
+    "input": "The hull caused a scratch on the eye and that is why it's not healing all the way.",
+    "output": "[Cause] The hull [Relation] cause [Effect] a scratch",
+    "gold": "[Cause] The hull [Relation] cause [Effect] a scratch",
+    "valid": true
+  },
+  {
+    "input": "Getting help has reduced the time to reverse all the irritation that had been caused by the fungus.",
+    "output": "[Cause] the fungus [Relation] cause [Effect] all the irritation",
+    "gold": "[Cause] the fungus [Relation] cause [Effect] all the irritation",
+    "valid": true
+  },
+  {
+    "input": "A fuel leak in one of the C-17s caused a delay on the morning of Nov. 7 as the crew was preparing for departure for Cairo, Egypt.",
+    "output": "[Cause] A fuel leak [Relation] cause [Effect] a delay",
+    "gold": "[Cause] A fuel leak [Relation] cause [Effect] a delay",
+    "valid": true
+  },
+  {
+    "input": "The energy of emission produces the separation field.",
+    "output": "[Cause] The energy [Relation] cause [Effect] the separation field",
+    "gold": "[Cause] The energy [Relation] cause [Effect] the separation field",
+    "valid": true
+  },
+  {
+    "input": "The accident caused a major traffic snarl on the arterial road.",
+    "output": "[Cause] The accident [Relation] cause [Effect] a major traffic snarl",
+    "gold": "[Cause] The accident [Relation] cause [Effect] a major traffic snarl",
+    "valid": true
+  },
+  {
+    "input": "The violence resulted in the death of police \"capo\" Filippo Raciti, which caused widespread soul-searching and a week-long suspension of Italian football.",
+    "output": "[Cause] The violence [Relation] cause [Effect] the death",
+    "gold": "[Cause] The violence [Relation] cause [Effect] the death",
+    "valid": true
+  },
+  {
+    "input": "The dust, noise, and sleep deprivation produced by the construction are intolerable.",
+    "output": "[Cause] the construction [Relation] cause [Effect] The dust",
+    "gold": "[Cause] the construction [Relation] cause [Effect] The dust",
+    "valid": true
+  },
+  {
+    "input": "Plantar warts are caused by a virus that infects the outer layer of skin on the soles of the feet.",
+    "output": "[Cause] a virus [Relation] cause [Effect] Plantar warts",
+    "gold": "[Cause] a virus [Relation] cause [Effect] Plantar warts",
+    "valid": true
+  },
+  {
+    "input": "More than 4500 tons of nitrogen oxides annually -- a pollutant that causes smog, acid rain, and contributes to asthma attacks and other breathing problems.",
+    "output": "[Cause] a pollutant [Relation] cause [Effect] smog",
+    "gold": "[Cause] a pollutant [Relation] cause [Effect] smog",
+    "valid": true
+  },
+  {
+    "input": "Companies face big risk from loss of key employees.",
+    "output": "[Cause] loss [Relation] cause [Effect] big risk",
+    "gold": "[Cause] loss [Relation] cause [Effect] big risk",
+    "valid": true
+  },
+  {
+    "input": "The author clearly got a great deal of pleasure from the work and did not allow his vast amount of material to force him into shallow generalizations.",
+    "output": "[Cause] the work [Relation] cause [Effect] pleasure",
+    "gold": "[Cause] the work [Relation] cause [Effect] pleasure",
+    "valid": true
+  },
+  {
+    "input": "The Fujita Scale is used to rate the intensity of a tornado by examining the damage caused by the tornado after it has passed over a man-made structure.",
+    "output": "[Cause] the tornado [Relation] cause [Effect] the damage",
+    "gold": "[Cause] the tornado [Relation] cause [Effect] the damage",
+    "valid": true
+  },
+  {
+    "input": "A method of mitigating the effect of a market spike caused by the triggering and the election of a conditional order includes monitoring conditional orders.",
+    "output": "[Cause] the triggering [Relation] cause [Effect] a market spike",
+    "gold": "[Cause] the triggering [Relation] cause [Effect] a market spike",
+    "valid": true
+  },
+  {
+    "input": "About 30 ducks were found dead in Klamath County in the past two days, and officials are investigating whether the deaths are from a cholera outbreak.",
+    "output": "[Cause] a cholera outbreak [Relation] cause [Effect] the deaths",
+    "gold": "[Cause] a cholera outbreak [Relation] cause [Effect] the deaths",
+    "valid": true
+  },
+  {
+    "input": "Tsunamis are caused by the sudden displacement of large volumes of water.",
+    "output": "[Cause] the sudden displacement [Relation] cause [Effect] Tsunamis",
+    "gold": "[Cause] the sudden displacement [Relation] cause [Effect] Tsunamis",
+    "valid": true
+  },
+  {
+    "input": "Heat, wind and smoke cause flight delays.",
+    "output": "[Cause] Heat [Relation] cause [Effect] flight delays",
+    "gold": "[Cause] Heat [Relation] cause [Effect] flight delays",
+    "valid": true
+  },
+  {
+    "input": "A spaghetti pie served at a church dinner had caused the poisoning of one hundred people.",
+    "output": "[Cause] A spaghetti pie [Relation] cause [Effect] the poisoning",
+    "gold": "[Cause] A spaghetti pie [Relation] cause [Effect] the poisoning",
+    "valid": true
+  },
+  {
+    "input": "Thus previous scientific estimates had overstated the devastation caused by the asteroid, since topographic and ecologic factors contributing to the result had not been taken into account.",
+    "output": "[Cause] the asteroid [Relation] cause [Effect] the devastation",
+    "gold": "[Cause] the asteroid [Relation] cause [Effect] the devastation",
+    "valid": true
+  },
+  {
+    "input": "Alcohol and drugs directly cause suicide by significantly diminishing the reasoning of the person at the time of the suicide.",
+    "output": "[Cause] Alcohol [Relation] cause [Effect] suicide",
+    "gold": "[Cause] Alcohol [Relation] cause [Effect] suicide",
+    "valid": true
+  },
+  {
+    "input": "Three people had been killed in a fire after the quake and hundreds of people were injured.",
+    "output": "[Cause] the quake [Relation] cause [Effect] a fire",
+    "gold": "[Cause] the quake [Relation] cause [Effect] a fire",
+    "valid": true
+  },
+  {
+    "input": "The damages caused by mudslides, tremors, subsidence, superficial or underground water were verified, as well as swelling clay soils.",
+    "output": "[Cause] mudslides [Relation] cause [Effect] The damages",
+    "gold": "[Cause] mudslides [Relation] cause [Effect] The damages",
+    "valid": true
+  },
+  {
+    "input": "The boom and shaking was caused by the asteroid that passed Earth yesterday.",
+    "output": "[Cause] the asteroid [Relation] cause [Effect] The boom",
+    "gold": "[Cause] the asteroid [Relation] cause [Effect] The boom",
+    "valid": true
+  },
+  {
+    "input": "The pollution from animal factories is also destroying parts of the world's oceans.",
+    "output": "[Cause] animal factories [Relation] cause [Effect] The pollution",
+    "gold": "[Cause] animal factories [Relation] cause [Effect] The pollution",
+    "valid": true
+  },
+  {
+    "input": "A large tsunami triggered by the earthquake spread outward from off the Sumatran coast.",
+    "output": "[Cause] the earthquake [Relation] cause [Effect] A large tsunami",
+    "gold": "[Cause] the earthquake [Relation] cause [Effect] A large tsunami",
+    "valid": true
+  },
+  {
+    "input": "The incoming water caused a stain on the wall that, through the lens of pareidolia, looked like a bearded man with a big afro hairdo.",
+    "output": "[Cause] The incoming water [Relation] cause [Effect] a stain",
+    "gold": "[Cause] The incoming water [Relation] cause [Effect] a stain",
+    "valid": true
+  },
+  {
+    "input": "Bounding pulses are caused by the relatively low systemic arterial blood pressure due to the continuous runoff of blood from the aorta into the pulmonary artery.",
+    "output": "[Cause] the relatively low systemic arterial blood pressure [Relation] cause [Effect] Bounding pulses",
+    "gold": "[Cause] the relatively low systemic arterial blood pressure [Relation] cause [Effect] Bounding pulses",
+    "valid": true
+  },
+  {
+    "input": "Information about the foodborne illness caused by salmonella bacteria.",
+    "output": "[Cause] salmonella bacteria [Relation] cause [Effect] the foodborne illness",
+    "gold": "[Cause] salmonella bacteria [Relation] cause [Effect] the foodborne illness",
+    "valid": true
+  },
+  {
+    "input": "Bed sores  are caused by pressure, which cuts off blood flow to parts of the body.",
+    "output": "[Cause] pressure [Relation] cause [Effect] Bed sores",
+    "gold": "[Cause] pressure [Relation] cause [Effect] Bed sores",
+    "valid": true
+  },
+  {
+    "input": "The grief from sudden death is completely different from expected death, when families have time to prepare and say goodbye.",
+    "output": "[Cause] sudden death [Relation] cause [Effect] The grief",
+    "gold": "[Cause] sudden death [Relation] cause [Effect] The grief",
+    "valid": true
+  },
+  {
+    "input": "The accident caused a traffic snarl on the ever busy bridge leading to diversions to other routes.",
+    "output": "[Cause] The accident [Relation] cause [Effect] a traffic snarl",
+    "gold": "[Cause] The accident [Relation] cause [Effect] a traffic snarl",
+    "valid": true
+  },
+  {
+    "input": "The contortions are caused by gravitational interactions with the small satellites Prometheus and Pandora.",
+    "output": "[Cause] gravitational interactions [Relation] cause [Effect] The contortions",
+    "gold": "[Cause] gravitational interactions [Relation] cause [Effect] The contortions",
+    "valid": true
+  },
+  {
+    "input": "The shock wave was generated by an explosive made from RDX.",
+    "output": "[Cause] an explosive [Relation] cause [Effect] The shock wave",
+    "gold": "[Cause] an explosive [Relation] cause [Effect] The shock wave",
+    "valid": true
+  },
+  {
+    "input": "Ordinary warts on the hands and feet are caused by viruses, which only affect humans.",
+    "output": "[Cause] viruses [Relation] cause [Effect] Ordinary warts",
+    "gold": "[Cause] viruses [Relation] cause [Effect] Ordinary warts",
+    "valid": true
+  },
+  {
+    "input": "Headaches, dizziness, balance problems, and neck and back pain were caused by the work injury.",
+    "output": "[Cause] the work injury [Relation] cause [Effect] Headaches",
+    "gold": "[Cause] the work injury [Relation] cause [Effect] Headaches",
+    "valid": true
+  },
+  {
+    "input": "Thus, evaluating capital punishment as a form of retribution is reduced by Sellin to merely estimating the proportion of capital murders that result in execution.",
+    "output": "[Cause] capital murders [Relation] cause [Effect] execution",
+    "gold": "[Cause] capital murders [Relation] cause [Effect] execution",
+    "valid": true
+  },
+  {
+    "input": "Traffic vibrations on the street outside had caused the movement of the light.",
+    "output": "[Cause] Traffic vibrations [Relation] cause [Effect] the movement",
+    "gold": "[Cause] Traffic vibrations [Relation] cause [Effect] the movement",
+    "valid": true
+  },
+  {
+    "input": "Later on that same day, an electrical short at the Farragut North station caused a fire on the tracks which shut down service three times over the course of the day.",
+    "output": "[Cause] an electrical short [Relation] cause [Effect] a fire",
+    "gold": "[Cause] an electrical short [Relation] cause [Effect] a fire",
+    "valid": true
+  },
+  {
+    "input": "The electricity is produced by 440 nuclear reactors in 31 countries.",
+    "output": "[Cause] 440 nuclear reactors [Relation] cause [Effect] The electricity",
+    "gold": "[Cause] 440 nuclear reactors [Relation] cause [Effect] The electricity",
+    "valid": true
+  },
+  {
+    "input": "Information about Salmonellosis, an illness caused by a bacteria found in raw food, soil, or water.",
+    "output": "[Cause] a bacteria [Relation] cause [Effect] an illness",
+    "gold": "[Cause] a bacteria [Relation] cause [Effect] an illness",
+    "valid": true
+  },
+  {
+    "input": "The earthquake caused the failures of the electric power system, the water supply system, the sewer system, the telephone and telegraph systems.",
+    "output": "[Cause] The earthquake [Relation] cause [Effect] the failures",
+    "gold": "[Cause] The earthquake [Relation] cause [Effect] the failures",
+    "valid": true
+  },
+  {
+    "input": "Paralysis or convulsions are caused by hormone deficiencies and imbalances.",
+    "gold": "[Cause] hormone deficiencies and imbalances [Relation] cause [Effect] Paralysis",
+    "output": "[Cause] hormone deficiencies [Relation] cause [Effect] Paralysis",
+    "valid": true
+  },
+  {
+    "input": "Use outdoor where sunlight and glare cause eye strain and fatigue.",
+    "gold": "[Cause] sunlight [Relation] cause [Effect] eye strain and fatigue",
+    "output": "[Cause] sunlight [Relation] cause [Effect] eye strain",
+    "valid": true
+  },
+  {
+    "input": "Every child and young person seen at Starship with intoxication from alcohol or illicit drug use had a social work assessment before leaving the hospital.",
+    "gold": "[Cause] alcohol or illicit drug use [Relation] cause [Effect] intoxication",
+    "output": "[Cause] alcohol [Relation] cause [Effect] intoxication",
+    "valid": true
+  },
+  {
+    "input": "The drone strike that resulted in the death of Pakistan's most wanted terrorist is believed to be a result of deliberately planted false intelligence, sources in South Waziristan have confirmed.",
+    "gold": "[Cause] The drone strike [Relation] cause [Effect] the death",
+    "output": "[Cause] deliberately planted false intelligence [Relation] cause [Effect] the death",
+    "valid": true
+  },
+  {
+    "input": "Four of the entrapments resulted in suffocation: a 7-month-old in Gouverneur, N.Y.; a 7-month-old in New Iberia, La.; a 6-month-old in Summersville, W.Va.; and a 9-month-old in Bronx, N.Y.",
+    "gold": "[Cause] the entrapments [Relation] cause [Effect] suffocation",
+    "output": "[Cause] Four of the entrapments [Relation] cause [Effect] suffocation",
+    "valid": false
+  },
+  {
+    "input": "Most deaths from the accident were caused by radiation poisoning.",
+    "gold": "[Cause] the accident [Relation] cause [Effect] Most deaths",
+    "output": "[Cause] radiation poisoning [Relation] cause [Effect] Most deaths",
+    "valid": true
+  },
+  {
+    "input": "Each year, many infants and toddlers die due to suffocation from breathing small objects into their breathing passages and lungs.",
+    "gold": "[Cause] suffocation [Relation] cause [Effect] die",
+    "output": "[Cause] breathing small objects [Relation] cause [Effect] suffocation",
+    "valid": true
+  },
+  {
+    "input": "Seniors get much joy from animals.",
+    "gold": "[Cause] animals [Relation] cause [Effect] much joy",
+    "output": "[Cause] animals [Relation] cause [Effect] joy",
+    "valid": false
+  },
+  {
+    "input": "Patients with adenomyosis experience pain from this disease in the early 30's.",
+    "gold": "[Cause] this disease [Relation] cause [Effect] adenomyosis experience pain",
+    "output": "[Cause] this disease [Relation] cause [Effect] pain",
+    "valid": true
+  },
+  {
+    "input": "Lymphedema is an abnormal build-up of fluid that causes swelling, most often in the arms or legs.",
+    "gold": "[Cause] Lymphedema [Relation] cause [Effect] swelling",
+    "output": "[Cause] fluid [Relation] cause [Effect] swelling",
+    "valid": true
+  },
+  {
+    "input": "The afterglow is produced by shock waves in the jets of tenuous gas that shoot from the blast at almost the speed of light.",
+    "gold": "[Cause] shock waves [Relation] cause [Effect] The afterglow",
+    "output": "[Cause] the blast [Relation] cause [Effect] The afterglow",
+    "valid": true
+  },
+  {
+    "input": "Even nuclear energy is among the causes of water pollution.",
+    "gold": "[Cause] Even nuclear energy [Relation] cause [Effect] water pollution",
+    "output": "[Cause] nuclear energy [Relation] cause [Effect] water pollution",
+    "valid": false
+  },
+  {
+    "input": "Landslides caused the majority of the deaths.",
+    "gold": "[Cause] Landslides [Relation] cause [Effect] the deaths",
+    "output": "[Cause] Landslides [Relation] cause [Effect] the majority",
+    "valid": true
+  },
+  {
+    "input": "In a person who already has some neck tension from stress, such an event can lead to a long-term increase of neck tension.",
+    "gold": "[Cause] stress [Relation] cause [Effect] some neck tension",
+    "output": "[Cause] stress [Relation] cause [Effect] neck tension",
+    "valid": false
+  },
+  {
+    "input": "The flooding, caused by a cyclone, came on the heels of a prolonged drought, which destroyed 60 percent of Fiji's sugar cane crop last year and cost more than 50 million Fijian dollars  in relief and rehabilitation.",
+    "gold": "[Cause] a cyclone [Relation] cause [Effect] The flooding",
+    "output": "[Cause] a prolonged drought [Relation] cause [Effect] The flooding",
+    "valid": true
+  },
+  {
+    "input": "Whooping cough is another name for the pertussis, an infection of the airways caused by the bacteria bordetella pertussis.",
+    "gold": "[Cause] the bacteria bordetella pertussis [Relation] cause [Effect] the pertussis",
+    "output": "[Cause] the bacteria [Relation] cause [Effect] an infection",
+    "valid": true
+  },
+  {
+    "input": "Discussion ensued from the Florida contingent on the fact that very stringent landowner protection laws in Florida make it imperative that the highest supportable appraised vallue be offered first.",
+    "gold": "[Cause] the Florida contingent [Relation] cause [Effect] Discussion",
+    "output": "[Cause] very stringent landowner protection laws [Relation] cause [Effect] Discussion",
+    "valid": true
+  },
+  {
+    "input": "The pipeline had to face the following main concerns from opposition: disturbance of animal migration patterns, environmental damage from spills, geological concerns and the Alaskan permafrost.",
+    "gold": "[Cause] spills [Relation] cause [Effect] environmental damage",
+    "output": "[Cause] opposition [Relation] cause [Effect] the main concerns",
+    "valid": true
+  },
+  {
+    "input": "Increased reproductive toxicity of landfill leachate after degradation was caused by nitrite.",
+    "gold": "[Cause] nitrite [Relation] cause [Effect] Increased reproductive toxicity",
+    "output": "[Cause] degradation [Relation] cause [Effect] Increased reproductive toxicity",
+    "valid": true
+  },
+  {
+    "input": "Swissair was a victim of the clandestine wealth-transfer plaguing the productive sector as a result of the falling interest-rate structure caused by bond speculation.",
+    "gold": "[Cause] the falling interest-rate structure [Relation] cause [Effect] a victim",
+    "output": "[Cause] bond speculation [Relation] cause [Effect] the falling interest-rate structure",
+    "valid": true
+  },
+  {
+    "input": "The clock struck twelve with a loud chime that made me jump.",
+    "gold": "[Cause] The clock [Relation] cause [Effect] a loud chime",
+    "output": "[Cause] a loud chime [Relation] cause [Effect] jump",
+    "valid": true
+  },
+  {
+    "input": "The cutaneous mycoses are caused by a homogeneous group of keratinophilic fungi termed the dermatophytes.",
+    "gold": "[Cause] keratinophilic fungi [Relation] cause [Effect] The cutaneous mycoses",
+    "output": "[Cause] a homogeneous group [Relation] cause [Effect] The cutaneous mycoses",
+    "valid": true
+  },
+  {
+    "input": "Most illnesses, including colds and flu, cause a toxic overload that also increases the stress on the kidneys.",
+    "gold": "[Cause] colds [Relation] cause [Effect] a toxic overload",
+    "output": "[Cause] Most illnesses [Relation] cause [Effect] a toxic overload",
+    "valid": true
+  },
+  {
+    "input": "I used to get terrible headaches from sinus infections that resulted in taking antibiotics a few times a year.",
+    "gold": "[Cause] terrible headaches [Relation] cause [Effect] taking antibiotics",
+    "output": "[Cause] sinus infections [Relation] cause [Effect] terrible headaches",
+    "valid": true
+  },
+  {
+    "input": "This case arises from a December 21, 2005 automobile accident that resulted in the death of Larry Haynes.",
+    "gold": "[Cause] a December 21, 2005 automobile accident [Relation] cause [Effect] the death",
+    "output": "[Cause] a December 21, 2005 automobile accident [Relation] cause [Effect] This case",
+    "valid": true
+  },
+  {
+    "input": "A first revolution was triggered by the growing use of reading and writing.",
+    "gold": "[Cause] reading [Relation] cause [Effect] A first revolution",
+    "output": "[Cause] the growing use [Relation] cause [Effect] A first revolution",
+    "valid": true
+  },
+  {
+    "input": "In early 2007 renewed a coal mining activity in the region triggered the earthquake, although earthquake activity has been present in the area at least since white settlement first occurred.",
+    "gold": "[Cause] a coal mining activity [Relation] cause [Effect] the earthquake",
+    "output": "[Cause] renewed a coal mining activity [Relation] cause [Effect] the earthquake",
+    "valid": false
+  },
+  {
+    "input": "The electromagnetic  radiation from the sun arrives mostly in the form of visible and infrared wavelengths.",
+    "gold": "[Cause] the sun [Relation] cause [Effect] The electromagnetic  radiation",
+    "output": "[Cause] the sun [Relation] cause [Effect] The electromagnetic radiation",
+    "valid": false
+  },
+  {
+    "input": "The amide-linked local anesthetics, bupivacaine and ropivacaine, cause depression of cardiac contractility and dysrhythmias.",
+    "gold": "[Cause] bupivacaine [Relation] cause [Effect] depression",
+    "output": "[Cause] The amide-linked local anesthetics [Relation] cause [Effect] depression",
+    "valid": true
+  },
+  {
+    "input": "There are everyday actions that can help prevent the spread of germs that cause respiratory illnesses  like influenza.",
+    "gold": "[Cause] germs [Relation] cause [Effect] respiratory illnesses ",
+    "output": "[Cause] germs [Relation] cause [Effect] respiratory illnesses",
+    "valid": false
+  },
+  {
+    "input": "When they took the floor against a team favored to win the national championship, the patriots radiated carefree confidence.",
+    "gold": "[Cause] the patriots [Relation] cause [Effect] carefree confidence",
+    "output": "[Cause] they took the floor [Relation] cause [Effect] carefree confidence",
+    "valid": true
+  },
+  {
+    "input": "Voltage surges or spikes are caused by lightning, short circuits, power company equipment problems, and inductive spikes, among many other causes.",
+    "gold": "[Cause] lightning [Relation] cause [Effect] Voltage surges or spikes",
+    "output": "[Cause] lightning [Relation] cause [Effect] Voltage surges",
+    "valid": true
+  },
+  {
+    "input": "The anxiety caused by the accident, which appears to show no sign of diminishing, and its negative impact on the living conditions in the affected areas, may be the principal reason for the increase in poor reported health.",
+    "gold": "[Cause] the accident [Relation] cause [Effect] The anxiety",
+    "output": "[Cause] The anxiety [Relation] cause [Effect] poor reported health",
+    "valid": true
+  },
+  {
+    "input": "Dehydration is one of the lead causes of death in the world due to dirty water and felt this should be emphasized in global charity documentation.",
+    "gold": "[Cause] Dehydration [Relation] cause [Effect] death",
+    "output": "[Cause] dirty water [Relation] cause [Effect] death",
+    "valid": true
+  },
+  {
+    "input": "The concerto comes from the pop of gas bubbles escaping the joints, snapping tendons and ligaments, and rickety arthritic joints.",
+    "gold": "[Cause] the pop [Relation] cause [Effect] The concerto",
+    "output": "[Cause] gas bubbles [Relation] cause [Effect] The concerto",
+    "valid": true
+  },
+  {
+    "input": "Their analysis demonstrates beyond any doubt that the problem of unemployment has been caused by the state, not by any inherent flaws or failures in a free market.",
+    "gold": "[Cause] the state [Relation] cause [Effect] the problem",
+    "output": "[Cause] the state [Relation] cause [Effect] unemployment",
+    "valid": true
+  },
+  {
+    "input": "Be sure to drink plenty of water to prevent running a fever from dehydration.",
+    "gold": "[Cause] dehydration [Relation] cause [Effect] a fever",
+    "output": "[Cause] dehydration [Relation] cause [Effect] running a fever",
+    "valid": false
+  },
+  {
+    "input": "The kids get great joy from eating the tomatoes right off the vine.",
+    "gold": "[Cause] eating [Relation] cause [Effect] great joy",
+    "output": "[Cause] eating the tomatoes [Relation] cause [Effect] great joy",
+    "valid": false
+  },
+  {
+    "input": "The halting of easy profits from inflation brought on a banking crisis, which resulted in a complete restructuring of the industry during the late 1990s.",
+    "gold": "[Cause] The halting [Relation] cause [Effect] a banking crisis",
+    "output": "[Cause] inflation [Relation] cause [Effect] a banking crisis",
+    "valid": true
+  },
+  {
+    "input": "In one day, the Red Crescent treated more than 50 injuries - mainly broken bones caused by panic from aftershocks.",
+    "gold": "[Cause] panic [Relation] cause [Effect] mainly broken bones",
+    "output": "[Cause] panic [Relation] cause [Effect] broken bones",
+    "valid": false
+  },
+  {
+    "input": "Cobalt metal fume and dust cause upper respiratory tract irritation, chronic interstitial pneumonitis, and skin sensitization.",
+    "gold": "[Cause] Cobalt metal fume and dust [Relation] cause [Effect] upper respiratory tract irritation",
+    "output": "[Cause] Cobalt metal fume [Relation] cause [Effect] upper respiratory tract irritation",
+    "valid": true
+  },
+  {
+    "input": "Convulsions that occur after DTaP are usually not caused directly by the vaccine, but by a fever, which in turn was triggered by the vaccine.",
+    "gold": "[Cause] a fever [Relation] cause [Effect] Convulsions",
+    "output": "[Cause] the vaccine [Relation] cause [Effect] Convulsions",
+    "valid": true
+  },
+  {
+    "input": "The inflammation is caused by the growth of unusual bacteria, which usually results from antibiotic use.",
+    "gold": "[Cause] unusual bacteria [Relation] cause [Effect] The inflammation",
+    "output": "[Cause] the growth [Relation] cause [Effect] The inflammation",
+    "valid": true
+  },
+  {
+    "input": "For example, driving recklessly and causing an auto accident that result in the death of another driver or passenger could be qualified as manslaughter.",
+    "gold": "[Cause] an auto accident [Relation] cause [Effect] the death",
+    "output": "[Cause] driving recklessly [Relation] cause [Effect] an auto accident",
+    "valid": true
+  },
+  {
+    "input": "In a conventional, steam turbine-only power plant, the heat required to produce the steam comes from a boiler.",
+    "gold": "[Cause] the heat [Relation] cause [Effect] the steam",
+    "output": "[Cause] a boiler [Relation] cause [Effect] the heat",
+    "valid": true
+  },
+  {
+    "input": "Fetal alcohol spectrum disorders, or FASDs, are caused by drinking alcohol during pregnancy.",
+    "gold": "[Cause] drinking [Relation] cause [Effect] Fetal alcohol spectrum disorders",
+    "output": "[Cause] drinking alcohol [Relation] cause [Effect] Fetal alcohol spectrum disorders",
+    "valid": false
+  },
+  {
+    "input": "Cells damaged or killed by flu result in the production of interferon which is one of the most potent causes of fever.",
+    "gold": "[Cause] Cells damaged or killed [Relation] cause [Effect] the production",
+    "output": "[Cause] Cells damaged or killed [Relation] cause [Effect] interferon",
+    "valid": true
+  },
+  {
+    "input": "These wind turbines generate electricity from naturally occurring wind.",
+    "gold": "[Cause] These wind turbines [Relation] cause [Effect] electricity",
+    "output": "[Cause] naturally occurring wind [Relation] cause [Effect] electricity",
+    "valid": true
+  },
+  {
+    "input": "Witness the gangs in Los Angeles who stopped killing one another for a time after the riots triggered by the Rodney King bashing verdict.",
+    "gold": "[Cause] bashing verdict [Relation] cause [Effect] the riots",
+    "output": "[Cause] the Rodney King bashing verdict [Relation] cause [Effect] the riots",
+    "valid": false
+  },
+  {
+    "input": "Pneumonia is an inflammation of the lungs caused by bacteria, viruses, or chemical irritants.",
+    "gold": "[Cause] bacteria [Relation] cause [Effect] an inflammation",
+    "output": "[Cause] bacteria [Relation] cause [Effect] Pneumonia",
+    "valid": true
+  },
+  {
+    "input": "The report links conditions in some of the worst affected localities and the likelihood that dire poverty - combined with despair and outrage over rampant corruption, repressive policies, and governments' failure to address local needs - could lead to outbreaks of localised unrest with the potential to spread into a wider regional conflict.",
+    "gold": "[Cause] corruption [Relation] cause [Effect] outrage",
+    "output": "[Cause] dire poverty [Relation] cause [Effect] localised unrest",
+    "valid": true
+  },
+  {
+    "input": "Here are some ways to avoid mindless eating and boost your weight loss from running.",
+    "gold": "[Cause] running [Relation] cause [Effect] your weight loss",
+    "output": "[Cause] running [Relation] cause [Effect] weight loss",
+    "valid": false
+  },
+  {
+    "input": "World AIDS Day, observed December 1 each year, is dedicated to raising awareness of the AIDS pandemic caused by the spread of HIV infection.",
+    "gold": "[Cause] HIV infection [Relation] cause [Effect] the AIDS pandemic",
+    "output": "[Cause] the spread [Relation] cause [Effect] the AIDS pandemic",
+    "valid": true
+  },
+  {
+    "input": "Describing all of the harm caused by the hurricane has filled entire books so this Web page summarizes the total damage and focuses on the damage incurred on Long Island, New York.",
+    "gold": "[Cause] the hurricane [Relation] cause [Effect] the harm",
+    "output": "[Cause] the hurricane [Relation] cause [Effect] all of the harm",
+    "valid": false
+  },
+  {
+    "input": "The family members also get great joy from dogs doing tricks and great for family activities.",
+    "gold": "[Cause] dogs doing tricks [Relation] cause [Effect] joy",
+    "output": "[Cause] dogs doing tricks [Relation] cause [Effect] great joy",
+    "valid": false
+  },
+  {
+    "input": "The fighting resulted in hundreds of deaths and in the deployment of peace keepers into East Timor.",
+    "gold": "[Cause] The fighting [Relation] cause [Effect] deaths",
+    "output": "[Cause] The fighting [Relation] cause [Effect] hundreds of deaths",
+    "valid": false
+  },
+  {
+    "input": "Phobia like fear from crowd, fear from insects, fear from height etc all contribute in developing the anxiety disorder.",
+    "gold": "[Cause] crowd [Relation] cause [Effect] fear",
+    "output": "[Cause] crowd [Relation] cause [Effect] Phobia",
+    "valid": true
+  },
+  {
+    "input": "Recently, there is a movement afoot, instigated by the heterodox section of the community, as well as by the followers of the Gatha Alone Cultists to proselytise others to become \"Zarthushtis\".",
+    "gold": "[Cause] the heterodox section [Relation] cause [Effect] a movement afoot",
+    "output": "[Cause] the heterodox section [Relation] cause [Effect] a movement",
+    "valid": false
+  },
+  {
+    "input": "The US forces have withdrawn due to the damage caused by the eruption and the typhoon.",
+    "gold": "[Cause] the damage [Relation] cause [Effect] withdrawn",
+    "output": "[Cause] the eruption [Relation] cause [Effect] the damage",
+    "valid": true
+  },
+  {
+    "input": "It was intermittently wet and dry, and almost always followed with a whine and a few tears from the terrible pain.",
+    "gold": "[Cause] the terrible pain [Relation] cause [Effect] a few tears",
+    "output": "[Cause] the terrible pain [Relation] cause [Effect] a whine",
+    "valid": true
+  },
+  {
+    "input": "As the compressor on the frig turned on caused a voltage spike on the electrical line, which caused a glitch in the \"room commander\" system.",
+    "gold": "[Cause] turned on [Relation] cause [Effect] a voltage spike",
+    "output": "[Cause] As the compressor [Relation] cause [Effect] a voltage spike",
+    "valid": true
+  },
+  {
+    "input": "Methadone gives a buzz too, but it's the most effective way to reel in heroin addicts into treatment and real life.",
+    "gold": "[Cause] Methadone [Relation] cause [Effect] buzz",
+    "output": "[Cause] Methadone [Relation] cause [Effect] a buzz",
+    "valid": false
+  },
+  {
+    "input": "All the decking on the ramps need to be replaced  because of the damage caused by the misuse of the facility.",
+    "gold": "[Cause] the damage [Relation] cause [Effect] replaced",
+    "output": "[Cause] the misuse [Relation] cause [Effect] the damage",
+    "valid": true
+  },
+  {
+    "input": "Pavlov-like, looking at the picture aids \"let-down,\" the release of milk normally triggered by the presence of the baby, its touch, its cry.",
+    "gold": "[Cause] the presence [Relation] cause [Effect] the release",
+    "output": "[Cause] the presence [Relation] cause [Effect] milk",
+    "valid": true
+  },
+  {
+    "input": "The tides are caused by the gravitational force of the Moon.",
+    "gold": "[Cause] gravitational force [Relation] cause [Effect] The tides",
+    "output": "[Cause] the gravitational force [Relation] cause [Effect] The tides",
+    "valid": false
+  },
+  {
+    "input": "This paper presents the results of a survey of the building damage caused by the ash fall from the cataclysmic eruption of Mount Pinatubo.",
+    "gold": "[Cause] the ash [Relation] cause [Effect] the building damage",
+    "output": "[Cause] the ash fall [Relation] cause [Effect] the building damage",
+    "valid": false
+  },
+  {
+    "input": "The miscarriages are caused by one time, non-repeating genetic problems.",
+    "gold": "[Cause] genetic problems [Relation] cause [Effect] miscarriages",
+    "output": "[Cause] genetic problems [Relation] cause [Effect] The miscarriages",
+    "valid": false
+  },
+  {
+    "input": "It seems like the fever heat got pushed out from the body as rashes.",
+    "gold": "[Cause] the body [Relation] cause [Effect] the fever heat",
+    "output": "[Cause] the body [Relation] cause [Effect] rashes",
+    "valid": true
+  },
+  {
+    "input": "The aircraft was written off in the accident due to the severe impact caused by the KLM aircraft, and the resulting fire.",
+    "gold": "[Cause] the severe impact [Relation] cause [Effect] written off",
+    "output": "[Cause] the severe impact [Relation] cause [Effect] The aircraft",
+    "valid": true
+  },
+  {
+    "input": "The said whistle produced the 2600 Hz tone necessary to authorize calls.",
+    "gold": "[Cause] whistle [Relation] cause [Effect] the 2600 Hz tone",
+    "output": "[Cause] The said whistle [Relation] cause [Effect] the 2600 Hz tone",
+    "valid": false
+  },
+  {
+    "input": "The World Health Organization found that the radiation release from the Chernobyl accident was 200 times that of the Hiroshima and Nagasaki.",
+    "gold": "[Cause] the Chernobyl accident [Relation] cause [Effect] the radiation",
+    "output": "[Cause] the Chernobyl accident [Relation] cause [Effect] the radiation release",
+    "valid": false
+  },
+  {
+    "input": "The children descend the ladder after hearing the fire alarm which has been triggered by the wood work workshop catching fire.",
+    "gold": "[Cause] the wood work workshop catching fire [Relation] cause [Effect] alarm",
+    "output": "[Cause] the wood work workshop catching fire [Relation] cause [Effect] the fire alarm",
+    "valid": false
+  },
+  {
+    "input": "Some people experience tremors after drinking coffee and tea.",
+    "gold": "[Cause] drinking coffee and tea [Relation] cause [Effect] tremors",
+    "output": "[Cause] drinking coffee [Relation] cause [Effect] tremors",
+    "valid": true
+  },
+  {
+    "input": "Josie Cormier, succumbed to peer pressure and now hangs out with the popular crowd that often instigates the harassment.",
+    "gold": "[Cause] the popular crowd [Relation] cause [Effect] the harassment",
+    "output": "[Cause] peer pressure [Relation] cause [Effect] the harassment",
+    "valid": false
+  },
+  {
+    "input": "TThe backup vocals are from a rather talented female, Stephanie Eitel.",
+    "gold": "[Cause] a rather talented female [Relation] cause [Effect] The backup vocals",
+    "output": "[Cause] Stephanie Eitel [Relation] cause [Effect] The backup vocals",
+    "valid": true
+  },
+  {
+    "input": "Global warming pollution from cars, light trucks and SUV's is the single largest source of global warming pollution generated in Maine.",
+    "gold": "[Cause] cars [Relation] cause [Effect] Global warming pollution",
+    "output": "[Cause] Global warming pollution [Relation] cause [Effect] global warming pollution",
+    "valid": true
+  },
+  {
+    "input": "The patient experiences displaced emotional and financial deprivation as well as anger after the divorce.",
+    "gold": "[Cause] divorce [Relation] cause [Effect] displaced emotional and financial deprivation",
+    "output": "[Cause] the divorce [Relation] cause [Effect] displaced emotional and financial deprivation",
+    "valid": false
+  },
+  {
+    "input": "The bruises are caused by the attacker's fingertips pressing into the skin.",
+    "gold": "[Cause] fingertips [Relation] cause [Effect] bruises",
+    "output": "[Cause] the attacker's fingertips [Relation] cause [Effect] The bruises",
+    "valid": true
+  },
+  {
+    "input": "Alzheimer's disease is a degenerative brain disorder that results in memory loss, impaired thinking, difficulty finding the right word when speaking, and personality changes .",
+    "gold": "[Cause] a degenerative brain disorder [Relation] cause [Effect] memory loss",
+    "output": "[Cause] Alzheimer's disease [Relation] cause [Effect] memory loss",
+    "valid": true
+  },
+  {
+    "input": "The mite's burrows, fecal matter, proteins and eggs cause itching, rashes and sensitivity.",
+    "gold": "[Cause] The mite's burrows, fecal matter, proteins and eggs [Relation] cause [Effect] itching",
+    "output": "[Cause] The mite's burrows [Relation] cause [Effect] itching",
+    "valid": true
+  },
+  {
+    "input": "In reality, however, the drama has been caused by the erupting ash and smoke colliding with a lightning storm.",
+    "gold": "[Cause] the erupting ash and smoke [Relation] cause [Effect] the drama",
+    "output": "[Cause] the erupting ash [Relation] cause [Effect] the drama",
+    "valid": true
+  },
+  {
+    "input": "Chronic daily headaches are tension headaches or headaches which are caused by taking too many pain killers.",
+    "gold": "[Cause] too many pain killers [Relation] cause [Effect] headaches",
+    "output": "[Cause] taking too many pain killers [Relation] cause [Effect] headaches",
+    "valid": false
+  },
+  {
+    "input": "He preserved the working ranches of the west, while achieving an expansion of the ranch's value through development and management of the recreational ecosystem within the ranch.",
+    "gold": "[Cause] development [Relation] cause [Effect] achieving an expansion",
+    "output": "[Cause] development [Relation] cause [Effect] an expansion",
+    "valid": false
+  },
+  {
+    "input": "Two of the incidents resulted in fatal CO poisonings .",
+    "gold": "[Cause] the incidents [Relation] cause [Effect] fatal CO poisonings",
+    "output": "[Cause] Two of the incidents [Relation] cause [Effect] fatal CO poisonings",
+    "valid": false
+  },
+  {
+    "input": "His trademark steam-engine puffing is revealed as a sound made by a viper spitting venom at his prey before swallowing her whole.",
+    "gold": "[Cause] a viper spitting venom [Relation] cause [Effect] a sound",
+    "output": "[Cause] a viper [Relation] cause [Effect] a sound",
+    "valid": true
+  },
+  {
+    "input": "Much of the bloodshed was caused by the growth of gangs.",
+    "gold": "[Cause] gangs [Relation] cause [Effect] the bloodshed",
+    "output": "[Cause] the growth [Relation] cause [Effect] the bloodshed",
+    "valid": true
+  },
+  {
+    "input": "I had been constipated for over 30 years, had significant sleep requirements , and had recurring headaches from fatigue and allergies.",
+    "gold": "[Cause] fatigue [Relation] cause [Effect] headaches",
+    "output": "[Cause] fatigue [Relation] cause [Effect] recurring headaches",
+    "valid": false
+  },
+  {
+    "input": "The pandemic was caused by the virus Yesinia pestis, better known as The Bubonic Black Plague, which infected the flees on the Black rodents.",
+    "gold": "[Cause] the virus Yesinia pestis [Relation] cause [Effect] The pandemic",
+    "output": "[Cause] the virus [Relation] cause [Effect] The pandemic",
+    "valid": false
+  },
+  {
+    "input": "Major disasters like cyclone, floods and the storm surges, drought are caused by climate change.",
+    "gold": "[Cause] climate change [Relation] cause [Effect] cyclone",
+    "output": "[Cause] climate change [Relation] cause [Effect] Major disasters",
+    "valid": true
+  },
+  {
+    "input": "This article discusses the ethics of the Soldier of Fortune's guns-for-hire advertisements that resulted in several murders across the United States.",
+    "gold": "[Cause] advertisements [Relation] cause [Effect] several murders",
+    "output": "[Cause] the Soldier of Fortune's guns-for-hire advertisements [Relation] cause [Effect] several murders",
+    "valid": true
+  },
+  {
+    "input": "The conclusion of the investigation was that the loss was caused by a failure in a cell wall, resulting in a serious crack and a leakage that the pumps were not able to cope with.",
+    "gold": "[Cause] the loss [Relation] cause [Effect] a serious crack",
+    "output": "[Cause] a failure [Relation] cause [Effect] the loss",
+    "valid": true
+  },
+  {
+    "input": "The tsunami was generated by an unusual type of earthquake that occurs near oceanic trenches.",
+    "gold": "[Cause] earthquake [Relation] cause [Effect] The tsunami",
+    "output": "[Cause] an unusual type of earthquake [Relation] cause [Effect] The tsunami",
+    "valid": false
+  },
+  {
+    "input": "In summer 2000, an Adventist church in Polotsk, Vitebsk Region, was damaged by a fire started with flammable liquids.",
+    "gold": "[Cause] fire [Relation] cause [Effect] damaged",
+    "output": "[Cause] a fire [Relation] cause [Effect] damaged",
+    "valid": false
+  },
+  {
+    "input": "The studies revealed that skin irritation from soaps, inaccessibility to supplies or sinks, and insufficient time to wash hands between every patient care contact were the main reasons given by healthcare workers for lack of handwashing compliance.",
+    "gold": "[Cause] skin irritation [Relation] cause [Effect] lack",
+    "output": "[Cause] skin irritation [Relation] cause [Effect] handwashing compliance",
+    "valid": true
+  },
+  {
+    "input": "Cobalt metal fume and dust cause irritation of the nose and throat.",
+    "gold": "[Cause] Cobalt metal fume and dust [Relation] cause [Effect] irritation",
+    "output": "[Cause] Cobalt metal fume [Relation] cause [Effect] irritation",
+    "valid": true
+  }
+]
