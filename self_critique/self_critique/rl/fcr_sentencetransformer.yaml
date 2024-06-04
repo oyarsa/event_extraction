@@ -8,7 +8,7 @@ max_eval_samples: null
 
 evaluator: SENTENCE_TRANSFORMER
 reward_model: all-MiniLM-L6-v2
-evaluator_threshold: 0.9656984508037567
+evaluator_threshold: 1.4280033707618713
 
 extraction_model: output/extraction/flan-t5-large
 max_generation_length: 128

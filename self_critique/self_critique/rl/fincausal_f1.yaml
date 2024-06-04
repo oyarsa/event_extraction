@@ -7,7 +7,7 @@ max_train_samples: null
 max_eval_samples: null
 
 evaluator: F1
-evaluator_threshold: 0.8210526315789475
+evaluator_threshold: 0.8260869565217391
 
 extraction_model: output/fincausal/flan-t5-large
 max_generation_length: 128
