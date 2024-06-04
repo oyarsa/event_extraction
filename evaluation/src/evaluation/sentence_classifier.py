@@ -18,23 +18,6 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def find_threshold(valids: list[bool], cosine: list[float]) -> tuple[float, float]:
-    thresholds = set(cosine)
-    best_threshold = 0
-    best_agreement = 0
-
-    for threshold in thresholds:
-        predictions = (c >= threshold for c in cosine)
-        correct = sum(p == v for p, v in zip(predictions, valids))
-        accuracy = correct / len(valids)
-
-        if accuracy > best_agreement:
-            best_agreement = accuracy
-            best_threshold = threshold
-
-    return best_threshold, best_agreement
-
-
 def classify(
     model: SentenceTransformer, gold: list[str], pred: list[str]
 ) -> list[float]:
@@ -46,33 +29,42 @@ def classify(
     return [float(sim) + 1 / 2 for sim in cosine_sims.diagonal()]
 
 
+def calc_agreement(valids: list[bool], preds: list[bool]) -> float:
+    return sum(v == p for v, p in zip(valids, preds)) / len(valids)
+
+
 def main(
     input_file: TextIO,
     output_file: Path | None,
     model_name: str,
     num_samples: int | None,
+    threshold: float | None,
 ) -> None:
     model = SentenceTransformer(model_name)
     data = json.load(input_file)[:num_samples]
 
     cosine = classify(model, [d["gold"] for d in data], [d["output"] for d in data])
 
-    threshold, agreement = find_threshold([d["valid"] for d in data], cosine)
-    result = [c >= threshold for c in cosine]
-    num_valid = sum(result)
+    if threshold is not None:
+        result = [c >= threshold for c in cosine]
+        agreement = calc_agreement([d["valid"] for d in data], result)
+        num_valid = sum(result)
 
-    print(
-        f"Model: {model_name}",
-        f"Threshold: {threshold}",
-        f"Valid: {num_valid}/{len(result)} ({num_valid/len(result):.2%})",
-        f"Agreement: {agreement:.2%}",
-        sep="\n",
-    )
+        print(
+            f"Model: {model_name}",
+            f"Threshold: {threshold}",
+            f"Valid: {num_valid}/{len(result)} ({num_valid/len(result):.2%})",
+            f"Agreement: {agreement:.2%}",
+            sep="\n",
+        )
 
-    data = [
-        d | {"cosine": c, "pred": int(r), "gold": int(d["valid"])}
-        for d, c, r in zip(data, cosine, result)
-    ]
+        data = [
+            d | {"cosine": c, "pred": int(r), "gold": int(d["valid"])}
+            for d, c, r in zip(data, cosine, result)
+        ]
+    else:
+        print("No threshold given, so we're not classifying, just saving the cosine.")
+        data = [d | {"cosine": c} for d, c in zip(data, cosine)]
 
     if output_file is not None:
         output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -112,5 +104,13 @@ if __name__ == "__main__":
         default=None,
         help="Number of samples to print. Default: all.",
     )
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        default=None,
+        help="Threshold to use for classification. Default: find best threshold.",
+    )
     args = parser.parse_args()
-    main(args.input_file, args.output_file, args.model, args.num_samples)
+    main(
+        args.input_file, args.output_file, args.model, args.num_samples, args.threshold
+    )
