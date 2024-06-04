@@ -106,18 +106,21 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
     }, relation
 
 
-def main(input_file: TextIO, output_file: TextIO) -> None:
+def main(input_file: TextIO, output_file: TextIO, threshold: float | None) -> None:
     data = json.load(input_file)
     out = [
         {
-            "gold": d.get("valid"),
-            "pred": calc_f1_instance(d["gold"], d["output"]),
+            "gold": int(d.get("valid")),
+            "f1": calc_f1_instance(d["gold"], d["output"]),
             "annotation": d["gold"],
             "output": d["output"],
             "input": d["input"],
         }
         for d in data
     ]
+    if threshold is not None:
+        for d in out:
+            d["pred"] = int(d["f1"] >= threshold)
     json.dump(out, output_file, indent=2)
 
 
@@ -135,5 +138,11 @@ if __name__ == "__main__":
         type=argparse.FileType("w"),
         help="Output file (use - for stdout)",
     )
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        default=None,
+        help="Threshold to determine if the output is valid",
+    )
     args = parser.parse_args()
-    main(args.input_file, args.output_file)
+    main(args.input_file, args.output_file, args.threshold)
