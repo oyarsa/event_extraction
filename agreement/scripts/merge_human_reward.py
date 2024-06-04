@@ -2,13 +2,28 @@
 
 """Combine human annotation file and machine prediction file into a single file.
 
-The human annotation file follows the `annotation` format. It's a JSON file with a list
-of objects with the following keys:
+The human annotation file can be on of two formats:
+
+It can follows a flat format. It's a JSON file with a list of objects with the following
+keys:
 - input (str): the input passage
 - gold (str): the annotation extraction
 - output (str): the model output
 - tag (str, optional): instance tag, e.g. 'em'
 - valid (bool): a boolean indicating whether the human annotated the output as valid
+
+Or it can have the nested formatted from the output of the `annotation` tool. It's a
+JSON file with the following structure:
+- username (str): user of the annotator
+- items (list): list of items
+  - id (str): identifier of the item
+  - data (dict): data of the item
+    - text (str): text to be annotated (plain text)
+    - reference (str): reference answer (tag format)
+    - model (str): model answer (tag format)
+  - answer (str): answer of the annotator
+
+If the file is in the nested format, it will be converted to the flat format first.
 
 The machine prediction follows the one from `self_critique`'s `run_reward` and RL
 outputs.
@@ -35,16 +50,31 @@ def hash_data(data: dict[str, Any], keys: list[str]) -> int:
     return hash("".join(data[k] for k in keys))
 
 
+def nested_to_flat(data: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        {
+            "input": item["data"]["text"],
+            "gold": item["data"]["reference"],
+            "output": item["data"]["model"],
+            "tag": item["data"].get("tag"),
+            "valid": item["answer"] == "yes",
+        }
+        for item in data["items"]
+    ]
+
+
 def main(human_file: TextIO, machine_file: TextIO, outfile: TextIO) -> None:
     human = json.load(human_file)
-    machine = json.load(machine_file)
+    if "items" in human:
+        human = nested_to_flat(human)
 
+    machine = json.load(machine_file)
     machine_clean = [
         m | {"input": m["input"].splitlines()[0], "output": m["rl_extract_txt"]}
         for m in machine
     ]
 
-    keys = ["input", "output", "gold"]
+    keys = ["input", "gold"]
     machine_idx = {hash_data(m, keys): m for m in machine_clean}
 
     out = [
