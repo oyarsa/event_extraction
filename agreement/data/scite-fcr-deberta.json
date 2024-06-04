@@ -1184,14 +1184,14 @@
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Every child and young person seen at Starship with intoxication from alcohol or illicit drug use had a social work assessment before leaving the hospital.",
     "output": "[Cause] alcohol [Relation] cause [Effect] intoxication",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "The drone strike that resulted in the death of Pakistan's most wanted terrorist is believed to be a result of deliberately planted false intelligence, sources in South Waziristan have confirmed.",
     "output": "[Cause] deliberately planted false intelligence [Relation] cause [Effect] the death",
     "tag": null
@@ -1205,14 +1205,14 @@
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Most deaths from the accident were caused by radiation poisoning.",
     "output": "[Cause] radiation poisoning [Relation] cause [Effect] Most deaths",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Each year, many infants and toddlers die due to suffocation from breathing small objects into their breathing passages and lungs.",
     "output": "[Cause] breathing small objects [Relation] cause [Effect] suffocation",
     "tag": null
@@ -1226,21 +1226,21 @@
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Patients with adenomyosis experience pain from this disease in the early 30's.",
     "output": "[Cause] this disease [Relation] cause [Effect] pain",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Lymphedema is an abnormal build-up of fluid that causes swelling, most often in the arms or legs.",
     "output": "[Cause] fluid [Relation] cause [Effect] swelling",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "The afterglow is produced by shock waves in the jets of tenuous gas that shoot from the blast at almost the speed of light.",
     "output": "[Cause] the blast [Relation] cause [Effect] The afterglow",
     "tag": null
@@ -1254,7 +1254,7 @@
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Landslides caused the majority of the deaths.",
     "output": "[Cause] Landslides [Relation] cause [Effect] the majority",
     "tag": null
@@ -1268,14 +1268,14 @@
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "The flooding, caused by a cyclone, came on the heels of a prolonged drought, which destroyed 60 percent of Fiji's sugar cane crop last year and cost more than 50 million Fijian dollars  in relief and rehabilitation.",
     "output": "[Cause] a prolonged drought [Relation] cause [Effect] The flooding",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Whooping cough is another name for the pertussis, an infection of the airways caused by the bacteria bordetella pertussis.",
     "output": "[Cause] the bacteria [Relation] cause [Effect] an infection",
     "tag": null
@@ -1296,42 +1296,42 @@
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Increased reproductive toxicity of landfill leachate after degradation was caused by nitrite.",
     "output": "[Cause] degradation [Relation] cause [Effect] Increased reproductive toxicity",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Swissair was a victim of the clandestine wealth-transfer plaguing the productive sector as a result of the falling interest-rate structure caused by bond speculation.",
     "output": "[Cause] bond speculation [Relation] cause [Effect] the falling interest-rate structure",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "The clock struck twelve with a loud chime that made me jump.",
     "output": "[Cause] a loud chime [Relation] cause [Effect] jump",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "The cutaneous mycoses are caused by a homogeneous group of keratinophilic fungi termed the dermatophytes.",
     "output": "[Cause] a homogeneous group [Relation] cause [Effect] The cutaneous mycoses",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "Most illnesses, including colds and flu, cause a toxic overload that also increases the stress on the kidneys.",
     "output": "[Cause] Most illnesses [Relation] cause [Effect] a toxic overload",
     "tag": null
   },
   {
     "gold": 1,
-    "pred": 0,
+    "pred": 1,
     "passage": "I used to get terrible headaches from sinus infections that resulted in taking antibiotics a few times a year.",
     "output": "[Cause] sinus infections [Relation] cause [Effect] terrible headaches",
     "tag": null
