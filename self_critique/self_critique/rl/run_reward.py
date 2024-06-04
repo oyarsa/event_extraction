@@ -7,6 +7,7 @@ import os
 from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import Any, TypeVar
 
@@ -46,6 +47,7 @@ from self_critique.util import (
 logger = logging.getLogger("self.reward")
 
 
+# TODO: Use Reward ABC instead of this
 def run_reward(
     reward: Module,
     max_seq_length: int,
@@ -85,6 +87,21 @@ def run_reward(
     return scores, predictions
 
 
+class EvalPrompt(Enum):
+    PASSAGE = "passage"
+    GOLD = "gold"
+    COMBINED = "combined"
+
+    def get_eval_input(self, entry: "EvalEntry") -> str:
+        match self:
+            case EvalPrompt.PASSAGE:
+                return entry.input
+            case EvalPrompt.GOLD:
+                return entry.gold
+            case EvalPrompt.COMBINED:
+                return f"{entry.input}\n{entry.gold}"
+
+
 @dataclass
 class Config:
     """Evaluate model output with a reward model.
@@ -103,6 +120,7 @@ class Config:
     model_path: str
     # Path to the data to be evaluated
     data_file: Path
+    eval_prompt: EvalPrompt = EvalPrompt.COMBINED
     # Metrics mode: 'fcr', 'extract', 'maven', or 'maven_s'.
     # 'extract' is a synonym for 'fcr'.
     mode: str = "fcr"
@@ -230,7 +248,7 @@ def evaluate(
     output: list[dict[str, Any]] = []
     for batch in tqdm(batches, desc=desc):
         inputs = [x.input for x in batch]
-        eval_inputs = [f"{x.input}\n{x.gold}" for x in batch]
+        eval_inputs = [args.eval_prompt.get_eval_input(x) for x in batch]
         extractions = [x.output for x in batch]
         golds = [x.gold for x in batch]
 
