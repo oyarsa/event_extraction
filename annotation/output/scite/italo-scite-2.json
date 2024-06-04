@@ -1,0 +1,860 @@
+{
+  "username": "italo-scite-2",
+  "items": [
+    {
+      "id": "df204f19",
+      "data": {
+        "text": "Paralysis or convulsions are caused by hormone deficiencies and imbalances.",
+        "reference": "[Cause] hormone deficiencies and imbalances [Relation] cause [Effect] Paralysis",
+        "model": "[Cause] hormone deficiencies [Relation] cause [Effect] Paralysis"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "c2a9e0f1",
+      "data": {
+        "text": "Use outdoor where sunlight and glare cause eye strain and fatigue.",
+        "reference": "[Cause] sunlight [Relation] cause [Effect] eye strain and fatigue",
+        "model": "[Cause] sunlight [Relation] cause [Effect] eye strain"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "71e3c51e",
+      "data": {
+        "text": "Every child and young person seen at Starship with intoxication from alcohol or illicit drug use had a social work assessment before leaving the hospital.",
+        "reference": "[Cause] alcohol or illicit drug use [Relation] cause [Effect] intoxication",
+        "model": "[Cause] alcohol [Relation] cause [Effect] intoxication"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "e766470a",
+      "data": {
+        "text": "The drone strike that resulted in the death of Pakistan's most wanted terrorist is believed to be a result of deliberately planted false intelligence, sources in South Waziristan have confirmed.",
+        "reference": "[Cause] The drone strike [Relation] cause [Effect] the death",
+        "model": "[Cause] deliberately planted false intelligence [Relation] cause [Effect] the death"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "39c74236",
+      "data": {
+        "text": "Four of the entrapments resulted in suffocation: a 7-month-old in Gouverneur, N.Y.; a 7-month-old in New Iberia, La.; a 6-month-old in Summersville, W.Va.; and a 9-month-old in Bronx, N.Y.",
+        "reference": "[Cause] the entrapments [Relation] cause [Effect] suffocation",
+        "model": "[Cause] Four of the entrapments [Relation] cause [Effect] suffocation"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "e7e9b697",
+      "data": {
+        "text": "Most deaths from the accident were caused by radiation poisoning.",
+        "reference": "[Cause] the accident [Relation] cause [Effect] Most deaths",
+        "model": "[Cause] radiation poisoning [Relation] cause [Effect] Most deaths"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "1e8ef596",
+      "data": {
+        "text": "Each year, many infants and toddlers die due to suffocation from breathing small objects into their breathing passages and lungs.",
+        "reference": "[Cause] suffocation [Relation] cause [Effect] die",
+        "model": "[Cause] breathing small objects [Relation] cause [Effect] suffocation"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "b9dcb630",
+      "data": {
+        "text": "Seniors get much joy from animals.",
+        "reference": "[Cause] animals [Relation] cause [Effect] much joy",
+        "model": "[Cause] animals [Relation] cause [Effect] joy"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "5e133811",
+      "data": {
+        "text": "Patients with adenomyosis experience pain from this disease in the early 30's.",
+        "reference": "[Cause] this disease [Relation] cause [Effect] adenomyosis experience pain",
+        "model": "[Cause] this disease [Relation] cause [Effect] pain"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "ad9f64cc",
+      "data": {
+        "text": "Lymphedema is an abnormal build-up of fluid that causes swelling, most often in the arms or legs.",
+        "reference": "[Cause] Lymphedema [Relation] cause [Effect] swelling",
+        "model": "[Cause] fluid [Relation] cause [Effect] swelling"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "4006712b",
+      "data": {
+        "text": "The afterglow is produced by shock waves in the jets of tenuous gas that shoot from the blast at almost the speed of light.",
+        "reference": "[Cause] shock waves [Relation] cause [Effect] The afterglow",
+        "model": "[Cause] the blast [Relation] cause [Effect] The afterglow"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "eda316c3",
+      "data": {
+        "text": "Even nuclear energy is among the causes of water pollution.",
+        "reference": "[Cause] Even nuclear energy [Relation] cause [Effect] water pollution",
+        "model": "[Cause] nuclear energy [Relation] cause [Effect] water pollution"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "87c69a9d",
+      "data": {
+        "text": "Landslides caused the majority of the deaths.",
+        "reference": "[Cause] Landslides [Relation] cause [Effect] the deaths",
+        "model": "[Cause] Landslides [Relation] cause [Effect] the majority"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "2f548b40",
+      "data": {
+        "text": "In a person who already has some neck tension from stress, such an event can lead to a long-term increase of neck tension.",
+        "reference": "[Cause] stress [Relation] cause [Effect] some neck tension",
+        "model": "[Cause] stress [Relation] cause [Effect] neck tension"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "7bc5fe27",
+      "data": {
+        "text": "The flooding, caused by a cyclone, came on the heels of a prolonged drought, which destroyed 60 percent of Fiji's sugar cane crop last year and cost more than 50 million Fijian dollars  in relief and rehabilitation.",
+        "reference": "[Cause] a cyclone [Relation] cause [Effect] The flooding",
+        "model": "[Cause] a prolonged drought [Relation] cause [Effect] The flooding"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "ffe7baab",
+      "data": {
+        "text": "Whooping cough is another name for the pertussis, an infection of the airways caused by the bacteria bordetella pertussis.",
+        "reference": "[Cause] the bacteria bordetella pertussis [Relation] cause [Effect] the pertussis",
+        "model": "[Cause] the bacteria [Relation] cause [Effect] an infection"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "90daf5a7",
+      "data": {
+        "text": "Discussion ensued from the Florida contingent on the fact that very stringent landowner protection laws in Florida make it imperative that the highest supportable appraised vallue be offered first.",
+        "reference": "[Cause] the Florida contingent [Relation] cause [Effect] Discussion",
+        "model": "[Cause] very stringent landowner protection laws [Relation] cause [Effect] Discussion"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "307a074b",
+      "data": {
+        "text": "The pipeline had to face the following main concerns from opposition: disturbance of animal migration patterns, environmental damage from spills, geological concerns and the Alaskan permafrost.",
+        "reference": "[Cause] spills [Relation] cause [Effect] environmental damage",
+        "model": "[Cause] opposition [Relation] cause [Effect] the main concerns"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "282e555f",
+      "data": {
+        "text": "Increased reproductive toxicity of landfill leachate after degradation was caused by nitrite.",
+        "reference": "[Cause] nitrite [Relation] cause [Effect] Increased reproductive toxicity",
+        "model": "[Cause] degradation [Relation] cause [Effect] Increased reproductive toxicity"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "2363c312",
+      "data": {
+        "text": "Swissair was a victim of the clandestine wealth-transfer plaguing the productive sector as a result of the falling interest-rate structure caused by bond speculation.",
+        "reference": "[Cause] the falling interest-rate structure [Relation] cause [Effect] a victim",
+        "model": "[Cause] bond speculation [Relation] cause [Effect] the falling interest-rate structure"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "6686f118",
+      "data": {
+        "text": "The clock struck twelve with a loud chime that made me jump.",
+        "reference": "[Cause] The clock [Relation] cause [Effect] a loud chime",
+        "model": "[Cause] a loud chime [Relation] cause [Effect] jump"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "dbb14e2c",
+      "data": {
+        "text": "The cutaneous mycoses are caused by a homogeneous group of keratinophilic fungi termed the dermatophytes.",
+        "reference": "[Cause] keratinophilic fungi [Relation] cause [Effect] The cutaneous mycoses",
+        "model": "[Cause] a homogeneous group [Relation] cause [Effect] The cutaneous mycoses"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "56a34c21",
+      "data": {
+        "text": "Most illnesses, including colds and flu, cause a toxic overload that also increases the stress on the kidneys.",
+        "reference": "[Cause] colds [Relation] cause [Effect] a toxic overload",
+        "model": "[Cause] Most illnesses [Relation] cause [Effect] a toxic overload"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "9db8ad38",
+      "data": {
+        "text": "I used to get terrible headaches from sinus infections that resulted in taking antibiotics a few times a year.",
+        "reference": "[Cause] terrible headaches [Relation] cause [Effect] taking antibiotics",
+        "model": "[Cause] sinus infections [Relation] cause [Effect] terrible headaches"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "e69c5300",
+      "data": {
+        "text": "This case arises from a December 21, 2005 automobile accident that resulted in the death of Larry Haynes.",
+        "reference": "[Cause] a December 21, 2005 automobile accident [Relation] cause [Effect] the death",
+        "model": "[Cause] a December 21, 2005 automobile accident [Relation] cause [Effect] This case"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "21aa1c80",
+      "data": {
+        "text": "A first revolution was triggered by the growing use of reading and writing.",
+        "reference": "[Cause] reading [Relation] cause [Effect] A first revolution",
+        "model": "[Cause] the growing use [Relation] cause [Effect] A first revolution"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "60bed533",
+      "data": {
+        "text": "In early 2007 renewed a coal mining activity in the region triggered the earthquake, although earthquake activity has been present in the area at least since white settlement first occurred.",
+        "reference": "[Cause] a coal mining activity [Relation] cause [Effect] the earthquake",
+        "model": "[Cause] renewed a coal mining activity [Relation] cause [Effect] the earthquake"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "3036435c",
+      "data": {
+        "text": "The electromagnetic  radiation from the sun arrives mostly in the form of visible and infrared wavelengths.",
+        "reference": "[Cause] the sun [Relation] cause [Effect] The electromagnetic  radiation",
+        "model": "[Cause] the sun [Relation] cause [Effect] The electromagnetic radiation"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "61b5668c",
+      "data": {
+        "text": "The amide-linked local anesthetics, bupivacaine and ropivacaine, cause depression of cardiac contractility and dysrhythmias.",
+        "reference": "[Cause] bupivacaine [Relation] cause [Effect] depression",
+        "model": "[Cause] The amide-linked local anesthetics [Relation] cause [Effect] depression"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "b9b064ea",
+      "data": {
+        "text": "There are everyday actions that can help prevent the spread of germs that cause respiratory illnesses  like influenza.",
+        "reference": "[Cause] germs [Relation] cause [Effect] respiratory illnesses ",
+        "model": "[Cause] germs [Relation] cause [Effect] respiratory illnesses"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "81bb2dbf",
+      "data": {
+        "text": "When they took the floor against a team favored to win the national championship, the patriots radiated carefree confidence.",
+        "reference": "[Cause] the patriots [Relation] cause [Effect] carefree confidence",
+        "model": "[Cause] they took the floor [Relation] cause [Effect] carefree confidence"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "e38f7370",
+      "data": {
+        "text": "Voltage surges or spikes are caused by lightning, short circuits, power company equipment problems, and inductive spikes, among many other causes.",
+        "reference": "[Cause] lightning [Relation] cause [Effect] Voltage surges or spikes",
+        "model": "[Cause] lightning [Relation] cause [Effect] Voltage surges"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "de94a8b7",
+      "data": {
+        "text": "The anxiety caused by the accident, which appears to show no sign of diminishing, and its negative impact on the living conditions in the affected areas, may be the principal reason for the increase in poor reported health.",
+        "reference": "[Cause] the accident [Relation] cause [Effect] The anxiety",
+        "model": "[Cause] The anxiety [Relation] cause [Effect] poor reported health"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "7ec67d98",
+      "data": {
+        "text": "Dehydration is one of the lead causes of death in the world due to dirty water and felt this should be emphasized in global charity documentation.",
+        "reference": "[Cause] Dehydration [Relation] cause [Effect] death",
+        "model": "[Cause] dirty water [Relation] cause [Effect] death"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "71cfaa37",
+      "data": {
+        "text": "The concerto comes from the pop of gas bubbles escaping the joints, snapping tendons and ligaments, and rickety arthritic joints.",
+        "reference": "[Cause] the pop [Relation] cause [Effect] The concerto",
+        "model": "[Cause] gas bubbles [Relation] cause [Effect] The concerto"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "091465a9",
+      "data": {
+        "text": "Their analysis demonstrates beyond any doubt that the problem of unemployment has been caused by the state, not by any inherent flaws or failures in a free market.",
+        "reference": "[Cause] the state [Relation] cause [Effect] the problem",
+        "model": "[Cause] the state [Relation] cause [Effect] unemployment"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "e9d14163",
+      "data": {
+        "text": "Be sure to drink plenty of water to prevent running a fever from dehydration.",
+        "reference": "[Cause] dehydration [Relation] cause [Effect] a fever",
+        "model": "[Cause] dehydration [Relation] cause [Effect] running a fever"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "ae3536de",
+      "data": {
+        "text": "The kids get great joy from eating the tomatoes right off the vine.",
+        "reference": "[Cause] eating [Relation] cause [Effect] great joy",
+        "model": "[Cause] eating the tomatoes [Relation] cause [Effect] great joy"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "75d32b5d",
+      "data": {
+        "text": "The halting of easy profits from inflation brought on a banking crisis, which resulted in a complete restructuring of the industry during the late 1990s.",
+        "reference": "[Cause] The halting [Relation] cause [Effect] a banking crisis",
+        "model": "[Cause] inflation [Relation] cause [Effect] a banking crisis"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "2e95e97f",
+      "data": {
+        "text": "In one day, the Red Crescent treated more than 50 injuries - mainly broken bones caused by panic from aftershocks.",
+        "reference": "[Cause] panic [Relation] cause [Effect] mainly broken bones",
+        "model": "[Cause] panic [Relation] cause [Effect] broken bones"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "13245a23",
+      "data": {
+        "text": "Cobalt metal fume and dust cause upper respiratory tract irritation, chronic interstitial pneumonitis, and skin sensitization.",
+        "reference": "[Cause] Cobalt metal fume and dust [Relation] cause [Effect] upper respiratory tract irritation",
+        "model": "[Cause] Cobalt metal fume [Relation] cause [Effect] upper respiratory tract irritation"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "6c319a91",
+      "data": {
+        "text": "Convulsions that occur after DTaP are usually not caused directly by the vaccine, but by a fever, which in turn was triggered by the vaccine.",
+        "reference": "[Cause] a fever [Relation] cause [Effect] Convulsions",
+        "model": "[Cause] the vaccine [Relation] cause [Effect] Convulsions"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "2bf14b61",
+      "data": {
+        "text": "The inflammation is caused by the growth of unusual bacteria, which usually results from antibiotic use.",
+        "reference": "[Cause] unusual bacteria [Relation] cause [Effect] The inflammation",
+        "model": "[Cause] the growth [Relation] cause [Effect] The inflammation"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "a5b73250",
+      "data": {
+        "text": "For example, driving recklessly and causing an auto accident that result in the death of another driver or passenger could be qualified as manslaughter.",
+        "reference": "[Cause] an auto accident [Relation] cause [Effect] the death",
+        "model": "[Cause] driving recklessly [Relation] cause [Effect] an auto accident"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "8c16d889",
+      "data": {
+        "text": "In a conventional, steam turbine-only power plant, the heat required to produce the steam comes from a boiler.",
+        "reference": "[Cause] the heat [Relation] cause [Effect] the steam",
+        "model": "[Cause] a boiler [Relation] cause [Effect] the heat"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "d71c82c7",
+      "data": {
+        "text": "Fetal alcohol spectrum disorders, or FASDs, are caused by drinking alcohol during pregnancy.",
+        "reference": "[Cause] drinking [Relation] cause [Effect] Fetal alcohol spectrum disorders",
+        "model": "[Cause] drinking alcohol [Relation] cause [Effect] Fetal alcohol spectrum disorders"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "f33490d7",
+      "data": {
+        "text": "Cells damaged or killed by flu result in the production of interferon which is one of the most potent causes of fever.",
+        "reference": "[Cause] Cells damaged or killed [Relation] cause [Effect] the production",
+        "model": "[Cause] Cells damaged or killed [Relation] cause [Effect] interferon"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "fe8bad1a",
+      "data": {
+        "text": "These wind turbines generate electricity from naturally occurring wind.",
+        "reference": "[Cause] These wind turbines [Relation] cause [Effect] electricity",
+        "model": "[Cause] naturally occurring wind [Relation] cause [Effect] electricity"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "63de1251",
+      "data": {
+        "text": "Witness the gangs in Los Angeles who stopped killing one another for a time after the riots triggered by the Rodney King bashing verdict.",
+        "reference": "[Cause] bashing verdict [Relation] cause [Effect] the riots",
+        "model": "[Cause] the Rodney King bashing verdict [Relation] cause [Effect] the riots"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "7243596b",
+      "data": {
+        "text": "Pneumonia is an inflammation of the lungs caused by bacteria, viruses, or chemical irritants.",
+        "reference": "[Cause] bacteria [Relation] cause [Effect] an inflammation",
+        "model": "[Cause] bacteria [Relation] cause [Effect] Pneumonia"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "b5c468af",
+      "data": {
+        "text": "The report links conditions in some of the worst affected localities and the likelihood that dire poverty - combined with despair and outrage over rampant corruption, repressive policies, and governments' failure to address local needs - could lead to outbreaks of localised unrest with the potential to spread into a wider regional conflict.",
+        "reference": "[Cause] corruption [Relation] cause [Effect] outrage",
+        "model": "[Cause] dire poverty [Relation] cause [Effect] localised unrest"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "3a1b1780",
+      "data": {
+        "text": "Here are some ways to avoid mindless eating and boost your weight loss from running.",
+        "reference": "[Cause] running [Relation] cause [Effect] your weight loss",
+        "model": "[Cause] running [Relation] cause [Effect] weight loss"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "0a78fd78",
+      "data": {
+        "text": "World AIDS Day, observed December 1 each year, is dedicated to raising awareness of the AIDS pandemic caused by the spread of HIV infection.",
+        "reference": "[Cause] HIV infection [Relation] cause [Effect] the AIDS pandemic",
+        "model": "[Cause] the spread [Relation] cause [Effect] the AIDS pandemic"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "9835335b",
+      "data": {
+        "text": "Describing all of the harm caused by the hurricane has filled entire books so this Web page summarizes the total damage and focuses on the damage incurred on Long Island, New York.",
+        "reference": "[Cause] the hurricane [Relation] cause [Effect] the harm",
+        "model": "[Cause] the hurricane [Relation] cause [Effect] all of the harm"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "52fffb8d",
+      "data": {
+        "text": "The family members also get great joy from dogs doing tricks and great for family activities.",
+        "reference": "[Cause] dogs doing tricks [Relation] cause [Effect] joy",
+        "model": "[Cause] dogs doing tricks [Relation] cause [Effect] great joy"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "a5ba57bb",
+      "data": {
+        "text": "The fighting resulted in hundreds of deaths and in the deployment of peace keepers into East Timor.",
+        "reference": "[Cause] The fighting [Relation] cause [Effect] deaths",
+        "model": "[Cause] The fighting [Relation] cause [Effect] hundreds of deaths"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "02cef5e0",
+      "data": {
+        "text": "Phobia like fear from crowd, fear from insects, fear from height etc all contribute in developing the anxiety disorder.",
+        "reference": "[Cause] crowd [Relation] cause [Effect] fear",
+        "model": "[Cause] crowd [Relation] cause [Effect] Phobia"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "bd026434",
+      "data": {
+        "text": "Recently, there is a movement afoot, instigated by the heterodox section of the community, as well as by the followers of the Gatha Alone Cultists to proselytise others to become \"Zarthushtis\".",
+        "reference": "[Cause] the heterodox section [Relation] cause [Effect] a movement afoot",
+        "model": "[Cause] the heterodox section [Relation] cause [Effect] a movement"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "ef6096f0",
+      "data": {
+        "text": "The US forces have withdrawn due to the damage caused by the eruption and the typhoon.",
+        "reference": "[Cause] the damage [Relation] cause [Effect] withdrawn",
+        "model": "[Cause] the eruption [Relation] cause [Effect] the damage"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "a36cbf98",
+      "data": {
+        "text": "It was intermittently wet and dry, and almost always followed with a whine and a few tears from the terrible pain.",
+        "reference": "[Cause] the terrible pain [Relation] cause [Effect] a few tears",
+        "model": "[Cause] the terrible pain [Relation] cause [Effect] a whine"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "2dc7acd2",
+      "data": {
+        "text": "As the compressor on the frig turned on caused a voltage spike on the electrical line, which caused a glitch in the \"room commander\" system.",
+        "reference": "[Cause] turned on [Relation] cause [Effect] a voltage spike",
+        "model": "[Cause] As the compressor [Relation] cause [Effect] a voltage spike"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "54b11d57",
+      "data": {
+        "text": "Methadone gives a buzz too, but it's the most effective way to reel in heroin addicts into treatment and real life.",
+        "reference": "[Cause] Methadone [Relation] cause [Effect] buzz",
+        "model": "[Cause] Methadone [Relation] cause [Effect] a buzz"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "dbe46147",
+      "data": {
+        "text": "All the decking on the ramps need to be replaced  because of the damage caused by the misuse of the facility.",
+        "reference": "[Cause] the damage [Relation] cause [Effect] replaced",
+        "model": "[Cause] the misuse [Relation] cause [Effect] the damage"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "bacbe7af",
+      "data": {
+        "text": "Pavlov-like, looking at the picture aids \"let-down,\" the release of milk normally triggered by the presence of the baby, its touch, its cry.",
+        "reference": "[Cause] the presence [Relation] cause [Effect] the release",
+        "model": "[Cause] the presence [Relation] cause [Effect] milk"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "dff24318",
+      "data": {
+        "text": "The tides are caused by the gravitational force of the Moon.",
+        "reference": "[Cause] gravitational force [Relation] cause [Effect] The tides",
+        "model": "[Cause] the gravitational force [Relation] cause [Effect] The tides"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "f288338e",
+      "data": {
+        "text": "This paper presents the results of a survey of the building damage caused by the ash fall from the cataclysmic eruption of Mount Pinatubo.",
+        "reference": "[Cause] the ash [Relation] cause [Effect] the building damage",
+        "model": "[Cause] the ash fall [Relation] cause [Effect] the building damage"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "32485547",
+      "data": {
+        "text": "The miscarriages are caused by one time, non-repeating genetic problems.",
+        "reference": "[Cause] genetic problems [Relation] cause [Effect] miscarriages",
+        "model": "[Cause] genetic problems [Relation] cause [Effect] The miscarriages"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "f741cdb2",
+      "data": {
+        "text": "It seems like the fever heat got pushed out from the body as rashes.",
+        "reference": "[Cause] the body [Relation] cause [Effect] the fever heat",
+        "model": "[Cause] the body [Relation] cause [Effect] rashes"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "24da3338",
+      "data": {
+        "text": "The aircraft was written off in the accident due to the severe impact caused by the KLM aircraft, and the resulting fire.",
+        "reference": "[Cause] the severe impact [Relation] cause [Effect] written off",
+        "model": "[Cause] the severe impact [Relation] cause [Effect] The aircraft"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "4fb66026",
+      "data": {
+        "text": "The said whistle produced the 2600 Hz tone necessary to authorize calls.",
+        "reference": "[Cause] whistle [Relation] cause [Effect] the 2600 Hz tone",
+        "model": "[Cause] The said whistle [Relation] cause [Effect] the 2600 Hz tone"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "82344047",
+      "data": {
+        "text": "The World Health Organization found that the radiation release from the Chernobyl accident was 200 times that of the Hiroshima and Nagasaki.",
+        "reference": "[Cause] the Chernobyl accident [Relation] cause [Effect] the radiation",
+        "model": "[Cause] the Chernobyl accident [Relation] cause [Effect] the radiation release"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "9af6b103",
+      "data": {
+        "text": "The children descend the ladder after hearing the fire alarm which has been triggered by the wood work workshop catching fire.",
+        "reference": "[Cause] the wood work workshop catching fire [Relation] cause [Effect] alarm",
+        "model": "[Cause] the wood work workshop catching fire [Relation] cause [Effect] the fire alarm"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "6eb0df0e",
+      "data": {
+        "text": "Some people experience tremors after drinking coffee and tea.",
+        "reference": "[Cause] drinking coffee and tea [Relation] cause [Effect] tremors",
+        "model": "[Cause] drinking coffee [Relation] cause [Effect] tremors"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "6015c95a",
+      "data": {
+        "text": "Josie Cormier, succumbed to peer pressure and now hangs out with the popular crowd that often instigates the harassment.",
+        "reference": "[Cause] the popular crowd [Relation] cause [Effect] the harassment",
+        "model": "[Cause] peer pressure [Relation] cause [Effect] the harassment"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "07fe1cfb",
+      "data": {
+        "text": "TThe backup vocals are from a rather talented female, Stephanie Eitel.",
+        "reference": "[Cause] a rather talented female [Relation] cause [Effect] The backup vocals",
+        "model": "[Cause] Stephanie Eitel [Relation] cause [Effect] The backup vocals"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "b1bacedf",
+      "data": {
+        "text": "Global warming pollution from cars, light trucks and SUV's is the single largest source of global warming pollution generated in Maine.",
+        "reference": "[Cause] cars [Relation] cause [Effect] Global warming pollution",
+        "model": "[Cause] Global warming pollution [Relation] cause [Effect] global warming pollution"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "cea2f6ce",
+      "data": {
+        "text": "The patient experiences displaced emotional and financial deprivation as well as anger after the divorce.",
+        "reference": "[Cause] divorce [Relation] cause [Effect] displaced emotional and financial deprivation",
+        "model": "[Cause] the divorce [Relation] cause [Effect] displaced emotional and financial deprivation"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "7a09b0e2",
+      "data": {
+        "text": "The bruises are caused by the attacker's fingertips pressing into the skin.",
+        "reference": "[Cause] fingertips [Relation] cause [Effect] bruises",
+        "model": "[Cause] the attacker's fingertips [Relation] cause [Effect] The bruises"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "a3a8e8f9",
+      "data": {
+        "text": "Alzheimer's disease is a degenerative brain disorder that results in memory loss, impaired thinking, difficulty finding the right word when speaking, and personality changes .",
+        "reference": "[Cause] a degenerative brain disorder [Relation] cause [Effect] memory loss",
+        "model": "[Cause] Alzheimer's disease [Relation] cause [Effect] memory loss"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "dc31c0de",
+      "data": {
+        "text": "The mite's burrows, fecal matter, proteins and eggs cause itching, rashes and sensitivity.",
+        "reference": "[Cause] The mite's burrows, fecal matter, proteins and eggs [Relation] cause [Effect] itching",
+        "model": "[Cause] The mite's burrows [Relation] cause [Effect] itching"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "776483b4",
+      "data": {
+        "text": "In reality, however, the drama has been caused by the erupting ash and smoke colliding with a lightning storm.",
+        "reference": "[Cause] the erupting ash and smoke [Relation] cause [Effect] the drama",
+        "model": "[Cause] the erupting ash [Relation] cause [Effect] the drama"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "b693cf11",
+      "data": {
+        "text": "Chronic daily headaches are tension headaches or headaches which are caused by taking too many pain killers.",
+        "reference": "[Cause] too many pain killers [Relation] cause [Effect] headaches",
+        "model": "[Cause] taking too many pain killers [Relation] cause [Effect] headaches"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "2533f589",
+      "data": {
+        "text": "He preserved the working ranches of the west, while achieving an expansion of the ranch's value through development and management of the recreational ecosystem within the ranch.",
+        "reference": "[Cause] development [Relation] cause [Effect] achieving an expansion",
+        "model": "[Cause] development [Relation] cause [Effect] an expansion"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "cff195f5",
+      "data": {
+        "text": "Two of the incidents resulted in fatal CO poisonings .",
+        "reference": "[Cause] the incidents [Relation] cause [Effect] fatal CO poisonings",
+        "model": "[Cause] Two of the incidents [Relation] cause [Effect] fatal CO poisonings"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "c92d1a39",
+      "data": {
+        "text": "His trademark steam-engine puffing is revealed as a sound made by a viper spitting venom at his prey before swallowing her whole.",
+        "reference": "[Cause] a viper spitting venom [Relation] cause [Effect] a sound",
+        "model": "[Cause] a viper [Relation] cause [Effect] a sound"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "95d161e9",
+      "data": {
+        "text": "Much of the bloodshed was caused by the growth of gangs.",
+        "reference": "[Cause] gangs [Relation] cause [Effect] the bloodshed",
+        "model": "[Cause] the growth [Relation] cause [Effect] the bloodshed"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "1d8103fd",
+      "data": {
+        "text": "I had been constipated for over 30 years, had significant sleep requirements , and had recurring headaches from fatigue and allergies.",
+        "reference": "[Cause] fatigue [Relation] cause [Effect] headaches",
+        "model": "[Cause] fatigue [Relation] cause [Effect] recurring headaches"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "034cd2e1",
+      "data": {
+        "text": "The pandemic was caused by the virus Yesinia pestis, better known as The Bubonic Black Plague, which infected the flees on the Black rodents.",
+        "reference": "[Cause] the virus Yesinia pestis [Relation] cause [Effect] The pandemic",
+        "model": "[Cause] the virus [Relation] cause [Effect] The pandemic"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "4f4b80fd",
+      "data": {
+        "text": "Major disasters like cyclone, floods and the storm surges, drought are caused by climate change.",
+        "reference": "[Cause] climate change [Relation] cause [Effect] cyclone",
+        "model": "[Cause] climate change [Relation] cause [Effect] Major disasters"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "62f48e89",
+      "data": {
+        "text": "This article discusses the ethics of the Soldier of Fortune's guns-for-hire advertisements that resulted in several murders across the United States.",
+        "reference": "[Cause] advertisements [Relation] cause [Effect] several murders",
+        "model": "[Cause] the Soldier of Fortune's guns-for-hire advertisements [Relation] cause [Effect] several murders"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "1cd180ac",
+      "data": {
+        "text": "The conclusion of the investigation was that the loss was caused by a failure in a cell wall, resulting in a serious crack and a leakage that the pumps were not able to cope with.",
+        "reference": "[Cause] the loss [Relation] cause [Effect] a serious crack",
+        "model": "[Cause] a failure [Relation] cause [Effect] the loss"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "cec8fa88",
+      "data": {
+        "text": "The tsunami was generated by an unusual type of earthquake that occurs near oceanic trenches.",
+        "reference": "[Cause] earthquake [Relation] cause [Effect] The tsunami",
+        "model": "[Cause] an unusual type of earthquake [Relation] cause [Effect] The tsunami"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "a3da2d5f",
+      "data": {
+        "text": "In summer 2000, an Adventist church in Polotsk, Vitebsk Region, was damaged by a fire started with flammable liquids.",
+        "reference": "[Cause] fire [Relation] cause [Effect] damaged",
+        "model": "[Cause] a fire [Relation] cause [Effect] damaged"
+      },
+      "answer": "valid"
+    },
+    {
+      "id": "20b30ab1",
+      "data": {
+        "text": "The studies revealed that skin irritation from soaps, inaccessibility to supplies or sinks, and insufficient time to wash hands between every patient care contact were the main reasons given by healthcare workers for lack of handwashing compliance.",
+        "reference": "[Cause] skin irritation [Relation] cause [Effect] lack",
+        "model": "[Cause] skin irritation [Relation] cause [Effect] handwashing compliance"
+      },
+      "answer": "invalid"
+    },
+    {
+      "id": "c41a781c",
+      "data": {
+        "text": "Cobalt metal fume and dust cause irritation of the nose and throat.",
+        "reference": "[Cause] Cobalt metal fume and dust [Relation] cause [Effect] irritation",
+        "model": "[Cause] Cobalt metal fume [Relation] cause [Effect] irritation"
+      },
+      "answer": "invalid"
+    }
+  ]
+}
