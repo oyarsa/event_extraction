@@ -140,6 +140,10 @@ class LabelConfig:
     id2label: dict[int, str]
     true_class: str
 
+    @property
+    def num_labels(self) -> int:
+        return len(self.label2id)
+
 
 def get_labelling(reward_type: str) -> LabelConfig:
     "Get configuration necessary for labelling entailment or valid models."
@@ -330,6 +334,7 @@ def train(
     scheduler_type: str,
     metric_for_best: str,
     metrics_file: Path,
+    label_config: LabelConfig,
 ) -> PreTrainedModel:
     model = model.to(device)  # type: ignore
     optimizer = AdamW(model.parameters(), lr=learning_rate)
@@ -364,7 +369,9 @@ def train(
             model, val_loader, device, desc=f"Evaluation ({epoch + 1}/{num_epochs})"
         )
 
-        metrics = calc_metrics(results)
+        metrics = calc_metrics(
+            results, average="binary" if label_config.num_labels == 2 else "macro"
+        )
         report_metrics(logger, metrics, "Train evaluation")
         save_metrics(metrics_file, **metrics, train_loss=avg_train_loss)
 
@@ -688,11 +695,14 @@ def run_training(
         config.lr_scheduler,
         config.metric_for_best,
         metrics_file,
+        label_config,
     )
     save_model(trained_model, tokenizer, output_dir)
 
     results = evaluate(trained_model, eval_loader, device, desc="Final evaluation")
-    metrics = calc_metrics(results)
+    metrics = calc_metrics(
+        results, average="binary" if label_config.num_labels == 2 else "macro"
+    )
     report_metrics(logger, metrics, "Final train evaluation")
     save_eval_results(results, metrics, output_dir, desc="eval")
 
@@ -733,7 +743,9 @@ def run_evaluation(
     )
 
     results = evaluate(model, loader, device, desc=f"{desc.capitalize()} evaluation")
-    metrics = calc_metrics(results)
+    metrics = calc_metrics(
+        results, average="binary" if label_config.num_labels == 2 else "macro"
+    )
     report_metrics(logger, metrics, desc)
     save_eval_results(results, metrics, output_dir, desc=desc)
 
