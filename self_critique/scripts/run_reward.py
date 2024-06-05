@@ -53,6 +53,7 @@ def main(
     is_cpu: bool,
     batch_size: int | None,
     prompt: str,
+    reward_type: str,
 ) -> None:
     validate_file(input_file)
 
@@ -64,6 +65,7 @@ def main(
 
     model_name = model_path.name
     output_dir = ROOT / f"self_critique/output/reward/{name}-{model_name}eval"
+
     if batch_size is None:
         batch_size = int(1e9) if is_cpu else 32
 
@@ -75,6 +77,7 @@ def main(
         "--output_dir", output_dir,
         "--batch_size", batch_size,
         "--eval_prompt", prompt.upper(),
+        "--reward_type", reward_type,
     ]
     # fmt: on
     if is_cpu:
@@ -114,5 +117,20 @@ if __name__ == "__main__":
         default="combined",
         help="Evaluation prompt mode",
     )
+    parser.add_argument(
+        "--reward_type",
+        type=str,
+        choices=["valid", "entailment"],
+        default="valid",
+        help="Reward type for the reward model. Default: %(default)s.",
+    )
     args = parser.parse_args()
-    main(args.input_file, args.name, args.model, args.cpu, args.batch_size, args.prompt)
+    main(
+        args.input_file,
+        args.name,
+        args.model,
+        args.cpu,
+        args.batch_size,
+        args.prompt,
+        args.reward_type,
+    )
