@@ -46,7 +46,12 @@ def validate_file(file: Path) -> None:
 
 
 def main(
-    input_file: Path, name: str, model: str, is_cpu: bool, batch_size: int | None
+    input_file: Path,
+    name: str,
+    model: str,
+    is_cpu: bool,
+    batch_size: int | None,
+    prompt: str,
 ) -> None:
     validate_file(input_file)
 
@@ -64,7 +69,8 @@ def main(
         "--model_path", model_path,
         "--data_file", input_file,
         "--output_dir", output_dir,
-        "--batch_size", batch_size
+        "--batch_size", batch_size,
+        "--eval_prompt", prompt.upper(),
     ]
     # fmt: on
     if is_cpu:
@@ -97,5 +103,12 @@ if __name__ == "__main__":
         default=None,
         help="Batch size for the evaluation model.",
     )
+    parser.add_argument(
+        "--prompt",
+        type=str,
+        choices=["passage", "gold", "combined"],
+        default="combined",
+        help="Evaluation prompt mode",
+    )
     args = parser.parse_args()
-    main(args.input_file, args.name, args.model, args.cpu, args.batch_size)
+    main(args.input_file, args.name, args.model, args.cpu, args.batch_size, args.prompt)
