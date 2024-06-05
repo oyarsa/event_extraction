@@ -1,3 +1,17 @@
+"""Train reward model as an LLM-based classifier (e.g. BERT, DeBERTa, etc.)
+
+The data files should be JSON files with a list of objects with the following keys:
+- input (str): the input context
+- output (str): the model generated answer (tagged format)
+- gold (str): the reference answer (tagged format)
+- label (str): the model's classification of the answer. E.g. VALID or INVALID for the
+  binary valid model, or CONTRADICTION, ENTAILMENT, NEUTRAL for the entailment model.
+- tag (str, optional): error analysis tag for the example
+
+For backwards compatibility with valid models, the data can contain a "valid" key (bool)
+instead of "label". This is converted to 'VALID' or 'INVALID' for the label.
+"""
+
 import collections
 import dataclasses
 import json
@@ -394,7 +408,7 @@ class DataEntry:
     input: str
     output: str
     gold: str
-    valid: bool
+    label: str
     tag: str | None = None
 
 
@@ -427,16 +441,29 @@ def load_json(path: Path, n: int | None) -> list[DataEntry]:
     data = json.loads(path.read_text())
     assert isinstance(data, list), "JSON file should be a list of objects"
     assert isinstance(data[0], dict), "JSON list should contain objects"
-    return [
-        DataEntry(
-            input=d["input"],
-            output=d["output"],
-            gold=d["gold"],
-            valid=d["valid"],
-            tag=d.get("tag"),
+
+    output: list[DataEntry] = []
+    for d in data[:n]:
+        # The input files for the "valid" classifier have different keys
+        if "valid" in d:
+            label = "VALID" if d["valid"] else "INVALID"
+        elif "label" in d:
+            label = d["label"]
+            if not isinstance(label, str):
+                raise ValueError("'label' key must be a string")
+        else:
+            raise ValueError("Missing 'valid' (bool) or 'label' (str) key in data")
+        output.append(
+            DataEntry(
+                input=d["input"],
+                output=d["output"],
+                gold=d["gold"],
+                label=label,
+                tag=d.get("tag"),
+            )
         )
-        for d in data[:n]
-    ]
+
+    return output
 
 
 def get_prompt(prompt: Prompt, data: list[DataEntry]) -> list[str]:
@@ -472,10 +499,13 @@ def get_answer(prompt: Prompt, data: list[DataEntry]) -> list[str]:
 def print_prompt_examples(prompt: Prompt, data: list[DataEntry], *, n: int) -> None:
     if n == 0:
         return
-    print_prompt_example(prompt, [d for d in data if d.valid], "Valid examples", n)
-    print_prompt_example(
-        prompt, [d for d in data if not d.valid], "Invalid examples", n
-    )
+
+    labels = {d.label for d in data}
+    for i, label in enumerate(labels):
+        examples = [d for d in data if d.label == label]
+        print_prompt_example(
+            prompt, examples, f"[{i+1}/{len(label)}] {label} examples", n
+        )
 
 
 def print_prompt_example(
@@ -508,6 +538,7 @@ def preprocess_data(
     prompt: Prompt,
     prompt_examples: int,
     has_labels: bool,
+    label_config: LabelConfig,
 ) -> DataLoader:
     prompts = get_prompt(prompt, data)
     answers = get_answer(prompt, data)
@@ -526,7 +557,7 @@ def preprocess_data(
     logger.info(f"Max sequence length: {get_max_seq_length(model_inputs, tokenizer)}")
 
     if has_labels:
-        labels = torch.tensor([int(d.valid) for d in data])
+        labels = torch.tensor([label_config.label2id[d.label] for d in data])
     else:
         labels = None
 
@@ -615,6 +646,7 @@ def run_training(
     tokenizer: PreTrainedTokenizer,
     device: torch.device,
     output_dir: Path,
+    label_config: LabelConfig,
 ) -> PreTrainedModel:
     logger.info(">>>> TRAINING <<<<")
     train_data = load_json(config.train_data_path, config.max_samples)
@@ -626,6 +658,7 @@ def run_training(
         config.prompt,
         config.print_prompt_examples,
         has_labels=True,
+        label_config=label_config,
     )
 
     eval_data = load_json(config.eval_data_path, config.max_samples)
@@ -637,6 +670,7 @@ def run_training(
         config.prompt,
         config.print_prompt_examples,
         has_labels=True,
+        label_config=label_config,
     )
 
     metrics_file = output_dir / "training_metrics.jsonl"
@@ -680,6 +714,7 @@ def run_evaluation(
     device: torch.device,
     output_dir: Path,
     desc: str,
+    label_config: LabelConfig,
 ) -> None:
     model = model.to(device)  # type: ignore
 
@@ -694,6 +729,7 @@ def run_evaluation(
         config.prompt,
         config.print_prompt_examples,
         has_labels=True,
+        label_config=label_config,
     )
 
     results = evaluate(model, loader, device, desc=f"{desc.capitalize()} evaluation")
@@ -709,6 +745,7 @@ def run_inference(
     tokenizer: PreTrainedTokenizer,
     device: torch.device,
     output_dir: Path,
+    label_config: LabelConfig,
 ) -> None:
     model = model.to(device)  # type: ignore
 
@@ -723,6 +760,7 @@ def run_inference(
         config.prompt,
         config.print_prompt_examples,
         has_labels=False,
+        label_config=label_config,
     )
 
     results = infer(model, loader, device, desc="Inference")
@@ -731,7 +769,7 @@ def run_inference(
 
 
 def main() -> None:
-    config = simple_parsing.parse(Config, add_config_path_arg=True)
+    config = simple_parsing.parse(Config, add_config_path_arg=True, description=__doc__)
 
     set_seed(config.seed)
     suppress_transformers_warnings()
@@ -759,7 +797,7 @@ def main() -> None:
     device = get_device()
 
     if config.do_train:
-        model = run_training(model, config, tokenizer, device, output_dir)
+        model = run_training(model, config, tokenizer, device, output_dir, label_config)
 
     if config.do_evaluation:
         if config.eval_data_path is None:
@@ -773,6 +811,7 @@ def main() -> None:
             device,
             output_dir,
             desc="eval",
+            label_config=label_config,
         )
 
     if config.do_test:
@@ -787,6 +826,7 @@ def main() -> None:
             device,
             output_dir,
             desc="test",
+            label_config=label_config,
         )
 
     if config.do_inference:
@@ -794,7 +834,13 @@ def main() -> None:
             raise ValueError("Inference data path must be specified for inference.")
 
         run_inference(
-            model, config.infer_data_path, config, tokenizer, device, output_dir
+            model,
+            config.infer_data_path,
+            config,
+            tokenizer,
+            device,
+            output_dir,
+            label_config,
         )
 
 
