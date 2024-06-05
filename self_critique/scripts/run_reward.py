@@ -7,6 +7,12 @@ The input is a JSON file with a list of objects with the following fields:
 - input (str): the input context
 - gold (str): the extraction annotation (tagged)
 - output (str) the model output extraction (tagged)
+
+We try to get the model from two possible paths, in order:
+- evaluation/output/classifier/{model}-deberta-best
+- evaluation/output/classifier/{model}
+
+The output is saved in self_critique/output/reward/{name}-{model}eval.
 """
 
 import argparse
@@ -45,6 +51,8 @@ def main(
     validate_file(input_file)
 
     model_path = ROOT / f"evaluation/output/classifier/{model}-deberta-best"
+    if not model_path.is_dir():
+        model_path = ROOT / f"evaluation/output/classifier/{model}"
     output_dir = ROOT / f"self_critique/output/reward/{name}-{model}eval"
 
     if batch_size is None:
@@ -71,7 +79,12 @@ if __name__ == "__main__":
     )
     parser.add_argument("input_file", type=Path, help="Path to the input JSON file.")
     parser.add_argument("name", type=str, help="Name of the output.")
-    parser.add_argument("model", type=str, help="Name of the model.")
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="fcr",
+        help="Name of the model. Default: %(default)s.",
+    )
     parser.add_argument(
         "--cpu",
         action=argparse.BooleanOptionalAction,
@@ -82,7 +95,7 @@ if __name__ == "__main__":
         "--batch_size",
         type=int,
         default=None,
-        help="Batch size for evaluation.",
+        help="Batch size for the evaluation model.",
     )
     args = parser.parse_args()
     main(args.input_file, args.name, args.model, args.cpu, args.batch_size)
