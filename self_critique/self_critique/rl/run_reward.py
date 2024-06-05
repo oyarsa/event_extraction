@@ -342,7 +342,7 @@ def main() -> None:
     git_commit = get_current_commit()
     logger.info(f"\n{args}")
     logger.info(f"Git commit: {git_commit}")
-    logger.info(f"Output files: {args.output_dir}")
+    logger.info(f"Output files: {output_dir}")
 
     (output_dir / "args.json").write_text(
         json.dumps(
