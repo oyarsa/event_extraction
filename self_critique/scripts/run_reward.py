@@ -11,6 +11,7 @@ The input is a JSON file with a list of objects with the following fields:
 We try to get the model from two possible paths, in order:
 - evaluation/output/classifier/{model}-deberta-best
 - evaluation/output/classifier/{model}
+- treat {model} as the absolute path
 
 The output is saved in self_critique/output/reward/{name}-{model}eval.
 """
@@ -58,8 +59,11 @@ def main(
     model_path = ROOT / f"evaluation/output/classifier/{model}-deberta-best"
     if not model_path.is_dir():
         model_path = ROOT / f"evaluation/output/classifier/{model}"
-    output_dir = ROOT / f"self_critique/output/reward/{name}-{model}eval"
+    if not model_path.is_dir():
+        model_path = Path(model)
 
+    model_name = model_path.name
+    output_dir = ROOT / f"self_critique/output/reward/{name}-{model_name}eval"
     if batch_size is None:
         batch_size = int(1e9) if is_cpu else 32
 
