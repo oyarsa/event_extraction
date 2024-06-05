@@ -3,7 +3,12 @@ import json
 
 import typer
 
+app = typer.Typer(
+    context_settings={"help_option_names": ["-h", "--help"]}, add_completion=False
+)
 
+
+@app.command()
 def main(
     input_path: typer.FileText = typer.Argument(
         ..., help="Path to input data (GPT eval output)."
@@ -24,4 +29,4 @@ def main(
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

@@ -49,7 +49,9 @@ def transform(input_file: Path, output_file: Path) -> None:
     output_file.write_text(json.dumps(new_data, indent=4))
 
 
-app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]})
+app = typer.Typer(
+    context_settings={"help_option_names": ["-h", "--help"]}, add_completion=False
+)
 
 
 @app.command()

@@ -197,6 +197,12 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
     }, relation
 
 
+app = typer.Typer(
+    context_settings={"help_option_names": ["-h", "--help"]}, add_completion=False
+)
+
+
+@app.command()
 def main(infiles: list[Path], tag: Optional[Path] = None, save: bool = True) -> None:
     """
     Expected input data format for each file is a JSON with the following structure:
@@ -272,4 +278,4 @@ def get_file_metrics(infile: Path) -> dict[str, float]:
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

@@ -379,6 +379,12 @@ def is_gpu_available() -> bool:
     return torch.cuda.is_available() or torch.backends.mps.is_available()
 
 
+app = typer.Typer(
+    context_settings={"help_option_names": ["-h", "--help"]}, add_completion=False
+)
+
+
+@app.command()
 def main(
     infiles: list[Path],
     tag: Optional[Path] = None,
@@ -475,4 +481,4 @@ def get_file_metrics(
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

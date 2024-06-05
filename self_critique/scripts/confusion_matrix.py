@@ -43,6 +43,12 @@ def print_acc(accuracies: dict[str, float]) -> None:
         print(f"{label.ljust(label_width)}: {rate:.2%}")
 
 
+app = typer.Typer(
+    context_settings={"help_option_names": ["-h", "--help"]}, add_completion=False
+)
+
+
+@app.command()
 def main(file: Path) -> None:
     """Print confusion matrix and class accuracies from a JSON file.
 
@@ -68,4 +74,4 @@ def main(file: Path) -> None:
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

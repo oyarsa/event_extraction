@@ -1,4 +1,5 @@
 "Annotate train and test output with valid label where possible."
+
 import json
 import re
 from pathlib import Path
@@ -58,6 +59,12 @@ def annotate(data: list[dict[str, str]]) -> list[dict[str, Any]]:
     ]
 
 
+app = typer.Typer(
+    context_settings={"help_option_names": ["-h", "--help"]}, add_completion=False
+)
+
+
+@app.command()
 def main(data_path: Path, output_path: Path, add_classify: bool = False) -> None:
     data = json.loads(data_path.read_text())
 
@@ -75,4 +82,4 @@ def main(data_path: Path, output_path: Path, add_classify: bool = False) -> None
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
