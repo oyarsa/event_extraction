@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 import re
 from pathlib import Path
@@ -48,6 +49,10 @@ def transform(input_file: Path, output_file: Path) -> None:
     output_file.write_text(json.dumps(new_data, indent=4))
 
 
+app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]})
+
+
+@app.command()
 def main(files: list[Path]) -> None:
     for file in files:
         new_dir = file.parent / "transformed"
@@ -56,4 +61,4 @@ def main(files: list[Path]) -> None:
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
