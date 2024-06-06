@@ -26,7 +26,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, TypedDict, cast
+from typing import Any, TypedDict, assert_never, cast
 
 import simple_parsing
 import torch
@@ -969,6 +969,45 @@ def suppress_warnings() -> None:
     logging.getLogger("accelerate").setLevel(logging.ERROR)
 
 
+def init_evaluator(
+    evaluator_type: EvaluatorType,
+    reward_model: str | None,
+    evaluator_threshold: float,
+    eval_prompt: EvalPrompt,
+    label2id: dict[str, int],
+    id2label: dict[int, str],
+    max_reward_seq_length: int,
+    reward_batch_size: int,
+    softmax_reward: bool,
+) -> Evaluator:
+    if evaluator_type is EvaluatorType.F1:
+        return F1Evaluator(evaluator_threshold, eval_prompt)
+
+    if reward_model is None:
+        raise ValueError(
+            "Must provide a reward model when using SentenceTransformer or"
+            " a trained Reward."
+        )
+
+    if evaluator_type is EvaluatorType.SENTENCE_TRANSFORMER:
+        return SentenceTransformerEvaluator(
+            model=SentenceTransformer(reward_model),
+            threshold=evaluator_threshold,
+            prompt=eval_prompt,
+        )
+
+    if evaluator_type is EvaluatorType.REWARD:
+        return RewardEvaluator(
+            model=load_reward_model(reward_model, label2id=label2id, id2label=id2label),
+            max_seq_length=max_reward_seq_length,
+            batch_size=reward_batch_size,
+            softmax_reward=softmax_reward,
+            device=None,
+        )
+
+    assert_never(evaluator_type)
+
+
 def main() -> None:
     args = simple_parsing.parse(Config, add_config_path_arg=True)
     args = resolve_arg_paths(args)
@@ -1010,36 +1049,17 @@ def main() -> None:
 
     extract = load_seq2seq_valuehead_model(args.extraction_model, train=True)
     extract_ref = create_reference_model(cast(PreTrainedModelWrapper, extract.model))
-
-    match args.evaluator:
-        case EvaluatorType.REWARD:
-            if args.reward_model is None:
-                raise ValueError(
-                    "Must provide a reward model name or path when using a learned"
-                    " evaluator."
-                )
-            reward = load_reward_model(
-                args.reward_model, label2id=label2id, id2label=id2label
-            )
-            evaluator = RewardEvaluator(
-                model=reward,
-                max_seq_length=args.max_reward_seq_length,
-                batch_size=args.reward_batch_size,
-                softmax_reward=args.softmax_reward,
-                device=None,
-            )
-        case EvaluatorType.SENTENCE_TRANSFORMER:
-            if args.reward_model is None:
-                raise ValueError("Must provide a reward model name")
-            model = SentenceTransformer(args.reward_model)
-            threshold = args.evaluator_threshold
-            # TODO: Figure out device explicitly. It currently does that internally if
-            # it's not set, but I want it to be explicit. Maybe together with
-            # RewardEvaluator? Which needs a better name?
-            evaluator = SentenceTransformerEvaluator(model, threshold, args.eval_prompt)
-        case EvaluatorType.F1:
-            threshold = args.evaluator_threshold
-            evaluator = F1Evaluator(threshold, args.eval_prompt)
+    evaluator = init_evaluator(
+        args.evaluator,
+        args.reward_model,
+        args.evaluator_threshold,
+        args.eval_prompt,
+        label2id,
+        id2label,
+        args.max_reward_seq_length,
+        args.reward_batch_size,
+        args.softmax_reward,
+    )
 
     train_data = load_data(args.train_file, args.max_train_samples)
     train_dataset = preprocess_data(
