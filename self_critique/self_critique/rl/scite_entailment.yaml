@@ -26,7 +26,7 @@ ppo_minibatch_size: 16
 # PPO parameters
 kl_penalty: kl
 adaptive_kl_ctrl: true
-init_kl_coef: 0.05
+init_kl_coef: 0.2
 use_reward_scaling: false
 use_reward_norm: false
 
@@ -34,5 +34,5 @@ use_reward_norm: false
 generation_top_k: null
 generation_top_p: null
 degeneration_penalty: null
-generation_do_sample: true
-generation_num_beams: 2
+generation_do_sample: false
+generation_num_beams: 1
