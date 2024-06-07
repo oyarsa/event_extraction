@@ -279,6 +279,7 @@ class InferenceResult:
     passages: list[str]
     outputs: list[str]
     annotations: list[str]
+    confidences: list[float]
     tags: list[str] | None = None
 
 
@@ -293,6 +294,7 @@ def infer(
     outputs: list[str] = []
     annotations: list[str] = []
     tags: list[str] = []
+    confidences: list[float] = []
 
     model.eval()
     for batch in tqdm(val_loader, desc=desc):
@@ -305,7 +307,9 @@ def infer(
                 input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids
             )
 
-            preds.extend(torch.argmax(model_outputs.logits, dim=1).tolist())
+            confidence, pred = torch.softmax(model_outputs.logits, dim=1).max(dim=1)
+            confidences.extend(confidence.tolist())
+            preds.extend(pred.tolist())
 
             passages.extend(batch["input"])
             outputs.extend(batch["output"])
@@ -319,6 +323,7 @@ def infer(
         passages=passages,
         outputs=outputs,
         annotations=annotations,
+        confidences=confidences,
         tags=tags or None,
     )
 
@@ -637,6 +642,7 @@ def save_inference_results(
     r = [
         {
             "valid": bool(results.preds[i]),
+            "confidence": results.confidences[i],
             "input": results.passages[i],
             "output": results.outputs[i],
             "gold": results.annotations[i],
