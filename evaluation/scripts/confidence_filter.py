@@ -1,17 +1,39 @@
 import argparse
+import copy
 import json
+import random
 from functools import partial
 from typing import Any, TextIO
 
 
+def shuffled[T](data: list[T]) -> list[T]:
+    new_data = copy.deepcopy(data)
+    random.shuffle(new_data)
+    return new_data
+
+
+def top_p_confidence(data: list[dict[str, Any]], p: float) -> list[dict[str, Any]]:
+    n = int(len(data) * p)
+    return sorted(data, key=lambda d: d["confidence"], reverse=True)[:n]
+
+
 def average_filter(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep only the data points with confidence above the average."""
     average = sum(d["confidence"] for d in data) / len(data)
-    return [d for d in data if d["confidence"] >= average]
+    return shuffled([d for d in data if d["confidence"] >= average])
 
 
 def top_x_filter(data: list[dict[str, Any]], x: float) -> list[dict[str, Any]]:
-    n = int(len(data) * x)
-    return sorted(data, key=lambda x: x["confidence"], reverse=True)[:n]
+    """Keep only the top x% of data points by confidence level."""
+    return shuffled(top_p_confidence(data, x))
+
+
+def alt_top_x_filter(data: list[dict[str, Any]], x: float) -> list[dict[str, Any]]:
+    """Keep the top x% of valid data points and the top x% of invalid data points."""
+    valid = [d for d in data if d["valid"]]
+    invalid = [d for d in data if not d["valid"]]
+
+    return shuffled(top_p_confidence(valid, x) + top_p_confidence(invalid, x))
 
 
 FILTERS = {
@@ -19,6 +41,8 @@ FILTERS = {
     "average": average_filter,
     "top_0.5": partial(top_x_filter, x=0.5),
     "top_0.75": partial(top_x_filter, x=0.75),
+    "alt_top_0.5": partial(alt_top_x_filter, x=0.5),
+    "alt_top_0.75": partial(alt_top_x_filter, x=0.75),
 }
 
 
