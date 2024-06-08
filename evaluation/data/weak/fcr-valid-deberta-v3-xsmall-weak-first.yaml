@@ -12,7 +12,7 @@ seed: 0
 output_name: fcr-deberta-v3-xsmall-weak-0.5-first
 prompt: COMBINED
 do_train: true
-do_test: true
+do_test: false
 do_inference: true
 do_evaluation: true
 test_data_path: data/prediction/all_labelled.tagged.json
