@@ -1,5 +1,6 @@
 import argparse
 import json
+from functools import partial
 from typing import Any, TextIO
 
 
@@ -8,9 +9,16 @@ def average_filter(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [d for d in data if d["confidence"] >= average]
 
 
+def top_x_filter(data: list[dict[str, Any]], x: float) -> list[dict[str, Any]]:
+    n = int(len(data) * x)
+    return sorted(data, key=lambda x: x["confidence"], reverse=True)[:n]
+
+
 FILTERS = {
     "none": lambda x: x,
     "average": average_filter,
+    "top_0.5": partial(top_x_filter, x=0.5),
+    "top_0.75": partial(top_x_filter, x=0.75),
 }
 
 
