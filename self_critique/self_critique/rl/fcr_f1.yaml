@@ -9,7 +9,7 @@ max_eval_samples: null
 evaluator: F1
 evaluator_threshold: 0.8260869565217391
 
-extraction_model: output/extraction/flan-t5-large
+extraction_model: output/extraction/fcr/flan-t5-large
 max_generation_length: 128
 
 output_dir: output/rl

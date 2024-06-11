@@ -1,5 +1,5 @@
 model_name_or_path: google/flan-t5-base
-output_dir: output/extraction/flan-t5-base
+output_dir: output/extraction/fcr/flan-t5-base
 max_seq_length: 128
 generation_num_beams: 1
 per_device_train_batch_size: 22

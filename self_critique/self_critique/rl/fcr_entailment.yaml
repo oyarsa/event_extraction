@@ -10,7 +10,7 @@ reward_model: ../evaluation/output/classifier/fcr-entailment-v3-xsmall-combined/
 reward_type: entailment
 max_reward_seq_length: 400
 
-extraction_model: output/extraction/flan-t5-large
+extraction_model: output/extraction/fcr/flan-t5-large
 max_generation_length: 128
 
 output_dir: output/rl
