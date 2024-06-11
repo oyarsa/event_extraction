@@ -14,4 +14,5 @@ docker run -d -p 8501:8501 \
 	-v "$files/config":/app/config \
 	-v "$files/data":/app/data \
 	-v "$files/logs":/app/logs \
+	--name annotation \
 	annotation
