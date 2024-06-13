@@ -88,7 +88,6 @@ def parse_instance(answer: str) -> tuple[dict[str, list[str]], str | None]:
     Complex case:
     [Cause] This cause 1 | This cause 2 [Effect] This effect 1 | This effect 2
     """
-    # TODO (italo): Document the relation
     matches = re.findall(r"\[Cause\](.*?)\[Relation\](.*?)\[Effect\](.*?)$", answer)
     if not matches:
         return {
