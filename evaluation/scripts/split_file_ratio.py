@@ -65,7 +65,12 @@ def sample_groups_by_ratios[T](
         start_index = 0
 
         for i, (_, end_ratio) in enumerate(ratio_ranges):
-            end_index = int(total_groups * end_ratio)
+            # Avoid rounding errors that would leave some items out
+            if i == len(ratio_ranges) - 1:
+                end_index = total_groups
+            else:
+                end_index = int(total_groups * end_ratio)
+
             result[i].extend(group[start_index:end_index])
             start_index = end_index
 
@@ -106,7 +111,7 @@ def main(
     sampled_splits = sample_groups_by_ratios(tag_groups, ratios)
 
     keys = [get_key(item) for _, _, split in sampled_splits for item in split]
-    assert len(keys) == len(data), "Some items are missing"
+    assert len(keys) == len(data), f"Some items are missing: {len(keys)} != {len(data)}"
     assert len(set(keys)) == len(data), "Some keys are duplicated"
 
     for start_ratio, end_ratio, split in sampled_splits:
