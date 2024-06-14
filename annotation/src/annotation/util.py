@@ -6,7 +6,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import ClassVar, Literal, TypeAlias, override
+from typing import ClassVar, Literal, override
 
 import yaml
 
@@ -125,9 +125,7 @@ def escape(text: str) -> str:
     return text
 
 
-Colour: TypeAlias = Literal[
-    "blue", "green", "orange", "red", "violet", "grey", "rainbow"
-]
+type Colour = Literal["blue", "green", "orange", "red", "violet", "grey", "rainbow"]
 
 
 def colour(text: str, fg: Colour | None = None, bg: Colour | None = None) -> str:

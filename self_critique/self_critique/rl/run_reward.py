@@ -1,15 +1,14 @@
 # pyright: basic
 import dataclasses
-import itertools
 import json
 import logging
 import os
-from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
+from itertools import batched
 from pathlib import Path
-from typing import Any, TypeVar
+from typing import Any
 
 import simple_parsing
 import torch
@@ -186,21 +185,6 @@ def load_data(file_path: Path, max_samples: int | None = None) -> list[EvalEntry
     return [
         EvalEntry(input=d["input"], output=d["output"], gold=d["gold"]) for d in data
     ][:max_samples]
-
-
-T = TypeVar("T")
-
-
-def batched(iterable: Iterable[T], n: int) -> Iterable[list[T]]:
-    """batched('ABCDEFG', 3) --> ABC DEF G
-
-    From https://docs.python.org/3/library/itertools.html#itertools.batched
-    """
-    if n < 1:
-        raise ValueError("n must be at least one")
-    it = iter(iterable)
-    while batch := tuple(itertools.islice(it, n)):
-        yield list(batch)
 
 
 @dataclasses.dataclass

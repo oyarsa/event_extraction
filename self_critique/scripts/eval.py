@@ -2,7 +2,6 @@
 # pyright: basic
 import contextlib
 import io
-import itertools
 import json
 import os
 import re
@@ -10,9 +9,9 @@ import statistics
 import string
 import warnings
 from collections import Counter, defaultdict
-from collections.abc import Iterable
+from itertools import batched
 from pathlib import Path
-from typing import Optional, TypedDict, TypeVar
+from typing import Optional, TypedDict
 
 # ruff: noqa: E402
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # disable Tensorflow CPU/GPU warnings
@@ -183,18 +182,6 @@ def calculate_bleurt(
         results[itype] = statistics.mean(scores)
 
     return {"bleurt": statistics.mean(results.values())}
-
-
-T = TypeVar("T")
-
-
-def batched(iterable: Iterable[T], n: int) -> Iterable[list[T]]:
-    if n < 1:
-        raise ValueError("n must be at least one")
-
-    it = iter(iterable)
-    while batch := list(itertools.islice(it, n)):
-        yield batch
 
 
 def compute_bertscore(
