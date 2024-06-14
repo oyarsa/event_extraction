@@ -22,6 +22,8 @@ import random
 from collections import defaultdict
 from pathlib import Path
 
+from beartype.door import is_bearable
+
 
 def get_key(d: dict[str, str]) -> str:
     keys = ["input", "output", "gold"]
@@ -77,7 +79,14 @@ def main(
     input_file: Path, output_dir: Path, ratios: list[float], output_name: str, seed: int
 ) -> None:
     random.seed(seed)
-    data: list[dict[str, str]] = json.loads(input_file.read_text())
+
+    data = json.loads(input_file.read_text())
+
+    data_keys = {"input", "output", "gold", "tag", "valid"}
+    if not is_bearable(data, list[dict[str, str]]):
+        raise ValueError("Invalid JSON format. Expected a list of objects.")
+    if missing := data_keys - data[0].keys():
+        raise SystemExit(f"Invalid JSON format. Missing keys: {missing}.")
 
     if not all(0 <= ratio <= 1 for ratio in ratios):
         raise SystemExit(f"Invalid ratios: {ratios}. All ratios must be in [0, 1].")
