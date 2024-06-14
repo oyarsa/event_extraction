@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
-"""Split a data file by a ratio, keeping the frequency of tags the same in both parts.
+"""Split a data file by a list ratios, keeping the frequency of tags the same.
+
+The ratios are used in order, must be in [0, 1] and sum to <= 1. If the sum is < 1, the
+remaining ratio will be appended. There will be one file per ratio, each with the
+interval in the name.
 
 The input file should be a JSON with a list of objects with the following keys:
 - input (str): the input context
@@ -15,8 +19,8 @@ The output files have the same format as the input file.
 import argparse
 import json
 import random
-from collections import Counter
-from typing import TextIO
+from collections import defaultdict
+from pathlib import Path
 
 
 def get_key(d: dict[str, str]) -> str:
@@ -24,65 +28,112 @@ def get_key(d: dict[str, str]) -> str:
     return "".join([d[k] for k in keys])
 
 
-def sample_preserving_frequencies(
-    data: list[dict[str, str]], k: int, key: str
-) -> list[dict[str, str]]:
-    "Samples K elements preserving the frequency of values for the specified key."
-    freq = Counter(item[key] for item in data)
+def sample_groups_by_ratios[T](
+    tag_to_groups: dict[str, list[T]], ratios: list[float]
+) -> list[tuple[float, float, list[T]]]:
+    """Sample each group by the given ratios, keeping the frequency of tags the same.
 
-    total = sum(freq.values())
-    sampled_data: list[dict[str, str]] = []
+    Args:
+        tag_to_groups: mapping from tags to lists of items.
+        ratios: list of ratios to split the groups, e.g. [0.8, 0.2] to split 80/20,
+            [0.5, 0.3, 0.2] to split 50/30/20, etc. Must sum to 1.
 
-    for value, count in freq.items():
-        value_to_sample = round(k * (count / total))
-        value_data = [item for item in data if item[key] == value]
-        sampled_value = random.sample(value_data, value_to_sample)
-        sampled_data.extend(sampled_value)
+    Returns:
+        The combination of the the sampled groups, one for each ratio, with the
+        corresponding start and end ratio.
 
-    random.shuffle(sampled_data)
-    return sampled_data
+    Note: some results might be unintuitive, e.g. if `ratios` is [0.5, 0.5], and there
+    are groups with uneven elements, the result will not be a proper 50/50 split.
+    """
+
+    result: list[list[T]] = [[] for _ in ratios]
+    ratio_ranges: list[tuple[float, float]] = []
+
+    for group in tag_to_groups.values():
+        random.shuffle(group)
+
+    start = 0
+    for ratio in ratios:
+        end = start + ratio
+        ratio_ranges.append((start, end))
+        start = end
+
+    for group in tag_to_groups.values():
+        total_groups = len(group)
+        start_index = 0
+
+        for i, (_, end_ratio) in enumerate(ratio_ranges):
+            end_index = int(total_groups * end_ratio)
+            result[i].extend(group[start_index:end_index])
+            start_index = end_index
+
+    return [
+        (start_ratio, end_ratio, parts)
+        for (start_ratio, end_ratio), parts in zip(ratio_ranges, result)
+    ]
 
 
 def main(
-    input_file: TextIO, ratio: float, first_file: TextIO, second_file: TextIO, seed: int
+    input_file: Path, output_dir: Path, ratios: list[float], output_name: str, seed: int
 ) -> None:
     random.seed(seed)
+    data: list[dict[str, str]] = json.loads(input_file.read_text())
 
-    data: list[dict[str, str]] = json.load(input_file)
+    if not all(0 <= ratio <= 1 for ratio in ratios):
+        raise SystemExit(f"Invalid ratios: {ratios}. All ratios must be in [0, 1].")
+    if sum(ratios) > 1:
+        raise SystemExit(
+            "Invalid ratios. The sum of ratios must be less than or equal to 1."
+        )
+    if sum(ratios) < 1:
+        ratios.append(1 - sum(ratios))
 
-    if not (0 <= ratio <= 1):
-        raise SystemExit(f"Invalid ratio: {ratio}. Must be in [0, 1].")
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    k = int(len(data) * ratio)
-    first = sample_preserving_frequencies(data, k, "tag")
+    tag_groups: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for item in data:
+        tag_groups[item["tag"]].append(item)
 
-    sample_keys = {get_key(d) for d in first}
-    second = [d for d in data if get_key(d) not in sample_keys]
+    sampled_splits = sample_groups_by_ratios(tag_groups, ratios)
+
+    keys = [get_key(item) for _, _, split in sampled_splits for item in split]
+    assert len(keys) == len(data), "Some items are missing"
+    assert len(set(keys)) == len(data), "Some keys are duplicated"
+
+    for start_ratio, end_ratio, split in sampled_splits:
+        name = f"{output_name}_{start_ratio:.1f}-{end_ratio:.1f}.json"
+        (output_dir / name).write_text(json.dumps(split, indent=2))
 
     print("Length of data:", len(data))
-    print("Length of first part:", len(first))
-    print("Length of second part:", len(second))
-
-    json.dump(first, first_file, indent=2)
-    json.dump(second, second_file, indent=2)
+    for start_ratio, end_ratio, split in sampled_splits:
+        print(f"- {start_ratio:.1f}-{end_ratio:.1f}: {len(split)}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("input_file", type=argparse.FileType("r"), help="Input file")
-    parser.add_argument("ratio", type=float, help="Ratio of to split the file")
+    parser.add_argument("input_file", type=Path, help="Path to the file")
+    parser.add_argument("output_dir", type=Path, help="Path to the output dir")
     parser.add_argument(
-        "first_file", type=argparse.FileType("w"), help="Output file for the first part"
+        "--ratios",
+        nargs="+",
+        type=float,
+        help="Ratios to split the file. Must be in [0, 1] and sum to <= 1. If the sum"
+        " is < 1, it will be topped up.",
     )
     parser.add_argument(
-        "second_file",
-        type=argparse.FileType("w"),
-        help="Output file for the second part",
+        "--output-name",
+        type=str,
+        default="split",
+        help="Name of the output files, to be appended with the ratios. (default:"
+        " %(default)s)",
     )
     parser.add_argument(
-        "--seed", type=int, default=0, help="Seed for the random number generator"
+        "--seed",
+        type=int,
+        default=0,
+        help="Seed for the random number generator (default: %(default)s)",
     )
     args = parser.parse_args()
-    main(args.input_file, args.ratio, args.first_file, args.second_file, args.seed)
+    main(args.input_file, args.output_dir, args.ratios, args.output_name, args.seed)
