@@ -1,4 +1,4 @@
-# event_extraction
+# Causal Event Extraction
 
 Causal event extraction from text
 
