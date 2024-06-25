@@ -23,9 +23,7 @@ The code is based on Huggingface transformer examples: [`question-answering`](ht
 
 ```sh
 # From the repository root:
-python preprocess/reconstruct.py
 python preprocess/genqa_joint.py
-python preprocess/entailment.py
 ```
 
 ## Train:
@@ -50,18 +48,8 @@ Train joint extraction and classification model:
 python self_critique/minimal/seq2seq.py --config config/extraction.json
 ```
 
-Train reconstruction model:
-```sh
-python self_critique/minimal/seq2seq.py --config config/reconstruct.json
-```
-
-Train text entailment model:
-```sh
-python self_critique/minimal/entailment.py --config config/entailment_deberta.json
-```
-
 Train Reinforcement Learning model:
 ```sh
 cd self_critique/rl
-python train.py --config config.json
+python extract_train.py --config config.json
 ```
