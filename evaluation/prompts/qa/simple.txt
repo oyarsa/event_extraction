@@ -1,1 +1,0 @@
-Given the context and question, is the answer correct? Respond with either 'true' or 'false'.

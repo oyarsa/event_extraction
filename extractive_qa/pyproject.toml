@@ -1,3 +1,0 @@
-[tool.isort]
-known_first_party = ["fgcr_metric", "models", "trainer_qa", "utils_qa"]
-profile = "black"

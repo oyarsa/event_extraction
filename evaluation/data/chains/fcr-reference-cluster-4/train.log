@@ -1,6 +1,0 @@
-2024-05-01 16:43:00 | INFO | evaluation.chain_generation | Run name: fcr-reference
-2024-05-01 16:43:00 | INFO | evaluation.chain_generation | Model: gpt-3.5-turbo
-2024-05-01 16:43:34 | INFO | evaluation.chain_generation | Total cost: 0.0028085
-2024-05-01 16:53:51 | INFO | evaluation.chain_generation | Run name: fcr-reference-cluster-4
-2024-05-01 16:53:51 | INFO | evaluation.chain_generation | Model: gpt-4-1106-preview
-2024-05-01 16:55:03 | INFO | evaluation.chain_generation | Total cost: 0.05425000000000001
