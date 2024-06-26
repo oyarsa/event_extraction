@@ -1,6 +1,6 @@
-# Causal Event Extraction
+# Cause_Event_Extraction
 
-Causal event extraction from text
+Weak Reward Model Transforms Generative Models into Robust Causal Event Extraction Systems
 
 ## Setup
 
@@ -16,10 +16,17 @@ because it's a lot faster, but it should work with python's built-in `venv` and
 
 Each project is a separate directory with its own README.md file. They all use PDM to
 manage dependencies, but we use pip-tools for a repository-wide environment.
-
-- `agreement`: Calculate agreement between LLM judges and human evaluation
-- `chatgpt`: Use GPT OpenAI API to extract causal events
-- `data`: Datasets for the project, including processed data
-- `preprocess`: Scripts to preprocess data for the different models
-- `self_critique`: LLM-based extraction, supervised and RL training
-- `sequence_labelling`: BIO labelling-based model for causal event extraction
+- `Human Evaluation`:
+  - [`agreement`](agreement): Calculate agreement between LLM judges and human
+    evaluation
+  - [`chatgpt`](chatgpt): Use GPT OpenAI API to extract causal events
+- `Baseline`:
+  - [`sequence_labelling`](sequence_labelling): BIO labelling-based model for causal
+    event extraction
+  - [`extractive_qa`](extractive_qa): Span-based model for causal event extraction
+  - [`gen_qa`](gen_qa): QA-based model for causal event extraction
+- `Our RL framework`
+  - [`data`](data): Datasets for the project, including processed data
+  - [`preprocess`](preprocess): Scripts to preprocess data for the different models
+  - [`self_critique`](self_critique): LLM-based extraction, supervised and RL training
+  - [`error_analysis`](error_analysis): Analyze errors in the extraction LLM model
