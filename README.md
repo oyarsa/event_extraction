@@ -19,6 +19,7 @@ manage dependencies, but we use pip-tools for a repository-wide environment.
 - `Human Evaluation`:
   - `agreement`: Calculate agreement between LLM judges and human evaluation
   - `chatgpt`: Use GPT OpenAI API to extract causal events
+  - `evaluation`: Use trained models and GPT to evaluate causal event extraction
 - `Baseline':
   - `sequence_labelling`: BIO labelling-based model for causal event extraction
   - `extractive_qa`: Span-based model for causal event extraction
