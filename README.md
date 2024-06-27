@@ -30,3 +30,18 @@ manage dependencies, but we use pip-tools for a repository-wide environment.
   - [`preprocess`](preprocess): Scripts to preprocess data for the different models
   - [`self_critique`](self_critique): LLM-based extraction, supervised and RL training
   - [`error_analysis`](error_analysis): Analyze errors in the extraction LLM model
+
+## Citation
+
+If you find our work useful, please cite as:
+
+```
+@misc{silva2024weak,
+    title={Weak Reward Model Transforms Generative Models into Robust Causal Event Extraction Systems},
+    author={Italo Luis da Silva and Hanqi Yan and Lin Gui and Yulan He},
+    year={2024},
+    eprint={2406.18245},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL}
+}
+```
