@@ -24,7 +24,10 @@ def main(original_path: Path, result_path: Path) -> None:
 
     acc = accuracy_score(gold, pred)
     prec, rec, f1, _ = precision_recall_fscore_support(
-        gold, pred, average="binary", zero_division=0  # type: ignore
+        gold,
+        pred,
+        average="binary",
+        zero_division=0,  # type: ignore
     )
 
     print(f"Accuracy: {acc:.4f}")

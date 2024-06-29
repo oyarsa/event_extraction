@@ -151,18 +151,16 @@ def print_model_messages(
     if chain_prompt and print_chains and gpt_result.filtered is FilterStatus.UNFILTERED:
         output.extend(["-" * 80, chain_prompt])
     if gpt_result.filtered is FilterStatus.UNFILTERED:
-        output.extend(
-            [
-                "-" * 80,
-                msg.gpt_msg,
-                "-" * 80,
-                "\nGPT: ",
-                *(format_result(i, r) for i, r in enumerate(gpt_result.results)),
-                f"\nParsed: {result}",
-                "*" * 80,
-                "",
-            ]
-        )
+        output.extend([
+            "-" * 80,
+            msg.gpt_msg,
+            "-" * 80,
+            "\nGPT: ",
+            *(format_result(i, r) for i, r in enumerate(gpt_result.results)),
+            f"\nParsed: {result}",
+            "*" * 80,
+            "",
+        ])
     else:
         output.append("Filtered output.")
     logger.info("\n".join(output))

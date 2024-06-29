@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Sample data from dataset preserving frequencies of values for a given key."""
+
 # pyright: basic
 import argparse
 import json

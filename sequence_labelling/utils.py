@@ -43,9 +43,9 @@ class Meter:
             micro_f1, macro_prec, macro_recall, macro_f1)
         """
         # get the argmax of logits from each output
-        y_pred = torch.tensor(
-            [torch.argmax(x) for x in logits.view(-1, logits.shape[2])]
-        ).tolist()
+        y_pred = torch.tensor([
+            torch.argmax(x) for x in logits.view(-1, logits.shape[2])
+        ]).tolist()
         y_true = gold.reshape(-1).tolist()
 
         new_pred = []

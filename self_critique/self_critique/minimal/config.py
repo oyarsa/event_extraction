@@ -63,9 +63,7 @@ class Config:
                 setattr(self, f.name, kwargs[f.name])
 
     def __str__(self) -> str:
-        return "\n".join(
-            [
-                ">>>> CONFIGURATION",
-                *(f"  {key}: {value}" for key, value in asdict(self).items()),
-            ]
-        )
+        return "\n".join([
+            ">>>> CONFIGURATION",
+            *(f"  {key}: {value}" for key, value in asdict(self).items()),
+        ])

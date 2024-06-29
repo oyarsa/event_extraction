@@ -27,13 +27,11 @@ def transform_str(tags: str) -> str:
 
     causes = " AND ".join(causes)
     effects = " AND ".join(effects)
-    return "\n".join(
-        [
-            f"Cause: {causes}",
-            f"Relation: {relation}",
-            f"Effect: {effects}",
-        ]
-    )
+    return "\n".join([
+        f"Cause: {causes}",
+        f"Relation: {relation}",
+        f"Effect: {effects}",
+    ])
 
 
 def transform(input_file: Path, output_file: Path) -> None:

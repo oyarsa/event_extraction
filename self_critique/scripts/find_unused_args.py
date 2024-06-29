@@ -47,7 +47,7 @@ def main(module_file: Path, data_classes: list[str]) -> None:
         print("\nUnused:")
         for field in unused:
             print(f"- {field}")
-        print(f"\n{'*'*80}\n")
+        print(f"\n{'*' * 80}\n")
 
 
 if __name__ == "__main__":

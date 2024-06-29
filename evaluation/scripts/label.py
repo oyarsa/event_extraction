@@ -26,66 +26,54 @@ def show(entry: dict[str, Any], use_excess: bool, use_overlap: bool) -> str:
     ]
 
     if entry["gold_cause"] != entry["pred_cause"]:
-        out.extend(
-            (
-                "CAUSE",
-                "gold:",
-                f"  -> {entry['gold_cause']!r}",
-                "pred:",
-                f"  -> {entry['pred_cause']!r}",
-            )
-        )
+        out.extend((
+            "CAUSE",
+            "gold:",
+            f"  -> {entry['gold_cause']!r}",
+            "pred:",
+            f"  -> {entry['pred_cause']!r}",
+        ))
 
         if use_excess:
             out.append(f"excess count: {entry['cause_excess_count']}")
 
         if use_overlap:
             is_substr_passage = entry["gold_cause"] in entry["input"]
-            out.extend(
-                (
-                    f"substr passage: {is_substr_passage}",
-                    f"overlap: {overlap(entry['gold_cause'], entry['pred_cause'])}",
-                )
-            )
+            out.extend((
+                f"substr passage: {is_substr_passage}",
+                f"overlap: {overlap(entry['gold_cause'], entry['pred_cause'])}",
+            ))
     else:
-        out.extend(
-            (
-                "CAUSE",
-                f"  {entry['gold_cause']!r}",
-            )
-        )
+        out.extend((
+            "CAUSE",
+            f"  {entry['gold_cause']!r}",
+        ))
 
     out.append("\n")
 
     if entry["gold_effect"] != entry["pred_effect"]:
-        out.extend(
-            (
-                "EFFECT",
-                "gold:",
-                f"  -> {entry['gold_effect']!r}",
-                "pred:",
-                f"  -> {entry['pred_effect']!r}",
-            )
-        )
+        out.extend((
+            "EFFECT",
+            "gold:",
+            f"  -> {entry['gold_effect']!r}",
+            "pred:",
+            f"  -> {entry['pred_effect']!r}",
+        ))
 
         if use_excess:
             out.append(f"excess count: {entry['effect_excess_count']}")
 
         if use_overlap:
             is_substr_passage = entry["gold_effect"] in entry["input"]
-            out.extend(
-                (
-                    f"substr passage: {is_substr_passage}",
-                    f"overlap: {overlap(entry['gold_effect'], entry['pred_effect'])}",
-                )
-            )
+            out.extend((
+                f"substr passage: {is_substr_passage}",
+                f"overlap: {overlap(entry['gold_effect'], entry['pred_effect'])}",
+            ))
     else:
-        out.extend(
-            (
-                "EFFECT",
-                f"  {entry['gold_effect']!r}",
-            )
-        )
+        out.extend((
+            "EFFECT",
+            f"  {entry['gold_effect']!r}",
+        ))
 
     out.append("\n")
 
@@ -133,7 +121,7 @@ def label(
             labelled_data.append(entry)
             continue
 
-        print(f"ENTRY {i+1}/{len(data)}")
+        print(f"ENTRY {i + 1}/{len(data)}")
 
         new_data = label_entry(entry, use_excess, use_overlap)
         if new_data is None:

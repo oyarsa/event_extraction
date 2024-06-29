@@ -20,13 +20,11 @@ class Config:
     @classmethod
     def from_json(cls, json_data: str) -> "Config":
         "Create instance from dict, ignoring unknown fields."
-        return cls(
-            **{
-                k: v
-                for k, v in json.loads(json_data).items()
-                if k in inspect.signature(cls).parameters
-            }
-        )
+        return cls(**{
+            k: v
+            for k, v in json.loads(json_data).items()
+            if k in inspect.signature(cls).parameters
+        })
 
 
 def generate(

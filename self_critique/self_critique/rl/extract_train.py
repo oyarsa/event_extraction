@@ -415,7 +415,7 @@ def train_extract(
 
             # Mid-epoch evaluation
             if eval_dataset is not None and (batch_idx + 1) % eval_batches == 0:
-                desc = f"Eval  ({epoch}.{batch_idx+1})"
+                desc = f"Eval  ({epoch}.{batch_idx + 1})"
                 eval_result = evaluate(
                     dataset=eval_dataset,
                     extract=extract,
@@ -431,7 +431,7 @@ def train_extract(
                 save_results(
                     result=eval_result,
                     dir=output_dir,
-                    file_name=f"mini_eval_result_{epoch}.{batch_idx+1}.json",
+                    file_name=f"mini_eval_result_{epoch}.{batch_idx + 1}.json",
                 )
                 if ref_result is not None:
                     log_label_distribution(ref_result, desc="Reference")
@@ -455,13 +455,11 @@ def train_extract(
                         model=best_model, tokeniser=extract.tokenizer, output_dir=path
                     )
                     (path / "stats.json").write_text(
-                        json.dumps(
-                            {
-                                "epoch": epoch,
-                                "batch": batch_idx,
-                                "ratio": eval_ratio,
-                            }
-                        )
+                        json.dumps({
+                            "epoch": epoch,
+                            "batch": batch_idx,
+                            "ratio": eval_ratio,
+                        })
                     )
                     logger.info(
                         "New best model at epoch %d. Saving to %s.", epoch, path
@@ -720,15 +718,13 @@ def evaluate(
 def log_label_distribution(result: list[dict[str, Any]], desc: str) -> None:
     labels = [d["reward_label"] for d in result]
     label_dist = Counter(labels)
-    msg = "\n".join(
-        [
-            f"\n{desc} label distribution:",
-            *(
-                f"  {label}: {count} ({count / len(labels)})"
-                for label, count in label_dist.items()
-            ),
-        ]
-    )
+    msg = "\n".join([
+        f"\n{desc} label distribution:",
+        *(
+            f"  {label}: {count} ({count / len(labels)})"
+            for label, count in label_dist.items()
+        ),
+    ])
     logger.info(f"{msg}\n")
 
 

@@ -31,6 +31,7 @@ class ModelConfig:
 @dataclasses.dataclass
 class Config:
     "Ensemble and inner models configuration"
+
     # Path to data to be evaluated in the ensemble
     data_file: Path
     model_1: ModelConfig

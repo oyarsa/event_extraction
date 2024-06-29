@@ -299,7 +299,7 @@ def train(
         total_loss = 0
         num_batches = 0
 
-        for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
+        for inputs in tqdm(train_loader, desc=f"Epoch {epoch + 1} training"):
             outputs = model(
                 input_ids=inputs["input_ids"],
                 attention_mask=inputs["attention_mask"],
@@ -319,7 +319,7 @@ def train(
             num_batches += 1
 
         avg_loss = total_loss / num_batches
-        logger.info(f"Epoch {epoch+1}, training loss: {avg_loss}")
+        logger.info(f"Epoch {epoch + 1}, training loss: {avg_loss}")
 
         if eval_data and eval_loader is not None:
             eval_result = eval(
@@ -328,9 +328,9 @@ def train(
                 eval_loader,
                 config,
                 generation_kwargs,
-                desc=f"Epoch {epoch+1} evaluation",
+                desc=f"Epoch {epoch + 1} evaluation",
             )
-            logger.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
+            logger.info(f"Epoch {epoch + 1}, evaluation loss: {eval_result.loss}")
 
             if eval_result.metrics[metric_early_stopping] > best_metric:
                 best_metric = eval_result.metrics[metric_early_stopping]

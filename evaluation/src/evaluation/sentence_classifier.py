@@ -53,7 +53,7 @@ def main(
         print(
             f"Model: {model_name}",
             f"Threshold: {threshold}",
-            f"Valid: {num_valid}/{len(result)} ({num_valid/len(result):.2%})",
+            f"Valid: {num_valid}/{len(result)} ({num_valid / len(result):.2%})",
             f"Agreement: {agreement:.2%}",
             sep="\n",
         )

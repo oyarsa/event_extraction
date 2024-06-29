@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # pyright: basic
 """Run GPT inference with Self Refinement."""
+
 import dataclasses
 import inspect
 import json
@@ -252,15 +253,13 @@ def print_prompt_opt_message(
         old_prompt,
     ]
     if gpt_result.filtered is FilterStatus.UNFILTERED:
-        output.extend(
-            [
-                "-" * 80,
-                "\nGPT: ",
-                result,
-                "*" * 80,
-                "",
-            ]
-        )
+        output.extend([
+            "-" * 80,
+            "\nGPT: ",
+            result,
+            "*" * 80,
+            "",
+        ])
     else:
         output.append("Filtered output.")
     logger.info("\n".join(output))
@@ -286,19 +285,17 @@ def print_refinement_message(
         if print_refinements:
             output.extend(["-" * 80, refinements])
 
-        output.extend(
-            [
-                "-" * 80,
-                msg.gpt_msg,
-                "-" * 80,
-                "\nGPT: ",
-                result,
-                f"NOT SENT {'~' * 50}",
-                msg.answer_msg,
-                "*" * 80,
-                "",
-            ]
-        )
+        output.extend([
+            "-" * 80,
+            msg.gpt_msg,
+            "-" * 80,
+            "\nGPT: ",
+            result,
+            f"NOT SENT {'~' * 50}",
+            msg.answer_msg,
+            "*" * 80,
+            "",
+        ])
     else:
         output.append("Filtered output.")
     logger.info("\n".join(output))
@@ -323,20 +320,18 @@ def print_solve_message(
     if gpt_result.filtered is FilterStatus.UNFILTERED:
         if chain_prompt and print_chains:
             output.extend(["-" * 80, chain_prompt])
-        output.extend(
-            [
-                "-" * 80,
-                msg.gpt_msg,
-                "-" * 80,
-                "\nGPT: ",
-                *(format_result(i, r) for i, r in enumerate(gpt_result.results)),
-                f"\nParsed: {result}",
-                f"NOT SENT {'~' * 50}",
-                msg.answer_msg,
-                "*" * 80,
-                "",
-            ]
-        )
+        output.extend([
+            "-" * 80,
+            msg.gpt_msg,
+            "-" * 80,
+            "\nGPT: ",
+            *(format_result(i, r) for i, r in enumerate(gpt_result.results)),
+            f"\nParsed: {result}",
+            f"NOT SENT {'~' * 50}",
+            msg.answer_msg,
+            "*" * 80,
+            "",
+        ])
     else:
         output.append("Filtered output.")
     logger.info("\n".join(output))

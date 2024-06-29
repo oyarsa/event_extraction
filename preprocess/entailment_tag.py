@@ -3,6 +3,7 @@ the reconstruction task.
 
 See convert_instance.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -133,7 +134,7 @@ def swap_cause_effect(instance: dict[str, str]) -> dict[str, str] | None:
 
 
 def generate_contradictory_instances(
-    instances: list[dict[str, str]]
+    instances: list[dict[str, str]],
 ) -> list[dict[str, str]]:
     """Generate contradictions by swapping cause and effect."""
     return [

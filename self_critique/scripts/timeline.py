@@ -83,13 +83,11 @@ def main(path: Annotated[Path, typer.Argument()] = Path(".")) -> None:
 
                 if "extracts" not in inst:
                     inst["extracts"] = []
-                inst["extracts"].append(
-                    {
-                        "batch": batch,
-                        "pred": d["rl_extract_txt"],
-                        "label": d["entailment_label"],
-                    }
-                )
+                inst["extracts"].append({
+                    "batch": batch,
+                    "pred": d["rl_extract_txt"],
+                    "label": d["entailment_label"],
+                })
     instances = keep_non_entailment(instances)
 
     sys.stdout.write(json.dumps(instances, indent=2))

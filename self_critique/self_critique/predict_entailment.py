@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-""" Finetuning the library models for text entailment."""
+"""Finetuning the library models for text entailment."""
 # You can also adapt this script on your own text classification task. Pointers for this are left as comments.
 
 import argparse
@@ -171,9 +171,11 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    hf_parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, TrainingArguments)
-    )
+    hf_parser = HfArgumentParser((
+        ModelArguments,
+        DataTrainingArguments,
+        TrainingArguments,
+    ))
     model_args, data_args, training_args = hf_parser.parse_json_file(
         json_file=args.config_file, allow_extra_keys=True
     )
@@ -383,15 +385,13 @@ def main() -> None:
             sentence2 = predict_dataset["sentence2"][index]
             gold = labels[predict_dataset["label"][index]]
             pred = labels[item]
-            results.append(
-                {
-                    "id": tid,
-                    "sentence1": sentence1,
-                    "sentence2": sentence2,
-                    "gold": gold,
-                    "pred": pred,
-                }
-            )
+            results.append({
+                "id": tid,
+                "sentence1": sentence1,
+                "sentence2": sentence2,
+                "gold": gold,
+                "pred": pred,
+            })
         with output_predict_json.open("w") as writer:
             json.dump(results, writer)
 

@@ -255,12 +255,12 @@ def train(
     for epoch in range(config.num_train_epochs):
         model.train()
 
-        logging.info(f"Epoch {epoch+1} learning rate: {scheduler.get_last_lr()[0]}")
+        logging.info(f"Epoch {epoch + 1} learning rate: {scheduler.get_last_lr()[0]}")
 
         total_loss = 0
         num_batches = 0
 
-        for inputs in tqdm(train_loader, desc=f"Epoch {epoch+1} training"):
+        for inputs in tqdm(train_loader, desc=f"Epoch {epoch + 1} training"):
             optimizer.zero_grad()
 
             outputs = model(
@@ -278,16 +278,16 @@ def train(
             num_batches += 1
 
         avg_loss = total_loss / num_batches
-        logging.info(f"Epoch {epoch+1}, training loss: {avg_loss}")
+        logging.info(f"Epoch {epoch + 1}, training loss: {avg_loss}")
 
         if eval_data and eval_loader is not None:
             eval_result = eval(
                 model,
                 eval_loader,
                 labeller,
-                desc=f"Epoch {epoch+1} evaluation",
+                desc=f"Epoch {epoch + 1} evaluation",
             )
-            logging.info(f"Epoch {epoch+1}, evaluation loss: {eval_result.loss}")
+            logging.info(f"Epoch {epoch + 1}, evaluation loss: {eval_result.loss}")
 
             if eval_result.metrics["f1"] > best_f1:
                 best_f1 = eval_result.metrics["f1"]

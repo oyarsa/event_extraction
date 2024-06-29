@@ -4,6 +4,7 @@
 
 Also convert field names: answer -> gold, pred -> output, text -> input.
 """
+
 import json
 import re
 import sys

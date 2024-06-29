@@ -45,7 +45,7 @@ def train_model(
     # epoch loop
     for epoch in range(args.epochs):
         print()
-        print(f"Epoch {epoch+1}/{args.epochs}")
+        print(f"Epoch {epoch + 1}/{args.epochs}")
 
         model.train()
 

@@ -24,4 +24,4 @@ if not args.compact:
     print(f"Total: {len(preds)}\n")
 
 for k, v in sorted(freqs.items()):
-    print(f"{k}: {v} ({v/len(preds):.2%})")
+    print(f"{k}: {v} ({v / len(preds):.2%})")

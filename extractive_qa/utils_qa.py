@@ -14,6 +14,7 @@
 """
 Post-processing utilities for question answering.
 """
+
 import collections
 import json
 import logging
@@ -188,18 +189,15 @@ def postprocess_qa_predictions(
                         ):
                             continue
 
-                        prelim_predictions.append(
-                            {
-                                "offsets": (
-                                    offset_mapping[start_index][0],
-                                    offset_mapping[end_index][1],
-                                ),
-                                "score": start_logits[start_index]
-                                + end_logits[end_index],
-                                "start_logit": start_logits[start_index],
-                                "end_logit": end_logits[end_index],
-                            }
-                        )
+                        prelim_predictions.append({
+                            "offsets": (
+                                offset_mapping[start_index][0],
+                                offset_mapping[end_index][1],
+                            ),
+                            "score": start_logits[start_index] + end_logits[end_index],
+                            "start_logit": start_logits[start_index],
+                            "end_logit": end_logits[end_index],
+                        })
             if version_2_with_negative and min_null_prediction is not None:
                 # Add the minimum null prediction
                 prelim_predictions.append(min_null_prediction)

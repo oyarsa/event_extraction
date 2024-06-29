@@ -32,19 +32,17 @@ class Instance(TypedDict):
 
 class Maven(evaluate.Metric):
     def _info(self):
-        features = datasets.Features(
-            {
-                "predictions": {
-                    "id": datasets.Value("string"),
-                    "prediction_text": datasets.Value("string"),
-                },
-                "references": {
-                    "id": datasets.Value("string"),
-                    "answers": datasets.Value("string"),
-                    "question_type": datasets.Value("string"),
-                },
-            }
-        )
+        features = datasets.Features({
+            "predictions": {
+                "id": datasets.Value("string"),
+                "prediction_text": datasets.Value("string"),
+            },
+            "references": {
+                "id": datasets.Value("string"),
+                "answers": datasets.Value("string"),
+                "question_type": datasets.Value("string"),
+            },
+        })
         return evaluate.MetricInfo(description="", citation="", features=features)
 
     def _compute(
@@ -57,13 +55,11 @@ class Maven(evaluate.Metric):
             pred_cause = parse_instance(pred["prediction_text"])
             gold_cause = parse_instance(refer["answers"])
 
-            instances.append(
-                {
-                    "id": refer["id"],
-                    "gold": gold_cause,
-                    "prediction": pred_cause,
-                }
-            )
+            instances.append({
+                "id": refer["id"],
+                "gold": gold_cause,
+                "prediction": pred_cause,
+            })
 
         if not instances:
             raise ValueError("No instances to evaluate.")

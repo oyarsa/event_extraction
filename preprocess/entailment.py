@@ -3,6 +3,7 @@ the reconstruction task.
 
 See convert_instance.
 """
+
 from __future__ import annotations
 
 import argparse

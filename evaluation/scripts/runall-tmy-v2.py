@@ -186,7 +186,7 @@ def main() -> None:
         )
 
         print(
-            f">>> #{i+1} {model} {prompt_version} - "
+            f">>> #{i + 1} {model} {prompt_version} - "
             f"{'With chains' if use_chains else 'No chains'} - "
             f"{f'With sampling (K: {k} + T: {t})' if use_sampling else 'No sampling'}"
             f" - Examples: {n}"

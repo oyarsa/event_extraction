@@ -45,7 +45,10 @@ def calc_metrics(
 
     acc = accuracy_score(x, y)
     prec, rec, f1, _ = precision_recall_fscore_support(
-        x, y, average=average, zero_division=0  # type: ignore
+        x,
+        y,
+        average=average,
+        zero_division=0,  # type: ignore
     )
     krippendorff_ = krippendorff.alpha(
         [x, y], level_of_measurement="ordinal" if mse else "nominal"

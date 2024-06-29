@@ -89,13 +89,11 @@ def main(
             run(cli_args)
 
             metrics = json.loads((output_dir / name / "metrics.json").read_text())
-            results.append(
-                {
-                    "file": file.stem.replace("_eval", ""),
-                    "reward_type": kind,
-                    "reward": metrics["reward"],
-                }
-            )
+            results.append({
+                "file": file.stem.replace("_eval", ""),
+                "reward_type": kind,
+                "reward": metrics["reward"],
+            })
             print(json.dumps(metrics, indent=2))
 
             print("-" * 80)

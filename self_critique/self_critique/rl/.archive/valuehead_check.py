@@ -135,13 +135,11 @@ class Labeller:
         return [self.id2label[int(label)] for label in labels]
 
 
-LABELLER = Labeller(
-    {
-        "CONTRADICTION": 0,
-        "ENTAILMENT": 1,
-        "NEUTRAL": 2,
-    }
-)
+LABELLER = Labeller({
+    "CONTRADICTION": 0,
+    "ENTAILMENT": 1,
+    "NEUTRAL": 2,
+})
 
 
 @dataclass
@@ -363,12 +361,12 @@ def train_extract(
                     labeller=labeller,
                     args=args,
                     device=device,
-                    desc=f"Eval  ({epoch}.{i+1})",
+                    desc=f"Eval  ({epoch}.{i + 1})",
                 )
                 save_results(
                     result=eval_result,
                     dir=output_dir,
-                    file_name=f"mini_eval_result_{epoch}.{i+1}.json",
+                    file_name=f"mini_eval_result_{epoch}.{i + 1}.json",
                 )
 
         if eval_dataset is not None:
@@ -606,19 +604,17 @@ def evaluate(
 
         assert len(rewards) == len(rl_output.entailment_labels) == len(inputs)
         for i in range(len(rewards)):
-            output.append(
-                {
-                    "id": batch["id"][i],
-                    "original": batch["original"][i],
-                    "answers": batch["answers"][i],
-                    "question_type": batch["question_type"][i],
-                    "context": batch["context"][i],
-                    "rl_extract_txt": rl_output.extract_txt[i],
-                    "rl_reconstruct_txt": rl_output.reconstruct_txt[i],
-                    "entailment_label": rl_output.entailment_labels[i],
-                    "reward": rewards[i].tolist(),
-                }
-            )
+            output.append({
+                "id": batch["id"][i],
+                "original": batch["original"][i],
+                "answers": batch["answers"][i],
+                "question_type": batch["question_type"][i],
+                "context": batch["context"][i],
+                "rl_extract_txt": rl_output.extract_txt[i],
+                "rl_reconstruct_txt": rl_output.reconstruct_txt[i],
+                "entailment_label": rl_output.entailment_labels[i],
+                "reward": rewards[i].tolist(),
+            })
 
     log_label_distribution(
         [d["entailment_label"] for d in output], desc=f"{desc}: RL model"
@@ -629,15 +625,13 @@ def evaluate(
 
 def log_label_distribution(labels: list[str], desc: str = "Model") -> None:
     label_dist = Counter(labels)
-    msg = "\n".join(
-        [
-            f"\n{desc} label distribution:",
-            *(
-                f"  {label}: {count} ({count / len(labels)})"
-                for label, count in label_dist.items()
-            ),
-        ]
-    )
+    msg = "\n".join([
+        f"\n{desc} label distribution:",
+        *(
+            f"  {label}: {count} ({count / len(labels)})"
+            for label, count in label_dist.items()
+        ),
+    ])
     logger.info(f"{msg}\n")
 
 

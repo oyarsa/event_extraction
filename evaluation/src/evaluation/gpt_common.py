@@ -89,21 +89,17 @@ def calculate_cost(model: str, response: Any) -> float:
 def dbg_gpt(messages: list[ChatCompletionMessageParam], result: str | None) -> None:
     output = ["\nINPUT:"]
     for msg in messages:
-        output.extend(
-            (
-                f'>>> {msg["role"]}',
-                f"{msg.get('content')}",
-                "",
-            )
-        )
-    output.extend(
-        (
-            "OUTPUT:",
-            (result or "<empty>"),
-            "-" * 80,
+        output.extend((
+            f'>>> {msg["role"]}',
+            f"{msg.get('content')}",
             "",
-        )
-    )
+        ))
+    output.extend((
+        "OUTPUT:",
+        (result or "<empty>"),
+        "-" * 80,
+        "",
+    ))
     logger.info("\n".join(output))
 
 
@@ -487,7 +483,7 @@ def count_steps(result: str) -> int:
 
 def format_result(i: int, result: str) -> str:
     num_steps = count_steps(result)
-    return f"#{i+1} Num steps: {num_steps}\n{result}"
+    return f"#{i + 1} Num steps: {num_steps}\n{result}"
 
 
 def reformat_output(

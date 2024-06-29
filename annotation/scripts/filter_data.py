@@ -160,7 +160,7 @@ def calc_tag_ratios(
 
 def show_tag_results(ratios: dict[Tag, dict[str, Any]]) -> str:
     return "Tag results:\n" + "\n".join(
-        f"  {tag.value}: {d['count']} ({d['ratio']:.1%})" for tag, d in ratios.items()
+        f"  {tag.value}: {d["count"]} ({d["ratio"]:.1%})" for tag, d in ratios.items()
     )
 
 

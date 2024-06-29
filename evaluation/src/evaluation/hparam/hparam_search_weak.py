@@ -69,7 +69,7 @@ for i, (model_name, learning_rate, max_seq_length, train_data_path) in enumerate
         "./training/transformed/weakly.json": "transformed",
     }[train_data_path]
 
-    print(f"\n\n>>>> {i+1} / {total_combinations} <<<<")
+    print(f"\n\n>>>> {i + 1} / {total_combinations} <<<<")
     print(
         f"{model_name=} {learning_rate=} {max_seq_length=} {batch_size=} {train_name=}"
     )

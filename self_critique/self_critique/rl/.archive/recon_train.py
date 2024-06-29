@@ -498,13 +498,11 @@ def main() -> None:
         device="cpu",
         desc="training",
     )
-    labeller = Labeller(
-        {
-            "CONTRADICTION": 0,
-            "ENTAILMENT": 1,
-            "NEUTRAL": 2,
-        }
-    )
+    labeller = Labeller({
+        "CONTRADICTION": 0,
+        "ENTAILMENT": 1,
+        "NEUTRAL": 2,
+    })
 
     entailment_model, entailment_tokenizer = load_entailment_model(
         model_name_or_path=args.entailment_model, labeller=labeller

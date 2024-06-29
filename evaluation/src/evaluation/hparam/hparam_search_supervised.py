@@ -43,7 +43,7 @@ total_combinations = len(model_names) * len(learning_rates) * len(use_passages)
 for i, (model_name, learning_rate, use_passage) in enumerate(
     tqdm(product(model_names, learning_rates, use_passages))
 ):
-    print(f"\n\n>>>> {i+1} / {total_combinations} <<<<")
+    print(f"\n\n>>>> {i + 1} / {total_combinations} <<<<")
     print(
         f"Model: {model_name}, learning rate: {learning_rate}, use passage:"
         f" {use_passage}\n"

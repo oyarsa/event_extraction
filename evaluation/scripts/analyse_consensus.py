@@ -5,6 +5,7 @@ Given a JSON file with files containing lists of integers, calculate the consens
 these lists. Supports both ordinal and binary consensus and can plot the cumulative
 distribution of the consensus values.
 """
+
 import argparse
 import json
 import math

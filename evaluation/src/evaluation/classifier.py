@@ -516,7 +516,7 @@ def print_prompt_examples(prompt: Prompt, data: list[DataEntry], *, n: int) -> N
     for i, label in enumerate(labels):
         examples = [d for d in data if d.label == label]
         print_prompt_example(
-            prompt, examples, f"[{i+1}/{len(label)}] {label} examples", n
+            prompt, examples, f"[{i + 1}/{len(label)}] {label} examples", n
         )
 
 

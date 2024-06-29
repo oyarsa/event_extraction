@@ -309,9 +309,11 @@ def main():
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
 
-    parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
-    )
+    parser = HfArgumentParser((
+        ModelArguments,
+        DataTrainingArguments,
+        Seq2SeqTrainingArguments,
+    ))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
@@ -696,7 +698,8 @@ def main():
             for ex in examples
         ]
         return EvalPrediction(
-            predictions=formatted_predictions, label_ids=references  # type: ignore
+            predictions=formatted_predictions,
+            label_ids=references,  # type: ignore
         )
 
     tb_run_name = f"-{os.environ['RUN_NAME']}" if "RUN_NAME" in os.environ else ""

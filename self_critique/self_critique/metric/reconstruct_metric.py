@@ -32,19 +32,17 @@ class Instance(TypedDict):
 
 class ReconstructMetric(evaluate.Metric):
     def _info(self):
-        features = datasets.Features(
-            {
-                "predictions": {
-                    "id": datasets.Value("string"),
-                    "prediction_text": datasets.Value("string"),
-                },
-                "references": {
-                    "id": datasets.Value("string"),
-                    "answers": datasets.Value("string"),
-                    "question_type": datasets.Value("string"),
-                },
-            }
-        )
+        features = datasets.Features({
+            "predictions": {
+                "id": datasets.Value("string"),
+                "prediction_text": datasets.Value("string"),
+            },
+            "references": {
+                "id": datasets.Value("string"),
+                "answers": datasets.Value("string"),
+                "question_type": datasets.Value("string"),
+            },
+        })
         return evaluate.MetricInfo(description="", citation="", features=features)
 
     def _compute(

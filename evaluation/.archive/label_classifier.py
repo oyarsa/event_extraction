@@ -7,7 +7,7 @@ import simple_parsing
 
 
 def separate(
-    data: list[dict[str, Any]]
+    data: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     "Separates data into rule-based classes (EM+no-substr) and substrings."
     done: list[dict[str, Any]] = []
