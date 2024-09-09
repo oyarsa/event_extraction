@@ -25,7 +25,7 @@ dependencies = [
     "tf-keras>=2.16.0"
 ]
 requires-python = ">=3.11,<3.13" # 3.11: assert_never
-license = {text = "GPL-3.0-only"}
+license = {text = "GPL-3.0-or-later"}
 
 [build-system]
 requires = ["pdm-backend"]

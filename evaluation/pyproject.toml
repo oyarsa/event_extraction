@@ -27,7 +27,7 @@ dependencies = [
 ]
 requires-python = ">=3.10,<3.13"
 readme = "README.md"
-license = {text = "GPT-3.0-only"}
+license = {text = "GPT-3.0-or-later"}
 
 [tool.pyright]
 typeCheckingMode = "basic"

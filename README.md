@@ -45,3 +45,7 @@ If you find our work useful, please cite as:
     primaryClass={cs.CL}
 }
 ```
+
+## License
+
+This project is licensed under the GPL version 3 or later.
